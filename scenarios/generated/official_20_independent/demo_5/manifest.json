@@ -1,0 +1,585 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "official_demo_5",
+  "demo_id": 5,
+  "provenance_class": "organizer_excel_png_plus_osm_modeled_sumo",
+  "source_files": [
+    {
+      "role": "organizer_workbook_read_only",
+      "path": "D:\\程序项目\\挑战杯\\赛题资料\\赛题资料\\路口数据\\5\\路口数据\\demo_5流量和交叉口配时方案.xlsx",
+      "sha256": "5378a0d888375f4ba7f5f8bc995b702ec2d39d2d0493d85f733a9f5e795efd9e"
+    },
+    {
+      "role": "organizer_high_precision_map_png_read_only",
+      "path": "D:\\程序项目\\挑战杯\\赛题资料\\赛题资料\\路口数据\\5\\高精地图\\demo_5.png",
+      "sha256": "e29f19f05109b4b677fc8b0b4a18349ef160c82129c040f1866c84dbfb1e801f"
+    },
+    {
+      "role": "osm_geometry_and_tags_cross_check",
+      "path": "scenarios/source/official_20_independent/osm/demo_05_raw.osm.xml",
+      "sha256": "9ae05dcfc019500dc68d7ccce12a61a9f22c356c99f5be86e2522d820ae16604"
+    },
+    {
+      "role": "derived_evidence_registry",
+      "path": "scenarios/source/official_20_independent/derived_evidence/lane_evidence_assessment.json",
+      "sha256": "8f316dace6e17e342808d402c0502ca078b5280797adcb8cda50bb00cddfac48"
+    },
+    {
+      "role": "derived_evidence_registry",
+      "path": "scenarios/source/official_20_independent/derived_evidence/locations_final.json",
+      "sha256": "d1a23c6fd2b8537ac9a385a52762163c4ea29e7cfb15955daf1ca9cf0f1fff14"
+    },
+    {
+      "role": "derived_evidence_registry",
+      "path": "scenarios/source/official_20_independent/derived_evidence/osm_analysis.json",
+      "sha256": "4371903ee56839fe9e8daefced2125bda254e922d78dec2974378e56f87c38d1"
+    }
+  ],
+  "workbook_source_audit": {
+    "profiles": {
+      "am_peak": {
+        "flow": {
+          "approach_header_order": [
+            "E",
+            "W",
+            "N",
+            "S"
+          ],
+          "source_rows": {
+            "header": 2,
+            "records": [
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
+            ],
+            "totals": 12,
+            "ratios": 13
+          },
+          "approach_totals_match": true,
+          "approach_total_differences": {},
+          "turn_ratios_match": true,
+          "turn_ratio_differences": {},
+          "simulation_demand_authority": "eight_15_min_movement_rows"
+        },
+        "signal": {
+          "declared_cycle_s": 77,
+          "calculated_component_cycle_s": 77,
+          "cycle_matches": true,
+          "phase_component_totals_match": true,
+          "phase_component_total_mismatches": [],
+          "simulation_signal_authority": "phase_green_yellow_all_red_components"
+        },
+        "source_consistent": true
+      },
+      "offpeak": {
+        "flow": {
+          "approach_header_order": [
+            "E",
+            "W",
+            "N",
+            "S"
+          ],
+          "source_rows": {
+            "header": 17,
+            "records": [
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26
+            ],
+            "totals": 27,
+            "ratios": 28
+          },
+          "approach_totals_match": true,
+          "approach_total_differences": {},
+          "turn_ratios_match": true,
+          "turn_ratio_differences": {},
+          "simulation_demand_authority": "eight_15_min_movement_rows"
+        },
+        "signal": {
+          "declared_cycle_s": 77,
+          "calculated_component_cycle_s": 77,
+          "cycle_matches": true,
+          "phase_component_totals_match": true,
+          "phase_component_total_mismatches": [],
+          "simulation_signal_authority": "phase_green_yellow_all_red_components"
+        },
+        "source_consistent": true
+      },
+      "pm_peak": {
+        "flow": {
+          "approach_header_order": [
+            "E",
+            "W",
+            "N",
+            "S"
+          ],
+          "source_rows": {
+            "header": 32,
+            "records": [
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ],
+            "totals": 42,
+            "ratios": 43
+          },
+          "approach_totals_match": true,
+          "approach_total_differences": {},
+          "turn_ratios_match": true,
+          "turn_ratio_differences": {},
+          "simulation_demand_authority": "eight_15_min_movement_rows"
+        },
+        "signal": {
+          "declared_cycle_s": 77,
+          "calculated_component_cycle_s": 77,
+          "cycle_matches": true,
+          "phase_component_totals_match": true,
+          "phase_component_total_mismatches": [],
+          "simulation_signal_authority": "phase_green_yellow_all_red_components"
+        },
+        "source_consistent": true
+      }
+    },
+    "workbook_source_consistent": true,
+    "policy": "simulation uses detailed 15-minute movement counts and per-phase green/yellow/all-red components; inconsistent summary cells are preserved as audit findings and never overwrite organizer files"
+  },
+  "workbook_interpretation": {
+    "am_peak": {
+      "clock_window": "07:00-09:00",
+      "demand_total": 2438,
+      "movement_totals": {
+        "E_L": 368,
+        "E_S": 368,
+        "E_R": 0,
+        "W_L": 0,
+        "W_S": 623,
+        "W_R": 267,
+        "S_L": 325,
+        "S_S": 0,
+        "S_R": 487,
+        "N_L": 0,
+        "N_S": 0,
+        "N_R": 0
+      },
+      "approach_totals": {
+        "E": 736,
+        "W": 890,
+        "S": 812,
+        "N": 0
+      },
+      "executed_component_cycle_s": 77,
+      "source_declared_cycle_s": 77,
+      "phases": [
+        {
+          "phase_id": "1",
+          "name": "东西向直左",
+          "green_s": 34,
+          "yellow_s": 3,
+          "all_red_s": 0
+        },
+        {
+          "phase_id": "2",
+          "name": "南向左右转",
+          "green_s": 37,
+          "yellow_s": 3,
+          "all_red_s": 0
+        }
+      ]
+    },
+    "offpeak": {
+      "clock_window": "14:30-16:30",
+      "demand_total": 1988,
+      "movement_totals": {
+        "E_L": 318,
+        "E_S": 318,
+        "E_R": 0,
+        "W_L": 0,
+        "W_S": 483,
+        "W_R": 207,
+        "S_L": 265,
+        "S_S": 0,
+        "S_R": 397,
+        "N_L": 0,
+        "N_S": 0,
+        "N_R": 0
+      },
+      "approach_totals": {
+        "E": 636,
+        "W": 690,
+        "S": 662,
+        "N": 0
+      },
+      "executed_component_cycle_s": 77,
+      "source_declared_cycle_s": 77,
+      "phases": [
+        {
+          "phase_id": "1",
+          "name": "东西向直左",
+          "green_s": 34,
+          "yellow_s": 3,
+          "all_red_s": 0
+        },
+        {
+          "phase_id": "2",
+          "name": "南向左右转",
+          "green_s": 37,
+          "yellow_s": 3,
+          "all_red_s": 0
+        }
+      ]
+    },
+    "pm_peak": {
+      "clock_window": "17:30-19:30",
+      "demand_total": 4038,
+      "movement_totals": {
+        "E_L": 568,
+        "E_S": 568,
+        "E_R": 0,
+        "W_L": 0,
+        "W_S": 1043,
+        "W_R": 447,
+        "S_L": 565,
+        "S_S": 0,
+        "S_R": 847,
+        "N_L": 0,
+        "N_S": 0,
+        "N_R": 0
+      },
+      "approach_totals": {
+        "E": 1136,
+        "W": 1490,
+        "S": 1412,
+        "N": 0
+      },
+      "executed_component_cycle_s": 77,
+      "source_declared_cycle_s": 77,
+      "phases": [
+        {
+          "phase_id": "1",
+          "name": "东西向直左",
+          "green_s": 34,
+          "yellow_s": 3,
+          "all_red_s": 0
+        },
+        {
+          "phase_id": "2",
+          "name": "南向左右转",
+          "green_s": 37,
+          "yellow_s": 3,
+          "all_red_s": 0
+        }
+      ]
+    }
+  },
+  "active_movements": [
+    "E_L",
+    "E_S",
+    "S_L",
+    "S_R",
+    "W_R",
+    "W_S"
+  ],
+  "arm_geometry": {
+    "E": {
+      "geometry_source": "checked_in_osm_extract",
+      "osm_node_chain": [
+        "2888280112",
+        "4870459734"
+      ],
+      "osm_way_ids": [
+        "285153960"
+      ],
+      "cutoff_node_id": "4870459734",
+      "cutoff_reason": "next_osm_topological_junction",
+      "length_basis": "geodesic_sum_along_osm_node_chain",
+      "measured_length_m": 79.17,
+      "modeled_length_m": 250.0,
+      "initial_bearing_deg": 96.47,
+      "length_confidence": "high",
+      "modeling_adjustment": {
+        "type": "standardized_isolated_intersection_boundary",
+        "reason": "OSM distance to the next topology node is retained as evidence, while every organizer-derived standalone arm uses the same 250 m simulation boundary for comparable storage and GUI scale",
+        "geometry_policy": "truncate along the evidenced OSM polyline when longer than 250 m; extend along the final evidenced bearing when shorter than 250 m",
+        "evidence_length_m": 79.17,
+        "modeled_length_m": 250.0
+      },
+      "sumo_effective_lane_length_m": {
+        "in": 239.12,
+        "out": 239.12
+      }
+    },
+    "S": {
+      "geometry_source": "checked_in_osm_extract",
+      "osm_node_chain": [
+        "2888280112",
+        "4870459819"
+      ],
+      "osm_way_ids": [
+        "977556867"
+      ],
+      "cutoff_node_id": "4870459819",
+      "cutoff_reason": "next_osm_topological_junction",
+      "length_basis": "geodesic_sum_along_osm_node_chain",
+      "measured_length_m": 275.21,
+      "modeled_length_m": 250.0,
+      "initial_bearing_deg": 182.96,
+      "length_confidence": "high",
+      "modeling_adjustment": {
+        "type": "standardized_isolated_intersection_boundary",
+        "reason": "OSM distance to the next topology node is retained as evidence, while every organizer-derived standalone arm uses the same 250 m simulation boundary for comparable storage and GUI scale",
+        "geometry_policy": "truncate along the evidenced OSM polyline when longer than 250 m; extend along the final evidenced bearing when shorter than 250 m",
+        "evidence_length_m": 275.21,
+        "modeled_length_m": 250.0
+      },
+      "sumo_effective_lane_length_m": {
+        "in": 239.11,
+        "out": 239.11
+      }
+    },
+    "W": {
+      "geometry_source": "checked_in_osm_extract",
+      "osm_node_chain": [
+        "2888280112",
+        "4870459535"
+      ],
+      "osm_way_ids": [
+        "285153960"
+      ],
+      "cutoff_node_id": "4870459535",
+      "cutoff_reason": "next_osm_topological_junction",
+      "length_basis": "geodesic_sum_along_osm_node_chain",
+      "measured_length_m": 64.58,
+      "modeled_length_m": 250.0,
+      "initial_bearing_deg": 278.67,
+      "length_confidence": "high",
+      "modeling_adjustment": {
+        "type": "standardized_isolated_intersection_boundary",
+        "reason": "OSM distance to the next topology node is retained as evidence, while every organizer-derived standalone arm uses the same 250 m simulation boundary for comparable storage and GUI scale",
+        "geometry_policy": "truncate along the evidenced OSM polyline when longer than 250 m; extend along the final evidenced bearing when shorter than 250 m",
+        "evidence_length_m": 64.58,
+        "modeled_length_m": 250.0
+      },
+      "sumo_effective_lane_length_m": {
+        "in": 240.12,
+        "out": 240.12
+      }
+    }
+  },
+  "controlled_link_indices": {
+    "S_R": [
+      2
+    ],
+    "E_S": [
+      0
+    ],
+    "W_R": [
+      4
+    ],
+    "S_L": [
+      3
+    ],
+    "E_L": [
+      1
+    ],
+    "W_S": [
+      5
+    ]
+  },
+  "generated_files": [
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_am_peak.net.xml",
+      "sha256": "8aa935dff392609ff8226123fa485d8d4721622a5aa53c7a5cedfc911e948bbc",
+      "size_bytes": 6872
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_am_peak.rou.xml",
+      "sha256": "042be310a198ffbe50194aa7eb07eafe4c6b2731b53e63fec0a9225df8eff284",
+      "size_bytes": 6892
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_am_peak.signal.add.xml",
+      "sha256": "0a41e52cd345fc4a40574f0ff14645f4be72ddac1080603d9ba144d988b0bb19",
+      "size_bytes": 426
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_am_peak.sumocfg",
+      "sha256": "8ce40ea234c02017ed36b20e01552eebeaf877cf650e26d6a7a0dbe402de2505",
+      "size_bytes": 1059
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_offpeak.net.xml",
+      "sha256": "b508ffd0aba409ac6d96c62ae107ffdaddbf0e0dc7928fb0a9966918f3e16a49",
+      "size_bytes": 6872
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_offpeak.rou.xml",
+      "sha256": "5cba1c839514056f2f1e70fd8ec52b883fe4bf1b9997e2bb3a5ba846b61d9263",
+      "size_bytes": 6892
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_offpeak.signal.add.xml",
+      "sha256": "fc9cee8b5d74167527789c4a1d8a010c6abde3737f7fd535d7fc601b81b4e870",
+      "size_bytes": 426
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_offpeak.sumocfg",
+      "sha256": "7c096e2681eb489b6d9630ba355008ff0a122830d5851bb62b7b5364a9d02ffd",
+      "size_bytes": 1059
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_pm_peak.net.xml",
+      "sha256": "209250e2d49faf6959813fc89793eff36f6df51c4a438df8950ede69249643cf",
+      "size_bytes": 6872
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_pm_peak.rou.xml",
+      "sha256": "b1c800f60c8a3409bc540acad595ecb07d6d6744117093f3755958ba2c57fddc",
+      "size_bytes": 6908
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_pm_peak.signal.add.xml",
+      "sha256": "45ff8185e1143a7be7537dc691b70742b05d9608ff153a7b9fa3faa726d99017",
+      "size_bytes": 426
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/demo_5_pm_peak.sumocfg",
+      "sha256": "fc23fa6e37171a8c01f487fa706e1de658812951d07061ea1bfc71163045886b",
+      "size_bytes": 1059
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/effective_config.yaml",
+      "sha256": "89fff10714d6b56068aa9ba2d6a69c734a83c24c3799cde53e5d861fa1d9b2eb",
+      "size_bytes": 6799
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/network.base.net.xml",
+      "sha256": "1e1f0217fb281ef8fa35de4f2fda1abce21059001abbca2d664490b9f0c3836c",
+      "size_bytes": 8117
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/network.con.xml",
+      "sha256": "49ddd05d6b0d514a5421d12be95c50e2d6250e9bbe417b895549bd868c36e10d",
+      "size_bytes": 471
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/network.edg.xml",
+      "sha256": "764ced76ac886e68ad06279f91d62c91d6400df0322445dd0b4156d743f6fb6e",
+      "size_bytes": 1000
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/network.nod.xml",
+      "sha256": "57677e2d4d161def231fdf9045be86a873619ec63857a137abe7065f46ffcc80",
+      "size_bytes": 348
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/network_preview.svg",
+      "sha256": "9bf919240fe783198979be6f80099b22f5c59da217bcd9c1185d01247903ac22",
+      "size_bytes": 2048
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/README.md",
+      "sha256": "5e627923276bcc4244df0c42f8951487fb7834410d60cbef48471bcccef9e259",
+      "size_bytes": 1507
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/simple-shapes.view.xml",
+      "sha256": "c95eb63e3233ff26f698541190d81998bae8e3a15681517fb8cec03dac0f6836",
+      "size_bytes": 224
+    },
+    {
+      "path": "scenarios/generated/official_20_independent/demo_5/validation.json",
+      "sha256": "3cc35e80701f8e8396bf5decdbb1d820d5f1ff26ab16c9cc4bdc400cfb1e2cdc",
+      "size_bytes": 1371
+    },
+    {
+      "path": "scenarios/source/official_20_independent/derived_evidence/lane_evidence_assessment.json",
+      "sha256": "8f316dace6e17e342808d402c0502ca078b5280797adcb8cda50bb00cddfac48",
+      "size_bytes": 8761
+    },
+    {
+      "path": "scenarios/source/official_20_independent/derived_evidence/locations_final.json",
+      "sha256": "d1a23c6fd2b8537ac9a385a52762163c4ea29e7cfb15955daf1ca9cf0f1fff14",
+      "size_bytes": 9619
+    },
+    {
+      "path": "scenarios/source/official_20_independent/derived_evidence/osm_analysis.json",
+      "sha256": "4371903ee56839fe9e8daefced2125bda254e922d78dec2974378e56f87c38d1",
+      "size_bytes": 50388
+    }
+  ],
+  "validation": {
+    "schema_version": "1.0",
+    "demo_id": 5,
+    "actual_sumo_run": true,
+    "profiles": {
+      "am_peak": {
+        "profile": "am_peak",
+        "expected_demand": 2438,
+        "loaded": 2438,
+        "tripinfo_count": 2438,
+        "summary_ended": 2438,
+        "final_running": 0,
+        "final_waiting": 0,
+        "demand_conservation": true,
+        "all_vehicles_cleared": true,
+        "collisions": 0,
+        "teleports": 0,
+        "sumo_exit_code": 0
+      },
+      "offpeak": {
+        "profile": "offpeak",
+        "expected_demand": 1988,
+        "loaded": 1988,
+        "tripinfo_count": 1988,
+        "summary_ended": 1988,
+        "final_running": 0,
+        "final_waiting": 0,
+        "demand_conservation": true,
+        "all_vehicles_cleared": true,
+        "collisions": 0,
+        "teleports": 0,
+        "sumo_exit_code": 0
+      },
+      "pm_peak": {
+        "profile": "pm_peak",
+        "expected_demand": 4038,
+        "loaded": 4038,
+        "tripinfo_count": 3898,
+        "summary_ended": 3898,
+        "final_running": 30,
+        "final_waiting": 110,
+        "demand_conservation": true,
+        "all_vehicles_cleared": false,
+        "collisions": 0,
+        "teleports": 0,
+        "sumo_exit_code": 0
+      }
+    },
+    "structurally_valid": true,
+    "all_profiles_cleared": false,
+    "evidence_note": "structural validity and full demand clearance are separate gates"
+  },
+  "git_revision": "UNCOMMITTED",
+  "evidence_boundaries": [
+    "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin",
+    "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts.",
+    "OSM community geometry, not a surveyed control point",
+    "organizer workbook supplies PCU but no vehicle-type split; the model applies the declared 1 PCU = 1 passenger assumption",
+    "SUMO network is a traceable model, not field-surveyed lane-level truth"
+  ]
+}

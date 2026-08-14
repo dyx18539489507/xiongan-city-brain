@@ -1,0 +1,41 @@
+schema_version: "1.0"
+system: xiongan-traffic-platform
+style: modular-monolith-with-deployable-services
+components:
+  cloud-service:
+    responsibilities: [regional_state, congestion_risk, coordination_targets]
+    interfaces: [rest, mqtt]
+  edge-service:
+    responsibilities: [local_control, safety_validation, degradation, cloud_state_gateway]
+    interfaces: [mqtt]
+  rsu-service:
+    responsibilities: [roadside_observation_validation, roadside_state_gateway, stale_sensor_detection]
+    interfaces: [mqtt]
+  vehicle-agent:
+    responsibilities: [vehicle_telemetry, speed_guidance, execution_feedback]
+    interfaces: [mqtt, sumo_adapter]
+  experiment-service:
+    responsibilities: [lifecycle, reproducibility, event_recording]
+    interfaces: [rest, mqtt]
+  report-service:
+    responsibilities: [metrics, json_csv_html_reports]
+    interfaces: [mqtt, shared_artifact_volume]
+  web-dashboard:
+    responsibilities: [realtime_visualization, experiment_control, fault_injection]
+    interfaces: [rest, websocket]
+  postgres:
+    implementation: TimescaleDB_on_PostgreSQL
+    responsibilities: [metadata, sampled_time_series, retention_policies, reports]
+  redis:
+    responsibilities: [locks, latest_state, short_term_cache]
+  mosquitto:
+    responsibilities: [state_strategy_feedback_event_bus]
+  sumo-runner:
+    responsibilities: [traffic_digital_proving_ground, validated_action_boundary]
+    interfaces: [mqtt, sumo_adapter]
+dependency_rules:
+  - cloud-service does_not_control sumo-runner
+  - sumo-runner observations_flow_through [rsu-service, edge-service, cloud-service]
+  - algorithms depend_only_on [contracts, algorithm-sdk]
+  - all_signal_actions pass_through safety-kernel
+  - all_sumo_calls pass_through sumo-adapter

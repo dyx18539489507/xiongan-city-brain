@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routes>
+    <vType id="passenger" vClass="passenger" accel="2.6" decel="4.5" sigma="0.5" length="5.0" minGap="2.5" color="1,1,0" />
+    <route id="E_L" edges="in_E out_S" />
+    <route id="E_R" edges="in_E out_N" />
+    <route id="S_R" edges="in_S out_E" />
+    <route id="S_S" edges="in_S out_N" />
+    <route id="W_L" edges="in_W out_N" />
+    <route id="W_S" edges="in_W out_E" />
+    <flow id="offpeak_01_E_L" type="passenger" route="E_L" begin="0" end="900" number="16" departLane="best" departSpeed="max" />
+    <flow id="offpeak_01_E_R" type="passenger" route="E_R" begin="0" end="900" number="70" departLane="best" departSpeed="max" />
+    <flow id="offpeak_01_S_R" type="passenger" route="S_R" begin="0" end="900" number="23" departLane="best" departSpeed="max" />
+    <flow id="offpeak_01_S_S" type="passenger" route="S_S" begin="0" end="900" number="55" departLane="best" departSpeed="max" />
+    <flow id="offpeak_01_W_L" type="passenger" route="W_L" begin="0" end="900" number="41" departLane="best" departSpeed="max" />
+    <flow id="offpeak_01_W_S" type="passenger" route="W_S" begin="0" end="900" number="40" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_E_L" type="passenger" route="E_L" begin="900" end="1800" number="18" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_E_R" type="passenger" route="E_R" begin="900" end="1800" number="72" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_S_R" type="passenger" route="S_R" begin="900" end="1800" number="24" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_S_S" type="passenger" route="S_S" begin="900" end="1800" number="54" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_W_L" type="passenger" route="W_L" begin="900" end="1800" number="40" departLane="best" departSpeed="max" />
+    <flow id="offpeak_02_W_S" type="passenger" route="W_S" begin="900" end="1800" number="42" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_E_L" type="passenger" route="E_L" begin="1800" end="2700" number="17" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_E_R" type="passenger" route="E_R" begin="1800" end="2700" number="71" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_S_R" type="passenger" route="S_R" begin="1800" end="2700" number="22" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_S_S" type="passenger" route="S_S" begin="1800" end="2700" number="56" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_W_L" type="passenger" route="W_L" begin="1800" end="2700" number="42" departLane="best" departSpeed="max" />
+    <flow id="offpeak_03_W_S" type="passenger" route="W_S" begin="1800" end="2700" number="39" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_E_L" type="passenger" route="E_L" begin="2700" end="3600" number="19" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_E_R" type="passenger" route="E_R" begin="2700" end="3600" number="69" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_S_R" type="passenger" route="S_R" begin="2700" end="3600" number="25" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_S_S" type="passenger" route="S_S" begin="2700" end="3600" number="53" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_W_L" type="passenger" route="W_L" begin="2700" end="3600" number="39" departLane="best" departSpeed="max" />
+    <flow id="offpeak_04_W_S" type="passenger" route="W_S" begin="2700" end="3600" number="41" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_E_L" type="passenger" route="E_L" begin="3600" end="4500" number="15" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_E_R" type="passenger" route="E_R" begin="3600" end="4500" number="73" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_S_R" type="passenger" route="S_R" begin="3600" end="4500" number="23" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_S_S" type="passenger" route="S_S" begin="3600" end="4500" number="55" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_W_L" type="passenger" route="W_L" begin="3600" end="4500" number="41" departLane="best" departSpeed="max" />
+    <flow id="offpeak_05_W_S" type="passenger" route="W_S" begin="3600" end="4500" number="43" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_E_L" type="passenger" route="E_L" begin="4500" end="5400" number="20" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_E_R" type="passenger" route="E_R" begin="4500" end="5400" number="68" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_S_R" type="passenger" route="S_R" begin="4500" end="5400" number="24" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_S_S" type="passenger" route="S_S" begin="4500" end="5400" number="57" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_W_L" type="passenger" route="W_L" begin="4500" end="5400" number="43" departLane="best" departSpeed="max" />
+    <flow id="offpeak_06_W_S" type="passenger" route="W_S" begin="4500" end="5400" number="40" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_E_L" type="passenger" route="E_L" begin="5400" end="6300" number="17" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_E_R" type="passenger" route="E_R" begin="5400" end="6300" number="74" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_S_R" type="passenger" route="S_R" begin="5400" end="6300" number="23" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_S_S" type="passenger" route="S_S" begin="5400" end="6300" number="54" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_W_L" type="passenger" route="W_L" begin="5400" end="6300" number="40" departLane="best" departSpeed="max" />
+    <flow id="offpeak_07_W_S" type="passenger" route="W_S" begin="5400" end="6300" number="42" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_E_L" type="passenger" route="E_L" begin="6300" end="7200" number="18" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_E_R" type="passenger" route="E_R" begin="6300" end="7200" number="71" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_S_R" type="passenger" route="S_R" begin="6300" end="7200" number="24" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_S_S" type="passenger" route="S_S" begin="6300" end="7200" number="54" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_W_L" type="passenger" route="W_L" begin="6300" end="7200" number="42" departLane="best" departSpeed="max" />
+    <flow id="offpeak_08_W_S" type="passenger" route="W_S" begin="6300" end="7200" number="41" departLane="best" departSpeed="max" />
+</routes>

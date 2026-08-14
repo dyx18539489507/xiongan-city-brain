@@ -1,0 +1,602 @@
+{
+  "schemaVersion": "1.0",
+  "startedAt": "2026-08-09T10:58:01.589Z",
+  "mode": "headed-gpu-candidate",
+  "claimBoundary": "Headed measurements are a candidate; verify the WebGL renderer and system GPU telemetry before MX250 acceptance.",
+  "baseUrl": "http://127.0.0.1:5185",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "durationS": 900,
+  "warmupS": 2,
+  "sampleS": 3,
+  "algorithm": "fixed-time",
+  "seed": 163,
+  "profiles": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05"
+  ],
+  "conditions": [
+    "clear",
+    "night",
+    "rain"
+  ],
+  "views": [
+    "overview",
+    "corridor",
+    "junction"
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "devicePixelRatio": 1,
+    "webglVendor": "Google Inc. (NVIDIA)",
+    "webglRenderer": "ANGLE (NVIDIA, NVIDIA GeForce MX250 (0x00001D52) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "pageErrors": [],
+  "runs": [
+    {
+      "profile": "S01",
+      "experimentId": "exp-131835663215",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_clear_overview.png",
+          "samples": 3,
+          "averageFps": 16.6,
+          "minimumP1Fps": 2.6,
+          "averageFrameTimeMs": 60.4,
+          "maximumFrameTimeMs": 615.2,
+          "maximumDrawCalls": 19,
+          "maximumTriangles": 136091,
+          "maximumGeometries": 36,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 94993215,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 11,
+          "simulationTimeEndS": 14,
+          "maximumVehicleCount": 4,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 1
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 15.3,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 65.3,
+          "maximumFrameTimeMs": 316.7,
+          "maximumDrawCalls": 21,
+          "maximumTriangles": 136235,
+          "maximumGeometries": 36,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 118890335,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 24,
+          "simulationTimeEndS": 27,
+          "maximumVehicleCount": 8,
+          "maximumBicycleCount": 5,
+          "maximumPedestrianCount": 2
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_clear_junction.png",
+          "samples": 3,
+          "averageFps": 12.6,
+          "minimumP1Fps": 1.7,
+          "averageFrameTimeMs": 79.3,
+          "maximumFrameTimeMs": 583.4,
+          "maximumDrawCalls": 32,
+          "maximumTriangles": 245079,
+          "maximumGeometries": 36,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 125686422,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 36,
+          "simulationTimeEndS": 38,
+          "maximumVehicleCount": 11,
+          "maximumBicycleCount": 6,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_night_overview.png",
+          "samples": 3,
+          "averageFps": 14.9,
+          "minimumP1Fps": 2.3,
+          "averageFrameTimeMs": 67.9,
+          "maximumFrameTimeMs": 433.3,
+          "maximumDrawCalls": 21,
+          "maximumTriangles": 136451,
+          "maximumGeometries": 36,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 126017914,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 45,
+          "simulationTimeEndS": 47,
+          "maximumVehicleCount": 13,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_night_corridor.png",
+          "samples": 3,
+          "averageFps": 13,
+          "minimumP1Fps": 2.4,
+          "averageFrameTimeMs": 76.9,
+          "maximumFrameTimeMs": 418.3,
+          "maximumDrawCalls": 21,
+          "maximumTriangles": 136595,
+          "maximumGeometries": 36,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 111127013,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 53,
+          "simulationTimeEndS": 55,
+          "maximumVehicleCount": 16,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_night_junction.png",
+          "samples": 3,
+          "averageFps": 12.1,
+          "minimumP1Fps": 2.1,
+          "averageFrameTimeMs": 82.7,
+          "maximumFrameTimeMs": 483.6,
+          "maximumDrawCalls": 32,
+          "maximumTriangles": 245355,
+          "maximumGeometries": 36,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 109232700,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 63,
+          "simulationTimeEndS": 65,
+          "maximumVehicleCount": 19,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_rain_overview.png",
+          "samples": 3,
+          "averageFps": 15.6,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 64.4,
+          "maximumFrameTimeMs": 283.4,
+          "maximumDrawCalls": 22,
+          "maximumTriangles": 136823,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 118918911,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 72,
+          "simulationTimeEndS": 74,
+          "maximumVehicleCount": 21,
+          "maximumBicycleCount": 14,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 15.9,
+          "minimumP1Fps": 1.9,
+          "averageFrameTimeMs": 63.2,
+          "maximumFrameTimeMs": 533.3,
+          "maximumDrawCalls": 22,
+          "maximumTriangles": 136847,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 128631224,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 79,
+          "simulationTimeEndS": 81,
+          "maximumVehicleCount": 23,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S01_rain_junction.png",
+          "samples": 3,
+          "averageFps": 15.7,
+          "minimumP1Fps": 2.4,
+          "averageFrameTimeMs": 63.8,
+          "maximumFrameTimeMs": 416,
+          "maximumDrawCalls": 33,
+          "maximumTriangles": 245607,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 135128086,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 87,
+          "simulationTimeEndS": 89,
+          "maximumVehicleCount": 26,
+          "maximumBicycleCount": 16,
+          "maximumPedestrianCount": 8
+        }
+      ],
+      "terminal": {
+        "id": "exp-131835663215",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 163,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S01"
+        },
+        "error": null
+      }
+    },
+    {
+      "profile": "S02",
+      "experimentId": "exp-29a0fb2e11a0",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_clear_overview.png",
+          "samples": 3,
+          "averageFps": 13.7,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 73,
+          "maximumFrameTimeMs": 283.5,
+          "maximumDrawCalls": 20,
+          "maximumTriangles": 136091,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 112465816,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 9,
+          "simulationTimeEndS": 13,
+          "maximumVehicleCount": 7,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 1
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 14.8,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 67.5,
+          "maximumFrameTimeMs": 316.8,
+          "maximumDrawCalls": 21,
+          "maximumTriangles": 136247,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 117783172,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 19,
+          "simulationTimeEndS": 21,
+          "maximumVehicleCount": 13,
+          "maximumBicycleCount": 4,
+          "maximumPedestrianCount": 2
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_clear_junction.png",
+          "samples": 3,
+          "averageFps": 11.7,
+          "minimumP1Fps": 2.1,
+          "averageFrameTimeMs": 86.3,
+          "maximumFrameTimeMs": 483.3,
+          "maximumDrawCalls": 32,
+          "maximumTriangles": 245043,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 136600210,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 27,
+          "simulationTimeEndS": 30,
+          "maximumVehicleCount": 17,
+          "maximumBicycleCount": 6,
+          "maximumPedestrianCount": 3
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_night_overview.png",
+          "samples": 3,
+          "averageFps": 14.4,
+          "minimumP1Fps": 2.1,
+          "averageFrameTimeMs": 69.7,
+          "maximumFrameTimeMs": 483.4,
+          "maximumDrawCalls": 21,
+          "maximumTriangles": 136547,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 135856417,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 37,
+          "simulationTimeEndS": 39,
+          "maximumVehicleCount": 23,
+          "maximumBicycleCount": 7,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_night_corridor.png",
+          "samples": 3,
+          "averageFps": 19,
+          "minimumP1Fps": 3,
+          "averageFrameTimeMs": 52.6,
+          "maximumFrameTimeMs": 333.1,
+          "maximumDrawCalls": 22,
+          "maximumTriangles": 136607,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 142098472,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 45,
+          "simulationTimeEndS": 47,
+          "maximumVehicleCount": 28,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_night_junction.png",
+          "samples": 3,
+          "averageFps": 15,
+          "minimumP1Fps": 2.3,
+          "averageFrameTimeMs": 66.8,
+          "maximumFrameTimeMs": 433.3,
+          "maximumDrawCalls": 34,
+          "maximumTriangles": 245403,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 148103820,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 51,
+          "simulationTimeEndS": 52,
+          "maximumVehicleCount": 32,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_rain_overview.png",
+          "samples": 3,
+          "averageFps": 16.1,
+          "minimumP1Fps": 2,
+          "averageFrameTimeMs": 62.2,
+          "maximumFrameTimeMs": 499.6,
+          "maximumDrawCalls": 24,
+          "maximumTriangles": 136799,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 141662176,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 59,
+          "simulationTimeEndS": 61,
+          "maximumVehicleCount": 37,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 20.5,
+          "minimumP1Fps": 3,
+          "averageFrameTimeMs": 48.8,
+          "maximumFrameTimeMs": 332.7,
+          "maximumDrawCalls": 24,
+          "maximumTriangles": 136931,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 160926348,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 66,
+          "simulationTimeEndS": 67,
+          "maximumVehicleCount": 41,
+          "maximumBicycleCount": 12,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T105748Z-screenshots\\S02_rain_junction.png",
+          "samples": 3,
+          "averageFps": 17.9,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 55.9,
+          "maximumFrameTimeMs": 312.2,
+          "maximumDrawCalls": 35,
+          "maximumTriangles": 245715,
+          "maximumGeometries": 37,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 109429953,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 72,
+          "simulationTimeEndS": 73,
+          "maximumVehicleCount": 45,
+          "maximumBicycleCount": 14,
+          "maximumPedestrianCount": 7
+        }
+      ],
+      "terminal": {
+        "id": "exp-29a0fb2e11a0",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 163,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S02"
+        },
+        "error": null
+      }
+    }
+  ]
+}

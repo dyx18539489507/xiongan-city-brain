@@ -1,0 +1,236 @@
+{
+  "status": "all_20_high_confidence_image_registration",
+  "corrected_prior_demo_1_candidate": {
+    "rejected": [
+      39.057146,
+      115.8915592
+    ],
+    "replacement": [
+      39.00495081,
+      116.10212482
+    ],
+    "reason": "the old candidate relied on a mistaken landmark interpretation; the replacement has over 1,100 RANSAC inliers against the regional imagery mosaic"
+  },
+  "intersections": [
+    {
+      "id": 1,
+      "latitude": 39.00495081,
+      "longitude": 116.10212482,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 1173,
+      "inlier_ratio": 0.9907,
+      "median_reprojection_error_px": 0.121,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 2,
+      "latitude": 38.99126558,
+      "longitude": 116.12702875,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 339,
+      "inlier_ratio": 0.9631,
+      "median_reprojection_error_px": 0.125,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 3,
+      "latitude": 38.98205793,
+      "longitude": 116.07981713,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 264,
+      "inlier_ratio": 0.9778,
+      "median_reprojection_error_px": 0.1,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 4,
+      "latitude": 38.98561213,
+      "longitude": 116.12553547,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 355,
+      "inlier_ratio": 0.9569,
+      "median_reprojection_error_px": 0.129,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 5,
+      "latitude": 38.99238912,
+      "longitude": 116.0905246,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 787,
+      "inlier_ratio": 0.9875,
+      "median_reprojection_error_px": 0.116,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 6,
+      "latitude": 38.98386684,
+      "longitude": 116.09010603,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 385,
+      "inlier_ratio": 0.9796,
+      "median_reprojection_error_px": 0.113,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 7,
+      "latitude": 39.03995083,
+      "longitude": 116.17425514,
+      "confidence": "high",
+      "method": "SIFT+RANSAC on targeted z16 mosaic around Xiong'an Railway Station",
+      "inliers": 45,
+      "inlier_ratio": 0.7627,
+      "median_reprojection_error_px": 1.856,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 8,
+      "latitude": 39.02038359,
+      "longitude": 116.11821398,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 69,
+      "inlier_ratio": 0.8734,
+      "median_reprojection_error_px": 0.178,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 9,
+      "latitude": 38.98414067,
+      "longitude": 116.0995201,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 765,
+      "inlier_ratio": 0.9871,
+      "median_reprojection_error_px": 0.111,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 10,
+      "latitude": 39.01899084,
+      "longitude": 116.14671709,
+      "confidence": "high",
+      "method": "pairwise official-PNG homography composed with a high-confidence mosaic registration (reference demo_1)",
+      "inliers": 1355,
+      "inlier_ratio": 0.9476,
+      "median_reprojection_error_px": null,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 11,
+      "latitude": 39.06951178,
+      "longitude": 115.84042554,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 71,
+      "inlier_ratio": 0.8353,
+      "median_reprojection_error_px": 0.087,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 12,
+      "latitude": 39.06142105,
+      "longitude": 115.84090993,
+      "confidence": "high",
+      "method": "SIFT+RANSAC on targeted western z16 mosaic",
+      "inliers": 54,
+      "inlier_ratio": 0.6506,
+      "median_reprojection_error_px": 0.209,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 13,
+      "latitude": 39.07354487,
+      "longitude": 115.90460527,
+      "confidence": "high",
+      "method": "pairwise official-PNG homography composed with a high-confidence mosaic registration (reference demo_20)",
+      "inliers": 52,
+      "inlier_ratio": 0.5909,
+      "median_reprojection_error_px": null,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 14,
+      "latitude": 39.04993181,
+      "longitude": 115.91778649,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 210,
+      "inlier_ratio": 0.9813,
+      "median_reprojection_error_px": 0.278,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 15,
+      "latitude": 39.04980217,
+      "longitude": 115.92118948,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 409,
+      "inlier_ratio": 0.9578,
+      "median_reprojection_error_px": 0.251,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 16,
+      "latitude": 39.06077023,
+      "longitude": 115.94382715,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 256,
+      "inlier_ratio": 0.9697,
+      "median_reprojection_error_px": 0.205,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 17,
+      "latitude": 39.06036845,
+      "longitude": 115.90968679,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 341,
+      "inlier_ratio": 0.9884,
+      "median_reprojection_error_px": 0.249,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 18,
+      "latitude": 39.06919712,
+      "longitude": 115.91657292,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 308,
+      "inlier_ratio": 0.9904,
+      "median_reprojection_error_px": 0.236,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 19,
+      "latitude": 39.05167274,
+      "longitude": 115.91706128,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 493,
+      "inlier_ratio": 0.992,
+      "median_reprojection_error_px": 0.266,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    },
+    {
+      "id": 20,
+      "latitude": 39.06635676,
+      "longitude": 115.9067022,
+      "confidence": "high",
+      "method": "SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic",
+      "inliers": 485,
+      "inlier_ratio": 0.9739,
+      "median_reprojection_error_px": 0.217,
+      "evidence_boundary": "high-confidence image registration; still requires field or survey verification before claiming an as-built digital twin"
+    }
+  ]
+}

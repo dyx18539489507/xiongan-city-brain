@@ -1,0 +1,1452 @@
+{
+  "schemaVersion": "1.0-merged",
+  "createdAt": "2026-08-09T23:10:53.187Z",
+  "claimBoundary": "Validated merge of profile runs captured with identical MX250/browser conditions.",
+  "sourceReports": [
+    "outputs/3d/benchmarks/matrix-20260809T225736Z.json",
+    "outputs/3d/benchmarks/matrix-20260809T230322Z.json",
+    "outputs/3d/benchmarks/matrix-20260809T230827Z.json"
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "devicePixelRatio": 1,
+    "webglVendor": "Google Inc. (NVIDIA)",
+    "webglRenderer": "ANGLE (NVIDIA, NVIDIA GeForce MX250 (0x00001D52) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "profiles": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05"
+  ],
+  "conditions": [
+    "clear",
+    "night",
+    "rain"
+  ],
+  "views": [
+    "overview",
+    "corridor",
+    "junction"
+  ],
+  "pageErrors": [],
+  "runs": [
+    {
+      "profile": "S01",
+      "experimentId": "exp-4aea8213fe72",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_clear_overview.png",
+          "samples": 3,
+          "averageFps": 22.1,
+          "minimumP1Fps": 4,
+          "averageFrameTimeMs": 45.4,
+          "maximumFrameTimeMs": 400,
+          "maximumDrawCalls": 25,
+          "maximumTriangles": 142781,
+          "maximumGeometries": 39,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 105801822,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 10,
+          "simulationTimeEndS": 15,
+          "maximumVehicleCount": 4,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 1
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 16.2,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 61.5,
+          "maximumFrameTimeMs": 283.2,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143009,
+          "maximumGeometries": 39,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 121808766,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 28,
+          "simulationTimeEndS": 32,
+          "maximumVehicleCount": 9,
+          "maximumBicycleCount": 6,
+          "maximumPedestrianCount": 3
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_clear_junction.png",
+          "samples": 3,
+          "averageFps": 12.8,
+          "minimumP1Fps": 2.2,
+          "averageFrameTimeMs": 79.4,
+          "maximumFrameTimeMs": 450,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 195645,
+          "maximumGeometries": 45,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 127271761,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 41,
+          "simulationTimeEndS": 42,
+          "maximumVehicleCount": 12,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_night_overview.png",
+          "samples": 3,
+          "averageFps": 22.7,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 44.2,
+          "maximumFrameTimeMs": 476.7,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143141,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 114477833,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 46,
+          "simulationTimeEndS": 48,
+          "maximumVehicleCount": 14,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_night_corridor.png",
+          "samples": 3,
+          "averageFps": 18.5,
+          "minimumP1Fps": 3.7,
+          "averageFrameTimeMs": 54.1,
+          "maximumFrameTimeMs": 266.7,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143285,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 110157614,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 54,
+          "simulationTimeEndS": 56,
+          "maximumVehicleCount": 16,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_night_junction.png",
+          "samples": 3,
+          "averageFps": 17.6,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 56.7,
+          "maximumFrameTimeMs": 350.1,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 195921,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 125330225,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 65,
+          "simulationTimeEndS": 67,
+          "maximumVehicleCount": 19,
+          "maximumBicycleCount": 12,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_rain_overview.png",
+          "samples": 3,
+          "averageFps": 19.4,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 51.5,
+          "maximumFrameTimeMs": 283.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143537,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 132392208,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 74,
+          "simulationTimeEndS": 77,
+          "maximumVehicleCount": 22,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 19.7,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 50.9,
+          "maximumFrameTimeMs": 283.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143633,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 130329294,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 84,
+          "simulationTimeEndS": 86,
+          "maximumVehicleCount": 25,
+          "maximumBicycleCount": 16,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S01_rain_junction.png",
+          "samples": 3,
+          "averageFps": 20.2,
+          "minimumP1Fps": 3.3,
+          "averageFrameTimeMs": 49.7,
+          "maximumFrameTimeMs": 299.9,
+          "maximumDrawCalls": 41,
+          "maximumTriangles": 196185,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 129323526,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 91,
+          "simulationTimeEndS": 93,
+          "maximumVehicleCount": 27,
+          "maximumBicycleCount": 18,
+          "maximumPedestrianCount": 8
+        }
+      ],
+      "terminal": {
+        "id": "exp-4aea8213fe72",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S01"
+        },
+        "error": null
+      }
+    },
+    {
+      "profile": "S02",
+      "experimentId": "exp-d99e03443873",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_clear_overview.png",
+          "samples": 3,
+          "averageFps": 8.6,
+          "minimumP1Fps": 1.1,
+          "averageFrameTimeMs": 126.3,
+          "maximumFrameTimeMs": 899.7,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 142949,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 120618073,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 24,
+          "simulationTimeEndS": 24,
+          "maximumVehicleCount": 14,
+          "maximumBicycleCount": 5,
+          "maximumPedestrianCount": 2
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 8.1,
+          "minimumP1Fps": 1.3,
+          "averageFrameTimeMs": 124,
+          "maximumFrameTimeMs": 783.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143297,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 119449072,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 41,
+          "simulationTimeEndS": 45,
+          "maximumVehicleCount": 28,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_clear_junction.png",
+          "samples": 3,
+          "averageFps": 12.5,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 80.4,
+          "maximumFrameTimeMs": 400.1,
+          "maximumDrawCalls": 42,
+          "maximumTriangles": 195981,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 127877487,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 54,
+          "simulationTimeEndS": 56,
+          "maximumVehicleCount": 34,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_night_overview.png",
+          "samples": 3,
+          "averageFps": 11.5,
+          "minimumP1Fps": 2.7,
+          "averageFrameTimeMs": 87.4,
+          "maximumFrameTimeMs": 366.6,
+          "maximumDrawCalls": 29,
+          "maximumTriangles": 143513,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 135441646,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 62,
+          "simulationTimeEndS": 65,
+          "maximumVehicleCount": 40,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_night_corridor.png",
+          "samples": 3,
+          "averageFps": 13.6,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 73.4,
+          "maximumFrameTimeMs": 316,
+          "maximumDrawCalls": 29,
+          "maximumTriangles": 143657,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 135414474,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 70,
+          "simulationTimeEndS": 73,
+          "maximumVehicleCount": 45,
+          "maximumBicycleCount": 14,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_night_junction.png",
+          "samples": 3,
+          "averageFps": 12.3,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 81.1,
+          "maximumFrameTimeMs": 399.7,
+          "maximumDrawCalls": 42,
+          "maximumTriangles": 196329,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 157558619,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 79,
+          "simulationTimeEndS": 82,
+          "maximumVehicleCount": 50,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_rain_overview.png",
+          "samples": 3,
+          "averageFps": 11.1,
+          "minimumP1Fps": 1.8,
+          "averageFrameTimeMs": 90.6,
+          "maximumFrameTimeMs": 566.8,
+          "maximumDrawCalls": 30,
+          "maximumTriangles": 143969,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 160860121,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 88,
+          "simulationTimeEndS": 91,
+          "maximumVehicleCount": 56,
+          "maximumBicycleCount": 18,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 15.2,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 66.2,
+          "maximumFrameTimeMs": 350.1,
+          "maximumDrawCalls": 30,
+          "maximumTriangles": 144017,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 159318688,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 97,
+          "simulationTimeEndS": 99,
+          "maximumVehicleCount": 61,
+          "maximumBicycleCount": 19,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T225736Z-screenshots/S02_rain_junction.png",
+          "samples": 3,
+          "averageFps": 16.9,
+          "minimumP1Fps": 1.8,
+          "averageFrameTimeMs": 59.7,
+          "maximumFrameTimeMs": 549.6,
+          "maximumDrawCalls": 43,
+          "maximumTriangles": 196653,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 149747056,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 104,
+          "simulationTimeEndS": 106,
+          "maximumVehicleCount": 65,
+          "maximumBicycleCount": 20,
+          "maximumPedestrianCount": 9
+        }
+      ],
+      "terminal": {
+        "id": "exp-d99e03443873",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S02"
+        },
+        "error": null
+      }
+    },
+    {
+      "profile": "S03",
+      "experimentId": "exp-628e164fab9c",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_clear_overview.png",
+          "samples": 3,
+          "averageFps": 23.4,
+          "minimumP1Fps": 5.5,
+          "averageFrameTimeMs": 42.7,
+          "maximumFrameTimeMs": 216.6,
+          "maximumDrawCalls": 25,
+          "maximumTriangles": 142805,
+          "maximumGeometries": 39,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 87258016,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 10,
+          "simulationTimeEndS": 16,
+          "maximumVehicleCount": 6,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 1
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 14.2,
+          "minimumP1Fps": 3.3,
+          "averageFrameTimeMs": 70.4,
+          "maximumFrameTimeMs": 299.9,
+          "maximumDrawCalls": 26,
+          "maximumTriangles": 143045,
+          "maximumGeometries": 39,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 99376980,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 28,
+          "simulationTimeEndS": 32,
+          "maximumVehicleCount": 12,
+          "maximumBicycleCount": 6,
+          "maximumPedestrianCount": 3
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_clear_junction.png",
+          "samples": 3,
+          "averageFps": 10.6,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 94.6,
+          "maximumFrameTimeMs": 399.8,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 195693,
+          "maximumGeometries": 45,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 125968124,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 42,
+          "simulationTimeEndS": 45,
+          "maximumVehicleCount": 17,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_night_overview.png",
+          "samples": 3,
+          "averageFps": 15,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 66.5,
+          "maximumFrameTimeMs": 316.7,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143321,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 136282886,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 53,
+          "simulationTimeEndS": 56,
+          "maximumVehicleCount": 22,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_night_corridor.png",
+          "samples": 3,
+          "averageFps": 14,
+          "minimumP1Fps": 2.6,
+          "averageFrameTimeMs": 71.6,
+          "maximumFrameTimeMs": 383.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143453,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 136794803,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 62,
+          "simulationTimeEndS": 64,
+          "maximumVehicleCount": 24,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_night_junction.png",
+          "samples": 3,
+          "averageFps": 15.8,
+          "minimumP1Fps": 3.3,
+          "averageFrameTimeMs": 63.2,
+          "maximumFrameTimeMs": 300,
+          "maximumDrawCalls": 41,
+          "maximumTriangles": 195993,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 135831477,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 69,
+          "simulationTimeEndS": 71,
+          "maximumVehicleCount": 27,
+          "maximumBicycleCount": 13,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_rain_overview.png",
+          "samples": 3,
+          "averageFps": 12.1,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 82.5,
+          "maximumFrameTimeMs": 350.1,
+          "maximumDrawCalls": 30,
+          "maximumTriangles": 143597,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 152458568,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 77,
+          "simulationTimeEndS": 79,
+          "maximumVehicleCount": 30,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 15.6,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 64.1,
+          "maximumFrameTimeMs": 350.1,
+          "maximumDrawCalls": 30,
+          "maximumTriangles": 143717,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 158986509,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 86,
+          "simulationTimeEndS": 88,
+          "maximumVehicleCount": 34,
+          "maximumBicycleCount": 16,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S03_rain_junction.png",
+          "samples": 3,
+          "averageFps": 14.5,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 69,
+          "maximumFrameTimeMs": 399.9,
+          "maximumDrawCalls": 43,
+          "maximumTriangles": 196281,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 117177092,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 94,
+          "simulationTimeEndS": 96,
+          "maximumVehicleCount": 37,
+          "maximumBicycleCount": 18,
+          "maximumPedestrianCount": 8
+        }
+      ],
+      "terminal": {
+        "id": "exp-628e164fab9c",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S03"
+        },
+        "error": null
+      }
+    },
+    {
+      "profile": "S04",
+      "experimentId": "exp-1951c60d3656",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_clear_overview.png",
+          "samples": 3,
+          "averageFps": 8.1,
+          "minimumP1Fps": 2.1,
+          "averageFrameTimeMs": 126.2,
+          "maximumFrameTimeMs": 483.3,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 142901,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 131751308,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 13,
+          "simulationTimeEndS": 18,
+          "maximumVehicleCount": 8,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 2
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 11.4,
+          "minimumP1Fps": 1.9,
+          "averageFrameTimeMs": 87.7,
+          "maximumFrameTimeMs": 516.7,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143069,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 146179666,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 25,
+          "simulationTimeEndS": 29,
+          "maximumVehicleCount": 13,
+          "maximumBicycleCount": 5,
+          "maximumPedestrianCount": 3
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_clear_junction.png",
+          "samples": 3,
+          "averageFps": 15.2,
+          "minimumP1Fps": 2.6,
+          "averageFrameTimeMs": 66.1,
+          "maximumFrameTimeMs": 383.3,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 195717,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 151600598,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 36,
+          "simulationTimeEndS": 39,
+          "maximumVehicleCount": 18,
+          "maximumBicycleCount": 7,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_night_overview.png",
+          "samples": 3,
+          "averageFps": 16.8,
+          "minimumP1Fps": 3.3,
+          "averageFrameTimeMs": 59.8,
+          "maximumFrameTimeMs": 300.2,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143357,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 125575247,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 49,
+          "simulationTimeEndS": 52,
+          "maximumVehicleCount": 24,
+          "maximumBicycleCount": 10,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_night_corridor.png",
+          "samples": 3,
+          "averageFps": 14.8,
+          "minimumP1Fps": 3.3,
+          "averageFrameTimeMs": 68,
+          "maximumFrameTimeMs": 300,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143393,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 122856241,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 58,
+          "simulationTimeEndS": 60,
+          "maximumVehicleCount": 27,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_night_junction.png",
+          "samples": 3,
+          "averageFps": 14.5,
+          "minimumP1Fps": 2.3,
+          "averageFrameTimeMs": 68.8,
+          "maximumFrameTimeMs": 431.6,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 196029,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 135533129,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 65,
+          "simulationTimeEndS": 67,
+          "maximumVehicleCount": 31,
+          "maximumBicycleCount": 12,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_rain_overview.png",
+          "samples": 3,
+          "averageFps": 14.9,
+          "minimumP1Fps": 2.3,
+          "averageFrameTimeMs": 67.3,
+          "maximumFrameTimeMs": 433.8,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143645,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 121101776,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 74,
+          "simulationTimeEndS": 76,
+          "maximumVehicleCount": 35,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 15.6,
+          "minimumP1Fps": 2.6,
+          "averageFrameTimeMs": 64.1,
+          "maximumFrameTimeMs": 383.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143765,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 130762752,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 82,
+          "simulationTimeEndS": 84,
+          "maximumVehicleCount": 39,
+          "maximumBicycleCount": 16,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230322Z-screenshots/S04_rain_junction.png",
+          "samples": 3,
+          "averageFps": 14.3,
+          "minimumP1Fps": 2.7,
+          "averageFrameTimeMs": 70.7,
+          "maximumFrameTimeMs": 366.8,
+          "maximumDrawCalls": 41,
+          "maximumTriangles": 196329,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 127764305,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 89,
+          "simulationTimeEndS": 91,
+          "maximumVehicleCount": 42,
+          "maximumBicycleCount": 18,
+          "maximumPedestrianCount": 8
+        }
+      ],
+      "terminal": {
+        "id": "exp-1951c60d3656",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S04"
+        },
+        "error": null
+      }
+    },
+    {
+      "profile": "S05",
+      "experimentId": "exp-fc9d1da4f2c5",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_clear_overview.png",
+          "samples": 3,
+          "averageFps": 21.8,
+          "minimumP1Fps": 4.6,
+          "averageFrameTimeMs": 46.1,
+          "maximumFrameTimeMs": 250.1,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 142889,
+          "maximumGeometries": 30,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 111106052,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 13,
+          "simulationTimeEndS": 19,
+          "maximumVehicleCount": 8,
+          "maximumBicycleCount": 3,
+          "maximumPedestrianCount": 2
+        },
+        {
+          "condition": "clear",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_clear_corridor.png",
+          "samples": 3,
+          "averageFps": 17.5,
+          "minimumP1Fps": 5,
+          "averageFrameTimeMs": 57.2,
+          "maximumFrameTimeMs": 200,
+          "maximumDrawCalls": 27,
+          "maximumTriangles": 143045,
+          "maximumGeometries": 30,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 118378797,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 31,
+          "simulationTimeEndS": 36,
+          "maximumVehicleCount": 16,
+          "maximumBicycleCount": 6,
+          "maximumPedestrianCount": 3
+        },
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_clear_junction.png",
+          "samples": 3,
+          "averageFps": 13.2,
+          "minimumP1Fps": 3.5,
+          "averageFrameTimeMs": 76.1,
+          "maximumFrameTimeMs": 283.3,
+          "maximumDrawCalls": 40,
+          "maximumTriangles": 195717,
+          "maximumGeometries": 44,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 133819094,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 44,
+          "simulationTimeEndS": 48,
+          "maximumVehicleCount": 22,
+          "maximumBicycleCount": 8,
+          "maximumPedestrianCount": 4
+        },
+        {
+          "condition": "night",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_night_overview.png",
+          "samples": 3,
+          "averageFps": 14.9,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 67.3,
+          "maximumFrameTimeMs": 317,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143357,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 106673391,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 57,
+          "simulationTimeEndS": 59,
+          "maximumVehicleCount": 27,
+          "maximumBicycleCount": 11,
+          "maximumPedestrianCount": 5
+        },
+        {
+          "condition": "night",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_night_corridor.png",
+          "samples": 3,
+          "averageFps": 18.6,
+          "minimumP1Fps": 2.1,
+          "averageFrameTimeMs": 54,
+          "maximumFrameTimeMs": 466.4,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 143477,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 114782005,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 66,
+          "simulationTimeEndS": 68,
+          "maximumVehicleCount": 31,
+          "maximumBicycleCount": 13,
+          "maximumPedestrianCount": 6
+        },
+        {
+          "condition": "night",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_night_junction.png",
+          "samples": 3,
+          "averageFps": 15.2,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 65.7,
+          "maximumFrameTimeMs": 349.9,
+          "maximumDrawCalls": 41,
+          "maximumTriangles": 196113,
+          "maximumGeometries": 45,
+          "maximumTextures": 9,
+          "maximumUsedJsHeapBytes": 125712566,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 74,
+          "simulationTimeEndS": 76,
+          "maximumVehicleCount": 35,
+          "maximumBicycleCount": 15,
+          "maximumPedestrianCount": 7
+        },
+        {
+          "condition": "rain",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_rain_overview.png",
+          "samples": 3,
+          "averageFps": 13.2,
+          "minimumP1Fps": 2.9,
+          "averageFrameTimeMs": 75.7,
+          "maximumFrameTimeMs": 350,
+          "maximumDrawCalls": 29,
+          "maximumTriangles": 143729,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 116760317,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 82,
+          "simulationTimeEndS": 84,
+          "maximumVehicleCount": 39,
+          "maximumBicycleCount": 16,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "corridor",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_rain_corridor.png",
+          "samples": 3,
+          "averageFps": 15.1,
+          "minimumP1Fps": 2.5,
+          "averageFrameTimeMs": 66.4,
+          "maximumFrameTimeMs": 400,
+          "maximumDrawCalls": 29,
+          "maximumTriangles": 143777,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 128381680,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 90,
+          "simulationTimeEndS": 92,
+          "maximumVehicleCount": 43,
+          "maximumBicycleCount": 18,
+          "maximumPedestrianCount": 8
+        },
+        {
+          "condition": "rain",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "outputs/3d/benchmarks/matrix-20260809T230827Z-screenshots/S05_rain_junction.png",
+          "samples": 3,
+          "averageFps": 17.8,
+          "minimumP1Fps": 3.2,
+          "averageFrameTimeMs": 56.3,
+          "maximumFrameTimeMs": 315.2,
+          "maximumDrawCalls": 42,
+          "maximumTriangles": 196341,
+          "maximumGeometries": 46,
+          "maximumTextures": 10,
+          "maximumUsedJsHeapBytes": 134525322,
+          "qualityLevels": [
+            "native"
+          ],
+          "renderScales": [
+            1
+          ],
+          "simulationTimeStartS": 98,
+          "simulationTimeEndS": 100,
+          "maximumVehicleCount": 46,
+          "maximumBicycleCount": 19,
+          "maximumPedestrianCount": 9
+        }
+      ],
+      "terminal": {
+        "id": "exp-fc9d1da4f2c5",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 900,
+          "gui": false,
+          "profile": "S05"
+        },
+        "error": null
+      }
+    }
+  ],
+  "summary": {
+    "combinations": 45,
+    "allConcurrentWithSumo": true,
+    "averageFps": 15.26888888888889,
+    "medianFps": 15,
+    "minimumAverageFps": 8.1,
+    "maximumAverageFps": 23.4,
+    "minimumP1Fps": 1.1,
+    "maximumFrameTimeMs": 899.7,
+    "maximumDrawCalls": 43,
+    "maximumTriangles": 196653,
+    "maximumUsedJsHeapBytes": 160860121,
+    "qualityLevels": [
+      "native"
+    ]
+  }
+}

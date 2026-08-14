@@ -1,0 +1,227 @@
+{
+  "assessment_date": "2026-07-24",
+  "policy": {
+    "high": "有主办方官方SUMO车道数据，或PNG中道路分隔与车道宽度清晰可辨",
+    "medium": "PNG能辨认道路分隔和路幅，可形成工程车道判断，但看不清完整转向箭头",
+    "low": "PNG分辨率不足且OSM缺少lanes/turn:lanes，保留队友3进口/2出口模板",
+    "lane_index_note": "SUMO车道索引0为外侧；1车道时左直右共用，2车道时外侧右直、内侧直左，3车道时仿队友右/直/左分工"
+  },
+  "intersections": {
+    "1": {
+      "method": "organizer_official_sumo",
+      "confidence": "high",
+      "evidence": "主办方demo_1.net.xml：东西方向2车道/向，南北方向3车道/向",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 3},
+        "S": {"incoming": 3, "outgoing": 3}
+      }
+    },
+    "2": {
+      "method": "organizer_official_sumo",
+      "confidence": "high",
+      "evidence": "主办方demo_2.net.xml：西向道路2车道/向，南北支路1车道/向，三岔路口",
+      "arms": {
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "3": {
+      "method": "organizer_official_sumo",
+      "confidence": "high",
+      "evidence": "主办方demo_3.net.xml：东西方向2车道/向，南北方向1车道/向",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "4": {
+      "method": "organizer_official_sumo",
+      "confidence": "high",
+      "evidence": "主办方demo_4.net.xml：四个方向均为1车道/向",
+      "arms": {
+        "E": {"incoming": 1, "outgoing": 1},
+        "W": {"incoming": 1, "outgoing": 1},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "5": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG可辨认东西与南向道路为有绿化分隔的城市道路，路幅更接近每向2车道；车道线和转向箭头不清晰",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "S": {"incoming": 2, "outgoing": 2}
+      }
+    },
+    "6": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG可辨认四向道路具有中央绿化分隔，路幅判断为每向2车道；转向专用道不可辨",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 2, "outgoing": 2},
+        "S": {"incoming": 2, "outgoing": 2}
+      }
+    },
+    "7": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG中的斜交道路均表现为窄幅无中央分隔双向道路，按每方向1车道建模；实际为不规则斜交形态",
+      "arms": {
+        "E": {"incoming": 1, "outgoing": 1},
+        "W": {"incoming": 1, "outgoing": 1},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "8": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG清楚显示宽幅分隔道路及进口展宽，保留队友3进口/2出口结构最接近可见路幅；无法逐条识别转向箭头",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "9": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG可辨认南北及东西道路为分隔式城市道路，路幅判断为每向2车道；车道标线不完整",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 2, "outgoing": 2},
+        "S": {"incoming": 2, "outgoing": 2}
+      }
+    },
+    "10": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "high",
+      "evidence": "PNG目标处为园区/施工道路三岔口，三条道路均为窄幅未分隔道路，按每方向1车道",
+      "arms": {
+        "E": {"incoming": 1, "outgoing": 1},
+        "W": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "11": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG显示东西主路为分隔式每向约2车道，南北支路明显较窄、按每向1车道；影像存在拼接接缝",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "12": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG中四向道路均有清晰中央分隔和双车道路幅，按每方向2车道；转向箭头不可辨",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 2, "outgoing": 2},
+        "S": {"incoming": 2, "outgoing": 2}
+      }
+    },
+    "13": {
+      "method": "official_png_visual_interpretation",
+      "confidence": "medium",
+      "evidence": "PNG显示东西弯曲主路为分隔式每向约2车道，南北支路路幅较窄、按每向1车道",
+      "arms": {
+        "E": {"incoming": 2, "outgoing": 2},
+        "W": {"incoming": 2, "outgoing": 2},
+        "N": {"incoming": 1, "outgoing": 1},
+        "S": {"incoming": 1, "outgoing": 1}
+      }
+    },
+    "14": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅704×395，目标区域模糊；OSM无完整lanes/turn:lanes，不能可靠数车道",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "15": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅805×525且目标路口标线不可辨；OSM无完整车道标签",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "16": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅823×521且路口被建筑与树影干扰；OSM无完整车道标签",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "17": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅720×660且目标道路被树冠遮挡；OSM无完整车道标签，保留三岔3进2出模板",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "18": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅819×560且目标交叉口标线不可辨；OSM无完整车道标签",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "19": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅953×756且目标路口边界与车道线模糊；OSM无完整车道标签",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    },
+    "20": {
+      "method": "teammate_template_retained",
+      "confidence": "low",
+      "evidence": "原始PNG仅1055×739，建筑与树影覆盖路口且标线不可辨；OSM无完整车道标签",
+      "arms": {
+        "E": {"incoming": 3, "outgoing": 2},
+        "W": {"incoming": 3, "outgoing": 2},
+        "N": {"incoming": 3, "outgoing": 2},
+        "S": {"incoming": 3, "outgoing": 2}
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0",
+  "startedAt": "2026-08-09T14:37:02.049Z",
+  "mode": "headed-gpu-candidate",
+  "claimBoundary": "Headed measurements are a candidate; verify the WebGL renderer and system GPU telemetry before MX250 acceptance.",
+  "baseUrl": "http://127.0.0.1:5177",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "durationS": 120,
+  "warmupS": 2,
+  "sampleS": 3,
+  "algorithm": "fixed-time",
+  "seed": 52,
+  "profiles": [
+    "S01"
+  ],
+  "conditions": [
+    "clear"
+  ],
+  "views": [
+    "junction"
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "devicePixelRatio": 1,
+    "webglVendor": "Google Inc. (NVIDIA)",
+    "webglRenderer": "ANGLE (NVIDIA, NVIDIA GeForce MX250 (0x00001D52) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "pageErrors": [],
+  "runs": [
+    {
+      "profile": "S01",
+      "experimentId": "exp-81c72c685d26",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "junction",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260809T143654Z-screenshots\\S01_clear_junction.png",
+          "samples": 3,
+          "averageFps": 14.8,
+          "minimumP1Fps": 5,
+          "averageFrameTimeMs": 67.7,
+          "maximumFrameTimeMs": 199.9,
+          "maximumDrawCalls": 34,
+          "maximumTriangles": 188715,
+          "maximumGeometries": 42,
+          "maximumTextures": 8,
+          "maximumUsedJsHeapBytes": 110109522,
+          "qualityLevels": [
+            "balanced"
+          ],
+          "renderScales": [
+            0.88
+          ],
+          "simulationTimeStartS": 14,
+          "simulationTimeEndS": 22,
+          "maximumVehicleCount": 6,
+          "maximumBicycleCount": 4,
+          "maximumPedestrianCount": 2
+        }
+      ],
+      "terminal": {
+        "id": "exp-81c72c685d26",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 120,
+          "gui": false,
+          "profile": "S01"
+        },
+        "error": null
+      }
+    }
+  ],
+  "completedAt": "2026-08-09T14:37:29.358Z"
+}

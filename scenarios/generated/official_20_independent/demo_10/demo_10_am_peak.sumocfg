@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<configuration>
+    <input>
+        <net-file value="demo_10_am_peak.net.xml" />
+        <route-files value="demo_10_am_peak.rou.xml" />
+        <gui-settings-file value="simple-shapes.view.xml" />
+    </input>
+    <time>
+        <begin value="0" />
+        <end value="9000" />
+        <step-length value="1.0" />
+    </time>
+    <processing>
+        <time-to-teleport value="-1" />
+        <collision.action value="warn" />
+    </processing>
+    <report>
+        <no-step-log value="true" />
+        <duration-log.statistics value="true" />
+    </report>
+    <output>
+        <summary-output value="outputs/am_peak/summary.xml" />
+        <tripinfo-output value="outputs/am_peak/tripinfo.xml" />
+        <statistic-output value="outputs/am_peak/statistics.xml" />
+        <vehroute-output value="outputs/am_peak/vehroute.xml" />
+    </output>
+    <random_number>
+        <seed value="10" />
+    </random_number>
+    <gui_only>
+        <delay value="300" />
+    </gui_only>
+</configuration>

@@ -1,0 +1,143 @@
+name: xiongan-traffic-cloud
+
+x-backend: &backend
+  build:
+    context: ../..
+    dockerfile: deployment/docker/backend.Dockerfile
+  image: ${TRAFFIC_BACKEND_IMAGE:-xiongan-traffic-platform-backend:phase1}
+  env_file: ${ENV_FILE:-../../.env.example}
+  environment:
+    POSTGRES_HOST: postgres
+    REDIS_URL: redis://redis:6379/0
+    MQTT_HOST: mosquitto
+    MQTT_PORT: 8883
+    MQTT_TLS_ENABLED: "true"
+    MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+    TRAFFIC_MESSAGE_BUS: mqtt
+  volumes:
+    - ../../scenarios:/workspace/scenarios:ro
+    - ../../results:/workspace/results
+    - ../mosquitto/certs:/run/mqtt-certs:ro
+  restart: unless-stopped
+  networks: [traffic-cloud]
+
+services:
+  database-migration:
+    <<: *backend
+    entrypoint: ["alembic"]
+    command: ["upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: "no"
+
+  experiment-service:
+    <<: *backend
+    command: ["serve", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on:
+      database-migration: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+      mosquitto: {condition: service_started}
+    ports:
+      - "${API_BIND_ADDRESS:-127.0.0.1}:${API_PORT:-8000}:8000"
+
+  cloud-service:
+    <<: *backend
+    command: ["worker", "cloud-service"]
+    environment:
+      SERVICE_INSTANCE_ID: cloud-primary
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 8883
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      REDIS_URL: redis://redis:6379/0
+      TRAFFIC_MESSAGE_BUS: mqtt
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+
+  report-service:
+    <<: *backend
+    command: ["worker", "report-service"]
+    environment:
+      SERVICE_INSTANCE_ID: report-primary
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 8883
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      REDIS_URL: redis://redis:6379/0
+      TRAFFIC_MESSAGE_BUS: mqtt
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+
+  web-dashboard:
+    build:
+      context: ../..
+      dockerfile: deployment/docker/web.Dockerfile
+    ports:
+      - "${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-5173}:80"
+    depends_on:
+      experiment-service: {condition: service_started}
+    restart: unless-stopped
+    networks: [traffic-cloud]
+
+  postgres:
+    image: ${TIMESCALEDB_IMAGE:-timescale/timescaledb:2.29.1-pg17}
+    command: ["postgres", "-c", "shared_preload_libraries=timescaledb"]
+    env_file: ${ENV_FILE:-../../.env.example}
+    environment:
+      TIMESCALEDB_TELEMETRY: "off"
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks: [traffic-cloud]
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks: [traffic-cloud]
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    ports:
+      - "${MQTT_BIND_ADDRESS:-0.0.0.0}:${MQTT_TLS_PORT:-8883}:8883"
+    volumes:
+      - ../mosquitto/mosquitto.cloud.conf:/mosquitto/config/mosquitto.conf:ro
+      - ../mosquitto/passwords:/mosquitto/config/passwords:ro
+      - ../mosquitto/certs:/mosquitto/certs:ro
+      - mosquitto_data:/mosquitto/data
+    restart: unless-stopped
+    networks: [traffic-cloud]
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "${PROMETHEUS_BIND_ADDRESS:-127.0.0.1}:${PROMETHEUS_PORT:-9090}:9090"
+    restart: unless-stopped
+    networks: [traffic-cloud]
+
+networks:
+  traffic-cloud:
+
+volumes:
+  postgres_data:
+  redis_data:
+  mosquitto_data:
+  prometheus_data:

@@ -1,0 +1,17 @@
+{
+  "name": "Xiongan.DigitalTwin.Tests.EditMode",
+  "rootNamespace": "Xiongan.DigitalTwin.Tests",
+  "references": [
+    "Xiongan.DigitalTwin.Runtime"
+  ],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

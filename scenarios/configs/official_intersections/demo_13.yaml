@@ -1,0 +1,93 @@
+schema_version: "1.0"
+scenario_id: official_demo_13
+demo_id: 13
+display_name: 主办方独立路口 demo_13
+intersection_form: three_arm_t_missing_south
+registration:
+  longitude: 115.90460527
+  latitude: 39.07354487
+  confidence: high
+  method: organizer_png_registration_estimate
+  evidence_boundary: image registration, not surveyed control point
+network_center:
+  longitude: 115.9045958
+  latitude: 39.0733861
+  source: osm_node
+  node_id: "7445137182"
+  evidence_boundary: OSM community geometry, not surveyed control point
+osm_reference:
+  source_file: scenarios/source/xiongan_rongdong_20/rongdong_bbox.osm.xml
+  matched_node_id: "7445137182"
+  nearest_distance_m: 17.67
+  ways:
+    - {way_id: "294951525", name: 通武线, ref: G230, highway: trunk, oneway: true, lanes: 3}
+    - {way_id: "1314535455", name: null, ref: null, highway: tertiary, oneway: false, lanes: null}
+  evidence_boundary: OSM geometry and community tags, not field-surveyed lane data
+arms:
+  E:
+    bearing_deg: 91.12
+    length_m: 2996.25
+    osm_node_chain: ["7445137182", "7445137173", "7445137172", "7445137171", "7445137170", "7445137169", "7445137168", "2985914134", "7994026998", "2985914164", "2985914153", "2985914154", "2985913612", "9250030946"]
+    cutoff_node_id: "9250030946"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 3
+    outgoing_lanes: 3
+    speed_m_s: 27.78
+    priority: 3
+    road_name: 通武线 G230
+    lane_basis: osm_lanes_tag_and_official_png
+    lane_confidence: high
+  W:
+    bearing_deg: 276.45
+    length_m: 537.09
+    osm_node_chain: ["7445137182", "7445137174", "7445137175", "7445137176", "7445137177", "7445137178", "7445137179", "7445137180", "7445137181", "7445137197", "7445137183", "7445137184", "7445137185", "7445137186", "7445137187", "7445137188", "7445137198", "7445137189", "7445137190", "7445137191", "7445137192", "7445137193"]
+    cutoff_node_id: "7445137193"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 3
+    outgoing_lanes: 3
+    speed_m_s: 27.78
+    priority: 3
+    road_name: 通武线 G230
+    lane_basis: osm_lanes_tag_and_official_png
+    lane_confidence: high
+  N:
+    bearing_deg: 359.71
+    length_m: 472.18
+    osm_node_chain: ["7445137182", "12167284906", "12167284907", "11309548689", "11309548688"]
+    cutoff_node_id: "11309548688"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 1
+    outgoing_lanes: 1
+    speed_m_s: 22.22
+    priority: 2
+    road_name: OSM tertiary way 1314535455
+    lane_basis: osm_default_plus_official_png_narrow_branch
+    lane_confidence: medium
+signal_phase_movements:
+  "1": [E_S, E_R, W_S]
+  "2": [N_L, N_R]
+  "3": [W_L]
+  "4": [E_S, E_R]
+simulation:
+  demand_duration_s: 7200
+  clearance_duration_s: 1800
+  step_length_s: 1.0
+  seed: 13
+vehicle_assumption:
+  pcu_to_vehicle: 1.0
+  vehicle_type: passenger
+  theme_color_hex: "#FFFF00"
+  sumo_color_rgb: [1.0, 1.0, 0.0]
+  color_basis: user_selected_theme_from_reference_image
+  evidence_boundary: organizer workbook supplies PCU but no vehicle-type split
+gui:
+  delay_ms: 300
+  vehicle_visualization: simple_shapes
+  vehicle_quality: 2
+  view_scheme: competition simple shapes

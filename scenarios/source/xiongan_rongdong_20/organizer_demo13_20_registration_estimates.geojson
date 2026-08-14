@@ -1,0 +1,20 @@
+{
+  "type": "FeatureCollection",
+  "name": "organizer_demo13_20_registration_estimates",
+  "properties": {
+    "provenance": "registration estimates derived from organizer high-definition map images",
+    "accuracy_boundary": "engineering registration only, not surveyed control points",
+    "connected_main_area_retained": ["demo_14", "demo_15", "demo_17", "demo_18", "demo_19", "demo_20"],
+    "connected_main_area_excluded_but_preserved": ["demo_13", "demo_16"]
+  },
+  "features": [
+    {"type": "Feature", "properties": {"demo_id": "demo_13"}, "geometry": {"type": "Point", "coordinates": [115.9046269, 39.0735494]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_14"}, "geometry": {"type": "Point", "coordinates": [115.9178081, 39.0499276]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_15"}, "geometry": {"type": "Point", "coordinates": [115.9211977, 39.0497776]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_16"}, "geometry": {"type": "Point", "coordinates": [115.9438542, 39.0607506]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_17"}, "geometry": {"type": "Point", "coordinates": [115.9097103, 39.0603499]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_18"}, "geometry": {"type": "Point", "coordinates": [115.9165934, 39.0689863]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_19"}, "geometry": {"type": "Point", "coordinates": [115.9170850, 39.0516698]}},
+    {"type": "Feature", "properties": {"demo_id": "demo_20"}, "geometry": {"type": "Point", "coordinates": [115.9067089, 39.0663405]}}
+  ]
+}

@@ -1,0 +1,14 @@
+.git
+.venv
+node_modules
+apps/web-dashboard/node_modules
+apps/web-dashboard/dist
+results
+outputs
+runtime
+tmp
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache

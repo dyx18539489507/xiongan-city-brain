@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<nodes>
+    <node id="J" x="116.11802400" y="39.02004530" type="traffic_light" />
+    <node id="B_E" x="116.12090732" y="39.01994887" type="priority" />
+    <node id="B_N" x="116.11887383" y="39.02218445" type="priority" />
+    <node id="B_S" x="116.11760738" y="39.01781695" type="priority" />
+    <node id="B_W" x="116.11513827" y="39.02010566" type="priority" />
+</nodes>

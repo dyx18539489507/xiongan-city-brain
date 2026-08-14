@@ -1,0 +1,12 @@
+{
+  "id": "phase13-60s-truth-demo",
+  "durationS": 60,
+  "cues": [
+    {"atS": 0, "label": "全20路口日间鸟瞰", "view": "overview", "weather": "clear", "displayMode": "real"},
+    {"atS": 8, "label": "进入核心控制走廊", "view": "corridor", "displayMode": "real"},
+    {"atS": 18, "label": "K06路口与信号控制", "view": "junction", "junctionId": "11122023451", "displayMode": "analysis"},
+    {"atS": 30, "label": "跟随真实SUMO车辆", "view": "vehicles", "displayMode": "real"},
+    {"atS": 40, "label": "机非人协同运行", "view": "multimodal", "displayMode": "real"},
+    {"atS": 50, "label": "区域态势收束", "view": "overview", "weather": "dusk", "displayMode": "analysis"}
+  ]
+}

@@ -1,0 +1,27 @@
+schema_version: "1.0"
+gates:
+  configuration:
+    command: make validate
+    assertions: [yaml_valid, openapi_valid, json_schema_valid, scenario_valid]
+  unit:
+    command: pytest tests/unit
+  contract:
+    command: pytest tests/contract
+  integration:
+    command: pytest tests/integration
+  end_to_end:
+    command: pytest tests/e2e
+  chaos:
+    command: pytest tests/chaos
+  performance:
+    command: pytest tests/performance
+  demo:
+    command: make demo
+    assertions:
+      [sumo_state_collected, cloud_strategy_received, safe_action_applied,
+       speed_guidance_feedback, metrics_computed, report_generated]
+  fault_demo:
+    command: make fault-demo
+    assertions: [edge_autonomous_entered, recovery_sync_entered, smooth_recovery]
+evidence_rule: actual_run_only
+

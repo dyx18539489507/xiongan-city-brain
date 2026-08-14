@@ -1,0 +1,43 @@
+schema_version: "1.0"
+scenario_id: official_20_independent
+display_name: 主办方20个独立路口复现集
+provenance: organizer_supplied
+is_real_measured_network: false
+network_file: external://赛题资料/20_independent_intersections
+simulation:
+  duration_s: 18000.0
+  step_length_s: 1.0
+  seed: 42
+  gui: false
+demand:
+  - origin_zone: per_intersection_organizer_input
+    destination_zone: per_intersection_organizer_output
+    flow_veh_h: 0.0
+    begin_s: 0.0
+    end_s: 18000.0
+    route_alternatives: false
+vehicle_type_ratios:
+  passenger: 1.0
+  bus: 0.0
+  truck: 0.0
+  emergency: 0.0
+  connected_vehicle: 0.0
+  non_connected_vehicle: 0.0
+connected_vehicle_penetration: 0.0
+flow_multiplier: 1.0
+signal_plan: organizer_supplied_per_intersection
+disturbances: []
+communication:
+  profile: N0
+  cloud_edge: {base_latency_ms: 0.0, packet_loss_rate: 0.0}
+  edge_vehicle: {base_latency_ms: 0.0, packet_loss_rate: 0.0}
+algorithm:
+  name: fixed-time
+  parameters: {}
+sampling:
+  control_hz: 1.0
+  intersection_hz: 1.0
+  dashboard_hz: 1.0
+  vehicle_trajectory_hz: 0.0
+  experiment_summary_hz: 0.1
+

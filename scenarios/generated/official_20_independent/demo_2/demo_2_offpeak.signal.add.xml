@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<additional>
+    <tlLogic id="J" type="static" programID="offpeak" offset="0">
+        <phase duration="37" state="gggrrr" name="P1 南北向直行" />
+        <phase duration="3" state="yyyrrr" name="P1 yellow" />
+        <phase duration="37" state="rrrggg" name="P2 西南向左转" />
+        <phase duration="3" state="rrryyy" name="P2 yellow" />
+    </tlLogic>
+</additional>

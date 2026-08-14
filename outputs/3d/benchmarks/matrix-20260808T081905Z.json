@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0",
+  "startedAt": "2026-08-08T08:19:13.610Z",
+  "mode": "headless-structural-not-gpu-acceptance",
+  "claimBoundary": "Headless measurements validate the harness only and must not be reported as MX250 FPS.",
+  "baseUrl": "http://127.0.0.1:5185",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "durationS": 60,
+  "warmupS": 1,
+  "sampleS": 2,
+  "profiles": [
+    "S01"
+  ],
+  "conditions": [
+    "clear"
+  ],
+  "views": [
+    "overview"
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+    "devicePixelRatio": 1,
+    "webglVendor": "Google Inc. (Google)",
+    "webglRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "pageErrors": [],
+  "runs": [
+    {
+      "profile": "S01",
+      "experimentId": "exp-e1df5f57f29c",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260808T081905Z-screenshots\\S01_clear_overview.png",
+          "samples": 2,
+          "averageFps": 4.2,
+          "minimumP1Fps": 1.9,
+          "averageFrameTimeMs": 237.9,
+          "maximumFrameTimeMs": 866.8,
+          "maximumDrawCalls": 35,
+          "maximumTriangles": 244839,
+          "maximumGeometries": 32,
+          "maximumTextures": 2,
+          "maximumUsedJsHeapBytes": 109000000,
+          "qualityLevels": [
+            "performance"
+          ],
+          "renderScales": [
+            0.75
+          ],
+          "simulationTimeStartS": 21,
+          "simulationTimeEndS": 25,
+          "maximumVehicleCount": 7,
+          "maximumBicycleCount": 5,
+          "maximumPedestrianCount": 2
+        }
+      ],
+      "terminal": {
+        "id": "exp-e1df5f57f29c",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 60,
+          "gui": false,
+          "profile": "S01"
+        },
+        "error": null
+      }
+    }
+  ],
+  "completedAt": "2026-08-08T08:20:15.825Z"
+}

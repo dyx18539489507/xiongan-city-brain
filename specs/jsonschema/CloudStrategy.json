@@ -1,0 +1,255 @@
+{
+  "$defs": {
+    "SourceType": {
+      "description": "Origin service categories used in every message envelope.",
+      "enum": [
+        "cloud",
+        "edge",
+        "vehicle",
+        "experiment",
+        "report",
+        "system",
+        "rsu"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Slow-timescale regional target sent from cloud to an edge controller.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "trace_id": {
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "simulation_time": {
+      "minimum": 0,
+      "title": "Simulation Time",
+      "type": "number"
+    },
+    "sequence_number": {
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "environment": {
+      "default": "development",
+      "minLength": 1,
+      "title": "Environment",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "strategy_id": {
+      "format": "uuid",
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "strategy_version": {
+      "minimum": 1,
+      "title": "Strategy Version",
+      "type": "integer"
+    },
+    "generated_at_sim_time": {
+      "minimum": 0,
+      "title": "Generated At Sim Time",
+      "type": "number"
+    },
+    "valid_from": {
+      "minimum": 0,
+      "title": "Valid From",
+      "type": "number"
+    },
+    "valid_until": {
+      "exclusiveMinimum": 0,
+      "title": "Valid Until",
+      "type": "number"
+    },
+    "target_intersection_id": {
+      "title": "Target Intersection Id",
+      "type": "string"
+    },
+    "target_cycle_length": {
+      "exclusiveMinimum": 0,
+      "title": "Target Cycle Length",
+      "type": "number"
+    },
+    "target_green_ratios": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Target Green Ratios",
+      "type": "object"
+    },
+    "target_offsets": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Target Offsets",
+      "type": "object"
+    },
+    "upstream_release_limit": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Upstream Release Limit",
+      "type": "number"
+    },
+    "downstream_priority": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Downstream Priority",
+      "type": "object"
+    },
+    "recommended_phase_plan": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Recommended Phase Plan",
+      "type": "array"
+    },
+    "speed_guidance_parameters": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Speed Guidance Parameters",
+      "type": "object"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "cloud_decision_latency_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cloud Decision Latency Ms"
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "fallback_policy": {
+      "title": "Fallback Policy",
+      "type": "string"
+    }
+  },
+  "required": [
+    "trace_id",
+    "source_id",
+    "source_type",
+    "simulation_time",
+    "sequence_number",
+    "correlation_id",
+    "scenario_id",
+    "experiment_id",
+    "strategy_version",
+    "generated_at_sim_time",
+    "valid_from",
+    "valid_until",
+    "target_intersection_id",
+    "target_cycle_length",
+    "target_green_ratios",
+    "target_offsets",
+    "upstream_release_limit",
+    "downstream_priority",
+    "recommended_phase_plan",
+    "speed_guidance_parameters",
+    "confidence",
+    "reason_codes",
+    "fallback_policy"
+  ],
+  "title": "CloudStrategy",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "trace_id": "example-trace_id",
+      "source_id": "example-source_id",
+      "source_type": "cloud",
+      "simulation_time": 0.0,
+      "sequence_number": 0,
+      "correlation_id": "example-correlation_id",
+      "environment": "development",
+      "scenario_id": "example-scenario_id",
+      "experiment_id": "example-experiment_id",
+      "strategy_version": 1,
+      "generated_at_sim_time": 0.0,
+      "valid_from": 0.0,
+      "valid_until": 1.0,
+      "target_intersection_id": "example-target_intersection_id",
+      "target_cycle_length": 1.0,
+      "target_green_ratios": {},
+      "target_offsets": {},
+      "upstream_release_limit": 0.0,
+      "downstream_priority": {},
+      "recommended_phase_plan": [],
+      "speed_guidance_parameters": {},
+      "confidence": 0.0,
+      "cloud_decision_latency_ms": null,
+      "reason_codes": [],
+      "fallback_policy": "example-fallback_policy"
+    }
+  ]
+}

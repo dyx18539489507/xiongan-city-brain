@@ -1,0 +1,389 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "official_20_independent",
+  "source_policy": "read_only_external",
+  "network_relationship": "independent_intersections_not_one_connected_network",
+  "claims": {
+    "organizer_intersection_count": 20,
+    "supplied_sumo_case_count": 4,
+    "is_connected_regional_network": false
+  },
+  "counts": {
+    "xlsx": 20,
+    "map_png": 20,
+    "sumocfg": 4,
+    "sumo_xml": 30
+  },
+  "assets": [
+    {
+      "relative_path": "路口数据/1/路口数据/demo_1流量和交叉口配时方案.xlsx",
+      "size_bytes": 16100,
+      "sha256": "9a3e0fe5f628c9820b3ae9013eb1358ce551dd1d284eeaf6988f7e4142067f6a"
+    },
+    {
+      "relative_path": "路口数据/10/路口数据/demo_10流量和交叉口配时方案.xlsx",
+      "size_bytes": 15321,
+      "sha256": "bf67f39cd0ef651a6e6657ddfec206a0966a2d881320537f2bbb0ffe83aa7975"
+    },
+    {
+      "relative_path": "路口数据/11/路口数据/demo_11流量和交叉口配时方案.xlsx",
+      "size_bytes": 16338,
+      "sha256": "c4b9a145360aa9aedb6fcbc3b29c169bd024b652804bb9062ab9bf28e2c13ef2"
+    },
+    {
+      "relative_path": "路口数据/12/路口数据/demo_12流量和交叉口配时方案.xlsx",
+      "size_bytes": 15975,
+      "sha256": "d0ef1ceff499fdb7d92e6cefc9136440b5acda49cb46f994ce4b1fdd0612cb99"
+    },
+    {
+      "relative_path": "路口数据/13/路口数据/demo_13流量和交叉口配时方案.xlsx",
+      "size_bytes": 15643,
+      "sha256": "23c80ffdd0b95e2a8828fc855fb235626fb0884a93ef3178cf8254635b986929"
+    },
+    {
+      "relative_path": "路口数据/14/路口数据/demo_14流量和交叉口配时方案.xlsx",
+      "size_bytes": 15425,
+      "sha256": "b23183070555bcf0742a34e99de2c8fc3c2a8668303a9d6f29b8d196392599a0"
+    },
+    {
+      "relative_path": "路口数据/15/路口数据/demo_15流量和交叉口配时方案.xlsx",
+      "size_bytes": 15998,
+      "sha256": "2e1919f4341d92393f58d5dff43f2aa75f18255ab28b456ee973c0308c435718"
+    },
+    {
+      "relative_path": "路口数据/16/路口数据/demo_16流量和交叉口配时方案.xlsx",
+      "size_bytes": 15956,
+      "sha256": "2e19e97ea906ffc25b29a3bd1deeb357aa152ebb725a80e97c91142376985182"
+    },
+    {
+      "relative_path": "路口数据/17/路口数据/demo_17流量和交叉口配时方案.xlsx",
+      "size_bytes": 15355,
+      "sha256": "943ac4b0a52991a4a97e0c052939e7567de18a38e900bfd569a5879fae817ee8"
+    },
+    {
+      "relative_path": "路口数据/18/路口数据/demo_18流量和交叉口配时方案.xlsx",
+      "size_bytes": 16036,
+      "sha256": "8c8cd91ae33226a1a9d119d226eefaa2b7b2f6e9d704997d1a26e6496aea7f36"
+    },
+    {
+      "relative_path": "路口数据/19/路口数据/demo_19流量和交叉口配时方案.xlsx",
+      "size_bytes": 15993,
+      "sha256": "2e7afc3a28286bf5b310c416aff602df0534a450f78db32431a3728bf614f01f"
+    },
+    {
+      "relative_path": "路口数据/2/路口数据/demo_2流量和交叉口配时方案.xlsx",
+      "size_bytes": 15269,
+      "sha256": "90baff9dc450187bf4cd829335f5e0be29ba321beb6e83e05af7d2f744e4f40c"
+    },
+    {
+      "relative_path": "路口数据/20/路口数据/demo_20流量和交叉口配时方案.xlsx",
+      "size_bytes": 16288,
+      "sha256": "d7d8ef098b1cb5e7faff1ecf4f95214f2a1b1d6d46a0e918e358b99fad76e441"
+    },
+    {
+      "relative_path": "路口数据/3/路口数据/demo_3流量和交叉口配时方案.xlsx",
+      "size_bytes": 17256,
+      "sha256": "9296497629aabea60aaa586a1b92d80e304e935a763ea60c85b525167dec6c49"
+    },
+    {
+      "relative_path": "路口数据/4/路口数据/demo_4流量和交叉口配时方案.xlsx",
+      "size_bytes": 16017,
+      "sha256": "7173280ce861caf505bb93b9e7e1ed2afa7a6d8aee7ba49b61950eb2850d6299"
+    },
+    {
+      "relative_path": "路口数据/5/路口数据/demo_5流量和交叉口配时方案.xlsx",
+      "size_bytes": 15377,
+      "sha256": "5378a0d888375f4ba7f5f8bc995b702ec2d39d2d0493d85f733a9f5e795efd9e"
+    },
+    {
+      "relative_path": "路口数据/6/路口数据/demo_6流量和交叉口配时方案.xlsx",
+      "size_bytes": 16000,
+      "sha256": "e217c095e84054858579b628ba212cb4bd6980174ecfbfbff417f78dce174830"
+    },
+    {
+      "relative_path": "路口数据/7/路口数据/demo_7流量和交叉口配时方案.xlsx",
+      "size_bytes": 15476,
+      "sha256": "1f4f13bb9783ccbf2d2e2eb18af03f4885e354c477ed0250b2896c4fcddc8e8d"
+    },
+    {
+      "relative_path": "路口数据/8/路口数据/demo_8流量和交叉口配时方案.xlsx",
+      "size_bytes": 16253,
+      "sha256": "f00133e3bd540209e7b16a516aaf7a7280a6bdc6d3f4564bc6fc3a8873fb5574"
+    },
+    {
+      "relative_path": "路口数据/9/路口数据/demo_9流量和交叉口配时方案.xlsx",
+      "size_bytes": 17259,
+      "sha256": "8aa871e7a39c02515f39760069feefa2455b9b17dfa1adb3c65d69657f26a4b0"
+    },
+    {
+      "relative_path": "路口数据/1/高精地图/demo_1.png",
+      "size_bytes": 4825774,
+      "sha256": "36964daca693294b632a028aacde52904d08d00284521b34134652b05bc7e177"
+    },
+    {
+      "relative_path": "路口数据/10/高精地图/demo_10.png",
+      "size_bytes": 5453549,
+      "sha256": "e43f94aa3fa8c537172778a5cfe29391951439fe504b4f5dbb0a86463700a703"
+    },
+    {
+      "relative_path": "路口数据/11/高清地图/demo_11.png",
+      "size_bytes": 4593184,
+      "sha256": "606b4b271648ca8b728bc7455238ed7b94942453675098a824390cae75b3f430"
+    },
+    {
+      "relative_path": "路口数据/12/高精地图/demo_12.png",
+      "size_bytes": 2885839,
+      "sha256": "c5bfe4ea9ed472c26bdd8f92d6ce809e271fc92ffb6211e5c1b47b82843a60aa"
+    },
+    {
+      "relative_path": "路口数据/13/高精地图/demo_13.png",
+      "size_bytes": 2393027,
+      "sha256": "d2367ef74cb843089d6f166a72c13f1bf46183d030f5c099819e466cb2fc429a"
+    },
+    {
+      "relative_path": "路口数据/14/高精地图/demo_14.png",
+      "size_bytes": 396034,
+      "sha256": "6afc1ac12ba417e792db406b1fbcebab06ba45d6d93ef6b147a0365c8c363902"
+    },
+    {
+      "relative_path": "路口数据/15/高精地图/demo_15.png",
+      "size_bytes": 671294,
+      "sha256": "c7522ab6dc8398d6886ae63c5f9dea5575b3ed1cdf1ba8486e4c387b8f76f5bb"
+    },
+    {
+      "relative_path": "路口数据/16/高精地图/demo_16.png",
+      "size_bytes": 660414,
+      "sha256": "6ded8cfa4f3b715d6075a0087b574c226b46a8baf3ba53312da5436bae10fece"
+    },
+    {
+      "relative_path": "路口数据/17/高精地图/demo_17.png",
+      "size_bytes": 730883,
+      "sha256": "14a756f8997491c4986ae872f8d3bc85756d5154090445da9e88dc1a1cd69d77"
+    },
+    {
+      "relative_path": "路口数据/18/高精地图/demo_18.png",
+      "size_bytes": 611967,
+      "sha256": "b8cfc68b85cbfc403a1281d7e14f85b2e7f6436767042d9adc0d575c4a91d68c"
+    },
+    {
+      "relative_path": "路口数据/19/高精地图/demo_19.png",
+      "size_bytes": 1052999,
+      "sha256": "1d1a0ac9d507743876819c8a8ee3d5224dfd9049958da920acfb7ef7b184f9e2"
+    },
+    {
+      "relative_path": "路口数据/2/高精地图/demo_2.png",
+      "size_bytes": 6002620,
+      "sha256": "a2342ad605c51d55039d7e00a29c199ce11ed613ff0543beec8cca8cf37c0216"
+    },
+    {
+      "relative_path": "路口数据/20/高精地图/demo_20.png",
+      "size_bytes": 1118303,
+      "sha256": "c60b01221b1b5bd2103dd6dc1b57fd491cb7e9bfca775a9d6167aed996dee75c"
+    },
+    {
+      "relative_path": "路口数据/3/高精地图/demo_3.png",
+      "size_bytes": 4466560,
+      "sha256": "93b80a58d7df65990f32f1c248e2317b36eac063d6d468e5678b059cb371bb43"
+    },
+    {
+      "relative_path": "路口数据/4/高精地图/demo_4.png",
+      "size_bytes": 5839286,
+      "sha256": "59ac523732e161cb9b8537ecd9b50d67d33559a5e0e368a5ea8c7ac6da655894"
+    },
+    {
+      "relative_path": "路口数据/5/高精地图/demo_5.png",
+      "size_bytes": 5470654,
+      "sha256": "e29f19f05109b4b677fc8b0b4a18349ef160c82129c040f1866c84dbfb1e801f"
+    },
+    {
+      "relative_path": "路口数据/6/高精地图/demo_6.png",
+      "size_bytes": 4835826,
+      "sha256": "23e48b0858713f513ab2da3c12daa40589021e5af58d4239ffe25c75dcee8d1d"
+    },
+    {
+      "relative_path": "路口数据/7/高精地图/demo_7.png",
+      "size_bytes": 5693953,
+      "sha256": "d2b1874fc8babc3ef717ff2463eadc8f68a89484fcf659897bfe0a01da15a130"
+    },
+    {
+      "relative_path": "路口数据/8/高精地图/demo_8.png",
+      "size_bytes": 5782209,
+      "sha256": "01a52c448d77128183f081f683b47b29dc36e95ca86e184a1780436740c13c24"
+    },
+    {
+      "relative_path": "路口数据/9/高精地图/demo_9.png",
+      "size_bytes": 5743805,
+      "sha256": "ea759ba97fb6c56282caf79169a5256eb35233e6858dc370d056281b19094280"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/demo_1.sumocfg",
+      "size_bytes": 667,
+      "sha256": "91b59ee9b3db61c39010a87503c76326565d2eb65b0755aa1f55e1a4866a0d1b"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/demo_2.sumocfg",
+      "size_bytes": 667,
+      "sha256": "bbed9087ed1fbdb19c0465d768a7503ba563e88ad5c4b9cdf372a4df29f13d31"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/demo_3.sumocfg",
+      "size_bytes": 667,
+      "sha256": "0f7160e1d13bb89173c36b46d2001582bb2f6ee12d5a371cc7bc89f81259451b"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.sumocfg",
+      "size_bytes": 666,
+      "sha256": "01282dd848add68179daf1f230256d24b2e69158f2c4342dca40e89c54f1629d"
+    },
+    {
+      "relative_path": "路口仿真案例/common.settings.xml",
+      "size_bytes": 64477,
+      "sha256": "7b412d6771391fd1d8bb2f446f494a996c3769a10d62096a8e3ce0724c737030"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/demo_1.flow.xml",
+      "size_bytes": 681,
+      "sha256": "7a2d09491f83c8fe3bc63fafa36dad322121f166f95cd5257a59051a9ff52e9b"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/demo_1.net.xml",
+      "size_bytes": 14643,
+      "sha256": "25af44ad3ea94dbe339a68890611cfb8b5c7b674866cce7eb8df668cf15bf346"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/demo_1.rou.xml",
+      "size_bytes": 181529,
+      "sha256": "c948931f419eacba2f0be27d49d4ad7b396d99254a915235aea25e64c1e695bc"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/demo_1.turn.xml",
+      "size_bytes": 944,
+      "sha256": "94c05a85f52d5566024d09e8cbf8cbe0dd1122456f98f11f2e70f871aafed6c3"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/stats.xml",
+      "size_bytes": 92621,
+      "sha256": "011a7fbc1d34f172395da82710fe644b87ee296003f98c249c23939da0c97ecd"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/traj.xml",
+      "size_bytes": 823256,
+      "sha256": "32e984855053f18ae5a0b7d71bb991f3cd9fadbf314642720c2f99b9ebc05249"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口1/tripinfo.xml",
+      "size_bytes": 58952,
+      "sha256": "4d4b742fe7a8491a65e177b80c98f33c55ac274c51e37e664b05e6223b7dd76f"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/demo_2.flow.xml",
+      "size_bytes": 603,
+      "sha256": "0188b7ff9c403b2a6ffbfd3db510f6a6a35c8907936e13abf7d43ff83bfcf817"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/demo_2.net.xml",
+      "size_bytes": 6553,
+      "sha256": "00e7c054f51ab4835410c2b999664f313caa5ea1be92eacca8023a9ed2f693b0"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/demo_2.rou.xml",
+      "size_bytes": 108996,
+      "sha256": "44afb382c0db7c8042cdc388bc3ac6979a248fff730615b5d2d4dc7563023364"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/demo_2.turn.xml",
+      "size_bytes": 593,
+      "sha256": "7819721bd8cd4cc4c657ca45527137f9555429a97d428a690f4c34e2b957f94a"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/stats.xml",
+      "size_bytes": 5337,
+      "sha256": "8d4f310de673e67a0c21a9d1e20e0c6ca6364477912a9a4693528156e8564658"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/traj.xml",
+      "size_bytes": 8585,
+      "sha256": "813d3e1e04c509c9460ce461bc65a79d9bddba3037cfbb9bf2de51cc3df07498"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口2/tripinfo.xml",
+      "size_bytes": 2179,
+      "sha256": "a481158473c51c43d5b93d71baaa61b9b3e8fddb72d7d166b4074ceec5a4d840"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/demo_3.flow.xml",
+      "size_bytes": 681,
+      "sha256": "fed2439b8a1ff710cffaa34381506a54e7934c51bf255037154f180c335e2e68"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/demo_3.net.xml",
+      "size_bytes": 12742,
+      "sha256": "a6f1a87f7fe7b837de0102beb3e7af928069e63055cb44d5da42f39c92fe3c32"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/demo_3.rou.xml",
+      "size_bytes": 177036,
+      "sha256": "67d8d1fff9310bc577a5e3c434396aeb3a297c0a2be8f741c7325a17dbef1100"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/demo_3.turn.xml",
+      "size_bytes": 944,
+      "sha256": "3363536edd18dc7542c2cdc8f02265345b748bdf0ba5af52a97567f7db8490a5"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/stats.xml",
+      "size_bytes": 4806,
+      "sha256": "424eddd1d87633a98d17f7343e98c35949df8edf3c46bb380476ebdcc02a154c"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/traj.xml",
+      "size_bytes": 10511,
+      "sha256": "59711adb968d5243e2aa6c6355b7d75d56fbea6d9f16325bea49817d4eb9f6dd"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口3/tripinfo.xml",
+      "size_bytes": 1778,
+      "sha256": "ae265590d7d2f8e23706f2e2d9e14c35b3181e06e706dcf1d7f31f6d4996f6cb"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.flow.xml",
+      "size_bytes": 681,
+      "sha256": "e91d473db4db1d798359b70d312825240e14826b87b602ac7e07ff3d8c54dc93"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.net.xml",
+      "size_bytes": 10965,
+      "sha256": "cc77fd8df9d2d7b34d8c3a2a52acaef3a2bcc283b7b6af732923b4181aee2062"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.rou.xml",
+      "size_bytes": 143823,
+      "sha256": "a3427a4eabbffa2eedde1e8d24daf5e80f6de74d70c190a550b8e36b6e7b6bf2"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.settings.xml",
+      "size_bytes": 64477,
+      "sha256": "7b412d6771391fd1d8bb2f446f494a996c3769a10d62096a8e3ce0724c737030"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/demo_4.turn.xml",
+      "size_bytes": 944,
+      "sha256": "21ff30e24426ebaf1d10d140720f5850570587e2329c64c39ce5fb79c14afb67"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/stats.xml",
+      "size_bytes": 8249,
+      "sha256": "6996f613b9e98c94b8e9bd43c8150224c24db9b699de10e476da0c916590bffd"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/traj.xml",
+      "size_bytes": 21572,
+      "sha256": "9be71bcb4872734bb5e3bf6002356d719a04e9de926cef04a77c5a8516149eab"
+    },
+    {
+      "relative_path": "路口仿真案例/sumo工程_路口4/tripinfo.xml",
+      "size_bytes": 2979,
+      "sha256": "335d6b51f9d2b128fc45339784fb57e8c9d94eced1dd3916d47569c2914f3ab4"
+    }
+  ]
+}

@@ -1,0 +1,547 @@
+{
+  "$defs": {
+    "ActiveModeDemand": {
+      "additionalProperties": false,
+      "description": "One deterministic bicycle, e-bike or pedestrian OD demand group.",
+      "properties": {
+        "participant": {
+          "enum": [
+            "bicycle",
+            "electric_bicycle",
+            "pedestrian"
+          ],
+          "title": "Participant",
+          "type": "string"
+        },
+        "origin_zone": {
+          "title": "Origin Zone",
+          "type": "string"
+        },
+        "destination_zone": {
+          "title": "Destination Zone",
+          "type": "string"
+        },
+        "flow_persons_h": {
+          "minimum": 0,
+          "title": "Flow Persons H",
+          "type": "number"
+        },
+        "begin_s": {
+          "minimum": 0,
+          "title": "Begin S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "route_alternatives": {
+          "default": true,
+          "title": "Route Alternatives",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "participant",
+        "origin_zone",
+        "destination_zone",
+        "flow_persons_h",
+        "begin_s",
+        "end_s"
+      ],
+      "title": "ActiveModeDemand",
+      "type": "object"
+    },
+    "AlgorithmSelection": {
+      "additionalProperties": false,
+      "description": "Algorithm plugin and validated parameter map.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Parameters",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "AlgorithmSelection",
+      "type": "object"
+    },
+    "CommunicationConfig": {
+      "additionalProperties": false,
+      "description": "Named and overrideable communication condition.",
+      "properties": {
+        "profile": {
+          "title": "Profile",
+          "type": "string"
+        },
+        "cloud_edge": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Cloud Edge",
+          "type": "object"
+        },
+        "edge_vehicle": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Edge Vehicle",
+          "type": "object"
+        }
+      },
+      "required": [
+        "profile"
+      ],
+      "title": "CommunicationConfig",
+      "type": "object"
+    },
+    "Disturbance": {
+      "additionalProperties": false,
+      "description": "Scheduled road, incident, event or emergency disturbance.",
+      "properties": {
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "roadwork",
+            "incident",
+            "event_dispersal",
+            "emergency_vehicle"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "simulation_time_s": {
+          "minimum": 0,
+          "title": "Simulation Time S",
+          "type": "number"
+        },
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "title": "Parameters",
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_id",
+        "type",
+        "simulation_time_s",
+        "duration_s",
+        "target"
+      ],
+      "title": "Disturbance",
+      "type": "object"
+    },
+    "MultimodalConfig": {
+      "additionalProperties": false,
+      "description": "Derived full-network pedestrian and bicycle modeling settings.",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "network_scope": {
+          "const": "complete_osm_network",
+          "default": "complete_osm_network",
+          "title": "Network Scope",
+          "type": "string"
+        },
+        "infrastructure_source": {
+          "const": "osm_plus_traceable_engineering_inference",
+          "default": "osm_plus_traceable_engineering_inference",
+          "title": "Infrastructure Source",
+          "type": "string"
+        },
+        "pedestrian_signal_mode": {
+          "const": "conditional_parallel",
+          "default": "conditional_parallel",
+          "title": "Pedestrian Signal Mode",
+          "type": "string"
+        },
+        "sidewalk_width_m": {
+          "default": 2.5,
+          "exclusiveMinimum": 0,
+          "title": "Sidewalk Width M",
+          "type": "number"
+        },
+        "bicycle_lane_width_m": {
+          "default": 2.0,
+          "exclusiveMinimum": 0,
+          "title": "Bicycle Lane Width M",
+          "type": "number"
+        },
+        "sidewalk_max_road_speed_m_s": {
+          "default": 22.3,
+          "exclusiveMinimum": 0,
+          "title": "Sidewalk Max Road Speed M S",
+          "type": "number"
+        },
+        "bicycle_lane_max_road_speed_m_s": {
+          "default": 19.5,
+          "exclusiveMinimum": 0,
+          "title": "Bicycle Lane Max Road Speed M S",
+          "type": "number"
+        },
+        "crossing_speed_threshold_m_s": {
+          "default": 22.3,
+          "exclusiveMinimum": 0,
+          "title": "Crossing Speed Threshold M S",
+          "type": "number"
+        },
+        "pedestrian_min_green_s": {
+          "default": 10.0,
+          "exclusiveMinimum": 0,
+          "title": "Pedestrian Min Green S",
+          "type": "number"
+        },
+        "pedestrian_clearance_s": {
+          "default": 5.0,
+          "exclusiveMinimum": 0,
+          "title": "Pedestrian Clearance S",
+          "type": "number"
+        },
+        "demands": {
+          "items": {
+            "$ref": "#/$defs/ActiveModeDemand"
+          },
+          "title": "Demands",
+          "type": "array"
+        }
+      },
+      "title": "MultimodalConfig",
+      "type": "object"
+    },
+    "OdDemand": {
+      "additionalProperties": false,
+      "description": "One configurable OD demand group.",
+      "properties": {
+        "origin_zone": {
+          "title": "Origin Zone",
+          "type": "string"
+        },
+        "destination_zone": {
+          "title": "Destination Zone",
+          "type": "string"
+        },
+        "flow_veh_h": {
+          "minimum": 0,
+          "title": "Flow Veh H",
+          "type": "number"
+        },
+        "begin_s": {
+          "minimum": 0,
+          "title": "Begin S",
+          "type": "number"
+        },
+        "end_s": {
+          "exclusiveMinimum": 0,
+          "title": "End S",
+          "type": "number"
+        },
+        "route_alternatives": {
+          "default": true,
+          "title": "Route Alternatives",
+          "type": "boolean"
+        },
+        "route_scope": {
+          "default": "complete_network",
+          "enum": [
+            "complete_network",
+            "controlled_corridor"
+          ],
+          "title": "Route Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin_zone",
+        "destination_zone",
+        "flow_veh_h",
+        "begin_s",
+        "end_s"
+      ],
+      "title": "OdDemand",
+      "type": "object"
+    },
+    "SamplingConfig": {
+      "additionalProperties": false,
+      "description": "Tiered data sampling frequencies.",
+      "properties": {
+        "control_hz": {
+          "exclusiveMinimum": 0,
+          "title": "Control Hz",
+          "type": "number"
+        },
+        "intersection_hz": {
+          "exclusiveMinimum": 0,
+          "title": "Intersection Hz",
+          "type": "number"
+        },
+        "dashboard_hz": {
+          "exclusiveMinimum": 0,
+          "title": "Dashboard Hz",
+          "type": "number"
+        },
+        "vehicle_trajectory_hz": {
+          "minimum": 0,
+          "title": "Vehicle Trajectory Hz",
+          "type": "number"
+        },
+        "experiment_summary_hz": {
+          "exclusiveMinimum": 0,
+          "title": "Experiment Summary Hz",
+          "type": "number"
+        }
+      },
+      "required": [
+        "control_hz",
+        "intersection_hz",
+        "dashboard_hz",
+        "vehicle_trajectory_hz",
+        "experiment_summary_hz"
+      ],
+      "title": "SamplingConfig",
+      "type": "object"
+    },
+    "SimulationConfig": {
+      "additionalProperties": false,
+      "description": "SUMO time and repeatability settings.",
+      "properties": {
+        "duration_s": {
+          "exclusiveMinimum": 0,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "step_length_s": {
+          "exclusiveMinimum": 0,
+          "title": "Step Length S",
+          "type": "number"
+        },
+        "seed": {
+          "minimum": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "gui": {
+          "default": false,
+          "title": "Gui",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "duration_s",
+        "step_length_s",
+        "seed"
+      ],
+      "title": "SimulationConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete scenario input used to generate a traceable manifest.",
+  "properties": {
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "display_name": {
+      "title": "Display Name",
+      "type": "string"
+    },
+    "provenance": {
+      "enum": [
+        "organizer_supplied",
+        "openstreetmap_plus_modeled_parameters",
+        "engineering_demo_placeholder"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "is_real_measured_network": {
+      "title": "Is Real Measured Network",
+      "type": "boolean"
+    },
+    "network_file": {
+      "title": "Network File",
+      "type": "string"
+    },
+    "simulation": {
+      "$ref": "#/$defs/SimulationConfig"
+    },
+    "demand": {
+      "items": {
+        "$ref": "#/$defs/OdDemand"
+      },
+      "title": "Demand",
+      "type": "array"
+    },
+    "vehicle_type_ratios": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Vehicle Type Ratios",
+      "type": "object"
+    },
+    "connected_vehicle_penetration": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Connected Vehicle Penetration",
+      "type": "number"
+    },
+    "flow_multiplier": {
+      "exclusiveMinimum": 0,
+      "title": "Flow Multiplier",
+      "type": "number"
+    },
+    "signal_plan": {
+      "title": "Signal Plan",
+      "type": "string"
+    },
+    "disturbances": {
+      "items": {
+        "$ref": "#/$defs/Disturbance"
+      },
+      "title": "Disturbances",
+      "type": "array"
+    },
+    "communication": {
+      "$ref": "#/$defs/CommunicationConfig"
+    },
+    "algorithm": {
+      "$ref": "#/$defs/AlgorithmSelection"
+    },
+    "sampling": {
+      "$ref": "#/$defs/SamplingConfig"
+    },
+    "multimodal": {
+      "$ref": "#/$defs/MultimodalConfig"
+    }
+  },
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "display_name",
+    "provenance",
+    "is_real_measured_network",
+    "network_file",
+    "simulation",
+    "demand",
+    "vehicle_type_ratios",
+    "connected_vehicle_penetration",
+    "flow_multiplier",
+    "signal_plan",
+    "disturbances",
+    "communication",
+    "algorithm",
+    "sampling"
+  ],
+  "title": "ScenarioConfig",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "scenario_id": "example-scenario_id",
+      "display_name": "example-display_name",
+      "provenance": "organizer_supplied",
+      "is_real_measured_network": false,
+      "network_file": "example-network_file",
+      "simulation": {
+        "duration_s": 1.0,
+        "step_length_s": 1.0,
+        "seed": 0,
+        "gui": false
+      },
+      "demand": [],
+      "vehicle_type_ratios": {},
+      "connected_vehicle_penetration": 0.0,
+      "flow_multiplier": 1.0,
+      "signal_plan": "example-signal_plan",
+      "disturbances": [],
+      "communication": {
+        "profile": "example-profile"
+      },
+      "algorithm": {
+        "name": "example-name"
+      },
+      "sampling": {
+        "control_hz": 1.0,
+        "intersection_hz": 1.0,
+        "dashboard_hz": 1.0,
+        "vehicle_trajectory_hz": 0.0,
+        "experiment_summary_hz": 1.0
+      }
+    }
+  ]
+}

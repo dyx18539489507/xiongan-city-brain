@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewsettings>
+    <scheme name="competition simple shapes">
+        <vehicles vehicleQuality="2" vehicle_minSize="1.50" vehicle_exaggeration="1.25" vehicle_constantSize="0"/>
+        <persons personQuality="3" person_minSize="0.50" person_exaggeration="1.25" person_constantSize="0"/>
+        <polys polyMode="0" poly_minSize="0.00" poly_exaggeration="1.00" poly_constantSize="0" polyName_show="0"/>
+    </scheme>
+</viewsettings>

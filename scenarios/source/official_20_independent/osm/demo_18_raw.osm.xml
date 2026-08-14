@@ -1,0 +1,1769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2102905 spike-06.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="39.0659971" minlon="115.9123729" maxlat="39.0723971" maxlon="115.9207729"/>
+ <node id="7341134030" visible="true" version="7" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0667514" lon="115.9174945">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134031" visible="true" version="3" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0603998" lon="115.9175343"/>
+ <node id="7341134032" visible="true" version="3" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0595447" lon="115.9177095"/>
+ <node id="7341134038" visible="true" version="3" changeset="141496384" timestamp="2023-09-20T06:32:45Z" user="rlloretb" uid="9609786" lat="39.0643931" lon="115.9077618">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134039" visible="true" version="7" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0661469" lon="115.9133327">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134040" visible="true" version="8" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0664297" lon="115.9152093">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134041" visible="true" version="5" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674063" lon="115.9222737">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134042" visible="true" version="3" changeset="113179732" timestamp="2021-10-31T05:11:05Z" user="z123456" uid="9395163" lat="39.0674176" lon="115.9273897"/>
+ <node id="7341134043" visible="true" version="4" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673971" lon="115.9417355">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134046" visible="true" version="6" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0674370" lon="115.9293519">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="7341134074" visible="true" version="7" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0629131" lon="115.9223428">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8515847046" visible="true" version="5" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0598615" lon="115.9176109">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8515847047" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0671833" lon="115.9174061"/>
+ <node id="8515847048" visible="true" version="3" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0644550" lon="115.9078564">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8515847049" visible="true" version="3" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0662864" lon="115.9142625"/>
+ <node id="8515847050" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0675387" lon="115.9173095"/>
+ <node id="8515847051" visible="true" version="4" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0749033" lon="115.9382906"/>
+ <node id="8515847056" visible="true" version="6" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0681078" lon="115.9124732">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8515870083" visible="true" version="3" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674389" lon="115.9359780">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8515870120" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673471" lon="115.9422148"/>
+ <node id="8519468889" visible="true" version="3" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0750461" lon="115.9401666"/>
+ <node id="8519484441" visible="true" version="2" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0654999" lon="115.9105640"/>
+ <node id="8519484442" visible="true" version="2" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0669264" lon="115.9098605"/>
+ <node id="8519484443" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0676625" lon="115.9120543"/>
+ <node id="8519484444" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0661352" lon="115.9128335"/>
+ <node id="8519484451" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0697177" lon="115.9116165"/>
+ <node id="8519484452" visible="true" version="3" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0664827" lon="115.9132479"/>
+ <node id="8519484460" visible="true" version="4" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674231" lon="115.9337471">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8519484462" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674451" lon="115.9386028">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8519484469" visible="true" version="4" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0628683" lon="115.9133306">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="8519484477" visible="true" version="5" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0578269" lon="115.9140409"/>
+ <node id="8519484512" visible="true" version="2" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0651038" lon="115.9170752"/>
+ <node id="8519484513" visible="true" version="3" changeset="113687345" timestamp="2021-11-12T09:31:24Z" user="user_8291442" uid="8291442" lat="39.0650902" lon="115.9154214"/>
+ <node id="8519484514" visible="true" version="2" changeset="113687345" timestamp="2021-11-12T09:31:24Z" user="user_8291442" uid="8291442" lat="39.0660992" lon="115.9154076"/>
+ <node id="8519484515" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0664391" lon="115.9172416"/>
+ <node id="8519484549" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0693344" lon="115.9166694"/>
+ <node id="8519484550" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0700133" lon="115.9191977"/>
+ <node id="8519484551" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0716029" lon="115.9184896"/>
+ <node id="8519484552" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438" lat="39.0709241" lon="115.9159613"/>
+ <node id="8519484567" visible="true" version="2" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0710330" lon="115.9288944"/>
+ <node id="8519484629" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0671362" lon="115.9433440">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9197849962" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0703200" lon="115.9135329"/>
+ <node id="9197849963" visible="true" version="7" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0709373" lon="115.9158416">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9197849964" visible="true" version="3" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0746875" lon="115.9336781"/>
+ <node id="9197849965" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0747000" lon="115.9332651"/>
+ <node id="9197849966" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0744272" lon="115.9298801"/>
+ <node id="9197849983" visible="true" version="4" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0594261" lon="115.9137394"/>
+ <node id="9213164759" visible="true" version="4" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0628759" lon="115.9175168">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9215428051" visible="true" version="3" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0746544" lon="115.9327471"/>
+ <node id="9215428081" visible="true" version="1" changeset="113216434" timestamp="2021-11-01T05:00:19Z" user="user_8291442" uid="8291442" lat="39.0709904" lon="115.9287349"/>
+ <node id="9215428082" visible="true" version="3" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0678650" lon="115.9171770">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9215428083" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0745115" lon="115.9309156"/>
+ <node id="9215428085" visible="true" version="2" changeset="137356709" timestamp="2023-06-15T07:14:06Z" user="wangxh" uid="13441853" lat="39.0716574" lon="115.9312467"/>
+ <node id="9215428087" visible="true" version="4" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674293" lon="115.9312754">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378832" visible="true" version="4" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0649234" lon="115.9175094">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378834" visible="true" version="3" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0690527" lon="115.9216093">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378835" visible="true" version="4" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0649191" lon="115.9223204">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378836" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0599820" lon="115.9207166"/>
+ <node id="9245378837" visible="true" version="3" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0590280" lon="115.9179003">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378838" visible="true" version="3" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0570884" lon="115.9116685">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378843" visible="true" version="4" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0611284" lon="115.9215147"/>
+ <node id="9245378844" visible="true" version="3" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0612026" lon="115.9175254">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378845" visible="true" version="6" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0611952" lon="115.9133393">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378854" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0720603" lon="115.9108404"/>
+ <node id="9245378855" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0729132" lon="115.9144968"/>
+ <node id="9245378856" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0711007" lon="115.9153036"/>
+ <node id="9245378857" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0699812" lon="115.9115785"/>
+ <node id="9245378858" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0712096" lon="115.9108761"/>
+ <node id="9245378861" visible="true" version="3" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0652613" lon="115.9104649">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378865" visible="true" version="4" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0628889" lon="115.9152644">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378866" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0612099" lon="115.9152584">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378867" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0602222" lon="115.9153098"/>
+ <node id="9245378868" visible="true" version="2" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0584324" lon="115.9159385"/>
+ <node id="9245378875" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0695993" lon="115.9118732"/>
+ <node id="9245378876" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0701306" lon="115.9134104"/>
+ <node id="9245378877" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0686861" lon="115.9140312"/>
+ <node id="9245378878" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0683641" lon="115.9125319"/>
+ <node id="9245378879" visible="true" version="3" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0649159" lon="115.9152518"/>
+ <node id="9245378880" visible="true" version="3" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0649204" lon="115.9133316"/>
+ <node id="9245378886" visible="true" version="2" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0721383" lon="115.9203088"/>
+ <node id="9245378888" visible="true" version="5" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0682070" lon="115.9184720">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378889" visible="true" version="4" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0669587" lon="115.9190259">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378890" visible="true" version="4" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0649231" lon="115.9190359">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378891" visible="true" version="5" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0628824" lon="115.9190745">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378892" visible="true" version="4" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0612162" lon="115.9190409"/>
+ <node id="9245378893" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0608608" lon="115.9190405"/>
+ <node id="9245378894" visible="true" version="5" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0595494" lon="115.9195877">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378896" visible="true" version="2" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0678630" lon="115.9128029"/>
+ <node id="9245378897" visible="true" version="2" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0682599" lon="115.9143355"/>
+ <node id="9245378898" visible="true" version="2" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0673870" lon="115.9147041"/>
+ <node id="9245378899" visible="true" version="2" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0670037" lon="115.9132180"/>
+ <node id="9245378910" visible="true" version="4" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0596108" lon="115.9154239">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245378912" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0603348" lon="115.9191758"/>
+ <node id="9245379759" visible="true" version="4" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0730258" lon="115.9239194">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379760" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0698129" lon="115.9243780">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379761" visible="true" version="4" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674241" lon="115.9255476">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379764" visible="true" version="2" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0724958" lon="115.9217386"/>
+ <node id="9245379766" visible="true" version="3" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0694377" lon="115.9230365">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379767" visible="true" version="3" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674372" lon="115.9238898">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379769" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0726422" lon="115.9153149"/>
+ <node id="9245379770" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0740381" lon="115.9211185"/>
+ <node id="9245379771" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0726584" lon="115.9216680"/>
+ <node id="9245379772" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0712324" lon="115.9159476"/>
+ <node id="9245379773" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0701728" lon="115.9137757"/>
+ <node id="9245379774" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0707077" lon="115.9156002"/>
+ <node id="9245379775" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0697971" lon="115.9160078"/>
+ <node id="9245379776" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0695745" lon="115.9152510"/>
+ <node id="9245379777" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0690795" lon="115.9154802"/>
+ <node id="9245379778" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0688069" lon="115.9143314"/>
+ <node id="9245379779" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0693877" lon="115.9183052"/>
+ <node id="9245379780" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0701020" lon="115.9209694"/>
+ <node id="9245379781" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0692381" lon="115.9213829"/>
+ <node id="9245379782" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0684135" lon="115.9186801"/>
+ <node id="9245379783" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0681536" lon="115.9187791"/>
+ <node id="9245379784" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0688669" lon="115.9215062"/>
+ <node id="9245379785" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0680804" lon="115.9218509"/>
+ <node id="9245379786" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0679147" lon="115.9212430"/>
+ <node id="9245379787" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0676106" lon="115.9214080"/>
+ <node id="9245379788" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0671874" lon="115.9191304"/>
+ <node id="9245379789" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0677686" lon="115.9174711"/>
+ <node id="9245379790" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0680360" lon="115.9183709"/>
+ <node id="9245379791" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0670456" lon="115.9186901"/>
+ <node id="9245379792" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0673577" lon="115.9178084"/>
+ <node id="9245379797" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0665860" lon="115.9180976"/>
+ <node id="9245379798" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0666972" lon="115.9188917"/>
+ <node id="9245379799" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0651146" lon="115.9189010"/>
+ <node id="9245379800" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0651327" lon="115.9177353"/>
+ <node id="9245379801" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658118" lon="115.9177375"/>
+ <node id="9245379802" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658061" lon="115.9181030"/>
+ <node id="9245379804" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0671642" lon="115.9221892"/>
+ <node id="9245379805" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0656172" lon="115.9225365"/>
+ <node id="9245379806" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0655977" lon="115.9204209"/>
+ <node id="9245379807" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0650718" lon="115.9204206"/>
+ <node id="9245379808" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0650773" lon="115.9192604"/>
+ <node id="9245379809" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0672061" lon="115.9238046"/>
+ <node id="9245379810" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0651566" lon="115.9237691"/>
+ <node id="9245379811" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0651598" lon="115.9225457"/>
+ <node id="9245379820" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0734110" lon="115.9255403"/>
+ <node id="9245379822" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0704866" lon="115.9268320"/>
+ <node id="9245379823" visible="true" version="3" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674229" lon="115.9278077">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245379866" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0715591" lon="115.9186787"/>
+ <node id="9245379867" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0719293" lon="115.9200684"/>
+ <node id="9245379868" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0704908" lon="115.9207224"/>
+ <node id="9245379869" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0700676" lon="115.9193735"/>
+ <node id="9245379870" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0719399" lon="115.9204363"/>
+ <node id="9245379871" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0722361" lon="115.9217170"/>
+ <node id="9245379872" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0708821" lon="115.9222483"/>
+ <node id="9245379873" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0705013" lon="115.9210766"/>
+ <node id="9245379945" visible="true" version="1" changeset="113684173" timestamp="2021-11-12T08:11:15Z" user="user_8291442" uid="8291442" lat="39.0734754" lon="115.9162361"/>
+ <node id="9245560394" visible="true" version="2" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0696153" lon="115.9113106"/>
+ <node id="9245560396" visible="true" version="2" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0666623" lon="115.9126946"/>
+ <node id="9245560397" visible="true" version="4" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0660434" lon="115.9129480">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245560398" visible="true" version="3" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0628665" lon="115.9130207">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245560399" visible="true" version="5" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0611488" lon="115.9130009">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9245560400" visible="true" version="3" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0593824" lon="115.9132799"/>
+ <node id="9249983287" visible="true" version="4" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0674336" lon="115.9292193">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9249983291" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0738858" lon="115.9275413">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9249983294" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0739233" lon="115.9277290">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9250030930" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0683022" lon="115.9144935"/>
+ <node id="9250030931" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0688522" lon="115.9163874"/>
+ <node id="9250030932" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0673977" lon="115.9171027"/>
+ <node id="9250030933" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0668424" lon="115.9171095"/>
+ <node id="9250030934" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442" lat="39.0665462" lon="115.9153996"/>
+ <node id="9878920233" visible="true" version="1" changeset="123432364" timestamp="2022-07-10T13:24:57Z" user="user_8291442" uid="8291442" lat="39.0719816" lon="115.9159980">
+  <tag k="name" v="南八于村"/>
+  <tag k="place" v="locality"/>
+ </node>
+ <node id="9999059758" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0744629" lon="115.9367231"/>
+ <node id="9999059759" visible="true" version="4" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0671532" lon="115.9094707">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059760" visible="true" version="6" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0662826" lon="115.9068717">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059763" visible="true" version="4" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0679962" lon="115.9120683">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059765" visible="true" version="4" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0685925" lon="115.9143187">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059766" visible="true" version="4" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0692082" lon="115.9165816">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059767" visible="true" version="4" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0695612" lon="115.9178931">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059768" visible="true" version="4" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0703958" lon="115.9210444">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059769" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0710644" lon="115.9237608">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059770" visible="true" version="4" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0707725" lon="115.9224655">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059771" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0717630" lon="115.9262903">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059772" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0722805" lon="115.9282404">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059773" visible="true" version="3" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0723260" lon="115.9284081">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="9999059774" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0730112" lon="115.9310540"/>
+ <node id="9999059775" visible="true" version="3" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0735476" lon="115.9329559"/>
+ <node id="9999059776" visible="true" version="2" changeset="125956599" timestamp="2022-09-08T20:09:16Z" user="(Inactive) Hoordinates" uid="8867106" lat="39.0738646" lon="115.9343239"/>
+ <node id="10009911100" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0667357" lon="115.9192529"/>
+ <node id="10727010170" visible="true" version="3" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0751041" lon="115.9393859"/>
+ <node id="10739806278" visible="true" version="2" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0750099" lon="115.9396665"/>
+ <node id="10739806279" visible="true" version="2" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0677380" lon="115.9117508"/>
+ <node id="10739806284" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0661458" lon="115.9068799">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806285" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0661948" lon="115.9070123">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806286" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0670270" lon="115.9095378">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806287" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0678472" lon="115.9121329">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806288" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0679571" lon="115.9125595">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806289" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0684581" lon="115.9143707">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806290" visible="true" version="3" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0690764" lon="115.9166535">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806291" visible="true" version="3" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0694138" lon="115.9179583">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806292" visible="true" version="3" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0702684" lon="115.9210907">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806293" visible="true" version="3" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0706475" lon="115.9225250">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806294" visible="true" version="2" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0708739" lon="115.9238547">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806295" visible="true" version="2" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0715386" lon="115.9263855">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806296" visible="true" version="2" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0720491" lon="115.9283291">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806297" visible="true" version="2" changeset="143043427" timestamp="2023-10-24T01:56:09Z" user="rlloretb" uid="9609786" lat="39.0720929" lon="115.9284958">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="10739806298" visible="true" version="1" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0727673" lon="115.9310634"/>
+ <node id="10739806299" visible="true" version="3" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0734267" lon="115.9329956"/>
+ <node id="10739806300" visible="true" version="1" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0736473" lon="115.9344137"/>
+ <node id="10739806301" visible="true" version="1" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0742740" lon="115.9367997"/>
+ <node id="10739806302" visible="true" version="2" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0749785" lon="115.9394122"/>
+ <node id="10739840446" visible="true" version="1" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0581467" lon="115.9160895"/>
+ <node id="10739840448" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0586970" lon="115.9180726"/>
+ <node id="10739840449" visible="true" version="1" changeset="133761056" timestamp="2023-03-16T18:33:58Z" user="theman7777" uid="17880941" lat="39.0621466" lon="115.9221510"/>
+ <node id="11204226724" visible="true" version="2" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0570448" lon="115.9115336">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862618" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0629741" lon="115.9223408">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862619" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0629830" lon="115.9190709">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862620" visible="true" version="2" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0629811" lon="115.9175160">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862621" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0629772" lon="115.9152634">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862622" visible="true" version="2" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0629762" lon="115.9133386">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862623" visible="true" version="2" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0629754" lon="115.9130192">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508862654" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0745046" lon="115.9339407"/>
+ <node id="11508862655" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0738523" lon="115.9342767"/>
+ <node id="11508862658" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0736564" lon="115.9344483"/>
+ <node id="11508862659" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0736144" lon="115.9342885"/>
+ <node id="11508862665" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674347" lon="115.9358578">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508880471" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0746300" lon="115.9324338"/>
+ <node id="11508880472" visible="true" version="2" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0734546" lon="115.9326660"/>
+ <node id="11508880473" visible="true" version="2" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0733420" lon="115.9326971"/>
+ <node id="11508880474" visible="true" version="1" changeset="146150081" timestamp="2024-01-11T16:13:16Z" user="ParadoX_ZLWC" uid="2507347" lat="39.0721073" lon="115.9329537"/>
+ <node id="11508880477" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674417" lon="115.9333992">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="11508880497" visible="true" version="2" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0749513" lon="115.9392401"/>
+ <node id="11508880506" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674090" lon="115.9415559">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="12994325121" visible="true" version="2" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0742089" lon="115.9142448"/>
+ <node id="12995167561" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0679662" lon="115.9123398"/>
+ <node id="12995167574" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0684507" lon="115.9141065"/>
+ <node id="12995167575" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0689005" lon="115.9157802"/>
+ <node id="12995167576" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0691046" lon="115.9165491"/>
+ <node id="12995167577" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0705484" lon="115.9159250"/>
+ <node id="12995167578" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0715410" lon="115.9154887"/>
+ <node id="12995167579" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0724433" lon="115.9150953"/>
+ <node id="12995167580" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0704706" lon="115.9135271">
+  <tag k="name" v="定安社区"/>
+  <tag k="place" v="quarter"/>
+ </node>
+ <node id="12995167597" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0708260" lon="115.9229971"/>
+ <node id="12995167598" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0695127" lon="115.9181692"/>
+ <node id="12995167599" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0719450" lon="115.9192528">
+  <tag k="name" v="金河社区"/>
+  <tag k="place" v="quarter"/>
+ </node>
+ <node id="12995167613" visible="true" version="2" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0629362" lon="115.9174450"/>
+ <node id="12995167622" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0600684" lon="115.9131208"/>
+ <node id="12995167623" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0583994" lon="115.9136572"/>
+ <node id="12995167624" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386" lat="39.0579801" lon="115.9140646"/>
+ <node id="12995941458" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0634823" lon="115.9174520"/>
+ <node id="12995941459" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0644694" lon="115.9174484"/>
+ <node id="12995941460" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0657106" lon="115.9174466"/>
+ <node id="12995941461" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0664520" lon="115.9174270"/>
+ <node id="12995941462" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0668616" lon="115.9174037"/>
+ <node id="12995941463" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0672864" lon="115.9173250"/>
+ <node id="12995941464" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0674752" lon="115.9172714"/>
+ <node id="12995941465" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0689274" lon="115.9166259"/>
+ <node id="12995941467" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0658286" lon="115.9129895"/>
+ <node id="12995941468" visible="true" version="2" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0649138" lon="115.9130179"/>
+ <node id="12995941469" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0666707" lon="115.9174171"/>
+ <node id="12995941470" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0668754" lon="115.9188468"/>
+ <node id="12995941471" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0670754" lon="115.9203559"/>
+ <node id="12995941472" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0673544" lon="115.9220922"/>
+ <node id="12995941473" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0673850" lon="115.9225947"/>
+ <node id="12995941474" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0673974" lon="115.9236408"/>
+ <node id="12995941475" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386" lat="39.0674002" lon="115.9243095"/>
+ <node id="12997244796" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0750694" lon="115.9391727"/>
+ <node id="12997244812" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0750679" lon="115.9407471"/>
+ <node id="12997244813" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0747950" lon="115.9383508"/>
+ <node id="12997244814" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0748718" lon="115.9387293"/>
+ <node id="12997244884" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0721301" lon="115.9330364"/>
+ <node id="12997244910" visible="true" version="1" changeset="168868431" timestamp="2025-07-13T11:10:51Z" user="openmap38" uid="11383386" lat="39.0669891" lon="115.9441835"/>
+ <node id="13006326367" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0658722" lon="115.9056708"/>
+ <node id="13006326374" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0656387" lon="115.9049991"/>
+ <node id="13006326392" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0699967" lon="115.9124956"/>
+ <node id="13006326393" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0705369" lon="115.9122192"/>
+ <node id="13006326394" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0712352" lon="115.9118687"/>
+ <node id="13006326395" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0712907" lon="115.9118741"/>
+ <node id="13006326396" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0713532" lon="115.9119456"/>
+ <node id="13006326397" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0715392" lon="115.9126859"/>
+ <node id="13006326398" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0715392" lon="115.9127700"/>
+ <node id="13006326399" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0713976" lon="115.9132635"/>
+ <node id="13006326400" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0713393" lon="115.9136426"/>
+ <node id="13006338307" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0668776" lon="115.9131181"/>
+ <node id="13006338308" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0673361" lon="115.9148295"/>
+ <node id="13006338309" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0670975" lon="115.9139387"/>
+ <node id="13006338310" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0663540" lon="115.9142389"/>
+ <node id="13006338311" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0662181" lon="115.9137547"/>
+ <node id="13006338312" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386" lat="39.0656114" lon="115.9115777"/>
+ <node id="13006353701" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0713546" lon="115.9137248"/>
+ <node id="13006353702" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0715115" lon="115.9143167"/>
+ <node id="13006353703" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0714976" lon="115.9143757"/>
+ <node id="13006353704" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0711450" lon="115.9145313"/>
+ <node id="13006353705" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0706528" lon="115.9147440"/>
+ <node id="13006353706" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0674214" lon="115.9107373"/>
+ <node id="13006353707" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0675559" lon="115.9106980"/>
+ <node id="13006353708" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0666630" lon="115.9080085"/>
+ <node id="13006353709" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0647282" lon="115.9025892"/>
+ <node id="13006353710" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0654210" lon="115.9046782"/>
+ <node id="13006353711" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0666040" lon="115.9082178"/>
+ <node id="13006353712" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0688865" lon="115.9154090"/>
+ <node id="13006353713" visible="true" version="1" changeset="169057644" timestamp="2025-07-17T11:54:03Z" user="openmap38" uid="11383386" lat="39.0687589" lon="115.9154602"/>
+ <node id="13007532811" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0713019" lon="115.9171929"/>
+ <node id="13007532812" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0721735" lon="115.9168056"/>
+ <node id="13007532813" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0722818" lon="115.9168485"/>
+ <node id="13007532814" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0723401" lon="115.9170273"/>
+ <node id="13007532815" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0730897" lon="115.9198883"/>
+ <node id="13007532816" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0629810" lon="115.9204891"/>
+ <node id="13007532817" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0640575" lon="115.9204963"/>
+ <node id="13007532819" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0649336" lon="115.9204909"/>
+ <node id="13007532820" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0655458" lon="115.9204999"/>
+ <node id="13007532821" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0660081" lon="115.9205321"/>
+ <node id="13007532822" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0666440" lon="115.9205446"/>
+ <node id="13007532823" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0668078" lon="115.9205267"/>
+ <node id="13007532824" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0671516" lon="115.9204368">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007532825" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0675728" lon="115.9203121"/>
+ <node id="13007532826" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0677144" lon="115.9202621"/>
+ <node id="13007532827" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0679226" lon="115.9202120"/>
+ <node id="13007532828" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0681448" lon="115.9200940"/>
+ <node id="13007532829" visible="true" version="2" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0685928" lon="115.9198773"/>
+ <node id="13007532830" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0697932" lon="115.9193183"/>
+ <node id="13007532831" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0699154" lon="115.9192552"/>
+ <node id="13007532832" visible="true" version="1" changeset="169083107" timestamp="2025-07-17T22:53:48Z" user="openmap38" uid="11383386" lat="39.0716462" lon="115.9184756"/>
+ <node id="13007678801" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0647311" lon="115.9204874"/>
+ <node id="13007678802" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0718534" lon="115.9154336"/>
+ <node id="13007678803" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0669653" lon="115.9174539"/>
+ <node id="13007678804" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0658055" lon="115.9175100"/>
+ <node id="13007678805" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0639800" lon="115.9175091"/>
+ <node id="13007678806" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0620184" lon="115.9175167"/>
+ <node id="13007678807" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0601042" lon="115.9175672"/>
+ <node id="13007678831" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0586378" lon="115.9179318"/>
+ <node id="13007678832" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0589848" lon="115.9177580">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678833" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0593321" lon="115.9176081"/>
+ <node id="13007678834" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0595653" lon="115.9175223"/>
+ <node id="13007678835" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0598256" lon="115.9174461">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678836" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0602860" lon="115.9173757"/>
+ <node id="13007678837" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0605137" lon="115.9173685"/>
+ <node id="13007678838" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0612051" lon="115.9173742">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678839" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0624880" lon="115.9173703"/>
+ <node id="13007678840" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0628767" lon="115.9173686">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678841" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0629825" lon="115.9173686">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678842" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0639819" lon="115.9173667"/>
+ <node id="13007678843" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0649229" lon="115.9173703">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678844" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0662103" lon="115.9173542"/>
+ <node id="13007678845" visible="true" version="2" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0667270" lon="115.9173318">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678846" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0669100" lon="115.9173077"/>
+ <node id="13007678847" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0671557" lon="115.9172612"/>
+ <node id="13007678848" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0674167" lon="115.9171861"/>
+ <node id="13007678849" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0678332" lon="115.9170305">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678850" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0687093" lon="115.9166229"/>
+ <node id="13007678851" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0690306" lon="115.9164813">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678852" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0691633" lon="115.9164179">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678853" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0702003" lon="115.9160006"/>
+ <node id="13007678854" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0709009" lon="115.9156890">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13007678855" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0721577" lon="115.9151298"/>
+ <node id="13007678857" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0725985" lon="115.9149420"/>
+ <node id="13007678858" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386" lat="39.0726419" lon="115.9150964"/>
+ <node id="13011794592" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0643828" lon="115.9078933">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011794593" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0647968" lon="115.9092496"/>
+ <node id="13011794594" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0651650" lon="115.9104702">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011794595" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0659458" lon="115.9129669">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011794596" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0660380" lon="115.9133326">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011794597" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0661213" lon="115.9137915"/>
+ <node id="13011794598" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0662324" lon="115.9145532"/>
+ <node id="13011794599" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0663198" lon="115.9152235">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011794600" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0665767" lon="115.9169815"/>
+ <node id="13011800801" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0666241" lon="115.9173379">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800802" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0666461" lon="115.9174989">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800803" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0668655" lon="115.9190418">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800804" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0670600" lon="115.9204608">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800805" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0672764" lon="115.9219132"/>
+ <node id="13011800806" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673000" lon="115.9221296"/>
+ <node id="13011800807" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673098" lon="115.9222928">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800808" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673347" lon="115.9236387"/>
+ <node id="13011800809" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673333" lon="115.9239314">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800810" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673334" lon="115.9240894"/>
+ <node id="13011800811" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673361" lon="115.9246115"/>
+ <node id="13011800812" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673318" lon="115.9255854">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800813" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673375" lon="115.9278104">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800814" visible="true" version="2" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0673421" lon="115.9292201">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800815" visible="true" version="2" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0673418" lon="115.9293534">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800816" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673292" lon="115.9302638"/>
+ <node id="13011800817" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673279" lon="115.9312745">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800818" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673336" lon="115.9334074">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800819" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673403" lon="115.9337471">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800820" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673500" lon="115.9345303"/>
+ <node id="13011800821" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673458" lon="115.9356550"/>
+ <node id="13011800822" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673431" lon="115.9358478">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800823" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673388" lon="115.9360096">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800824" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673417" lon="115.9375594"/>
+ <node id="13011800825" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673417" lon="115.9386017">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800826" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673445" lon="115.9408174"/>
+ <node id="13011800827" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673389" lon="115.9411339"/>
+ <node id="13011800828" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673098" lon="115.9415589">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800829" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0672986" lon="115.9417360">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800830" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0672417" lon="115.9421746"/>
+ <node id="13011800831" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0671084" lon="115.9429077"/>
+ <node id="13011800832" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0669157" lon="115.9440569"/>
+ <node id="13011800863" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0670399" lon="115.9433162">
+  <tag k="highway" v="traffic_signals"/>
+  <tag k="traffic_signals" v="signal"/>
+ </node>
+ <node id="13011800864" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0673804" lon="115.9419376"/>
+ <node id="13011800865" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674382" lon="115.9400927"/>
+ <node id="13011800866" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674243" lon="115.9412901"/>
+ <node id="13011800867" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674283" lon="115.9299370"/>
+ <node id="13011800868" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386" lat="39.0674204" lon="115.9228117"/>
+ <node id="13013171201" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0585682" lon="115.9135916"/>
+ <node id="13013171202" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0576715" lon="115.9135333"/>
+ <node id="13013171206" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0591799" lon="115.9155704"/>
+ <node id="13013171221" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0603002" lon="115.9130813"/>
+ <node id="13013171238" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0619889" lon="115.9152615"/>
+ <node id="13013171239" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0619916" lon="115.9133066"/>
+ <node id="13013171240" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0619931" lon="115.9130224"/>
+ <node id="13013171264" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0657806" lon="115.9131593"/>
+ <node id="13013171265" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0662797" lon="115.9131280"/>
+ <node id="13013171266" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0665456" lon="115.9130807"/>
+ <node id="13013171267" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0667865" lon="115.9129832"/>
+ <node id="13013171268" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0670565" lon="115.9128536"/>
+ <node id="13013171269" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0673265" lon="115.9127230"/>
+ <node id="13013171270" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0677437" lon="115.9124968"/>
+ <node id="13013171271" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0682317" lon="115.9122232"/>
+ <node id="13013171286" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0696895" lon="115.9115376"/>
+ <node id="13013171294" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386" lat="39.0635827" lon="115.9130193"/>
+ <node id="13015208348" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0700741" lon="115.9210367"/>
+ <node id="13015208349" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0691363" lon="115.9213120"/>
+ <node id="13015208350" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0687694" lon="115.9200193"/>
+ <node id="13015208351" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0684467" lon="115.9185981"/>
+ <node id="13015208352" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0692781" lon="115.9182407"/>
+ <node id="13015208353" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0680780" lon="115.9187348"/>
+ <node id="13015208354" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0671324" lon="115.9192535"/>
+ <node id="13015208355" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0674659" lon="115.9214394"/>
+ <node id="13015208356" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0674339" lon="115.9214104"/>
+ <node id="13015208357" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0671840" lon="115.9187737"/>
+ <node id="13015208358" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0669767" lon="115.9180794"/>
+ <node id="13015208359" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0673084" lon="115.9176201"/>
+ <node id="13015208360" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0683293" lon="115.9126494"/>
+ <node id="13015208361" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0687898" lon="115.9140866"/>
+ <node id="13015208362" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0700752" lon="115.9135304"/>
+ <node id="13015208363" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0696664" lon="115.9119230"/>
+ <node id="13015208364" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0702716" lon="115.9138440"/>
+ <node id="13015208365" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0687822" lon="115.9143962"/>
+ <node id="13015208366" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0638371" lon="115.9152529"/>
+ <node id="13015208378" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0657585" lon="115.9173598"/>
+ <node id="13015208380" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0657432" lon="115.9164518"/>
+ <node id="13015208383" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0655487" lon="115.9152390"/>
+ <node id="13015208385" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658403" lon="115.9164143"/>
+ <node id="13015208386" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0661309" lon="115.9164135"/>
+ <node id="13015208387" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0662194" lon="115.9170294"/>
+ <node id="13015208388" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0660069" lon="115.9155506"/>
+ <node id="13015208389" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0655762" lon="115.9189017"/>
+ <node id="13015208390" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0650529" lon="115.9188063"/>
+ <node id="13015208391" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0650484" lon="115.9178470"/>
+ <node id="13015208393" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0639785" lon="115.9152516"/>
+ <node id="13015208394" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0639856" lon="115.9190528"/>
+ <node id="13015208398" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0638925" lon="115.9204952"/>
+ <node id="13015262006" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0639743" lon="115.9223248"/>
+ <node id="13015262007" visible="true" version="2" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0625227" lon="115.9222976"/>
+ <node id="13015262008" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0623112" lon="115.9222225"/>
+ <node id="13015262009" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0601350" lon="115.9208639"/>
+ <node id="13015262010" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0597334" lon="115.9201624"/>
+ <node id="13015262011" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0598619" lon="115.9205110"/>
+ <node id="13015262012" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0606506" lon="115.9190671"/>
+ <node id="13015262029" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0604742" lon="115.9152714"/>
+ <node id="13015262041" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0587480" lon="115.9157831"/>
+ <node id="13015262049" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0663221" lon="115.9239410"/>
+ <node id="13015262050" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0663013" lon="115.9231359"/>
+ <node id="13015262051" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0663041" lon="115.9223044"/>
+ <node id="13015262052" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0663027" lon="115.9217215"/>
+ <node id="13015262053" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0662749" lon="115.9213603"/>
+ <node id="13015262054" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0662750" lon="115.9205373"/>
+ <node id="13015262055" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658582" lon="115.9205217"/>
+ <node id="13015262056" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658626" lon="115.9190388"/>
+ <node id="13015262057" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0658861" lon="115.9175089"/>
+ <node id="13015262058" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0712016" lon="115.9207043"/>
+ <node id="13015262059" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0707215" lon="115.9188921"/>
+ <node id="13015262060" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0711268" lon="115.9207358"/>
+ <node id="13015262061" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0714926" lon="115.9221617"/>
+ <node id="13015262062" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0718852" lon="115.9169337"/>
+ <node id="13015262063" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0716878" lon="115.9161800"/>
+ <node id="13015262064" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0714324" lon="115.9162998"/>
+ <node id="13015262065" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0725666" lon="115.9157634"/>
+ <node id="13015262066" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0726804" lon="115.9157276"/>
+ <node id="13015262067" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0727346" lon="115.9157759"/>
+ <node id="13015262068" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0732440" lon="115.9164179"/>
+ <node id="13015262069" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0732718" lon="115.9165234"/>
+ <node id="13015262070" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0734828" lon="115.9184957"/>
+ <node id="13015262071" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0736327" lon="115.9198958"/>
+ <node id="13015262072" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0736980" lon="115.9203160"/>
+ <node id="13015262073" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0737146" lon="115.9205645"/>
+ <node id="13015262074" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0736869" lon="115.9205860"/>
+ <node id="13015262075" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0734301" lon="115.9205216"/>
+ <node id="13015262076" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0733176" lon="115.9205556"/>
+ <node id="13015262077" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0729372" lon="115.9207380"/>
+ <node id="13015262092" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0717469" lon="115.9143028"/>
+ <node id="13015262093" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0722037" lon="115.9141312"/>
+ <node id="13015262094" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0722453" lon="115.9140883"/>
+ <node id="13015262095" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0722606" lon="115.9140024"/>
+ <node id="13015262096" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0721287" lon="115.9134946"/>
+ <node id="13015262097" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0721398" lon="115.9133891"/>
+ <node id="13015262098" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0721620" lon="115.9132621"/>
+ <node id="13015262099" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0720163" lon="115.9126059"/>
+ <node id="13015262100" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0720246" lon="115.9124682"/>
+ <node id="13015262101" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0718858" lon="115.9119496"/>
+ <node id="13015262102" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0718302" lon="115.9119443"/>
+ <node id="13015262103" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0717705" lon="115.9118942"/>
+ <node id="13015262106" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0714135" lon="115.9121857"/>
+ <node id="13015262114" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0718705" lon="115.9148142"/>
+ <node id="13015262115" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0718427" lon="115.9148482"/>
+ <node id="13015262116" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386" lat="39.0716387" lon="115.9149376"/>
+ <node id="13362882441" visible="true" version="1" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0591626" lon="115.9197814"/>
+ <node id="13362898365" visible="true" version="1" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526" lat="39.0648385" lon="115.9025391"/>
+ <node id="13373988757" visible="true" version="1" changeset="175884758" timestamp="2025-12-13T14:04:52Z" user="小阿喵喵" uid="22277678" lat="39.0650688" lon="115.9036287"/>
+ <node id="13373988758" visible="true" version="1" changeset="175884758" timestamp="2025-12-13T14:04:52Z" user="小阿喵喵" uid="22277678" lat="39.0650950" lon="115.9037035"/>
+ <way id="570706187" visible="true" version="18" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526">
+  <nd ref="10727010170"/>
+  <nd ref="12997244796"/>
+  <nd ref="8515847051"/>
+  <nd ref="9999059758"/>
+  <nd ref="9999059776"/>
+  <nd ref="11508862655"/>
+  <nd ref="9999059775"/>
+  <nd ref="11508880472"/>
+  <nd ref="9999059774"/>
+  <nd ref="9999059773"/>
+  <nd ref="9999059772"/>
+  <nd ref="9999059771"/>
+  <nd ref="9999059769"/>
+  <nd ref="9999059770"/>
+  <nd ref="9999059768"/>
+  <nd ref="13007532831"/>
+  <nd ref="9999059767"/>
+  <nd ref="9999059766"/>
+  <nd ref="13007678852"/>
+  <nd ref="13006353712"/>
+  <nd ref="9999059765"/>
+  <nd ref="8515847056"/>
+  <nd ref="9999059763"/>
+  <nd ref="13006353707"/>
+  <nd ref="9999059759"/>
+  <nd ref="13006353708"/>
+  <nd ref="9999059760"/>
+  <nd ref="13006326367"/>
+  <nd ref="13006326374"/>
+  <nd ref="13362898365"/>
+  <tag k="highway" v="primary"/>
+  <tag k="lanes" v="4"/>
+  <tag k="name" v="乐民路"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="ref" v="S333"/>
+ </way>
+ <way id="785419413" visible="true" version="16" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="10739840448"/>
+  <nd ref="9245378837"/>
+  <nd ref="7341134032"/>
+  <nd ref="8515847046"/>
+  <nd ref="13007678807"/>
+  <nd ref="7341134031"/>
+  <nd ref="9245378844"/>
+  <nd ref="13007678806"/>
+  <nd ref="9213164759"/>
+  <nd ref="11508862620"/>
+  <nd ref="13007678805"/>
+  <nd ref="9245378832"/>
+  <nd ref="13007678804"/>
+  <nd ref="13015262057"/>
+  <nd ref="13011800802"/>
+  <nd ref="7341134030"/>
+  <nd ref="13007678803"/>
+  <nd ref="8515847047"/>
+  <nd ref="8515847050"/>
+  <nd ref="9215428082"/>
+  <nd ref="10739806290"/>
+  <nd ref="9999059766"/>
+  <nd ref="9197849963"/>
+  <tag k="construction" v="tertiary"/>
+  <tag k="highway" v="primary"/>
+  <tag k="name" v="崇文北路"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="785419414" visible="true" version="18" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526">
+  <nd ref="12997244910"/>
+  <nd ref="8519484629"/>
+  <nd ref="8515870120"/>
+  <nd ref="13011800864"/>
+  <nd ref="7341134043"/>
+  <nd ref="11508880506"/>
+  <nd ref="13011800866"/>
+  <nd ref="13011800865"/>
+  <nd ref="8519484462"/>
+  <nd ref="8515870083"/>
+  <nd ref="11508862665"/>
+  <nd ref="8519484460"/>
+  <nd ref="11508880477"/>
+  <nd ref="9215428087"/>
+  <nd ref="13011800867"/>
+  <nd ref="7341134046"/>
+  <nd ref="9249983287"/>
+  <nd ref="9245379823"/>
+  <nd ref="7341134042"/>
+  <nd ref="9245379761"/>
+  <nd ref="9245379767"/>
+  <nd ref="13011800868"/>
+  <nd ref="7341134041"/>
+  <nd ref="13007532824"/>
+  <nd ref="9245378889"/>
+  <nd ref="7341134030"/>
+  <nd ref="13007678845"/>
+  <nd ref="7341134040"/>
+  <nd ref="8515847049"/>
+  <nd ref="13006338311"/>
+  <nd ref="7341134039"/>
+  <nd ref="9245560397"/>
+  <nd ref="13006338312"/>
+  <nd ref="9245378861"/>
+  <nd ref="8515847048"/>
+  <nd ref="7341134038"/>
+  <tag k="highway" v="secondary"/>
+  <tag k="name" v="乐安街"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="795983675" visible="true" version="13" changeset="175884758" timestamp="2025-12-13T14:04:52Z" user="小阿喵喵" uid="22277678">
+  <nd ref="13006353709"/>
+  <nd ref="13373988757"/>
+  <nd ref="13373988758"/>
+  <nd ref="13006353710"/>
+  <nd ref="10739806284"/>
+  <nd ref="10739806285"/>
+  <nd ref="13006353711"/>
+  <nd ref="10739806286"/>
+  <nd ref="13006353706"/>
+  <nd ref="10739806279"/>
+  <nd ref="10739806287"/>
+  <nd ref="10739806288"/>
+  <nd ref="10739806289"/>
+  <nd ref="13006353713"/>
+  <nd ref="13007678851"/>
+  <nd ref="10739806290"/>
+  <nd ref="10739806291"/>
+  <nd ref="13007532830"/>
+  <nd ref="10739806292"/>
+  <nd ref="10739806293"/>
+  <nd ref="10739806294"/>
+  <nd ref="10739806295"/>
+  <nd ref="10739806296"/>
+  <nd ref="10739806297"/>
+  <nd ref="10739806298"/>
+  <nd ref="11508880473"/>
+  <nd ref="10739806299"/>
+  <nd ref="11508862659"/>
+  <nd ref="10739806300"/>
+  <nd ref="11508862658"/>
+  <nd ref="10739806301"/>
+  <nd ref="12997244813"/>
+  <nd ref="12997244814"/>
+  <nd ref="11508880497"/>
+  <nd ref="10739806302"/>
+  <nd ref="10739806278"/>
+  <nd ref="8519468889"/>
+  <nd ref="12997244812"/>
+  <tag k="highway" v="primary"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="ref" v="S333"/>
+ </way>
+ <way id="917242905" visible="true" version="3" changeset="139220286" timestamp="2023-07-30T18:19:26Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="8519484444"/>
+  <nd ref="8519484443"/>
+  <nd ref="8519484442"/>
+  <nd ref="8519484441"/>
+  <nd ref="8519484444"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="锦绣园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="917242907" visible="true" version="17" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="8519484477"/>
+  <nd ref="12995167624"/>
+  <nd ref="9197849983"/>
+  <nd ref="9245378845"/>
+  <nd ref="13013171239"/>
+  <nd ref="8519484469"/>
+  <nd ref="11508862622"/>
+  <nd ref="9245378880"/>
+  <nd ref="13011794596"/>
+  <nd ref="7341134039"/>
+  <nd ref="8519484452"/>
+  <nd ref="13006338307"/>
+  <nd ref="10739806288"/>
+  <nd ref="8515847056"/>
+  <nd ref="8519484451"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="善荣路"/>
+  <tag k="oneway" v="yes"/>
+ </way>
+ <way id="917242918" visible="true" version="3" changeset="139220286" timestamp="2023-07-30T18:19:26Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="8519484515"/>
+  <nd ref="8519484514"/>
+  <nd ref="8519484513"/>
+  <nd ref="8519484512"/>
+  <nd ref="8519484515"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="裕民园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="917242925" visible="true" version="1" changeset="101017953" timestamp="2021-03-15T04:27:41Z" user="user_11435438" uid="11435438">
+  <nd ref="8519484551"/>
+  <nd ref="8519484552"/>
+  <nd ref="8519484549"/>
+  <nd ref="8519484550"/>
+  <nd ref="8519484551"/>
+  <tag k="landuse" v="construction"/>
+ </way>
+ <way id="996095926" visible="true" version="12" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="13013171286"/>
+  <nd ref="8519484451"/>
+  <nd ref="13006326392"/>
+  <nd ref="9197849962"/>
+  <nd ref="13006353705"/>
+  <nd ref="13007678854"/>
+  <nd ref="9197849963"/>
+  <nd ref="13007532811"/>
+  <nd ref="13007532832"/>
+  <nd ref="9245378886"/>
+  <nd ref="9245379764"/>
+  <nd ref="9245379759"/>
+  <nd ref="9245379820"/>
+  <nd ref="9249983291"/>
+  <nd ref="9249983294"/>
+  <nd ref="9197849966"/>
+  <nd ref="9215428083"/>
+  <nd ref="11508880471"/>
+  <nd ref="9215428051"/>
+  <nd ref="9197849965"/>
+  <nd ref="9197849964"/>
+  <nd ref="11508862654"/>
+  <nd ref="11508862655"/>
+  <tag k="construction" v="residential"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="红莲街"/>
+ </way>
+ <way id="998067061" visible="true" version="9" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386">
+  <nd ref="12997244884"/>
+  <nd ref="11508880474"/>
+  <nd ref="9215428085"/>
+  <nd ref="8519484567"/>
+  <nd ref="9215428081"/>
+  <nd ref="9245379822"/>
+  <nd ref="9245379760"/>
+  <nd ref="9245379766"/>
+  <nd ref="9245378834"/>
+  <nd ref="13007532829"/>
+  <nd ref="9245378888"/>
+  <nd ref="9215428082"/>
+  <nd ref="13007678849"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="八于街"/>
+ </way>
+ <way id="1001665903" visible="true" version="11" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245378886"/>
+  <nd ref="13015262058"/>
+  <nd ref="13015262060"/>
+  <nd ref="9999059768"/>
+  <nd ref="10739806292"/>
+  <nd ref="9245378834"/>
+  <nd ref="7341134041"/>
+  <nd ref="13011800807"/>
+  <nd ref="13015262051"/>
+  <nd ref="9245378835"/>
+  <nd ref="13015262006"/>
+  <nd ref="11508862618"/>
+  <nd ref="7341134074"/>
+  <nd ref="13015262007"/>
+  <nd ref="13015262008"/>
+  <nd ref="10739840449"/>
+  <nd ref="9245378843"/>
+  <nd ref="13015262009"/>
+  <nd ref="9245378836"/>
+  <nd ref="13015262011"/>
+  <nd ref="13015262010"/>
+  <nd ref="9245378894"/>
+  <nd ref="9245378837"/>
+  <nd ref="13007678832"/>
+  <nd ref="9245378868"/>
+  <nd ref="8519484477"/>
+  <nd ref="13013171202"/>
+  <nd ref="9245378838"/>
+  <nd ref="11204226724"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="motor_vehicle" v="no"/>
+  <tag k="name" v="龚庄路"/>
+ </way>
+ <way id="1001665905" visible="true" version="2" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="9245378854"/>
+  <nd ref="9245378855"/>
+  <nd ref="9245378856"/>
+  <nd ref="9245378857"/>
+  <nd ref="9245378858"/>
+  <nd ref="9245378854"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="红莲中园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665907" visible="true" version="10" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9197849962"/>
+  <nd ref="9999059765"/>
+  <nd ref="10739806289"/>
+  <nd ref="13006338308"/>
+  <nd ref="7341134040"/>
+  <nd ref="13011794599"/>
+  <nd ref="13015208383"/>
+  <nd ref="9245378879"/>
+  <nd ref="13015208393"/>
+  <nd ref="13015208366"/>
+  <nd ref="11508862621"/>
+  <nd ref="9245378865"/>
+  <nd ref="13013171238"/>
+  <nd ref="9245378866"/>
+  <nd ref="13015262029"/>
+  <nd ref="9245378867"/>
+  <nd ref="9245378910"/>
+  <nd ref="13013171206"/>
+  <nd ref="13015262041"/>
+  <nd ref="9245378868"/>
+  <nd ref="10739840446"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="lanes" v="2"/>
+  <tag k="name" v="富家路"/>
+ </way>
+ <way id="1001665909" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245378875"/>
+  <nd ref="13015208363"/>
+  <nd ref="9245378876"/>
+  <nd ref="13015208362"/>
+  <nd ref="13015208361"/>
+  <nd ref="9245378877"/>
+  <nd ref="13015208360"/>
+  <nd ref="9245378878"/>
+  <nd ref="9245378875"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="富家园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665911" visible="true" version="12" changeset="175693575" timestamp="2025-12-09T02:49:23Z" user="Su Lu" uid="16676526">
+  <nd ref="9999059767"/>
+  <nd ref="10739806291"/>
+  <nd ref="9245378888"/>
+  <nd ref="9245378889"/>
+  <nd ref="13011800803"/>
+  <nd ref="13015262056"/>
+  <nd ref="9245378890"/>
+  <nd ref="13015208394"/>
+  <nd ref="11508862619"/>
+  <nd ref="9245378891"/>
+  <nd ref="9245378892"/>
+  <nd ref="9245378893"/>
+  <nd ref="13015262012"/>
+  <nd ref="9245378912"/>
+  <nd ref="9245378894"/>
+  <nd ref="13362882441"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="金湖西路"/>
+ </way>
+ <way id="1001665912" visible="true" version="2" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="9245378896"/>
+  <nd ref="9245378897"/>
+  <nd ref="9245378898"/>
+  <nd ref="9245378899"/>
+  <nd ref="9245378896"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="悦祥园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665922" visible="true" version="2" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="9245379769"/>
+  <nd ref="9245379945"/>
+  <nd ref="9245379770"/>
+  <nd ref="9245379771"/>
+  <nd ref="9245379772"/>
+  <nd ref="9245379769"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="红莲东园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665923" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245379773"/>
+  <nd ref="13015208364"/>
+  <nd ref="9245379774"/>
+  <nd ref="9245379775"/>
+  <nd ref="9245379776"/>
+  <nd ref="9245379777"/>
+  <nd ref="13015208365"/>
+  <nd ref="9245379778"/>
+  <nd ref="9245379773"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="容和园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665924" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245379779"/>
+  <nd ref="9245379780"/>
+  <nd ref="13015208348"/>
+  <nd ref="9245379781"/>
+  <nd ref="13015208349"/>
+  <nd ref="13015208350"/>
+  <nd ref="9245379782"/>
+  <nd ref="13015208351"/>
+  <nd ref="13015208352"/>
+  <nd ref="9245379779"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="宽余园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665925" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245379783"/>
+  <nd ref="9245379784"/>
+  <nd ref="9245379785"/>
+  <nd ref="9245379786"/>
+  <nd ref="9245379787"/>
+  <nd ref="13015208355"/>
+  <nd ref="13015208356"/>
+  <nd ref="13015208354"/>
+  <nd ref="9245379788"/>
+  <nd ref="13015208353"/>
+  <nd ref="9245379783"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="树华园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665926" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245379789"/>
+  <nd ref="9245379790"/>
+  <nd ref="13015208357"/>
+  <nd ref="9245379791"/>
+  <nd ref="13015208358"/>
+  <nd ref="9245379792"/>
+  <nd ref="13015208359"/>
+  <nd ref="9245379789"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="众志园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665928" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="9245379797"/>
+  <nd ref="9245379798"/>
+  <nd ref="13015208389"/>
+  <nd ref="9245379799"/>
+  <nd ref="13015208390"/>
+  <nd ref="13015208391"/>
+  <nd ref="9245379800"/>
+  <nd ref="9245379801"/>
+  <nd ref="9245379802"/>
+  <nd ref="9245379797"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="日新园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665929" visible="true" version="3" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="10009911100"/>
+  <nd ref="9245379804"/>
+  <nd ref="9245379809"/>
+  <nd ref="9245379810"/>
+  <nd ref="9245379811"/>
+  <nd ref="9245379805"/>
+  <nd ref="9245379806"/>
+  <nd ref="9245379807"/>
+  <nd ref="9245379808"/>
+  <nd ref="10009911100"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="富兴园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665942" visible="true" version="2" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="9245379866"/>
+  <nd ref="9245379867"/>
+  <nd ref="9245379868"/>
+  <nd ref="9245379869"/>
+  <nd ref="9245379866"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="荷香园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001665943" visible="true" version="2" changeset="139220286" timestamp="2023-07-30T18:19:30Z" user="h4ic8bn3kstr" uid="12863618">
+  <nd ref="9245379870"/>
+  <nd ref="9245379871"/>
+  <nd ref="9245379872"/>
+  <nd ref="9245379873"/>
+  <nd ref="9245379870"/>
+  <tag k="landuse" v="residential"/>
+  <tag k="name" v="金芦园"/>
+  <tag k="residential" v="apartments"/>
+ </way>
+ <way id="1001688828" visible="true" version="10" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="9245560394"/>
+  <nd ref="9999059763"/>
+  <nd ref="10739806287"/>
+  <nd ref="9245560396"/>
+  <nd ref="9245560397"/>
+  <nd ref="13011794595"/>
+  <nd ref="12995941467"/>
+  <nd ref="12995941468"/>
+  <nd ref="13013171294"/>
+  <nd ref="11508862623"/>
+  <nd ref="9245560398"/>
+  <nd ref="13013171240"/>
+  <nd ref="9245560399"/>
+  <nd ref="13013171221"/>
+  <nd ref="12995167622"/>
+  <nd ref="9245560400"/>
+  <nd ref="13013171201"/>
+  <nd ref="12995167623"/>
+  <nd ref="8519484477"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="lanes" v="1"/>
+  <tag k="name" v="善荣路"/>
+  <tag k="oneway" v="yes"/>
+ </way>
+ <way id="1002234961" visible="true" version="1" changeset="113756578" timestamp="2021-11-14T10:04:48Z" user="user_8291442" uid="8291442">
+  <nd ref="9250030930"/>
+  <nd ref="9250030931"/>
+  <nd ref="9250030932"/>
+  <nd ref="9250030933"/>
+  <nd ref="9250030934"/>
+  <nd ref="9250030930"/>
+  <tag k="amenity" v="school"/>
+  <tag k="name" v="雄安容和红杰初级中学"/>
+ </way>
+ <way id="1414181182" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386">
+  <nd ref="12995167576"/>
+  <nd ref="12995167577"/>
+  <nd ref="12995167578"/>
+  <nd ref="12995167579"/>
+  <nd ref="12994325121"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1414181186" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386">
+  <nd ref="12995167561"/>
+  <nd ref="12995167574"/>
+  <nd ref="12995167575"/>
+  <nd ref="12995167576"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1414271321" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <nd ref="12995167613"/>
+  <nd ref="12995941458"/>
+  <nd ref="12995941459"/>
+  <nd ref="12995941460"/>
+  <nd ref="12995941461"/>
+  <nd ref="12995941469"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1414271322" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <nd ref="12995941469"/>
+  <nd ref="12995941462"/>
+  <nd ref="12995941463"/>
+  <nd ref="12995941464"/>
+  <nd ref="12995941465"/>
+  <nd ref="12995167576"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1414271323" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <nd ref="12995941469"/>
+  <nd ref="12995941470"/>
+  <nd ref="12995941471"/>
+  <nd ref="12995941472"/>
+  <nd ref="12995941473"/>
+  <nd ref="12995941474"/>
+  <nd ref="12995941475"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1414271327" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <nd ref="12995167597"/>
+  <nd ref="12995167598"/>
+  <nd ref="12995167576"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+ </way>
+ <way id="1415388950" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13006326392"/>
+  <nd ref="13006326393"/>
+  <nd ref="13006326394"/>
+  <nd ref="13006326395"/>
+  <nd ref="13006326396"/>
+  <nd ref="13015262106"/>
+  <nd ref="13006326397"/>
+  <nd ref="13006326398"/>
+  <nd ref="13006326399"/>
+  <nd ref="13006326400"/>
+  <nd ref="13006353701"/>
+  <nd ref="13006353702"/>
+  <nd ref="13006353703"/>
+  <nd ref="13006353704"/>
+  <nd ref="13006353705"/>
+  <tag k="highway" v="residential"/>
+ </way>
+ <way id="1415389572" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386">
+  <nd ref="13006338307"/>
+  <nd ref="13006338309"/>
+  <nd ref="13006338308"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1415389573" visible="true" version="1" changeset="169057818" timestamp="2025-07-17T11:58:14Z" user="openmap38" uid="11383386">
+  <nd ref="13006338309"/>
+  <nd ref="13006338310"/>
+  <tag k="highway" v="service"/>
+ </way>
+ <way id="1415503583" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13007532811"/>
+  <nd ref="13015262062"/>
+  <nd ref="13007532812"/>
+  <nd ref="13007532813"/>
+  <nd ref="13007532814"/>
+  <nd ref="13007532815"/>
+  <nd ref="9245378886"/>
+  <tag k="highway" v="residential"/>
+ </way>
+ <way id="1415503584" visible="true" version="4" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13007532816"/>
+  <nd ref="13015208398"/>
+  <nd ref="13007532817"/>
+  <nd ref="13007678801"/>
+  <nd ref="13007532819"/>
+  <nd ref="13007532820"/>
+  <nd ref="13015262055"/>
+  <nd ref="13007532821"/>
+  <nd ref="13015262054"/>
+  <nd ref="13007532822"/>
+  <nd ref="13007532823"/>
+  <nd ref="13011800804"/>
+  <nd ref="13007532824"/>
+  <nd ref="13007532825"/>
+  <nd ref="13007532826"/>
+  <nd ref="13007532827"/>
+  <nd ref="13007532828"/>
+  <nd ref="13007532829"/>
+  <nd ref="13007532830"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1415503585" visible="true" version="2" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13007532830"/>
+  <nd ref="13007532831"/>
+  <nd ref="13015262059"/>
+  <nd ref="13007532832"/>
+  <tag k="highway" v="unclassified"/>
+ </way>
+ <way id="1415517609" visible="true" version="3" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13007678854"/>
+  <nd ref="13007678853"/>
+  <nd ref="13007678852"/>
+  <nd ref="13007678851"/>
+  <nd ref="13007678850"/>
+  <nd ref="13007678849"/>
+  <nd ref="13007678848"/>
+  <nd ref="13007678847"/>
+  <nd ref="13007678846"/>
+  <nd ref="13007678845"/>
+  <nd ref="13011800801"/>
+  <nd ref="13007678844"/>
+  <nd ref="13015208378"/>
+  <nd ref="13007678843"/>
+  <nd ref="13007678842"/>
+  <nd ref="13007678841"/>
+  <nd ref="13007678840"/>
+  <nd ref="13007678839"/>
+  <nd ref="13007678838"/>
+  <nd ref="13007678837"/>
+  <nd ref="13007678836"/>
+  <nd ref="13007678835"/>
+  <nd ref="13007678834"/>
+  <nd ref="13007678833"/>
+  <nd ref="13007678832"/>
+  <nd ref="13007678831"/>
+  <tag k="highway" v="primary"/>
+  <tag k="name" v="崇文北路"/>
+  <tag k="oneway" v="yes"/>
+ </way>
+ <way id="1415517613" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386">
+  <nd ref="9197849963"/>
+  <nd ref="13007678802"/>
+  <nd ref="13007678858"/>
+  <tag k="construction" v="tertiary"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="崇文北路"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="1415517614" visible="true" version="1" changeset="169084577" timestamp="2025-07-18T00:38:21Z" user="openmap38" uid="11383386">
+  <nd ref="13007678857"/>
+  <nd ref="13007678855"/>
+  <nd ref="13007678854"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="name" v="崇文北路"/>
+  <tag k="oneway" v="yes"/>
+ </way>
+ <way id="1415897649" visible="true" version="1" changeset="169157156" timestamp="2025-07-19T15:17:00Z" user="openmap38" uid="11383386">
+  <nd ref="7341134038"/>
+  <nd ref="13011794592"/>
+  <nd ref="13011794593"/>
+  <nd ref="13011794594"/>
+  <nd ref="13011794595"/>
+  <nd ref="13011794596"/>
+  <nd ref="13011794597"/>
+  <nd ref="13011794598"/>
+  <nd ref="13011794599"/>
+  <nd ref="13011794600"/>
+  <nd ref="13011800801"/>
+  <nd ref="13011800802"/>
+  <nd ref="13011800803"/>
+  <nd ref="13011800804"/>
+  <nd ref="13011800805"/>
+  <nd ref="13011800806"/>
+  <nd ref="13011800807"/>
+  <nd ref="13011800808"/>
+  <nd ref="13011800809"/>
+  <nd ref="13011800810"/>
+  <nd ref="13011800811"/>
+  <nd ref="13011800812"/>
+  <nd ref="13011800813"/>
+  <nd ref="13011800814"/>
+  <nd ref="13011800815"/>
+  <nd ref="13011800816"/>
+  <nd ref="13011800817"/>
+  <nd ref="13011800818"/>
+  <nd ref="13011800819"/>
+  <nd ref="13011800820"/>
+  <nd ref="13011800821"/>
+  <nd ref="13011800822"/>
+  <nd ref="13011800823"/>
+  <nd ref="13011800824"/>
+  <nd ref="13011800825"/>
+  <nd ref="13011800826"/>
+  <nd ref="13011800827"/>
+  <nd ref="13011800828"/>
+  <nd ref="13011800829"/>
+  <nd ref="13011800830"/>
+  <nd ref="13011800831"/>
+  <nd ref="13011800863"/>
+  <nd ref="13011800832"/>
+  <tag k="highway" v="secondary"/>
+  <tag k="name" v="乐安街"/>
+  <tag k="oneway" v="yes"/>
+ </way>
+ <way id="1416043126" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="13013171270"/>
+  <nd ref="13013171271"/>
+  <tag k="layer" v="-1"/>
+  <tag k="tunnel" v="culvert"/>
+  <tag k="waterway" v="stream"/>
+ </way>
+ <way id="1416043127" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="13013171265"/>
+  <nd ref="13013171266"/>
+  <nd ref="13013171267"/>
+  <nd ref="13013171268"/>
+  <nd ref="13013171269"/>
+  <nd ref="13013171270"/>
+  <tag k="waterway" v="stream"/>
+ </way>
+ <way id="1416043128" visible="true" version="1" changeset="169182454" timestamp="2025-07-20T07:48:23Z" user="openmap38" uid="11383386">
+  <nd ref="13013171264"/>
+  <nd ref="13013171265"/>
+  <tag k="layer" v="-1"/>
+  <tag k="tunnel" v="culvert"/>
+  <tag k="waterway" v="stream"/>
+ </way>
+ <way id="1416280862" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015208380"/>
+  <nd ref="13015208385"/>
+  <nd ref="13015208386"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280863" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015208387"/>
+  <nd ref="13015208386"/>
+  <nd ref="13015208388"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280874" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262049"/>
+  <nd ref="13015262050"/>
+  <nd ref="13015262051"/>
+  <nd ref="13015262052"/>
+  <nd ref="13015262053"/>
+  <nd ref="13015262054"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280876" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262058"/>
+  <nd ref="13015262059"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280877" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262060"/>
+  <nd ref="13015262061"/>
+  <tag k="highway" v="unclassified"/>
+ </way>
+ <way id="1416280878" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262062"/>
+  <nd ref="13015262063"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280879" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262064"/>
+  <nd ref="13015262063"/>
+  <nd ref="13015262065"/>
+  <nd ref="13015262066"/>
+  <nd ref="13015262067"/>
+  <nd ref="13015262068"/>
+  <nd ref="13015262069"/>
+  <nd ref="13015262070"/>
+  <nd ref="13015262071"/>
+  <nd ref="13015262072"/>
+  <nd ref="13015262073"/>
+  <nd ref="13015262074"/>
+  <nd ref="13015262075"/>
+  <nd ref="13015262076"/>
+  <nd ref="13015262077"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280883" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13006353703"/>
+  <nd ref="13015262092"/>
+  <nd ref="13015262093"/>
+  <nd ref="13015262094"/>
+  <nd ref="13015262095"/>
+  <nd ref="13015262096"/>
+  <nd ref="13015262097"/>
+  <nd ref="13015262098"/>
+  <nd ref="13015262099"/>
+  <nd ref="13015262100"/>
+  <nd ref="13015262101"/>
+  <nd ref="13015262102"/>
+  <nd ref="13015262103"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <way id="1416280886" visible="true" version="1" changeset="169235584" timestamp="2025-07-21T10:27:14Z" user="openmap38" uid="11383386">
+  <nd ref="13015262092"/>
+  <nd ref="13015262114"/>
+  <nd ref="13015262115"/>
+  <nd ref="13015262116"/>
+  <nd ref="13006353703"/>
+  <tag k="highway" v="living_street"/>
+ </way>
+ <relation id="19345552" visible="true" version="1" changeset="168818168" timestamp="2025-07-12T00:53:45Z" user="openmap38" uid="11383386">
+  <member type="way" ref="1414181186" role="outer"/>
+  <member type="way" ref="1414181182" role="outer"/>
+  <member type="way" ref="1414181183" role="outer"/>
+  <member type="way" ref="1414181179" role="outer"/>
+  <member type="node" ref="12995167580" role="label"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="定安社区"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="19345553" visible="true" version="2" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <member type="way" ref="1414181184" role="outer"/>
+  <member type="way" ref="1414271327" role="outer"/>
+  <member type="way" ref="1414181182" role="outer"/>
+  <member type="way" ref="1414181185" role="outer"/>
+  <member type="node" ref="12995167599" role="label"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="金河社区"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="19346960" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <member type="way" ref="1414271321" role="outer"/>
+  <member type="way" ref="1414271322" role="outer"/>
+  <member type="way" ref="1414181186" role="outer"/>
+  <member type="way" ref="1414181181" role="outer"/>
+  <member type="way" ref="1414181192" role="outer"/>
+  <member type="way" ref="1414181191" role="outer"/>
+  <member type="way" ref="1414271320" role="outer"/>
+  <member type="node" ref="12995941466" role="label"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="望淀社区"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="19346961" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <member type="way" ref="1414271323" role="outer"/>
+  <member type="way" ref="1414271325" role="outer"/>
+  <member type="way" ref="1414181188" role="outer"/>
+  <member type="way" ref="1414271321" role="outer"/>
+  <member type="node" ref="12995941489" role="label"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="双文社区"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="19346962" visible="true" version="1" changeset="168839446" timestamp="2025-07-12T14:45:21Z" user="openmap38" uid="11383386">
+  <member type="way" ref="1414271326" role="outer"/>
+  <member type="way" ref="1414271327" role="outer"/>
+  <member type="way" ref="1414271322" role="outer"/>
+  <member type="way" ref="1414271323" role="outer"/>
+  <member type="node" ref="12995948003" role="label"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="龚庄社区"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+</osm>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>雄安交通协同控制数字孪生</title>
+  <style>
+    html,body,#unity-canvas{width:100%;height:100%;margin:0;overflow:hidden;background:#061113}
+    #unity-canvas{display:block;outline:none}
+    #loading{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#10282a,#061113 62%);color:#c9d9d7;font:500 13px/1.5 system-ui,sans-serif;letter-spacing:.08em}
+    #loading[data-hidden="true"]{opacity:0;pointer-events:none;transition:opacity .45s ease}
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="loading">正在构建雄安交通数字孪生场景</div>
+  <script src="Build/unity.loader.js"></script>
+  <script>
+    const canvas = document.querySelector('#unity-canvas');
+    const loading = document.querySelector('#loading');
+    const config = {
+      dataUrl: 'Build/unity.data',
+      frameworkUrl: 'Build/unity.framework.js',
+      codeUrl: 'Build/unity.wasm',
+      streamingAssetsUrl: 'StreamingAssets',
+      companyName: 'Xiongan Traffic Brain',
+      productName: '雄安交通协同控制数字孪生',
+      productVersion: '1.0'
+    };
+    function send(method, payload) {
+      if (!window.unityInstance) return;
+      window.unityInstance.SendMessage('XionganBootstrap', method, JSON.stringify(payload));
+    }
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.location.origin || event.source !== window.parent) return;
+      if (event.data?.type === 'xiongan-unity-command') send('HandleBrowserCommand', event.data.payload);
+      if (event.data?.type === 'xiongan-unity-snapshot') send('HandleBrowserSnapshot', event.data.payload);
+    });
+    createUnityInstance(canvas, config, (progress) => {
+      loading.textContent = `正在加载雄安交通数字孪生 ${Math.round(progress * 100)}%`;
+    }).then((instance) => {
+      window.unityInstance = instance;
+      loading.dataset.hidden = 'true';
+      window.parent.postMessage({type:'xiongan-unity-ready'}, window.location.origin);
+    }).catch((error) => {
+      loading.textContent = `Unity 场景启动失败：${error}`;
+      window.parent.postMessage({type:'xiongan-unity-fatal', message:String(error)}, window.location.origin);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760">
+<rect width="100%" height="100%" fill="#0c1424" />
+<text x="48" y="58" fill="#ffffff" font-size="32" font-family="Segoe UI,Microsoft YaHei,sans-serif">官方独立路口 demo_16</text>
+<text x="48" y="92" fill="#7ed6c4" font-size="18" font-family="Segoe UI,Microsoft YaHei,sans-serif">Excel 流量与配时 + OSM 位置、方位与道路等级</text>
+<line x1="500.0" y1="390.0" x2="641.2" y2="422.9" stroke="#27374d" stroke-width="24" stroke-linecap="round" />
+<line x1="500.0" y1="390.0" x2="532.4" y2="248.7" stroke="#27374d" stroke-width="24" stroke-linecap="round" />
+<line x1="500.0" y1="390.0" x2="518.1" y2="533.9" stroke="#27374d" stroke-width="24" stroke-linecap="round" />
+<line x1="500.0" y1="390.0" x2="358.8" y2="356.9" stroke="#27374d" stroke-width="24" stroke-linecap="round" />
+<line x1="500.0" y1="390.0" x2="641.2" y2="422.9" stroke="#f4cf57" stroke-width="2" stroke-dasharray="10 8" />
+<line x1="500.0" y1="390.0" x2="532.4" y2="248.7" stroke="#f4cf57" stroke-width="2" stroke-dasharray="10 8" />
+<line x1="500.0" y1="390.0" x2="518.1" y2="533.9" stroke="#f4cf57" stroke-width="2" stroke-dasharray="10 8" />
+<line x1="500.0" y1="390.0" x2="358.8" y2="356.9" stroke="#f4cf57" stroke-width="2" stroke-dasharray="10 8" />
+<circle cx="500.0" cy="390.0" r="24" fill="#f05d5e" stroke="#ffffff" stroke-width="3" />
+<text x="500.0" y="397.0" fill="#ffffff" text-anchor="middle" font-size="20">J</text>
+<text x="641.2" y="404.9" text-anchor="middle" fill="#e7edf6" font-size="20">E · 3进口车道</text>
+<text x="532.4" y="230.7" text-anchor="middle" fill="#e7edf6" font-size="20">N · 3进口车道</text>
+<text x="518.1" y="515.9" text-anchor="middle" fill="#e7edf6" font-size="20">S · 3进口车道</text>
+<text x="358.8" y="338.9" text-anchor="middle" fill="#e7edf6" font-size="20">W · 3进口车道</text>
+<rect x="40" y="622" width="920" height="102" rx="16" fill="#17243a" stroke="#31445f" />
+<text x="64" y="661" fill="#ffffff" font-size="18" font-family="Segoe UI,Microsoft YaHei,sans-serif">2小时精确需求：am_peak 4992辆 / offpeak 4664辆 / pm_peak 4792辆</text>
+<text x="64" y="697" fill="#ffffff" font-size="18" font-family="Segoe UI,Microsoft YaHei,sans-serif">官方周期：am_peak 77s / offpeak 77s / pm_peak 77s</text>
+</svg>

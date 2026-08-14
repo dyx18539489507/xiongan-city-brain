@@ -1,0 +1,102 @@
+name: xiongan-traffic-local-edge
+
+x-edge-worker: &edge-worker
+  image: ${TRAFFIC_BACKEND_IMAGE:-xiongan-traffic-platform-backend:phase1}
+  env_file: ${ENV_FILE:-../../.env.example}
+  environment:
+    ENVIRONMENT: ${ENVIRONMENT:-production}
+    MQTT_HOST: ${CLOUD_MQTT_HOST:-host.docker.internal}
+    MQTT_PORT: ${CLOUD_MQTT_PORT:-8883}
+    MQTT_TLS_ENABLED: "true"
+    MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+    MQTT_CLIENT_CERT: /run/mqtt-certs/client.crt
+    MQTT_CLIENT_KEY: /run/mqtt-certs/client.key
+    REDIS_URL: ${LOCAL_REDIS_URL:-redis://redis:6379/0}
+    TRAFFIC_MESSAGE_BUS: mqtt
+  volumes:
+    - ${EDGE_CERT_DIR:-../mosquitto/certs}:/run/mqtt-certs:ro
+    - ../../scenarios:/workspace/scenarios:ro
+    - ../../results:/workspace/results
+  restart: unless-stopped
+  depends_on:
+    redis: {condition: service_healthy}
+  networks: [traffic-edge]
+
+services:
+  rsu-service:
+    <<: *edge-worker
+    command: ["worker", "rsu-service"]
+    environment:
+      SERVICE_INSTANCE_ID: rsu-rongdong
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: ${CLOUD_MQTT_HOST:-host.docker.internal}
+      MQTT_PORT: ${CLOUD_MQTT_PORT:-8883}
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      MQTT_CLIENT_CERT: /run/mqtt-certs/client.crt
+      MQTT_CLIENT_KEY: /run/mqtt-certs/client.key
+      REDIS_URL: ${LOCAL_REDIS_URL:-redis://redis:6379/0}
+      TRAFFIC_MESSAGE_BUS: mqtt
+
+  edge-service:
+    <<: *edge-worker
+    command: ["worker", "edge-service"]
+    environment:
+      SERVICE_INSTANCE_ID: edge-rongdong
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: ${CLOUD_MQTT_HOST:-host.docker.internal}
+      MQTT_PORT: ${CLOUD_MQTT_PORT:-8883}
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      MQTT_CLIENT_CERT: /run/mqtt-certs/client.crt
+      MQTT_CLIENT_KEY: /run/mqtt-certs/client.key
+      REDIS_URL: ${LOCAL_REDIS_URL:-redis://redis:6379/0}
+      TRAFFIC_MESSAGE_BUS: mqtt
+
+  vehicle-agent:
+    <<: *edge-worker
+    command: ["worker", "vehicle-agent"]
+    environment:
+      SERVICE_INSTANCE_ID: vehicle-agent-primary
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: ${CLOUD_MQTT_HOST:-host.docker.internal}
+      MQTT_PORT: ${CLOUD_MQTT_PORT:-8883}
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      MQTT_CLIENT_CERT: /run/mqtt-certs/client.crt
+      MQTT_CLIENT_KEY: /run/mqtt-certs/client.key
+      REDIS_URL: ${LOCAL_REDIS_URL:-redis://redis:6379/0}
+      TRAFFIC_MESSAGE_BUS: mqtt
+
+  sumo-runner:
+    <<: *edge-worker
+    command: ["worker", "sumo-runner"]
+    environment:
+      SERVICE_INSTANCE_ID: sumo-runner-primary
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      MQTT_HOST: ${CLOUD_MQTT_HOST:-host.docker.internal}
+      MQTT_PORT: ${CLOUD_MQTT_PORT:-8883}
+      MQTT_TLS_ENABLED: "true"
+      MQTT_CA_CERT: /run/mqtt-certs/ca.crt
+      MQTT_CLIENT_CERT: /run/mqtt-certs/client.crt
+      MQTT_CLIENT_KEY: /run/mqtt-certs/client.key
+      REDIS_URL: ${LOCAL_REDIS_URL:-redis://redis:6379/0}
+      TRAFFIC_MESSAGE_BUS: mqtt
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [edge_redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks: [traffic-edge]
+
+networks:
+  traffic-edge:
+
+volumes:
+  edge_redis_data:

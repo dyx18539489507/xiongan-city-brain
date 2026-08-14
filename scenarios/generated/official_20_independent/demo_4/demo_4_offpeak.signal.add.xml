@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<additional>
+    <tlLogic id="J" type="static" programID="offpeak" offset="0">
+        <phase duration="57" state="gggrrrgggrrr" name="P1 南北向直左" />
+        <phase duration="3" state="yyyrrryyyrrr" name="P1 yellow" />
+        <phase duration="2" state="rrrrrrrrrrrr" name="P1 all-red" />
+        <phase duration="34" state="rrrrrrrrrggg" name="P2 西向直左" />
+        <phase duration="3" state="rrrrrrrrryyy" name="P2 yellow" />
+        <phase duration="2" state="rrrrrrrrrrrr" name="P2 all-red" />
+        <phase duration="34" state="rrrgggrrrrrr" name="P3 东向直左" />
+        <phase duration="3" state="rrryyyrrrrrr" name="P3 yellow" />
+        <phase duration="2" state="rrrrrrrrrrrr" name="P3 all-red" />
+    </tlLogic>
+</additional>

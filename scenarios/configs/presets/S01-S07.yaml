@@ -1,0 +1,50 @@
+schema_version: "1.0"
+base_scenario_id: xiongan_rongdong_20
+profiles:
+  - code: S01
+    name: 平峰正常运行
+    flow_multiplier: 0.75
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S02
+    name: 早晚高峰
+    flow_multiplier: 1.6
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S03
+    name: 大型活动散场
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances:
+      - {type: event_dispersal, start_s: 900.0, duration_s: 300.0, target: north_activity, multiplier: 2.5}
+  - code: S04
+    name: 下游施工占道
+    flow_multiplier: 1.2
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances:
+      - {type: roadwork, start_s: 600.0, duration_s: 900.0, target: configured_downstream_lane}
+  - code: S05
+    name: 突发交通事件
+    flow_multiplier: 1.2
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances:
+      - {type: incident, start_s: 600.0, duration_s: 300.0, target: core_corridor}
+  - code: S06
+    name: 应急车辆优先
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances:
+      - {type: emergency_vehicle, start_s: 1200.0, duration_s: 180.0, target: core_corridor}
+  - code: S07
+    name: 通信异常
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N8
+    disturbances:
+      - {type: cloud_offline, start_s: 600.0, duration_s: 60.0, target: cloud}

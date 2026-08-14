@@ -1,0 +1,34 @@
+schema_version: "1.0"
+description: xiongan_rongdong_20 工程验证场景的可复用扰动模板
+templates:
+  event_dispersal:
+    event_type: event_dispersal
+    default_start_s: 900.0
+    default_duration_s: 300.0
+    target_selector: north_activity_source
+    parameters: {flow_multiplier: 2.5}
+  downstream_roadwork:
+    event_type: roadwork
+    default_start_s: 600.0
+    default_duration_s: 900.0
+    target_selector: configured_downstream_lane
+    parameters: {closed_lane_count: 1}
+  core_incident:
+    event_type: incident
+    default_start_s: 600.0
+    default_duration_s: 300.0
+    target_selector: core_corridor
+    parameters: {safe_stop: true}
+  emergency_priority:
+    event_type: emergency_vehicle
+    default_start_s: 1200.0
+    default_duration_s: 180.0
+    target_selector: core_corridor
+    parameters: {vehicle_type: emergency}
+  cloud_outage:
+    event_type: cloud_offline
+    default_start_s: 600.0
+    default_duration_s: 60.0
+    target_selector: cloud-service
+    parameters: {automatic_recovery: true}
+

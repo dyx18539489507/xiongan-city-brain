@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0",
+  "startedAt": "2026-08-08T08:16:39.169Z",
+  "mode": "headless-structural-not-gpu-acceptance",
+  "claimBoundary": "Headless measurements validate the harness only and must not be reported as MX250 FPS.",
+  "baseUrl": "http://127.0.0.1:5185",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "durationS": 60,
+  "warmupS": 1,
+  "sampleS": 2,
+  "profiles": [
+    "S01"
+  ],
+  "conditions": [
+    "clear"
+  ],
+  "views": [
+    "overview"
+  ],
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+    "devicePixelRatio": 1,
+    "webglVendor": "Google Inc. (Google)",
+    "webglRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "pageErrors": [],
+  "runs": [
+    {
+      "profile": "S01",
+      "experimentId": "exp-ef14790cc377",
+      "measurements": [
+        {
+          "condition": "clear",
+          "view": "overview",
+          "experimentStatusBefore": "running",
+          "experimentStatusAfter": "running",
+          "concurrentWithSumo": true,
+          "screenshot": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\benchmarks\\matrix-20260808T081628Z-screenshots\\S01_clear_overview.png",
+          "samples": 2,
+          "averageFps": 6.5,
+          "minimumP1Fps": 1.8,
+          "averageFrameTimeMs": 156,
+          "maximumFrameTimeMs": 983.3,
+          "maximumDrawCalls": 28,
+          "maximumTriangles": 244683,
+          "maximumGeometries": 29,
+          "maximumTextures": 2,
+          "maximumUsedJsHeapBytes": 76600000,
+          "qualityLevels": [
+            "performance"
+          ],
+          "renderScales": [
+            0.75
+          ]
+        }
+      ],
+      "terminal": {
+        "id": "exp-ef14790cc377",
+        "status": "stopped",
+        "request": {
+          "scenario_id": "xiongan_rongdong_20",
+          "algorithm": "fixed-time",
+          "seed": 52,
+          "duration_s": 60,
+          "gui": false,
+          "profile": "S01"
+        },
+        "error": null
+      }
+    }
+  ],
+  "completedAt": "2026-08-08T08:17:09.603Z"
+}

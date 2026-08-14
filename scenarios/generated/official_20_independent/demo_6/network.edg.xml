@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<edges>
+    <edge id="in_E" priority="2" speed="13.89" from="B_E" to="J" numLanes="2" shape="116.09299199,38.98379470 116.09291120,38.98379480 116.09011070,38.98367790" />
+    <edge id="out_E" priority="2" speed="13.89" from="J" to="B_E" numLanes="2" shape="116.09011070,38.98367790 116.09291120,38.98379480 116.09299199,38.98379470" />
+    <edge id="in_N" priority="2" speed="13.89" from="B_N" to="J" numLanes="2" shape="116.09025973,38.98592684 116.09011070,38.98367790" />
+    <edge id="out_N" priority="2" speed="13.89" from="J" to="B_N" numLanes="2" shape="116.09011070,38.98367790 116.09025973,38.98592684" />
+    <edge id="in_S" priority="2" speed="13.89" from="B_S" to="J" numLanes="2" shape="116.09039036,38.98143656 116.09011070,38.98367790" />
+    <edge id="out_S" priority="2" speed="13.89" from="J" to="B_S" numLanes="2" shape="116.09011070,38.98367790 116.09039036,38.98143656" />
+    <edge id="in_W" priority="2" speed="13.89" from="B_W" to="J" numLanes="2" shape="116.08723370,38.98350769 116.08821560,38.98356880 116.08897560,38.98361610 116.09011070,38.98367790" />
+    <edge id="out_W" priority="2" speed="13.89" from="J" to="B_W" numLanes="2" shape="116.09011070,38.98367790 116.08897560,38.98361610 116.08821560,38.98356880 116.08723370,38.98350769" />
+</edges>

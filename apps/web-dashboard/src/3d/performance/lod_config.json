@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "nearHeightM": 260,
+  "farHeightM": 720,
+  "updateIntervalFrames": 15,
+  "nearOnlyNames": [
+    "BuildingWindows",
+    "TreeTrunks",
+    "StreetLightHeads",
+    "TrafficSignalRedLenses",
+    "TrafficSignalYellowLenses",
+    "TrafficSignalGreenLenses"
+  ],
+  "farHiddenNames": [
+    "StreetLightPoles",
+    "RSUBodies",
+    "CameraBodies",
+    "TrafficSignalHousings",
+    "TrafficSignalPoles"
+  ]
+}

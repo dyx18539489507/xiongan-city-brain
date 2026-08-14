@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routes>
+    <vType id="passenger" vClass="passenger" accel="2.6" decel="4.5" sigma="0.5" length="5.0" minGap="2.5" color="1,1,0" />
+    <route id="E_L" edges="in_E out_S" />
+    <route id="E_R" edges="in_E out_N" />
+    <route id="E_S" edges="in_E out_W" />
+    <route id="N_L" edges="in_N out_E" />
+    <route id="N_R" edges="in_N out_W" />
+    <route id="N_S" edges="in_N out_S" />
+    <route id="S_L" edges="in_S out_W" />
+    <route id="S_R" edges="in_S out_E" />
+    <route id="S_S" edges="in_S out_N" />
+    <route id="W_L" edges="in_W out_N" />
+    <route id="W_R" edges="in_W out_S" />
+    <route id="W_S" edges="in_W out_E" />
+    <flow id="am_peak_01_E_L" type="passenger" route="E_L" begin="0" end="900" number="28" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_E_R" type="passenger" route="E_R" begin="0" end="900" number="26" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_E_S" type="passenger" route="E_S" begin="0" end="900" number="48" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_N_L" type="passenger" route="N_L" begin="0" end="900" number="42" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_N_R" type="passenger" route="N_R" begin="0" end="900" number="29" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_N_S" type="passenger" route="N_S" begin="0" end="900" number="52" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_S_L" type="passenger" route="S_L" begin="0" end="900" number="30" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_S_R" type="passenger" route="S_R" begin="0" end="900" number="21" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_S_S" type="passenger" route="S_S" begin="0" end="900" number="51" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_W_L" type="passenger" route="W_L" begin="0" end="900" number="31" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_W_R" type="passenger" route="W_R" begin="0" end="900" number="33" departLane="best" departSpeed="max" />
+    <flow id="am_peak_01_W_S" type="passenger" route="W_S" begin="0" end="900" number="22" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_E_L" type="passenger" route="E_L" begin="900" end="1800" number="35" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_E_R" type="passenger" route="E_R" begin="900" end="1800" number="24" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_E_S" type="passenger" route="E_S" begin="900" end="1800" number="42" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_N_L" type="passenger" route="N_L" begin="900" end="1800" number="45" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_N_R" type="passenger" route="N_R" begin="900" end="1800" number="37" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_N_S" type="passenger" route="N_S" begin="900" end="1800" number="58" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_S_L" type="passenger" route="S_L" begin="900" end="1800" number="33" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_S_R" type="passenger" route="S_R" begin="900" end="1800" number="18" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_S_S" type="passenger" route="S_S" begin="900" end="1800" number="65" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_W_L" type="passenger" route="W_L" begin="900" end="1800" number="45" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_W_R" type="passenger" route="W_R" begin="900" end="1800" number="19" departLane="best" departSpeed="max" />
+    <flow id="am_peak_02_W_S" type="passenger" route="W_S" begin="900" end="1800" number="25" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_E_L" type="passenger" route="E_L" begin="1800" end="2700" number="23" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_E_R" type="passenger" route="E_R" begin="1800" end="2700" number="31" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_E_S" type="passenger" route="E_S" begin="1800" end="2700" number="45" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_N_L" type="passenger" route="N_L" begin="1800" end="2700" number="38" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_N_R" type="passenger" route="N_R" begin="1800" end="2700" number="35" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_N_S" type="passenger" route="N_S" begin="1800" end="2700" number="55" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_S_L" type="passenger" route="S_L" begin="1800" end="2700" number="58" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_S_R" type="passenger" route="S_R" begin="1800" end="2700" number="20" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_S_S" type="passenger" route="S_S" begin="1800" end="2700" number="58" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_W_L" type="passenger" route="W_L" begin="1800" end="2700" number="34" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_W_R" type="passenger" route="W_R" begin="1800" end="2700" number="21" departLane="best" departSpeed="max" />
+    <flow id="am_peak_03_W_S" type="passenger" route="W_S" begin="1800" end="2700" number="21" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_E_L" type="passenger" route="E_L" begin="2700" end="3600" number="26" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_E_R" type="passenger" route="E_R" begin="2700" end="3600" number="19" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_E_S" type="passenger" route="E_S" begin="2700" end="3600" number="40" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_N_L" type="passenger" route="N_L" begin="2700" end="3600" number="40" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_N_R" type="passenger" route="N_R" begin="2700" end="3600" number="41" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_N_S" type="passenger" route="N_S" begin="2700" end="3600" number="45" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_S_L" type="passenger" route="S_L" begin="2700" end="3600" number="28" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_S_R" type="passenger" route="S_R" begin="2700" end="3600" number="17" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_S_S" type="passenger" route="S_S" begin="2700" end="3600" number="48" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_W_L" type="passenger" route="W_L" begin="2700" end="3600" number="29" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_W_R" type="passenger" route="W_R" begin="2700" end="3600" number="17" departLane="best" departSpeed="max" />
+    <flow id="am_peak_04_W_S" type="passenger" route="W_S" begin="2700" end="3600" number="20" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_E_L" type="passenger" route="E_L" begin="3600" end="4500" number="32" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_E_R" type="passenger" route="E_R" begin="3600" end="4500" number="27" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_E_S" type="passenger" route="E_S" begin="3600" end="4500" number="43" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_N_L" type="passenger" route="N_L" begin="3600" end="4500" number="44" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_N_R" type="passenger" route="N_R" begin="3600" end="4500" number="33" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_N_S" type="passenger" route="N_S" begin="3600" end="4500" number="49" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_S_L" type="passenger" route="S_L" begin="3600" end="4500" number="31" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_S_R" type="passenger" route="S_R" begin="3600" end="4500" number="16" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_S_S" type="passenger" route="S_S" begin="3600" end="4500" number="66" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_W_L" type="passenger" route="W_L" begin="3600" end="4500" number="27" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_W_R" type="passenger" route="W_R" begin="3600" end="4500" number="20" departLane="best" departSpeed="max" />
+    <flow id="am_peak_05_W_S" type="passenger" route="W_S" begin="3600" end="4500" number="24" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_E_L" type="passenger" route="E_L" begin="4500" end="5400" number="34" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_E_R" type="passenger" route="E_R" begin="4500" end="5400" number="28" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_E_S" type="passenger" route="E_S" begin="4500" end="5400" number="39" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_N_L" type="passenger" route="N_L" begin="4500" end="5400" number="39" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_N_R" type="passenger" route="N_R" begin="4500" end="5400" number="59" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_N_S" type="passenger" route="N_S" begin="4500" end="5400" number="63" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_S_L" type="passenger" route="S_L" begin="4500" end="5400" number="27" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_S_R" type="passenger" route="S_R" begin="4500" end="5400" number="19" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_S_S" type="passenger" route="S_S" begin="4500" end="5400" number="47" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_W_L" type="passenger" route="W_L" begin="4500" end="5400" number="30" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_W_R" type="passenger" route="W_R" begin="4500" end="5400" number="18" departLane="best" departSpeed="max" />
+    <flow id="am_peak_06_W_S" type="passenger" route="W_S" begin="4500" end="5400" number="35" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_E_L" type="passenger" route="E_L" begin="5400" end="6300" number="21" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_E_R" type="passenger" route="E_R" begin="5400" end="6300" number="20" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_E_S" type="passenger" route="E_S" begin="5400" end="6300" number="41" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_N_L" type="passenger" route="N_L" begin="5400" end="6300" number="41" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_N_R" type="passenger" route="N_R" begin="5400" end="6300" number="39" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_N_S" type="passenger" route="N_S" begin="5400" end="6300" number="41" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_S_L" type="passenger" route="S_L" begin="5400" end="6300" number="29" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_S_R" type="passenger" route="S_R" begin="5400" end="6300" number="15" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_S_S" type="passenger" route="S_S" begin="5400" end="6300" number="49" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_W_L" type="passenger" route="W_L" begin="5400" end="6300" number="28" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_W_R" type="passenger" route="W_R" begin="5400" end="6300" number="36" departLane="best" departSpeed="max" />
+    <flow id="am_peak_07_W_S" type="passenger" route="W_S" begin="5400" end="6300" number="19" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_E_L" type="passenger" route="E_L" begin="6300" end="7200" number="32" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_E_R" type="passenger" route="E_R" begin="6300" end="7200" number="19" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_E_S" type="passenger" route="E_S" begin="6300" end="7200" number="39" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_N_L" type="passenger" route="N_L" begin="6300" end="7200" number="46" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_N_R" type="passenger" route="N_R" begin="6300" end="7200" number="31" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_N_S" type="passenger" route="N_S" begin="6300" end="7200" number="64" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_S_L" type="passenger" route="S_L" begin="6300" end="7200" number="26" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_S_R" type="passenger" route="S_R" begin="6300" end="7200" number="29" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_S_S" type="passenger" route="S_S" begin="6300" end="7200" number="53" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_W_L" type="passenger" route="W_L" begin="6300" end="7200" number="32" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_W_R" type="passenger" route="W_R" begin="6300" end="7200" number="22" departLane="best" departSpeed="max" />
+    <flow id="am_peak_08_W_S" type="passenger" route="W_S" begin="6300" end="7200" number="23" departLane="best" departSpeed="max" />
+</routes>

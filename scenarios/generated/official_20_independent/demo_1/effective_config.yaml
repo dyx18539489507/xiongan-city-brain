@@ -1,0 +1,208 @@
+schema_version: '1.0'
+scenario_id: official_demo_1
+demo_id: 1
+display_name: 主办方独立路口 demo_1
+registration:
+  longitude: 116.10212482
+  latitude: 39.00495081
+  confidence: high
+  method: SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic
+  evidence_boundary: high-confidence image registration; still requires field or survey
+    verification before claiming an as-built digital twin
+geometry:
+  mode: organizer_official_sumo_reference
+  preferred_osm_node_id: '6946375257'
+  preferred_osm_distance_m: 28.71
+  reference_note: demos 1-4 use organizer SUMO arm lengths and lane structure; demos
+    5-20 preserve checked-in OSM branch geometry while using a standard 250 m isolated-intersection
+    simulation boundary
+  reference_net: D:\程序项目\挑战杯\赛题资料\赛题资料\路口仿真案例\sumo工程_路口1\demo_1.net.xml
+network_center:
+  longitude: 116.10212482
+  latitude: 39.00495081
+  source: organizer_sumo_geometry_placed_at_registered_center
+  node_id: J1
+  evidence_boundary: organizer SUMO provides local geometry; geographic placement
+    comes from image registration and is not a surveyed control point
+osm_reference:
+  source_file: scenarios/source/official_20_independent/osm/demo_01_raw.osm.xml
+  matched_node_id: '6946375257'
+  nearest_distance_m: 28.71
+  ways:
+  - way_id: 742030366
+    name: 世纪大街
+    ref: null
+    highway: tertiary
+    oneway: 'yes'
+    lanes: null
+    lanes_forward: null
+    lanes_backward: null
+    turn_lanes: null
+    turn_lanes_forward: null
+    turn_lanes_backward: null
+    maxspeed: null
+    surface: null
+  - way_id: 896510828
+    name: 雄州路
+    ref: S042
+    highway: primary
+    oneway: 'yes'
+    lanes: null
+    lanes_forward: null
+    lanes_backward: null
+    turn_lanes: null
+    turn_lanes_forward: null
+    turn_lanes_backward: null
+    maxspeed: null
+    surface: null
+  evidence_boundary: OSM supplies community-mapped geometry/tags only. Missing lane/turn
+    tags must not be interpreted as field-verified lane counts.
+arms:
+  E:
+    incoming_lanes: 2
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: organizer_official_sumo
+    lane_confidence: high
+    bearing_deg: 90.67
+    length_m: 76.92
+    length_basis: organizer_official_sumo_lane_length_mean
+    length_confidence: high
+    cutoff_reason: organizer_official_sumo_boundary
+  N:
+    incoming_lanes: 3
+    outgoing_lanes: 3
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: organizer_official_sumo
+    lane_confidence: high
+    bearing_deg: 4.61
+    length_m: 101.28
+    length_basis: organizer_official_sumo_lane_length_mean
+    length_confidence: high
+    cutoff_reason: organizer_official_sumo_boundary
+  S:
+    incoming_lanes: 3
+    outgoing_lanes: 3
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: organizer_official_sumo
+    lane_confidence: high
+    bearing_deg: 184.52
+    length_m: 80.71
+    length_basis: organizer_official_sumo_lane_length_mean
+    length_confidence: high
+    cutoff_reason: organizer_official_sumo_boundary
+  W:
+    incoming_lanes: 2
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: organizer_official_sumo
+    lane_confidence: high
+    bearing_deg: 270.11
+    length_m: 74.17
+    length_basis: organizer_official_sumo_lane_length_mean
+    length_confidence: high
+    cutoff_reason: organizer_official_sumo_boundary
+signal_phase_movements:
+  am_peak:
+    '1':
+    - E_R
+    - E_S
+    - W_R
+    - W_S
+    '2':
+    - E_L
+    - W_L
+    '3':
+    - N_R
+    - N_S
+    - S_R
+    - S_S
+    '4':
+    - N_L
+    - S_L
+  offpeak:
+    '1':
+    - E_R
+    - E_S
+    - W_R
+    - W_S
+    '2':
+    - E_L
+    - W_L
+    '3':
+    - N_R
+    - N_S
+    - S_R
+    - S_S
+    '4':
+    - N_L
+    - S_L
+  pm_peak:
+    '1':
+    - E_R
+    - E_S
+    - W_R
+    - W_S
+    '2':
+    - E_L
+    - W_L
+    '3':
+    - N_R
+    - N_S
+    - S_R
+    - S_S
+    '4':
+    - N_L
+    - S_L
+simulation:
+  demand_duration_s: 7200
+  clearance_duration_s: 1800
+  step_length_s: 1.0
+  seed: 1
+vehicle_assumption:
+  pcu_to_vehicle: 1.0
+  vehicle_type: passenger
+  theme_color_hex: '#FFFF00'
+  sumo_color_rgb:
+  - 1.0
+  - 1.0
+  - 0.0
+  color_basis: user_selected_theme_from_reference_image
+  evidence_boundary: organizer workbook supplies PCU but no vehicle-type split; the
+    model applies the declared 1 PCU = 1 passenger assumption
+gui:
+  delay_ms: 300
+  vehicle_visualization: simple_shapes
+  vehicle_quality: 2
+  view_scheme: competition simple shapes
+lane_evidence:
+  method: organizer_official_sumo
+  confidence: high
+  evidence: 主办方demo_1.net.xml：东西方向2车道/向，南北方向3车道/向
+  arms:
+    E:
+      incoming: 2
+      outgoing: 2
+    W:
+      incoming: 2
+      outgoing: 2
+    N:
+      incoming: 3
+      outgoing: 3
+    S:
+      incoming: 3
+      outgoing: 3
+config_provenance:
+  type: derived_evidence_registry
+  registry_files:
+  - scenarios/source/official_20_independent/derived_evidence/lane_evidence_assessment.json
+  - scenarios/source/official_20_independent/derived_evidence/locations_final.json
+  - scenarios/source/official_20_independent/derived_evidence/osm_analysis.json

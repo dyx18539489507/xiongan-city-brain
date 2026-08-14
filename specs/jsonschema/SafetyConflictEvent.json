@@ -1,0 +1,250 @@
+{
+  "$defs": {
+    "PositionXY": {
+      "additionalProperties": false,
+      "description": "Cartesian SUMO position in metres.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "title": "PositionXY",
+      "type": "object"
+    },
+    "SourceType": {
+      "description": "Origin service categories used in every message envelope.",
+      "enum": [
+        "cloud",
+        "edge",
+        "vehicle",
+        "experiment",
+        "report",
+        "system",
+        "rsu"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Observed surrogate-safety conflict; never populated by random data.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "trace_id": {
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "simulation_time": {
+      "minimum": 0,
+      "title": "Simulation Time",
+      "type": "number"
+    },
+    "sequence_number": {
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "environment": {
+      "default": "development",
+      "minLength": 1,
+      "title": "Environment",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "conflict_id": {
+      "title": "Conflict Id",
+      "type": "string"
+    },
+    "intersection_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Intersection Id"
+    },
+    "participant_a_id": {
+      "title": "Participant A Id",
+      "type": "string"
+    },
+    "participant_a_type": {
+      "title": "Participant A Type",
+      "type": "string"
+    },
+    "participant_b_id": {
+      "title": "Participant B Id",
+      "type": "string"
+    },
+    "participant_b_type": {
+      "title": "Participant B Type",
+      "type": "string"
+    },
+    "conflict_type": {
+      "title": "Conflict Type",
+      "type": "string"
+    },
+    "position_xy": {
+      "$ref": "#/$defs/PositionXY"
+    },
+    "ttc_s": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ttc S"
+    },
+    "pet_s": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pet S"
+    },
+    "minimum_distance_m": {
+      "minimum": 0,
+      "title": "Minimum Distance M",
+      "type": "number"
+    },
+    "relative_speed_m_s": {
+      "minimum": 0,
+      "title": "Relative Speed M S",
+      "type": "number"
+    },
+    "severity": {
+      "title": "Severity",
+      "type": "string"
+    },
+    "observed": {
+      "default": true,
+      "title": "Observed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "trace_id",
+    "source_id",
+    "source_type",
+    "simulation_time",
+    "sequence_number",
+    "correlation_id",
+    "scenario_id",
+    "experiment_id",
+    "conflict_id",
+    "participant_a_id",
+    "participant_a_type",
+    "participant_b_id",
+    "participant_b_type",
+    "conflict_type",
+    "position_xy",
+    "minimum_distance_m",
+    "relative_speed_m_s",
+    "severity"
+  ],
+  "title": "SafetyConflictEvent",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "trace_id": "example-trace_id",
+      "source_id": "example-source_id",
+      "source_type": "cloud",
+      "simulation_time": 0.0,
+      "sequence_number": 0,
+      "correlation_id": "example-correlation_id",
+      "environment": "development",
+      "scenario_id": "example-scenario_id",
+      "experiment_id": "example-experiment_id",
+      "conflict_id": "example-conflict_id",
+      "intersection_id": null,
+      "participant_a_id": "example-participant_a_id",
+      "participant_a_type": "example-participant_a_type",
+      "participant_b_id": "example-participant_b_id",
+      "participant_b_type": "example-participant_b_type",
+      "conflict_type": "example-conflict_type",
+      "position_xy": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "ttc_s": null,
+      "pet_s": null,
+      "minimum_distance_m": 0.0,
+      "relative_speed_m_s": 0.0,
+      "severity": "example-severity",
+      "observed": true
+    }
+  ]
+}

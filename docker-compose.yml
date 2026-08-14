@@ -1,0 +1,247 @@
+name: xiongan-traffic-platform
+
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: deployment/docker/backend.Dockerfile
+  image: xiongan-traffic-platform-backend:phase1
+  env_file: ${ENV_FILE:-.env.example}
+  environment:
+    SUMO_HOME: /opt/sumo
+    POSTGRES_HOST: postgres
+    REDIS_URL: redis://redis:6379/0
+    MQTT_HOST: mosquitto
+    TRAFFIC_MESSAGE_BUS: mqtt
+  volumes:
+    - ./scenarios:/workspace/scenarios
+    - ./results:/workspace/results
+  restart: unless-stopped
+  networks: [traffic]
+
+services:
+  database-migration:
+    <<: *backend
+    entrypoint: ["alembic"]
+    command: ["upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: "no"
+
+  experiment-service:
+    <<: *backend
+    command: ["serve", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      database-migration: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      mosquitto: {condition: service_started}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3).read()",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  cloud-service:
+    <<: *backend
+    command: ["worker", "cloud-service"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: cloud-service
+      SERVICE_INSTANCE_ID: cloud-primary
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rsu-service:
+    <<: *backend
+    command: ["worker", "rsu-service"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: rsu-service
+      SERVICE_INSTANCE_ID: rsu-rongdong
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  edge-service:
+    <<: *backend
+    command: ["worker", "edge-service"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: edge-service
+      SERVICE_INSTANCE_ID: edge-rongdong
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  vehicle-agent:
+    <<: *backend
+    command: ["worker", "vehicle-agent"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: vehicle-agent
+      SERVICE_INSTANCE_ID: vehicle-agent-primary
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  report-service:
+    <<: *backend
+    command: ["worker", "report-service"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: report-service
+      SERVICE_INSTANCE_ID: report-primary
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  sumo-runner:
+    <<: *backend
+    command: ["worker", "sumo-runner"]
+    environment:
+      SUMO_HOME: /opt/sumo
+      SERVICE_ROLE: sumo-runner
+      SERVICE_INSTANCE_ID: sumo-runner-primary
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      TRAFFIC_MESSAGE_BUS: mqtt
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mosquitto: {condition: service_started}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; assert b'worker' in open('/proc/1/cmdline','rb').read(); socket.create_connection(('redis',6379),2).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  web-dashboard:
+    build:
+      context: .
+      dockerfile: deployment/docker/web.Dockerfile
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5173}:80"
+    depends_on:
+      experiment-service: {condition: service_healthy}
+    restart: unless-stopped
+    networks: [traffic]
+
+  postgres:
+    image: ${TIMESCALEDB_IMAGE:-timescale/timescaledb:2.29.1-pg17}
+    command: ["postgres", "-c", "shared_preload_libraries=timescaledb"]
+    env_file: ${ENV_FILE:-.env.example}
+    environment:
+      TIMESCALEDB_TELEMETRY: "off"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks: [traffic]
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    networks: [traffic]
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    ports:
+      - "127.0.0.1:${MQTT_PORT:-1883}:1883"
+    volumes:
+      - ./deployment/mosquitto/mosquitto.local.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+    restart: unless-stopped
+    networks: [traffic]
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./deployment/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
+    restart: unless-stopped
+    networks: [traffic]
+
+networks:
+  traffic:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  mosquitto_data:
+  prometheus_data:

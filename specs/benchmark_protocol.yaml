@@ -1,0 +1,51 @@
+schema_version: "1.0"
+scenario: xiongan_rongdong_20
+cases: [S01, S02, S03, S04, S05, S06, S07]
+algorithms:
+  B0: fixed-time
+  B1: actuated-control
+  B2: max-pressure
+  B3: coordinated-max-pressure
+seeds: [11, 23, 37, 41, 59]
+formal_duration_s: 1800
+statistics:
+  confidence_level: 0.95
+  method: student_t_interval_across_seeds
+fairness_lock:
+  - network_hash
+  - od_hash
+  - vehicle_types
+  - departure_times
+  - seed
+  - duration
+  - disturbances
+  - communication_profile
+only_variable: algorithm
+metrics:
+  traffic:
+    [mean_travel_time, mean_waiting_time, mean_time_loss, mean_speed,
+     mean_queue_vehicles, mean_queue_meters, max_queue, throughput,
+     completed_trips, stop_count]
+  active_modes:
+    [bicycle_completed_trips, mean_bicycle_waiting_time_s,
+     mean_bicycle_queue_count, pedestrian_completed_trips,
+     mean_pedestrian_waiting_time_s, pedestrian_crossing_count]
+  surrogate_safety:
+    [motor_motor_conflict_count, motor_bicycle_conflict_count,
+     motor_pedestrian_conflict_count, bicycle_pedestrian_conflict_count,
+     minimum_ttc_s, minimum_pet_s]
+  congestion:
+    [spillback_count, spillback_duration, congested_intersection_count,
+     congestion_propagation_time, network_recovery_time, gridlock_duration]
+  environment:
+    [fuel_consumption, CO2, NOx, emergency_braking_count, acceleration_variance]
+  engineering:
+    [cloud_decision_latency, edge_decision_latency, end_to_end_control_latency,
+     MQTT_round_trip_latency, CPU, memory, simulation_realtime_factor,
+     data_write_latency, algorithm_timeout_count]
+  robustness:
+    [performance_retention_under_delay, performance_retention_under_packet_loss,
+     fallback_activation_time, fallback_duration, recovery_time,
+     unsafe_command_rejection_count]
+outputs: [raw_json, summary_csv, html, chart_png, manifest]
+unrun_result_label: 尚未运行

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<viewsettings>
+    <scheme name="competition simple shapes">
+        <vehicles vehicleQuality="2" vehicle_exaggeration="1" vehicle_constantSize="0" />
+    </scheme>
+</viewsettings>

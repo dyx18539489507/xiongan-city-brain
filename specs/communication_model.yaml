@@ -1,0 +1,44 @@
+schema_version: "1.0"
+engine: event_driven_priority_queue
+wall_clock_sleep_used_for_faults: false
+profiles:
+  N0: {base_latency_ms: 0, jitter_ms: 0, packet_loss_rate: 0}
+  N1: {base_latency_ms: 100, jitter_ms: 0, packet_loss_rate: 0}
+  N2: {base_latency_ms: 300, jitter_ms: 0, packet_loss_rate: 0}
+  N3: {base_latency_ms: 500, jitter_ms: 0, packet_loss_rate: 0}
+  N4: {base_latency_ms: 0, jitter_ms: 0, packet_loss_rate: 0.05}
+  N5: {base_latency_ms: 0, jitter_ms: 0, packet_loss_rate: 0.10}
+  N6: {offline_target: cloud, offline_duration_s: 30}
+  N7: {offline_target: cloud, offline_duration_s: 60}
+  N8:
+    base_latency_ms: 300
+    jitter_ms: 100
+    jitter_distribution: truncated_normal
+    packet_loss_rate: 0.05
+    duplicate_rate: 0.01
+    reorder_rate: 0.01
+    corruption_rate: 0.01
+channels:
+  sumo_rsu:
+    base_latency_ms: 0
+    jitter_ms: 0
+    packet_loss_rate: 0
+    timeout_ms: 500
+  rsu_edge:
+    base_latency_ms: 10
+    jitter_ms: 5
+    packet_loss_rate: 0
+    timeout_ms: 500
+  cloud_edge:
+    base_latency_ms: 100
+    jitter_ms: 30
+    packet_loss_rate: 0.05
+    duplicate_rate: 0.01
+    reorder_rate: 0.01
+    timeout_ms: 1000
+  edge_vehicle:
+    base_latency_ms: 30
+    jitter_ms: 10
+    packet_loss_rate: 0.02
+    timeout_ms: 500
+record_all_events: true

@@ -1,0 +1,234 @@
+openapi: 3.1.0
+info:
+  title: Xiongan Traffic Platform API
+  version: 1.0.0
+  description: Phase 1 管理面、实验控制和实时数据查询接口。
+servers:
+  - url: http://localhost:8000
+paths:
+  /health:
+    get: {operationId: health, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /ready:
+    get: {operationId: ready, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/system/status:
+    get: {operationId: systemStatus, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/scenarios/validate:
+    post:
+      operationId: validateScenario
+      requestBody: {$ref: "#/components/requestBodies/ScenarioValidationBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenarios/generate:
+    post:
+      operationId: generateScenario
+      requestBody: {$ref: "#/components/requestBodies/ScenarioGenerateBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenarios:
+    get: {operationId: listScenarios, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/scenarios/{scenario_id}:
+    parameters: [{$ref: "#/components/parameters/ScenarioId"}]
+    get: {operationId: getScenario, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/scenes/{scenario_id}/3d:
+    parameters: [{$ref: "#/components/parameters/ScenarioId"}]
+    get:
+      operationId: getThreeDimensionalScene
+      description: Return the generated immutable scene JSON used by the Web 3D renderer.
+      responses:
+        "200":
+          description: Generated scene document
+          content:
+            application/json:
+              schema: {type: object}
+        "404": {$ref: "#/components/responses/Error"}
+  /api/v1/replays:
+    get:
+      operationId: listDigitalTwinReplays
+      description: List replay files recorded from actual digital-twin simulation frames.
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+  /api/v1/replays/{experiment_id}:
+    parameters: [{$ref: "#/components/parameters/ReplayExperimentId"}]
+    get:
+      operationId: getDigitalTwinReplay
+      description: Download the immutable NDJSON replay recorded for one experiment.
+      responses:
+        "200":
+          description: Digital-twin replay stream
+          content:
+            application/x-ndjson:
+              schema: {type: string, format: binary}
+        "404": {$ref: "#/components/responses/Error"}
+  /api/v1/experiments:
+    post:
+      operationId: createExperiment
+      requestBody: {$ref: "#/components/requestBodies/ExperimentBody"}
+      responses: {"201": {$ref: "#/components/responses/Created"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/experiments/{id}/start:
+    post: {$ref: "#/components/pathItems/ExperimentAction"}
+  /api/v1/experiments/{id}/pause:
+    post: {$ref: "#/components/pathItems/ExperimentAction"}
+  /api/v1/experiments/{id}/resume:
+    post: {$ref: "#/components/pathItems/ExperimentAction"}
+  /api/v1/experiments/{id}/stop:
+    post: {$ref: "#/components/pathItems/ExperimentAction"}
+  /api/v1/experiments/{id}:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    get: {operationId: getExperiment, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/experiments/{id}/metrics:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    get: {operationId: experimentMetrics, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/experiments/{id}/events:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    get: {operationId: experimentEvents, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/experiments/{id}/report:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    get: {operationId: experimentReport, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/algorithms:
+    get: {operationId: listAlgorithms, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/algorithms/{name}/validate-config:
+    parameters: [{$ref: "#/components/parameters/AlgorithmName"}]
+    post:
+      operationId: validateAlgorithmConfig
+      requestBody: {$ref: "#/components/requestBodies/AlgorithmConfigBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/algorithms/{name}/activate:
+    parameters: [{$ref: "#/components/parameters/AlgorithmName"}]
+    post: {operationId: activateAlgorithm, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/faults/inject:
+    post:
+      operationId: injectFault
+      requestBody: {$ref: "#/components/requestBodies/FaultBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/faults/clear:
+    post: {operationId: clearFaults, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/faults:
+    get: {operationId: listFaults, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/intersections:
+    get: {operationId: listIntersections, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/intersections/{id}/state:
+    parameters: [{$ref: "#/components/parameters/IntersectionId"}]
+    get: {operationId: intersectionState, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/intersections/{id}/history:
+    parameters: [{$ref: "#/components/parameters/IntersectionId"}]
+    get: {operationId: intersectionHistory, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /ws/v1/realtime:
+    get:
+      operationId: realtimeWebSocket
+      description: Upgrade to WebSocket. Streams actual state, metrics and event snapshots.
+      responses: {"101": {description: Switching Protocols}}
+  /ws/v1/digital-twin:
+    get:
+      operationId: digitalTwinWebSocket
+      description: Upgrade to WebSocket. Streams protocol 1.0 entity init snapshots and bounded SUMO deltas.
+      responses: {"101": {description: Switching Protocols}}
+components:
+  parameters:
+    ScenarioId: {name: scenario_id, in: path, required: true, schema: {type: string}}
+    ReplayExperimentId: {name: experiment_id, in: path, required: true, schema: {type: string}}
+    ExperimentId: {name: id, in: path, required: true, schema: {type: string}}
+    AlgorithmName: {name: name, in: path, required: true, schema: {type: string}}
+    IntersectionId: {name: id, in: path, required: true, schema: {type: string}}
+  requestBodies:
+    ScenarioValidationBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "./jsonschema/ScenarioConfig.json"}
+    ScenarioGenerateBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ScenarioGenerateRequest"}
+    ExperimentBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ExperimentRequest"}
+    AlgorithmConfigBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/AlgorithmConfig"}
+    FaultBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/FaultRequest"}
+  responses:
+    Ok:
+      description: Successful response
+      content:
+        application/json:
+          schema: {type: object, additionalProperties: true}
+    Created:
+      description: Resource created
+      content:
+        application/json:
+          schema: {type: object, additionalProperties: true}
+    Accepted:
+      description: Operation accepted
+      content:
+        application/json:
+          schema: {type: object, additionalProperties: true}
+    Error:
+      description: Structured platform error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ErrorResponse"}
+  pathItems:
+    ExperimentAction:
+      parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+      operationId: experimentLifecycleAction
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "409": {$ref: "#/components/responses/Error"}
+        "404": {$ref: "#/components/responses/Error"}
+  schemas:
+    ScenarioGenerateRequest:
+      type: object
+      additionalProperties: false
+      required: [scenario_id]
+      properties:
+        scenario_id: {type: string, example: xiongan_rongdong_20}
+    ExperimentRequest:
+      type: object
+      additionalProperties: false
+      required: [scenario_id, algorithm, seed, duration_s, gui]
+      properties:
+        scenario_id: {type: string, example: xiongan_rongdong_20}
+        algorithm: {type: string, example: coordinated-max-pressure}
+        seed: {type: integer, minimum: 0, example: 42}
+        duration_s: {type: number, exclusiveMinimum: 0, maximum: 18000, example: 30}
+        gui: {type: boolean, example: false}
+        profile:
+          type: string
+          enum: [BASE, S01, S02, S03, S04, S05, S06, S07]
+          default: BASE
+          example: S02
+    AlgorithmConfig:
+      type: object
+      additionalProperties: false
+      properties:
+        min_green_s: {type: number, exclusiveMinimum: 0, example: 10}
+        max_green_s: {type: number, exclusiveMinimum: 0, example: 60}
+        switch_penalty: {type: number, minimum: 0, example: 2}
+        downstream_saturation_threshold: {type: number, minimum: 0, maximum: 1, example: 0.9}
+        cloud_weight: {type: number, minimum: 0, example: 0.35}
+        decision_timeout_ms: {type: number, exclusiveMinimum: 0, example: 100}
+    FaultRequest:
+      type: object
+      additionalProperties: false
+      required: [fault_type, target]
+      properties:
+        fault_type: {type: string, example: cloud_offline}
+        target: {type: string, example: cloud-service}
+        severity: {type: string, example: medium}
+        duration_s: {type: number, exclusiveMinimum: 0, example: 30}
+        parameters: {type: object, additionalProperties: true}
+    ErrorResponse:
+      type: object
+      required: [error_code, message, trace_id]
+      properties:
+        error_code: {type: string}
+        message: {type: string}
+        trace_id: {type: string}
+        details: {type: object, additionalProperties: true}

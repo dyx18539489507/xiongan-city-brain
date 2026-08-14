@@ -1,0 +1,270 @@
+{
+  "$defs": {
+    "SourceType": {
+      "description": "Origin service categories used in every message envelope.",
+      "enum": [
+        "cloud",
+        "edge",
+        "vehicle",
+        "experiment",
+        "report",
+        "system",
+        "rsu"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Aggregated one-second lane state.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "trace_id": {
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "simulation_time": {
+      "minimum": 0,
+      "title": "Simulation Time",
+      "type": "number"
+    },
+    "sequence_number": {
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "environment": {
+      "default": "development",
+      "minLength": 1,
+      "title": "Environment",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "lane_id": {
+      "title": "Lane Id",
+      "type": "string"
+    },
+    "intersection_id": {
+      "title": "Intersection Id",
+      "type": "string"
+    },
+    "direction": {
+      "title": "Direction",
+      "type": "string"
+    },
+    "movement": {
+      "title": "Movement",
+      "type": "string"
+    },
+    "vehicle_count": {
+      "minimum": 0,
+      "title": "Vehicle Count",
+      "type": "integer"
+    },
+    "connected_vehicle_count": {
+      "minimum": 0,
+      "title": "Connected Vehicle Count",
+      "type": "integer"
+    },
+    "queue_vehicle_count": {
+      "minimum": 0,
+      "title": "Queue Vehicle Count",
+      "type": "integer"
+    },
+    "queue_length_m": {
+      "minimum": 0,
+      "title": "Queue Length M",
+      "type": "number"
+    },
+    "mean_speed": {
+      "minimum": 0,
+      "title": "Mean Speed",
+      "type": "number"
+    },
+    "occupancy": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Occupancy",
+      "type": "number"
+    },
+    "arrival_rate": {
+      "minimum": 0,
+      "title": "Arrival Rate",
+      "type": "number"
+    },
+    "discharge_rate": {
+      "minimum": 0,
+      "title": "Discharge Rate",
+      "type": "number"
+    },
+    "downstream_lane_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Downstream Lane Id"
+    },
+    "downstream_occupancy": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Downstream Occupancy",
+      "type": "number"
+    },
+    "downstream_available_capacity": {
+      "minimum": 0,
+      "title": "Downstream Available Capacity",
+      "type": "number"
+    },
+    "bicycle_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Bicycle Count",
+      "type": "integer"
+    },
+    "electric_bicycle_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Electric Bicycle Count",
+      "type": "integer"
+    },
+    "bicycle_queue_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Bicycle Queue Count",
+      "type": "integer"
+    },
+    "bicycle_queue_length_m": {
+      "default": 0.0,
+      "minimum": 0,
+      "title": "Bicycle Queue Length M",
+      "type": "number"
+    },
+    "pedestrian_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Pedestrian Count",
+      "type": "integer"
+    },
+    "pedestrian_waiting_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Pedestrian Waiting Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "trace_id",
+    "source_id",
+    "source_type",
+    "simulation_time",
+    "sequence_number",
+    "correlation_id",
+    "scenario_id",
+    "experiment_id",
+    "lane_id",
+    "intersection_id",
+    "direction",
+    "movement",
+    "vehicle_count",
+    "connected_vehicle_count",
+    "queue_vehicle_count",
+    "queue_length_m",
+    "mean_speed",
+    "occupancy",
+    "arrival_rate",
+    "discharge_rate",
+    "downstream_lane_id",
+    "downstream_occupancy",
+    "downstream_available_capacity"
+  ],
+  "title": "LaneState",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "trace_id": "example-trace_id",
+      "source_id": "example-source_id",
+      "source_type": "cloud",
+      "simulation_time": 0.0,
+      "sequence_number": 0,
+      "correlation_id": "example-correlation_id",
+      "environment": "development",
+      "scenario_id": "example-scenario_id",
+      "experiment_id": "example-experiment_id",
+      "lane_id": "example-lane_id",
+      "intersection_id": "example-intersection_id",
+      "direction": "example-direction",
+      "movement": "example-movement",
+      "vehicle_count": 0,
+      "connected_vehicle_count": 0,
+      "queue_vehicle_count": 0,
+      "queue_length_m": 0.0,
+      "mean_speed": 0.0,
+      "occupancy": 0.0,
+      "arrival_rate": 0.0,
+      "discharge_rate": 0.0,
+      "downstream_lane_id": "example-downstream_lane_id",
+      "downstream_occupancy": 0.0,
+      "downstream_available_capacity": 0.0,
+      "bicycle_count": 0,
+      "electric_bicycle_count": 0,
+      "bicycle_queue_count": 0,
+      "bicycle_queue_length_m": 0.0,
+      "pedestrian_count": 0,
+      "pedestrian_waiting_count": 0
+    }
+  ]
+}

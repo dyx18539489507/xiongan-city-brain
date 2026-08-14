@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="rongdong.control.net.xml"/>
+        <route-files value="routes.rou.xml"/>
+        <additional-files value="vtypes.add.xml"/>
+        <gui-settings-file value="simple-shapes.view.xml"/>
+    </input>
+    <time><begin value="0"/><end value="1800"/><step-length value="1"/></time>
+    <processing><time-to-teleport value="300"/><collision.action value="warn"/></processing>
+    <report><verbose value="false"/><no-step-log value="true"/><duration-log.statistics value="true"/></report>
+    <output>
+        <summary-output value="summary.xml"/>
+        <tripinfo-output value="tripinfo.xml"/>
+        <statistic-output value="statistics.xml"/>
+    </output>
+    <random_number><seed value="42"/></random_number>
+    <gui_only><delay value="300"/></gui_only>
+</configuration>

@@ -1,0 +1,91 @@
+schema_version: "1.0"
+scenario_id: official_demo_14
+demo_id: 14
+display_name: 主办方独立路口 demo_14
+intersection_form: three_arm_t_missing_west
+registration:
+  longitude: 115.91778649
+  latitude: 39.04993181
+  confidence: high
+  method: organizer_png_registration_estimate
+  evidence_boundary: image registration, not surveyed control point
+network_center:
+  longitude: 115.9179084
+  latitude: 39.0498754
+  source: osm_node
+  node_id: "11122023451"
+  evidence_boundary: OSM community geometry, not surveyed control point
+osm_reference:
+  source_file: scenarios/source/xiongan_rongdong_20/rongdong_bbox.osm.xml
+  matched_node_id: "11122023451"
+  nearest_distance_m: 12.25
+  ways:
+    - {way_id: "1154819229", name: 善荣路, ref: null, highway: tertiary, oneway: false, lanes: null}
+    - {way_id: "1198948441", name: 春明四街, ref: null, highway: residential, oneway: false, lanes: null}
+  evidence_boundary: OSM geometry is usable, but explicit lane tags are absent
+arms:
+  E:
+    bearing_deg: 90.67
+    length_m: 156.92
+    osm_node_chain: ["11122023451", "11122023463"]
+    cutoff_node_id: "11122023463"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 1
+    outgoing_lanes: 1
+    speed_m_s: 13.89
+    priority: 1
+    road_name: 春明四街
+    lane_basis: osm_generated_default_and_official_png
+    lane_confidence: low
+  N:
+    bearing_deg: 359.10
+    length_m: 191.56
+    osm_node_chain: ["11122023451", "9245560392", "8519484674"]
+    cutoff_node_id: "8519484674"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 1
+    outgoing_lanes: 1
+    speed_m_s: 22.22
+    priority: 2
+    road_name: 善荣路
+    lane_basis: osm_generated_default_and_official_png
+    lane_confidence: low
+  S:
+    bearing_deg: 179.10
+    length_m: 45.06
+    osm_node_chain: ["11122023451", "10836150093"]
+    cutoff_node_id: "10836150093"
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    incoming_lanes: 1
+    outgoing_lanes: 1
+    speed_m_s: 22.22
+    priority: 2
+    road_name: 善荣路
+    lane_basis: osm_generated_default_and_official_png
+    lane_confidence: low
+signal_phase_movements:
+  "1": [E_L, E_R, N_L, N_S]
+  "2": [S_S, S_R]
+simulation:
+  demand_duration_s: 7200
+  clearance_duration_s: 1800
+  step_length_s: 1.0
+  seed: 14
+vehicle_assumption:
+  pcu_to_vehicle: 1.0
+  vehicle_type: passenger
+  theme_color_hex: "#FFFF00"
+  sumo_color_rgb: [1.0, 1.0, 0.0]
+  color_basis: user_selected_theme_from_reference_image
+  evidence_boundary: organizer workbook supplies PCU but no vehicle-type split
+gui:
+  delay_ms: 300
+  vehicle_visualization: simple_shapes
+  vehicle_quality: 2
+  view_scheme: competition simple shapes

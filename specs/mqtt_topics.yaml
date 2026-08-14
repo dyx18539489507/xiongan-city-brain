@@ -1,0 +1,177 @@
+schema_version: "1.0"
+defaults:
+  encoding: json
+  reject_expired: true
+  idempotency_key: message_id
+topics:
+  "traffic/{environment}/sumo/{runner_id}/observation":
+    publisher: sumo-runner
+    subscribers: [rsu-service]
+    model: RegionalState
+    qos: 1
+    retained: false
+    ttl_s: 3
+    frequency_hz: 1
+    failure: rsu_marks_sensor_gateway_stale
+  "traffic/{environment}/rsu/{rsu_id}/state":
+    publisher: rsu-service
+    subscribers: [edge-service, experiment-service]
+    model: RegionalState
+    qos: 1
+    retained: false
+    ttl_s: 3
+    frequency_hz: 1
+    failure: edge_holds_last_observation_then_fixed_time_safe
+  "traffic/{environment}/edge/{edge_id}/heartbeat":
+    publisher: edge-service
+    subscribers: [cloud-service, experiment-service]
+    model: ServiceHeartbeat
+    qos: 1
+    retained: true
+    ttl_s: 5
+    frequency_hz: 1
+    failure: mark_edge_offline
+  "traffic/{environment}/edge/{edge_id}/state":
+    publisher: edge-service
+    subscribers: [cloud-service, experiment-service]
+    model: RegionalState
+    qos: 1
+    retained: false
+    ttl_s: 3
+    frequency_hz: 1
+    failure: edge_buffer_then_autonomous
+  "traffic/{environment}/edge/{edge_id}/intersection/{intersection_id}/state":
+    publisher: edge-service
+    subscribers: [cloud-service, experiment-service]
+    model: IntersectionState
+    qos: 1
+    retained: false
+    ttl_s: 3
+    frequency_hz: 1
+    failure: aggregate_state_remains_available
+  "traffic/{environment}/edge/{edge_id}/feedback":
+    publisher: edge-service
+    subscribers: [cloud-service, experiment-service]
+    model: ExecutionFeedback
+    qos: 1
+    retained: false
+    ttl_s: 30
+    frequency_hz: event
+    failure: durable_local_buffer
+  "traffic/{environment}/edge/{edge_id}/alert":
+    publisher: edge-service
+    subscribers: [cloud-service, experiment-service, web-dashboard]
+    model: FaultEvent
+    qos: 2
+    retained: false
+    ttl_s: 300
+    frequency_hz: event
+    failure: durable_local_buffer
+  "traffic/{environment}/edge/{edge_id}/action/{intersection_id}":
+    publisher: edge-service
+    subscribers: [sumo-runner]
+    model: EdgeControlAction
+    qos: 1
+    retained: false
+    ttl_s: 2
+    frequency_hz: 1
+    failure: sumo_retains_loaded_safe_signal_program
+  "traffic/{environment}/cloud/strategy/{edge_id}":
+    publisher: cloud-service
+    subscribers: [edge-service]
+    model: CloudStrategy
+    qos: 1
+    retained: false
+    ttl_s: 15
+    frequency_hz: 0.1
+    failure: hold_last_then_edge_autonomous
+  "traffic/{environment}/cloud/strategy/{intersection_id}":
+    publisher: cloud-service
+    subscribers: [edge-service]
+    model: CloudStrategy
+    qos: 1
+    retained: false
+    ttl_s: 15
+    frequency_hz: 0.1
+    failure: hold_last_then_edge_autonomous
+  "traffic/{environment}/cloud/command/{edge_id}":
+    publisher: cloud-service
+    subscribers: [edge-service]
+    model: CloudCommand
+    qos: 2
+    retained: false
+    ttl_s: 10
+    frequency_hz: event
+    failure: reject_and_alert
+  "traffic/{environment}/vehicle/{vehicle_id}/state":
+    publisher: vehicle-agent
+    subscribers: [edge-service, experiment-service]
+    model: VehicleState
+    qos: 0
+    retained: false
+    ttl_s: 2
+    frequency_hz: configurable
+    failure: drop_low_priority_telemetry
+  "traffic/{environment}/vehicle/{vehicle_id}/telemetry":
+    publisher: sumo-runner
+    subscribers: [vehicle-agent]
+    model: VehicleState
+    qos: 0
+    retained: false
+    ttl_s: 2
+    frequency_hz: configurable
+    failure: vehicle_agent_uses_last_safe_state_then_sumo_default
+  "traffic/{environment}/vehicle/{vehicle_id}/guidance":
+    publisher: edge-service
+    subscribers: [vehicle-agent]
+    model: SpeedGuidance
+    qos: 1
+    retained: false
+    ttl_s: 3
+    frequency_hz: 1
+    failure: vehicle_default_behavior
+  "traffic/{environment}/vehicle/{vehicle_id}/command":
+    publisher: vehicle-agent
+    subscribers: [sumo-runner]
+    model: VehicleGuidanceCommand
+    qos: 1
+    retained: false
+    ttl_s: 2
+    frequency_hz: event
+    failure: sumo_keeps_default_car_following
+  "traffic/{environment}/service/{role}/heartbeat":
+    publisher: [cloud-service, rsu-service, vehicle-agent, report-service, sumo-runner]
+    subscribers: [experiment-service]
+    model: ServiceHeartbeat
+    qos: 1
+    retained: true
+    ttl_s: 5
+    frequency_hz: 1
+    failure: mark_service_offline
+  "traffic/{environment}/experiment/{experiment_id}/event":
+    publisher: [experiment-service, cloud-service, edge-service]
+    subscribers: [report-service, web-dashboard]
+    model: ExperimentEvent
+    qos: 1
+    retained: false
+    ttl_s: 3600
+    frequency_hz: event
+    failure: durable_local_buffer
+  "traffic/{environment}/experiment/{experiment_id}/metric":
+    publisher: experiment-service
+    subscribers: [report-service, web-dashboard]
+    model: MetricSnapshot
+    qos: 0
+    retained: false
+    ttl_s: 10
+    frequency_hz: 0.2
+    failure: drop_visual_snapshot_not_raw_metric
+  "traffic/{environment}/experiment/{experiment_id}/communication":
+    publisher: [cloud-service, edge-service, vehicle-agent]
+    subscribers: [experiment-service, report-service]
+    model: CommunicationEvent
+    qos: 1
+    retained: false
+    ttl_s: 3600
+    frequency_hz: event
+    failure: durable_local_buffer

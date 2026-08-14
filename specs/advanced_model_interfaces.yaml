@@ -1,0 +1,21 @@
+schema_version: "1.0"
+phase: Phase_1_reserved_interfaces
+activation_rule: artifact_exists_and_hash_matches_and_trained_and_validated
+fabricated_output_forbidden: true
+models:
+  stgnn:
+    kind: spatiotemporal_graph_neural_network
+    input: versioned_regional_graph_history
+    output: predicted_lane_arrivals_and_occupancies
+    current_status: MODEL_NOT_AVAILABLE
+  mpc:
+    kind: model_predictive_control
+    input: state_prediction_topology_and_safety_constraints
+    output: slow_timescale_cycle_green_ratio_and_offset_targets
+    current_status: MODEL_NOT_AVAILABLE
+  multi_agent_rl:
+    kind: multi_agent_reinforcement_learning
+    input: per_intersection_observation_and_regional_context
+    output: algorithm_sdk_control_decision
+    current_status: MODEL_NOT_AVAILABLE
+claim_boundary: no trained or validated advanced model is included in Phase 1

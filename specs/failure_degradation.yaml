@@ -1,0 +1,39 @@
+schema_version: "1.0"
+states:
+  - CLOUD_COORDINATED
+  - HOLD_LAST_VALID
+  - EDGE_AUTONOMOUS
+  - FIXED_TIME_SAFE
+  - RECOVERY_SYNC
+thresholds:
+  strategy_expected_interval_s: 10
+  cloud_hold_timeout_s: 15
+  cloud_autonomous_timeout_s: 30
+  recovery_stable_s: 5
+  algorithm_timeout_ms: 100
+transitions:
+  CLOUD_COORDINATED:
+    cloud_short_timeout: HOLD_LAST_VALID
+    local_failure: FIXED_TIME_SAFE
+  HOLD_LAST_VALID:
+    cloud_timeout: EDGE_AUTONOMOUS
+    cloud_recovered: RECOVERY_SYNC
+    strategy_expired: EDGE_AUTONOMOUS
+    local_failure: FIXED_TIME_SAFE
+  EDGE_AUTONOMOUS:
+    cloud_recovered: RECOVERY_SYNC
+    local_failure: FIXED_TIME_SAFE
+  FIXED_TIME_SAFE:
+    local_recovered_and_cloud_available: RECOVERY_SYNC
+    local_recovered_without_cloud: EDGE_AUTONOMOUS
+  RECOVERY_SYNC:
+    version_and_state_synchronized: CLOUD_COORDINATED
+    cloud_lost: EDGE_AUTONOMOUS
+safeguards:
+  reject_duplicate_message_id: true
+  reject_out_of_order_sequence: true
+  reject_expired_strategy: true
+  reject_experiment_mismatch: true
+  forbid_immediate_phase_jump_during_recovery: true
+  detect_simulation_time_rollback: true
+

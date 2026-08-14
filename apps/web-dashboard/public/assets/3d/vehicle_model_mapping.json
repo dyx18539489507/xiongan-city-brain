@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "poolSoftLimit": 192,
+  "lodDistancesM": [90, 260],
+  "models": {
+    "urban-car": {
+      "asset": "/assets/k06/k06-vehicle.optimized.glb",
+      "baseYawRad": 1.5707963267948966,
+      "groundOffsetM": 0.02,
+      "dimensionsM": [4.65, 1.95, 2.1],
+      "wheelAxlesM": [1.45, -1.45],
+      "wheelRadiusM": 0.39
+    },
+    "delivery-van": {
+      "asset": "/assets/3d/vehicles/delivery-van.optimized.glb",
+      "baseYawRad": 1.5707963267948966,
+      "groundOffsetM": 0.02,
+      "dimensionsM": [5.6, 2.55, 2.15],
+      "wheelAxlesM": [1.8, -1.55],
+      "wheelRadiusM": 0.43
+    },
+    "urban-bus": {
+      "asset": "/assets/3d/vehicles/urban-bus.optimized.glb",
+      "baseYawRad": 1.5707963267948966,
+      "groundOffsetM": 0.02,
+      "dimensionsM": [11.8, 3.2, 2.5],
+      "wheelAxlesM": [3.8, -3.6],
+      "wheelRadiusM": 0.52
+    },
+    "urban-truck": {
+      "asset": "/assets/3d/vehicles/urban-truck.optimized.glb",
+      "baseYawRad": 1.5707963267948966,
+      "groundOffsetM": 0.02,
+      "dimensionsM": [8.2, 3.4, 2.5],
+      "wheelAxlesM": [2.65, -2.45, -3.35],
+      "wheelRadiusM": 0.50
+    }
+  },
+  "typeMappings": {
+    "passenger": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "connected_vehicle": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "non_connected_vehicle": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "taxi": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "ride_hailing": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "emergency": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "delivery_vehicle": {"model": "delivery-van", "scale": [1.0, 1.0, 1.0]},
+    "bus": {"model": "urban-bus", "scale": [1.0, 1.0, 1.0]},
+    "truck": {"model": "urban-truck", "scale": [1.0, 1.0, 1.0]}
+  },
+  "classMappings": {
+    "passenger": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "taxi": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "emergency": {"model": "urban-car", "scale": [1.0, 1.0, 1.0]},
+    "delivery": {"model": "delivery-van", "scale": [1.0, 1.0, 1.0]},
+    "bus": {"model": "urban-bus", "scale": [1.0, 1.0, 1.0]},
+    "truck": {"model": "urban-truck", "scale": [1.0, 1.0, 1.0]}
+  },
+  "fallback": {"model": "urban-car", "scale": [1.0, 1.0, 1.0], "temporaryFallback": true}
+}

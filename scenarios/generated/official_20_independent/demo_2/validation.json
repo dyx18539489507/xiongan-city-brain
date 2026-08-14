@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "demo_id": 2,
+  "actual_sumo_run": true,
+  "profiles": {
+    "am_peak": {
+      "profile": "am_peak",
+      "expected_demand": 2761,
+      "loaded": 2761,
+      "tripinfo_count": 2007,
+      "summary_ended": 2007,
+      "final_running": 8,
+      "final_waiting": 746,
+      "demand_conservation": true,
+      "all_vehicles_cleared": false,
+      "collisions": 0,
+      "teleports": 0,
+      "sumo_exit_code": 0
+    },
+    "offpeak": {
+      "profile": "offpeak",
+      "expected_demand": 1502,
+      "loaded": 1502,
+      "tripinfo_count": 1404,
+      "summary_ended": 1404,
+      "final_running": 8,
+      "final_waiting": 90,
+      "demand_conservation": true,
+      "all_vehicles_cleared": false,
+      "collisions": 0,
+      "teleports": 0,
+      "sumo_exit_code": 0
+    },
+    "pm_peak": {
+      "profile": "pm_peak",
+      "expected_demand": 2299,
+      "loaded": 2299,
+      "tripinfo_count": 1786,
+      "summary_ended": 1786,
+      "final_running": 8,
+      "final_waiting": 505,
+      "demand_conservation": true,
+      "all_vehicles_cleared": false,
+      "collisions": 0,
+      "teleports": 0,
+      "sumo_exit_code": 0
+    }
+  },
+  "structurally_valid": true,
+  "all_profiles_cleared": false,
+  "evidence_note": "structural validity and full demand clearance are separate gates"
+}

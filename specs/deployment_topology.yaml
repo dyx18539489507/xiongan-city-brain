@@ -1,0 +1,24 @@
+schema_version: "1.0"
+topologies:
+  single_machine:
+    compose_file: docker-compose.yml
+    services:
+      [cloud-service, rsu-service, edge-service, vehicle-agent, experiment-service,
+       report-service, web-dashboard, postgres, redis, mosquitto, prometheus,
+       sumo-runner]
+  alicloud_plus_local_edge:
+    cloud_compose_file: deployment/compose/alicloud-cloud.yml
+    local_compose_file: deployment/compose/local-edge.yml
+    alicloud:
+      [cloud-service, experiment-service, report-service, web-dashboard,
+       postgres, redis, mosquitto, prometheus]
+    local:
+      [rsu-service, edge-service, vehicle-agent, sumo-runner]
+security:
+  addresses_from_environment: true
+  secrets_committed: false
+  mqtt_auth_required_for_public_network: true
+  tls_supported: true
+  database_public_exposure: false
+  mqtt_client_tls_environment:
+    [MQTT_TLS_ENABLED, MQTT_CA_CERT, MQTT_CLIENT_CERT, MQTT_CLIENT_KEY]

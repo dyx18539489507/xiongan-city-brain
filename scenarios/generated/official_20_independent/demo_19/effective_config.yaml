@@ -1,0 +1,273 @@
+schema_version: '1.0'
+scenario_id: official_demo_19
+demo_id: 19
+display_name: 主办方独立路口 demo_19
+registration:
+  longitude: 115.91706128
+  latitude: 39.05167274
+  confidence: high
+  method: SIFT+FLANN+RANSAC on expanded Xiong'an z15 imagery mosaic
+  evidence_boundary: high-confidence image registration; still requires field or survey
+    verification before claiming an as-built digital twin
+geometry:
+  mode: osm_auto
+  preferred_osm_node_id: '8515870116'
+  preferred_osm_distance_m: 11.55
+  reference_note: demos 1-4 use organizer SUMO arm lengths and lane structure; demos
+    5-20 preserve checked-in OSM branch geometry while using a standard 250 m isolated-intersection
+    simulation boundary
+network_center:
+  longitude: 115.9171164
+  latitude: 39.0515781
+  source: osm_topology_candidate
+  node_id: '8515870116'
+  distance_to_registered_center_m: 11.54
+  assignment_angle_error_sum_deg: 62.06
+  evidence_boundary: OSM community geometry, not a surveyed control point
+osm_reference:
+  source_file: scenarios/source/official_20_independent/osm/demo_19_raw.osm.xml
+  matched_node_id: '8515870116'
+  nearest_distance_m: 11.54
+  ways:
+  - way_id: 1154819229
+    name: 善荣路
+    ref: null
+    highway: tertiary
+    oneway: 'no'
+    lanes: null
+    lanes_forward: null
+    lanes_backward: null
+    turn_lanes: null
+    turn_lanes_forward: null
+    turn_lanes_backward: null
+    maxspeed: null
+    surface: null
+  - way_id: 1414879134
+    name: 明朗北街
+    ref: null
+    highway: secondary
+    oneway: 'yes'
+    lanes: null
+    lanes_forward: null
+    lanes_backward: null
+    turn_lanes: null
+    turn_lanes_forward: null
+    turn_lanes_backward: null
+    maxspeed: null
+    surface: asphalt
+  evidence_boundary: OSM supplies community-mapped geometry/tags only. Missing lane/turn
+    tags must not be interpreted as field-verified lane counts.
+arms:
+  E:
+    incoming_lanes: 3
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: teammate_template_retained
+    lane_confidence: low
+    bearing_deg: 77.92
+    length_m: 250.0
+    evidence_length_m: 186.5
+    osm_node_chain:
+    - '8515870116'
+    - '13007678886'
+    - '7341134020'
+    - '9245378870'
+    cutoff_node_id: '9245378870'
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    osm_way_ids:
+    - '1414879134'
+    modeling_adjustment:
+      type: standardized_isolated_intersection_boundary
+      reason: OSM distance to the next topology node is retained as evidence, while
+        every organizer-derived standalone arm uses the same 250 m simulation boundary
+        for comparable storage and GUI scale
+      geometry_policy: truncate along the evidenced OSM polyline when longer than
+        250 m; extend along the final evidenced bearing when shorter than 250 m
+      evidence_length_m: 186.5
+      modeled_length_m: 250.0
+  N:
+    incoming_lanes: 3
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: teammate_template_retained
+    lane_confidence: low
+    bearing_deg: 338.86
+    length_m: 250.0
+    evidence_length_m: 160.12
+    osm_node_chain:
+    - '8515870116'
+    - '9245560423'
+    cutoff_node_id: '9245560423'
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    osm_way_ids:
+    - '1154819229'
+    modeling_adjustment:
+      type: standardized_isolated_intersection_boundary
+      reason: OSM distance to the next topology node is retained as evidence, while
+        every organizer-derived standalone arm uses the same 250 m simulation boundary
+        for comparable storage and GUI scale
+      geometry_policy: truncate along the evidenced OSM polyline when longer than
+        250 m; extend along the final evidenced bearing when shorter than 250 m
+      evidence_length_m: 160.12
+      modeled_length_m: 250.0
+  S:
+    incoming_lanes: 3
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: teammate_template_retained
+    lane_confidence: low
+    bearing_deg: 158.15
+    length_m: 250.0
+    evidence_length_m: 11.3
+    osm_node_chain:
+    - '8515870116'
+    - '8519484674'
+    cutoff_node_id: '8519484674'
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    osm_way_ids:
+    - '1154819229'
+    modeling_adjustment:
+      type: standardized_isolated_intersection_boundary
+      reason: OSM distance to the next topology node is retained as evidence, while
+        every organizer-derived standalone arm uses the same 250 m simulation boundary
+        for comparable storage and GUI scale
+      geometry_policy: truncate along the evidenced OSM polyline when longer than
+        250 m; extend along the final evidenced bearing when shorter than 250 m
+      evidence_length_m: 11.3
+      modeled_length_m: 250.0
+  W:
+    incoming_lanes: 3
+    outgoing_lanes: 2
+    speed_m_s: 13.89
+    priority: 2
+    road_name: resolved from geometry evidence
+    lane_basis: teammate_template_retained
+    lane_confidence: low
+    bearing_deg: 263.01
+    length_m: 250.0
+    evidence_length_m: 218.51
+    osm_node_chain:
+    - '8515870116'
+    - '13007678881'
+    - '7341134019'
+    - '13007678882'
+    - '7341134018'
+    - '13007678883'
+    - '12483062681'
+    cutoff_node_id: '12483062681'
+    cutoff_reason: next_osm_topological_junction
+    length_basis: geodesic_sum_along_osm_node_chain
+    length_confidence: high
+    osm_way_ids:
+    - '1414879134'
+    modeling_adjustment:
+      type: standardized_isolated_intersection_boundary
+      reason: OSM distance to the next topology node is retained as evidence, while
+        every organizer-derived standalone arm uses the same 250 m simulation boundary
+        for comparable storage and GUI scale
+      geometry_policy: truncate along the evidenced OSM polyline when longer than
+        250 m; extend along the final evidenced bearing when shorter than 250 m
+      evidence_length_m: 218.51
+      modeled_length_m: 250.0
+signal_phase_movements:
+  am_peak:
+    '1':
+    - N_L
+    - N_R
+    - N_S
+    - S_L
+    - S_R
+    - S_S
+    '2':
+    - E_L
+    - E_R
+    - E_S
+    - W_L
+    - W_R
+    - W_S
+  offpeak:
+    '1':
+    - N_L
+    - N_R
+    - N_S
+    - S_L
+    - S_R
+    - S_S
+    '2':
+    - E_L
+    - E_R
+    - E_S
+    - W_L
+    - W_R
+    - W_S
+  pm_peak:
+    '1':
+    - N_L
+    - N_R
+    - N_S
+    - S_L
+    - S_R
+    - S_S
+    '2':
+    - E_L
+    - E_R
+    - E_S
+    - W_L
+    - W_R
+    - W_S
+simulation:
+  demand_duration_s: 7200
+  clearance_duration_s: 1800
+  step_length_s: 1.0
+  seed: 19
+vehicle_assumption:
+  pcu_to_vehicle: 1.0
+  vehicle_type: passenger
+  theme_color_hex: '#FFFF00'
+  sumo_color_rgb:
+  - 1.0
+  - 1.0
+  - 0.0
+  color_basis: user_selected_theme_from_reference_image
+  evidence_boundary: organizer workbook supplies PCU but no vehicle-type split; the
+    model applies the declared 1 PCU = 1 passenger assumption
+gui:
+  delay_ms: 300
+  vehicle_visualization: simple_shapes
+  vehicle_quality: 2
+  view_scheme: competition simple shapes
+lane_evidence:
+  method: teammate_template_retained
+  confidence: low
+  evidence: 原始PNG仅953×756且目标路口边界与车道线模糊；OSM无完整车道标签
+  arms:
+    E:
+      incoming: 3
+      outgoing: 2
+    W:
+      incoming: 3
+      outgoing: 2
+    N:
+      incoming: 3
+      outgoing: 2
+    S:
+      incoming: 3
+      outgoing: 2
+config_provenance:
+  type: derived_evidence_registry
+  registry_files:
+  - scenarios/source/official_20_independent/derived_evidence/lane_evidence_assessment.json
+  - scenarios/source/official_20_independent/derived_evidence/locations_final.json
+  - scenarios/source/official_20_independent/derived_evidence/osm_analysis.json

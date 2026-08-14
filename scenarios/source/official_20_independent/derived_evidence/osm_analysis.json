@@ -1,0 +1,1590 @@
+{
+  "generated_at": "2026-07-23T22:09:58+0800",
+  "source": "OpenStreetMap API 0.6 map extracts",
+  "license_note": "OpenStreetMap data is © OpenStreetMap contributors and available under ODbL.",
+  "intersections": [
+    {
+      "id": 1,
+      "registered_center": {
+        "latitude": 39.00495081,
+        "longitude": 116.10212482
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.0979248,39.0017508,116.1063248,39.0081508",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_01_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 125,
+        "motor_vehicle_highway_ways": 8,
+        "candidate_junction_nodes": 8,
+        "highway_classes": {
+          "primary": 2,
+          "residential": 3,
+          "tertiary": 3
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 6946375257,
+        "latitude": 39.0046968,
+        "longitude": 116.1021844,
+        "distance_to_registered_center_m": 28.71,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "世纪大街",
+          "雄州路"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          742030366,
+          896510828
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 742030366,
+          "name": "世纪大街",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 896510828,
+          "name": "雄州路",
+          "ref": "S042",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 2,
+      "registered_center": {
+        "latitude": 38.99126558,
+        "longitude": 116.12702875
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.1228287,38.9880656,116.1312287,38.9944656",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_02_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 83,
+        "motor_vehicle_highway_ways": 3,
+        "candidate_junction_nodes": 9,
+        "highway_classes": {
+          "primary": 3
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 10289897811,
+        "latitude": 38.991154,
+        "longitude": 116.1268548,
+        "distance_to_registered_center_m": 19.49,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "way:1090625752",
+          "保静公路"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          540702864,
+          1090625752
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 540702864,
+          "name": "保静公路",
+          "ref": "G336",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1090625752,
+          "name": null,
+          "ref": null,
+          "highway": "primary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 3,
+      "registered_center": {
+        "latitude": 38.98205793,
+        "longitude": 116.07981713
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.0756171,38.9788579,116.0840171,38.9852579",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_03_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 360,
+        "motor_vehicle_highway_ways": 4,
+        "candidate_junction_nodes": 5,
+        "highway_classes": {
+          "secondary": 4
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 3239367695,
+        "latitude": 38.983628,
+        "longitude": 116.0818519,
+        "distance_to_registered_center_m": 247.81,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "S043",
+          "way:317651496"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          317651496,
+          977556865
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 317651496,
+          "name": null,
+          "ref": null,
+          "highway": "secondary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 977556865,
+          "name": null,
+          "ref": "S043",
+          "highway": "secondary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_not_usable",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 4,
+      "registered_center": {
+        "latitude": 38.98561213,
+        "longitude": 116.12553547
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.1213355,38.9824121,116.1297355,38.9888121",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_04_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 119,
+        "motor_vehicle_highway_ways": 6,
+        "candidate_junction_nodes": 11,
+        "highway_classes": {
+          "secondary": 1,
+          "primary": 3,
+          "trunk_link": 2
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 5230429217,
+        "latitude": 38.9857665,
+        "longitude": 116.1254609,
+        "distance_to_registered_center_m": 18.34,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "保静公路",
+          "铃铛阁大街"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          486395359,
+          896510830
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 486395359,
+          "name": "铃铛阁大街",
+          "ref": "S043",
+          "highway": "secondary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 896510830,
+          "name": "保静公路",
+          "ref": "G336",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 5,
+      "registered_center": {
+        "latitude": 38.99238912,
+        "longitude": 116.0905246
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.0863246,38.9891891,116.0947246,38.9955891",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_05_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 113,
+        "motor_vehicle_highway_ways": 14,
+        "candidate_junction_nodes": 17,
+        "highway_classes": {
+          "primary": 3,
+          "tertiary": 2,
+          "residential": 8,
+          "service": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 2888280112,
+        "latitude": 38.9923375,
+        "longitude": 116.0906846,
+        "distance_to_registered_center_m": 14.97,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "文昌大街",
+          "温泉路"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          285153960,
+          977556867
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 285153960,
+          "name": "文昌大街",
+          "ref": null,
+          "highway": "primary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 977556867,
+          "name": "温泉路",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 6,
+      "registered_center": {
+        "latitude": 38.98386684,
+        "longitude": 116.09010603
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.0859060,38.9806668,116.0943060,38.9870668",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_06_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 114,
+        "motor_vehicle_highway_ways": 12,
+        "candidate_junction_nodes": 18,
+        "highway_classes": {
+          "tertiary": 3,
+          "residential": 8,
+          "secondary": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 2888280432,
+        "latitude": 38.9836779,
+        "longitude": 116.0901107,
+        "distance_to_registered_center_m": 21.01,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "温泉路",
+          "铃铛阁大街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          486395359,
+          977556867
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 486395359,
+          "name": "铃铛阁大街",
+          "ref": "S043",
+          "highway": "secondary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 977556867,
+          "name": "温泉路",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 7,
+      "registered_center": {
+        "latitude": 39.03995083,
+        "longitude": 116.17425514
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.1700551,39.0367508,116.1784551,39.0431508",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_07_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 97,
+        "motor_vehicle_highway_ways": 4,
+        "candidate_junction_nodes": 3,
+        "highway_classes": {
+          "secondary": 1,
+          "tertiary": 2,
+          "unclassified": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 10216079796,
+        "latitude": 39.0396501,
+        "longitude": 116.1742895,
+        "distance_to_registered_center_m": 33.57,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "way:1092754029",
+          "way:1117025923"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          1092754029,
+          1117025923
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 1092754029,
+          "name": null,
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1117025923,
+          "name": null,
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 8,
+      "registered_center": {
+        "latitude": 39.02038359,
+        "longitude": 116.11821398
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.1140140,39.0171836,116.1224140,39.0235836",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_08_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 163,
+        "motor_vehicle_highway_ways": 4,
+        "candidate_junction_nodes": 11,
+        "highway_classes": {
+          "primary": 4
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 7445137617,
+        "latitude": 39.0200453,
+        "longitude": 116.118024,
+        "distance_to_registered_center_m": 41.04,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "保静公路",
+          "燕南路"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          795983735,
+          1356857894
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 795983735,
+          "name": "燕南路",
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1356857894,
+          "name": "保静公路",
+          "ref": "G336",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 9,
+      "registered_center": {
+        "latitude": 38.98414067,
+        "longitude": 116.0995201
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.0953201,38.9809407,116.1037201,38.9873407",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_09_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 100,
+        "motor_vehicle_highway_ways": 9,
+        "candidate_junction_nodes": 7,
+        "highway_classes": {
+          "primary": 3,
+          "residential": 5,
+          "secondary": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 13282292884,
+        "latitude": 38.9840052,
+        "longitude": 116.0995615,
+        "distance_to_registered_center_m": 15.48,
+        "connected_way_count": 3,
+        "distinct_road_count": 3,
+        "road_names_or_ids": [
+          "铃铛阁大街",
+          "雄州路",
+          "雄昝路"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          256857278,
+          333390912,
+          486395359
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 256857278,
+          "name": "雄州路",
+          "ref": "S042",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 333390912,
+          "name": "雄昝路",
+          "ref": null,
+          "highway": "residential",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 486395359,
+          "name": "铃铛阁大街",
+          "ref": "S043",
+          "highway": "secondary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 10,
+      "registered_center": {
+        "latitude": 39.01899084,
+        "longitude": 116.14671709
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=116.1425171,39.0157908,116.1509171,39.0221908",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_10_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 332,
+        "motor_vehicle_highway_ways": 15,
+        "candidate_junction_nodes": 27,
+        "highway_classes": {
+          "secondary": 4,
+          "tertiary": 2,
+          "unclassified": 7,
+          "primary": 2
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 8889955586,
+        "latitude": 39.0189878,
+        "longitude": 116.1467801,
+        "distance_to_registered_center_m": 5.45,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "way:961014057",
+          "爱景街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          961014050,
+          961014057
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 961014050,
+          "name": "爱景街",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 961014057,
+          "name": null,
+          "ref": null,
+          "highway": "unclassified",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 11,
+      "registered_center": {
+        "latitude": 39.06951178,
+        "longitude": 115.84042554
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.8362255,39.0663118,115.8446255,39.0727118",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_11_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 300,
+        "motor_vehicle_highway_ways": 7,
+        "candidate_junction_nodes": 4,
+        "highway_classes": {
+          "primary": 4,
+          "tertiary": 2,
+          "unclassified": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 7445137085,
+        "latitude": 39.0694636,
+        "longitude": 115.8404233,
+        "distance_to_registered_center_m": 5.36,
+        "connected_way_count": 3,
+        "distinct_road_count": 3,
+        "road_names_or_ids": [
+          "way:1038812307",
+          "way:795983666",
+          "大水大街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          795983666,
+          1038812306,
+          1038812307
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 795983666,
+          "name": null,
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1038812306,
+          "name": "大水大街",
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": 2,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1038812307,
+          "name": null,
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": 3,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        }
+      ],
+      "lane_tag_ways": 2,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 12,
+      "registered_center": {
+        "latitude": 39.06142105,
+        "longitude": 115.84090993
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.8367099,39.0582211,115.8451099,39.0646210",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_12_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 207,
+        "motor_vehicle_highway_ways": 10,
+        "candidate_junction_nodes": 7,
+        "highway_classes": {
+          "primary": 5,
+          "tertiary": 2,
+          "residential": 3
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 3310198039,
+        "latitude": 39.0611978,
+        "longitude": 115.8408943,
+        "distance_to_registered_center_m": 24.86,
+        "connected_way_count": 3,
+        "distinct_road_count": 3,
+        "road_names_or_ids": [
+          "S333",
+          "大水大街",
+          "豪丹街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          232119960,
+          372159297,
+          1038812305
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 232119960,
+          "name": "大水大街",
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": 2,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 372159297,
+          "name": "豪丹街",
+          "ref": "S333",
+          "highway": "primary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1038812305,
+          "name": null,
+          "ref": "S333",
+          "highway": "primary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 1,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 13,
+      "registered_center": {
+        "latitude": 39.07354487,
+        "longitude": 115.90460527
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9004053,39.0703449,115.9088053,39.0767449",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_13_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 915,
+        "motor_vehicle_highway_ways": 9,
+        "candidate_junction_nodes": 7,
+        "highway_classes": {
+          "trunk": 2,
+          "tertiary": 3,
+          "residential": 3,
+          "living_street": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 7445137182,
+        "latitude": 39.0733861,
+        "longitude": 115.9045958,
+        "distance_to_registered_center_m": 17.67,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "way:1314535455",
+          "通武线"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          294951525,
+          1314535455
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 294951525,
+          "name": "通武线",
+          "ref": "G230",
+          "highway": "trunk",
+          "oneway": "yes",
+          "lanes": 3,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        },
+        {
+          "way_id": 1314535455,
+          "name": null,
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 1,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 14,
+      "registered_center": {
+        "latitude": 39.04993181,
+        "longitude": 115.91778649
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9135865,39.0467318,115.9219865,39.0531318",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_14_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 428,
+        "motor_vehicle_highway_ways": 18,
+        "candidate_junction_nodes": 46,
+        "highway_classes": {
+          "secondary": 4,
+          "tertiary": 4,
+          "residential": 3,
+          "primary": 2,
+          "unclassified": 3,
+          "living_street": 1,
+          "primary_link": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 11122023451,
+        "latitude": 39.0498754,
+        "longitude": 115.9179084,
+        "distance_to_registered_center_m": 12.25,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "善荣路",
+          "春明四街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          1154819229,
+          1198948441
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 1154819229,
+          "name": "善荣路",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": "no",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1198948441,
+          "name": "春明四街",
+          "ref": null,
+          "highway": "residential",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 15,
+      "registered_center": {
+        "latitude": 39.04980217,
+        "longitude": 115.92118948
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9169895,39.0466022,115.9253895,39.0530022",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_15_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 566,
+        "motor_vehicle_highway_ways": 17,
+        "candidate_junction_nodes": 48,
+        "highway_classes": {
+          "secondary": 4,
+          "tertiary": 6,
+          "residential": 3,
+          "primary": 2,
+          "living_street": 1,
+          "primary_link": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 11122023574,
+        "latitude": 39.0498262,
+        "longitude": 115.9212982,
+        "distance_to_registered_center_m": 9.76,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "崇文北路",
+          "春明四街"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          1198948441,
+          1415517615
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 1198948441,
+          "name": "春明四街",
+          "ref": null,
+          "highway": "residential",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1415517615,
+          "name": "崇文北路",
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 16,
+      "registered_center": {
+        "latitude": 39.06077023,
+        "longitude": 115.94382715
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9396272,39.0575702,115.9480272,39.0639702",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_16_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 438,
+        "motor_vehicle_highway_ways": 26,
+        "candidate_junction_nodes": 48,
+        "highway_classes": {
+          "primary": 2,
+          "tertiary": 6,
+          "secondary": 16,
+          "living_street": 1,
+          "unclassified": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 9215428068,
+        "latitude": 39.0608308,
+        "longitude": 115.943817,
+        "distance_to_registered_center_m": 6.79,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "文营西路",
+          "金湖北街"
+        ],
+        "traffic_signals": false,
+        "node_tags": {},
+        "way_ids": [
+          998067059,
+          1414413747
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 998067059,
+          "name": "文营西路",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1414413747,
+          "name": "金湖北街",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 17,
+      "registered_center": {
+        "latitude": 39.06036845,
+        "longitude": 115.90968679
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9054868,39.0571684,115.9138868,39.0635684",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_17_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 1184,
+        "motor_vehicle_highway_ways": 32,
+        "candidate_junction_nodes": 98,
+        "highway_classes": {
+          "secondary": 4,
+          "tertiary": 8,
+          "living_street": 3,
+          "service": 17
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 11204209180,
+        "latitude": 39.0601865,
+        "longitude": 115.9099399,
+        "distance_to_registered_center_m": 29.78,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "甘棠路",
+          "金湖北街"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          916884512,
+          1457051468
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 916884512,
+          "name": "甘棠路",
+          "ref": null,
+          "highway": "secondary",
+          "oneway": "yes",
+          "lanes": 2,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        },
+        {
+          "way_id": 1457051468,
+          "name": "金湖北街",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 1,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 18,
+      "registered_center": {
+        "latitude": 39.06919712,
+        "longitude": 115.91657292
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9123729,39.0659971,115.9207729,39.0723971",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_18_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 503,
+        "motor_vehicle_highway_ways": 30,
+        "candidate_junction_nodes": 146,
+        "highway_classes": {
+          "primary": 4,
+          "secondary": 2,
+          "tertiary": 9,
+          "residential": 2,
+          "living_street": 10,
+          "service": 1,
+          "unclassified": 2
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 9999059766,
+        "latitude": 39.0692082,
+        "longitude": 115.9165816,
+        "distance_to_registered_center_m": 1.44,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "乐民路",
+          "崇文北路"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          570706187,
+          785419413
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 570706187,
+          "name": "乐民路",
+          "ref": "S333",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": 4,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 785419413,
+          "name": "崇文北路",
+          "ref": null,
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        }
+      ],
+      "lane_tag_ways": 1,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 19,
+      "registered_center": {
+        "latitude": 39.05167274,
+        "longitude": 115.91706128
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9128613,39.0484727,115.9212613,39.0548727",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_19_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 395,
+        "motor_vehicle_highway_ways": 17,
+        "candidate_junction_nodes": 59,
+        "highway_classes": {
+          "secondary": 4,
+          "tertiary": 4,
+          "residential": 3,
+          "primary": 2,
+          "unclassified": 3,
+          "living_street": 1
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 8515870116,
+        "latitude": 39.0515781,
+        "longitude": 115.9171164,
+        "distance_to_registered_center_m": 11.55,
+        "connected_way_count": 2,
+        "distinct_road_count": 2,
+        "road_names_or_ids": [
+          "善荣路",
+          "明朗北街"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          1154819229,
+          1414879134
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 1154819229,
+          "name": "善荣路",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": "no",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 1414879134,
+          "name": "明朗北街",
+          "ref": null,
+          "highway": "secondary",
+          "oneway": "yes",
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        }
+      ],
+      "lane_tag_ways": 0,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    },
+    {
+      "id": 20,
+      "registered_center": {
+        "latitude": 39.06635676,
+        "longitude": 115.9067022
+      },
+      "osm_api_url": "https://api.openstreetmap.org/api/0.6/map?bbox=115.9025022,39.0631568,115.9109022,39.0695568",
+      "osm_raw_path": "D:\\程序项目\\挑战杯\\outputs\\xh202613_20_intersections\\evidence\\osm\\demo_20_raw.osm.xml",
+      "raw_counts": {
+        "nodes": 964,
+        "motor_vehicle_highway_ways": 31,
+        "candidate_junction_nodes": 119,
+        "highway_classes": {
+          "primary": 4,
+          "secondary": 4,
+          "tertiary": 2,
+          "living_street": 1,
+          "residential": 3,
+          "unclassified": 1,
+          "service": 16
+        }
+      },
+      "nearest_candidate": {
+        "node_id": 9999059760,
+        "latitude": 39.0662826,
+        "longitude": 115.9068717,
+        "distance_to_registered_center_m": 16.8,
+        "connected_way_count": 4,
+        "distinct_road_count": 3,
+        "road_names_or_ids": [
+          "乐民路",
+          "甘棠路",
+          "红莲街"
+        ],
+        "traffic_signals": true,
+        "node_tags": {
+          "highway": "traffic_signals",
+          "traffic_signals": "signal"
+        },
+        "way_ids": [
+          570706187,
+          916884512,
+          916884513,
+          1416043123
+        ]
+      },
+      "connected_ways": [
+        {
+          "way_id": 570706187,
+          "name": "乐民路",
+          "ref": "S333",
+          "highway": "primary",
+          "oneway": "yes",
+          "lanes": 4,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        },
+        {
+          "way_id": 916884512,
+          "name": "甘棠路",
+          "ref": null,
+          "highway": "secondary",
+          "oneway": "yes",
+          "lanes": 2,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        },
+        {
+          "way_id": 916884513,
+          "name": "甘棠路",
+          "ref": null,
+          "highway": "secondary",
+          "oneway": "yes",
+          "lanes": 2,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": "asphalt"
+        },
+        {
+          "way_id": 1416043123,
+          "name": "红莲街",
+          "ref": null,
+          "highway": "tertiary",
+          "oneway": null,
+          "lanes": null,
+          "lanes_forward": null,
+          "lanes_backward": null,
+          "turn_lanes": null,
+          "turn_lanes_forward": null,
+          "turn_lanes_backward": null,
+          "maxspeed": null,
+          "surface": null
+        }
+      ],
+      "lane_tag_ways": 3,
+      "turn_lane_tag_ways": 0,
+      "modeling_usability": "osm_geometry_only_lane_count_incomplete",
+      "evidence_boundary": "OSM supplies community-mapped geometry/tags only. Missing lane/turn tags must not be interpreted as field-verified lane counts."
+    }
+  ]
+}

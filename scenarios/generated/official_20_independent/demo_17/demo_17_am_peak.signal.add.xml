@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<additional>
+    <tlLogic id="J" type="static" programID="am_peak" offset="0">
+        <phase duration="58" state="ggrrrrrr" name="P1 东进口左右转" />
+        <phase duration="3" state="yyrrrrrr" name="P1 yellow" />
+        <phase duration="32" state="rrgggggg" name="P2 南北直行转向" />
+        <phase duration="3" state="rryyyyyy" name="P2 yellow" />
+    </tlLogic>
+</additional>

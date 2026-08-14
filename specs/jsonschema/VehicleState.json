@@ -1,0 +1,288 @@
+{
+  "$defs": {
+    "EmissionEstimate": {
+      "additionalProperties": false,
+      "description": "Per-step emission estimates emitted by SUMO.",
+      "properties": {
+        "co2_mg_s": {
+          "minimum": 0,
+          "title": "Co2 Mg S",
+          "type": "number"
+        },
+        "nox_mg_s": {
+          "minimum": 0,
+          "title": "Nox Mg S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "co2_mg_s",
+        "nox_mg_s"
+      ],
+      "title": "EmissionEstimate",
+      "type": "object"
+    },
+    "PositionXY": {
+      "additionalProperties": false,
+      "description": "Cartesian SUMO position in metres.",
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "title": "PositionXY",
+      "type": "object"
+    },
+    "SourceType": {
+      "description": "Origin service categories used in every message envelope.",
+      "enum": [
+        "cloud",
+        "edge",
+        "vehicle",
+        "experiment",
+        "report",
+        "system",
+        "rsu"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "High-frequency state for one simulated road vehicle.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "trace_id": {
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "simulation_time": {
+      "minimum": 0,
+      "title": "Simulation Time",
+      "type": "number"
+    },
+    "sequence_number": {
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "environment": {
+      "default": "development",
+      "minLength": 1,
+      "title": "Environment",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "vehicle_id": {
+      "title": "Vehicle Id",
+      "type": "string"
+    },
+    "vehicle_type": {
+      "title": "Vehicle Type",
+      "type": "string"
+    },
+    "connected": {
+      "title": "Connected",
+      "type": "boolean"
+    },
+    "road_id": {
+      "title": "Road Id",
+      "type": "string"
+    },
+    "lane_id": {
+      "title": "Lane Id",
+      "type": "string"
+    },
+    "position_xy": {
+      "$ref": "#/$defs/PositionXY"
+    },
+    "lane_position": {
+      "minimum": 0,
+      "title": "Lane Position",
+      "type": "number"
+    },
+    "speed": {
+      "minimum": 0,
+      "title": "Speed",
+      "type": "number"
+    },
+    "acceleration": {
+      "title": "Acceleration",
+      "type": "number"
+    },
+    "heading": {
+      "exclusiveMaximum": 360,
+      "minimum": 0,
+      "title": "Heading",
+      "type": "number"
+    },
+    "route_id": {
+      "title": "Route Id",
+      "type": "string"
+    },
+    "next_intersection_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Next Intersection Id"
+    },
+    "distance_to_stop_line": {
+      "minimum": 0,
+      "title": "Distance To Stop Line",
+      "type": "number"
+    },
+    "turn_direction": {
+      "title": "Turn Direction",
+      "type": "string"
+    },
+    "waiting_time": {
+      "minimum": 0,
+      "title": "Waiting Time",
+      "type": "number"
+    },
+    "stop_count": {
+      "minimum": 0,
+      "title": "Stop Count",
+      "type": "integer"
+    },
+    "emission_estimate": {
+      "$ref": "#/$defs/EmissionEstimate"
+    },
+    "fuel_consumption_estimate": {
+      "minimum": 0,
+      "title": "Fuel Consumption Estimate",
+      "type": "number"
+    }
+  },
+  "required": [
+    "trace_id",
+    "source_id",
+    "source_type",
+    "simulation_time",
+    "sequence_number",
+    "correlation_id",
+    "scenario_id",
+    "experiment_id",
+    "vehicle_id",
+    "vehicle_type",
+    "connected",
+    "road_id",
+    "lane_id",
+    "position_xy",
+    "lane_position",
+    "speed",
+    "acceleration",
+    "heading",
+    "route_id",
+    "next_intersection_id",
+    "distance_to_stop_line",
+    "turn_direction",
+    "waiting_time",
+    "stop_count",
+    "emission_estimate",
+    "fuel_consumption_estimate"
+  ],
+  "title": "VehicleState",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "trace_id": "example-trace_id",
+      "source_id": "example-source_id",
+      "source_type": "cloud",
+      "simulation_time": 0.0,
+      "sequence_number": 0,
+      "correlation_id": "example-correlation_id",
+      "environment": "development",
+      "scenario_id": "example-scenario_id",
+      "experiment_id": "example-experiment_id",
+      "vehicle_id": "example-vehicle_id",
+      "vehicle_type": "example-vehicle_type",
+      "connected": false,
+      "road_id": "example-road_id",
+      "lane_id": "example-lane_id",
+      "position_xy": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "lane_position": 0.0,
+      "speed": 0.0,
+      "acceleration": 0.0,
+      "heading": 0.0,
+      "route_id": "example-route_id",
+      "next_intersection_id": "example-next_intersection_id",
+      "distance_to_stop_line": 0.0,
+      "turn_direction": "example-turn_direction",
+      "waiting_time": 0.0,
+      "stop_count": 0,
+      "emission_estimate": {
+        "co2_mg_s": 0.0,
+        "nox_mg_s": 0.0
+      },
+      "fuel_consumption_estimate": 0.0
+    }
+  ]
+}

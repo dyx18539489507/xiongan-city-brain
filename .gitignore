@@ -1,0 +1,54 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+build/
+.tools/
+.env
+*.log
+
+# Generated runtime and experiment artifacts
+results/
+runtime/
+scenarios/generated/*
+!scenarios/generated/.gitkeep
+!scenarios/generated/official_20_independent/
+!scenarios/generated/official_20_independent/**
+scenarios/generated/official_20_independent/*/outputs/
+scenarios/generated/official_20_independent/*/validation_outputs/
+reports/generated/*
+!reports/generated/.gitkeep
+
+# Local audit/reference material; never package as source
+tmp/
+
+# IDE and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Unity local/generated state
+/apps/unity-digital-twin/[Ll]ibrary/
+/apps/unity-digital-twin/[Tt]emp/
+/apps/unity-digital-twin/[Oo]bj/
+/apps/unity-digital-twin/[Ll]ogs/
+/apps/unity-digital-twin/[Uu]ser[Ss]ettings/
+/apps/unity-digital-twin/[Bb]uild/
+/apps/unity-digital-twin/[Bb]uilds/
+/apps/unity-digital-twin/[Mm]emoryCaptures/
+/apps/unity-digital-twin/[Rr]ecordings/
+
+# Rebuildable delivery packages and local test state
+/exports/
+/apps/web-dashboard/test-results/
+
+# Accidental local process artifact
+/19776

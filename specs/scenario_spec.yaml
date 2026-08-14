@@ -1,0 +1,65 @@
+schema_version: "1.0"
+scenario_schema:
+  required:
+    - scenario_id
+    - provenance
+    - simulation
+    - demand
+    - vehicle_type_ratios
+    - signal_plan
+    - communication
+    - algorithm
+    - sampling
+    - multimodal
+  units:
+    duration: s
+    step_length: s
+    flow: veh/h
+    speed: m/s
+  reproducibility:
+    deterministic_for_equal_config_and_seed: true
+    manifest_sha256: true
+    source_file_sha256: true
+  network_scope:
+    geometry: complete_rongdong_osm_extract
+    physical_crop: prohibited
+    od_restriction_to_controlled_intersections: false
+    controlled_corridor_demand_may_coexist_with_full_network_background: true
+  multimodal:
+    participants: [bicycle, electric_bicycle, pedestrian]
+    separate_od: true
+    pedestrian_signal_mode: conditional_parallel
+    baseline_network_is_read_only: true
+    derived_network_required: true
+    facility_provenance:
+      osm_evidence: imported_when_present
+      missing_facilities: traceable_engineering_inference
+      field_calibration: false
+scenarios:
+  official_20_independent:
+    kind: organizer_independent_intersections
+    connected_network: false
+    provenance: organizer_supplied
+  xiongan_rongdong_20:
+    kind: connected_real_geography_engineering_model
+    connected_network: true
+    signalized_intersections: 20
+    core_corridor_intersections: 8
+    retained_official_locations: [demo14, demo15, demo17, demo18, demo19, demo20]
+    excluded_official_locations_preserved_in_official_set: [demo13, demo16]
+    added_osm_locations: 14
+    topology_definition: direct_adjacent_intersections
+    maximum_direct_adjacency_m: 350
+    minimum_controlled_intersections_per_od_route: 5
+    added_parameter_provenance: modeled_from_organizer_data
+supported_cases:
+  S01: off_peak
+  S02: peak
+  S03: event_dispersal
+  S04: downstream_roadwork
+  S05: incident
+  S06: emergency_priority
+  S07: communication_fault
+connected_vehicle_penetration: [0.0, 0.2, 0.5, 0.8, 1.0]
+vehicle_types: [passenger, bus, truck, emergency, connected_vehicle, non_connected_vehicle]
+active_mode_types: [bicycle, electric_bicycle, pedestrian_adult, pedestrian_elderly]

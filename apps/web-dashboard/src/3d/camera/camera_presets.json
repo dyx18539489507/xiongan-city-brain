@@ -1,0 +1,68 @@
+{
+  "coordinateSystem": "Three.js world metres from CoordinateService",
+  "presets": [
+    {
+      "id": "overview",
+      "position": [219.69, 2141.92, 1208.25],
+      "target": [0.0, 0.0, 0.0],
+      "fov": 43,
+      "transitionDuration": 1600,
+      "scene": "xiongan_rongdong_20",
+      "description": "完整20路口全域鸟瞰"
+    },
+    {
+      "id": "corridor",
+      "position": [374.62, 826.08, 1371.16],
+      "target": [222.45, 0.0, 697.25],
+      "fov": 43,
+      "transitionDuration": 1400,
+      "scene": "xiongan_rongdong_20",
+      "description": "K01-K08核心走廊鸟瞰"
+    },
+    {
+      "id": "hero-k06",
+      "position": [368.43, 63.36, 1132.69],
+      "target": [313.87, 0.0, 1064.05],
+      "fov": 43,
+      "transitionDuration": 1100,
+      "scene": "xiongan_rongdong_20",
+      "description": "英雄路口K06近景"
+    },
+    {
+      "id": "rsu",
+      "position": [0.0, 4.5, 0.0],
+      "target": [16.0, 0.0, 0.0],
+      "fov": 48,
+      "transitionDuration": 900,
+      "scene": "xiongan_rongdong_20",
+      "description": "运行时以场景首个RSU及其管辖SUMO路口重新计算"
+    },
+    {
+      "id": "monitor",
+      "position": [0.0, 5.05, 0.0],
+      "target": [16.0, 0.0, 0.0],
+      "fov": 58,
+      "transitionDuration": 900,
+      "scene": "xiongan_rongdong_20",
+      "description": "运行时以场景首个摄像头及其管辖SUMO路口重新计算"
+    },
+    {
+      "id": "driver",
+      "position": [0.0, 1.55, 0.0],
+      "target": [0.0, 1.55, 22.0],
+      "fov": 62,
+      "transitionDuration": 700,
+      "scene": "xiongan_rongdong_20",
+      "description": "运行时绑定首个真实SUMO机动车的位置与航向"
+    },
+    {
+      "id": "cruise",
+      "position": [420.0, 210.0, 1060.0],
+      "target": [222.45, 0.0, 697.25],
+      "fov": 46,
+      "transitionDuration": 1800,
+      "scene": "xiongan_rongdong_20",
+      "description": "核心走廊无人机巡航入口镜头"
+    }
+  ]
+}

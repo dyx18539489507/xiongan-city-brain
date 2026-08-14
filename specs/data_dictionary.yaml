@@ -1,0 +1,240 @@
+schema_version: "1.0"
+conventions:
+  speed: {unit: m/s}
+  distance: {unit: m}
+  duration: {unit: s}
+  latency: {unit: ms}
+  acceleration: {unit: "m/s^2"}
+  flow: {unit: veh/h}
+  ratio: {range: [0, 1]}
+common_message:
+  schema_version: {type: string, required: true, unit: none}
+  message_id: {type: uuid, required: true, unit: none}
+  trace_id: {type: string, required: true, unit: none}
+  source_id: {type: string, required: true, unit: none}
+  source_type: {type: enum, values: [cloud, rsu, edge, vehicle, experiment, report, system], unit: none}
+  timestamp_utc: {type: datetime, timezone: UTC, unit: none}
+  simulation_time: {type: number, unit: s}
+  sequence_number: {type: integer, minimum: 0, unit: none}
+  created_at: {type: datetime, timezone: UTC, unit: none}
+  expires_at: {type: datetime, timezone: UTC, unit: none}
+  correlation_id: {type: string, unit: none}
+  environment: {type: string, unit: none}
+  scenario_id: {type: string, unit: none}
+  experiment_id: {type: string, unit: none}
+models:
+  VehicleState:
+    frequency_hz: configurable
+    schema: specs/jsonschema/VehicleState.json
+    fields:
+      vehicle_id: {type: string, unit: none}
+      vehicle_type: {type: string, unit: none}
+      connected: {type: boolean, unit: none}
+      road_id: {type: string, unit: none}
+      lane_id: {type: string, unit: none}
+      position_xy: {type: "tuple[number, number]", unit: m}
+      lane_position: {type: number, unit: m}
+      speed: {type: number, unit: m/s}
+      acceleration: {type: number, unit: "m/s^2"}
+      heading: {type: number, unit: degree}
+      route_id: {type: string, unit: none}
+      next_intersection_id: {type: "string|null", unit: none}
+      distance_to_stop_line: {type: "number|null", unit: m}
+      turn_direction: {type: string, unit: none}
+      waiting_time: {type: number, unit: s}
+      stop_count: {type: integer, unit: count}
+      emission_estimate: {type: number, unit: mg/s}
+      fuel_consumption_estimate: {type: number, unit: mg/s}
+  BicycleState:
+    frequency_hz: configurable
+    schema: specs/jsonschema/BicycleState.json
+    fields:
+      bicycle_id: {type: string, unit: none}
+      bicycle_type: {type: string, unit: none}
+      electric: {type: boolean, unit: none}
+      road_id: {type: string, unit: none}
+      lane_id: {type: string, unit: none}
+      position_xy: {type: "tuple[number, number]", unit: m}
+      lane_position_m: {type: number, unit: m}
+      speed_m_s: {type: number, unit: m/s}
+      acceleration_m_s2: {type: number, unit: "m/s^2"}
+      waiting_time_s: {type: number, unit: s}
+      next_intersection_id: {type: "string|null", unit: none}
+      turn_direction: {type: string, unit: none}
+      in_bicycle_lane: {type: boolean, unit: none}
+      conflict_risk: {type: number, unit: ratio}
+  PedestrianState:
+    frequency_hz: configurable
+    schema: specs/jsonschema/PedestrianState.json
+    fields:
+      pedestrian_id: {type: string, unit: none}
+      pedestrian_type: {type: string, unit: none}
+      position_xy: {type: "tuple[number, number]", unit: m}
+      road_id: {type: string, unit: none}
+      lane_id: {type: string, unit: none}
+      speed_m_s: {type: number, unit: m/s}
+      waiting_time_s: {type: number, unit: s}
+      walking_stage_index: {type: integer, unit: none}
+      crossing_id: {type: "string|null", unit: none}
+      waiting_area_id: {type: "string|null", unit: none}
+      signal_state: {type: "string|null", unit: none}
+      conflict_risk: {type: number, unit: ratio}
+  LaneState:
+    frequency_hz: 1
+    schema: specs/jsonschema/LaneState.json
+    fields:
+      lane_id: {type: string, unit: none}
+      intersection_id: {type: string, unit: none}
+      direction: {type: string, unit: none}
+      movement: {type: string, unit: none}
+      vehicle_count: {type: integer, unit: veh}
+      connected_vehicle_count: {type: integer, unit: veh}
+      queue_vehicle_count: {type: integer, unit: veh}
+      queue_length_m: {type: number, unit: m}
+      mean_speed: {type: number, unit: m/s}
+      occupancy: {type: number, unit: ratio}
+      arrival_rate: {type: number, unit: veh/h}
+      discharge_rate: {type: number, unit: veh/h}
+      downstream_lane_id: {type: "string|null", unit: none}
+      downstream_occupancy: {type: number, unit: ratio}
+      downstream_available_capacity: {type: number, unit: veh}
+      bicycle_count: {type: integer, unit: participant}
+      electric_bicycle_count: {type: integer, unit: participant}
+      bicycle_queue_count: {type: integer, unit: participant}
+      bicycle_queue_length_m: {type: number, unit: m}
+      pedestrian_count: {type: integer, unit: participant}
+      pedestrian_waiting_count: {type: integer, unit: participant}
+  IntersectionState:
+    frequency_hz: 1
+    schema: specs/jsonschema/IntersectionState.json
+    fields:
+      intersection_id: {type: string, unit: none}
+      edge_id: {type: string, unit: none}
+      current_phase_id: {type: string, unit: none}
+      phase_state: {type: string, unit: none}
+      phase_elapsed: {type: number, unit: s}
+      phase_remaining: {type: number, unit: s}
+      cycle_elapsed: {type: number, unit: s}
+      lane_states: {type: "list[LaneState]", unit: none}
+      total_queue: {type: integer, unit: veh}
+      mean_speed: {type: number, unit: m/s}
+      throughput: {type: number, unit: veh/h}
+      congestion_level: {type: number, unit: ratio}
+      spillback_risk: {type: number, unit: ratio}
+      incident_state: {type: string, unit: none}
+      emergency_priority_phase_id: {type: "string|null", unit: none}
+      communication_state: {type: string, unit: none}
+      local_control_mode: {type: string, unit: none}
+      bicycle_queue_count: {type: integer, unit: participant}
+      pedestrian_waiting_count: {type: integer, unit: participant}
+      crossing_pedestrian_count: {type: integer, unit: participant}
+      active_conflict_count: {type: integer, unit: count}
+  RegionalState:
+    frequency_hz: 1
+    schema: specs/jsonschema/RegionalState.json
+    fields:
+      intersection_states: {type: "list[IntersectionState]", unit: none}
+      network_mean_speed: {type: number, unit: m/s}
+      total_queue: {type: integer, unit: veh}
+      congested_intersections: {type: "list[string]", unit: none}
+      spillback_edges: {type: "list[string]", unit: none}
+      risk_levels: {type: "map[string, number]", unit: ratio}
+      active_disturbances: {type: "list[string]", unit: none}
+  CloudStrategy:
+    frequency_hz: 0.2
+    schema: specs/jsonschema/CloudStrategy.json
+    fields:
+      strategy_id: {type: uuid, unit: none}
+      strategy_version: {type: integer, unit: none}
+      generated_at_sim_time: {type: number, unit: s}
+      valid_from: {type: number, unit: s}
+      valid_until: {type: number, unit: s}
+      target_intersection_id: {type: string, unit: none}
+      target_cycle_length: {type: number, unit: s}
+      target_green_ratios: {type: "map[string, number]", unit: ratio}
+      target_offsets: {type: "map[string, number]", unit: s}
+      upstream_release_limit: {type: number, unit: ratio}
+      downstream_priority: {type: "map[string, number]", unit: weight}
+      recommended_phase_plan: {type: "list[string]", unit: none}
+      speed_guidance_parameters: {type: "map[string, number]", unit: mixed}
+      confidence: {type: number, unit: ratio}
+      reason_codes: {type: "list[string]", unit: none}
+      fallback_policy: {type: string, unit: none}
+  EdgeControlAction:
+    frequency_hz: 1
+    schema: specs/jsonschema/EdgeControlAction.json
+    fields:
+      action_id: {type: uuid, unit: none}
+      intersection_id: {type: string, unit: none}
+      requested_phase_id: {type: "string|null", unit: none}
+      action_type: {type: enum, unit: none}
+      requested_duration: {type: "number|null", unit: s}
+      source_strategy_id: {type: "uuid|null", unit: none}
+      validation_status: {type: string, unit: none}
+      rejection_reasons: {type: "list[string]", unit: none}
+      applied_at: {type: "number|null", unit: s}
+      expected_effect: {type: map, unit: mixed}
+      recommended_speed_m_s: {type: "number|null", unit: m/s}
+  ExecutionFeedback:
+    frequency_hz: event
+    schema: specs/jsonschema/ExecutionFeedback.json
+    fields:
+      action_id: {type: uuid, unit: none}
+      strategy_id: {type: "uuid|null", unit: none}
+      intersection_id: {type: string, unit: none}
+      requested_action: {type: map, unit: mixed}
+      executed_action: {type: map, unit: mixed}
+      execution_status: {type: enum, unit: none}
+      rejection_reason: {type: "string|null", unit: none}
+      control_mode: {type: string, unit: none}
+      command_latency_ms: {type: number, unit: ms}
+      cloud_round_trip_latency_ms: {type: "number|null", unit: ms}
+      actual_start_time: {type: number, unit: s}
+      actual_end_time: {type: "number|null", unit: s}
+      observed_effect: {type: map, unit: mixed}
+  CommunicationEvent:
+    frequency_hz: event
+    schema: specs/jsonschema/CommunicationEvent.json
+    fields:
+      channel: {type: string, unit: none}
+      source: {type: string, unit: none}
+      destination: {type: string, unit: none}
+      message_type: {type: string, unit: none}
+      configured_latency_ms: {type: number, unit: ms}
+      actual_latency_ms: {type: number, unit: ms}
+      dropped: {type: boolean, unit: none}
+      duplicated: {type: boolean, unit: none}
+      reordered: {type: boolean, unit: none}
+      corrupted: {type: boolean, unit: none}
+      timeout: {type: boolean, unit: none}
+      recovery_time: {type: "number|null", unit: s}
+  FaultEvent:
+    frequency_hz: event
+    schema: specs/jsonschema/FaultEvent.json
+    fields:
+      fault_type: {type: string, unit: none}
+      target: {type: string, unit: none}
+      severity: {type: string, unit: none}
+      start_time: {type: number, unit: s}
+      duration: {type: number, unit: s}
+      injected_by: {type: string, unit: none}
+      recovery_policy: {type: string, unit: none}
+      recovery_status: {type: string, unit: none}
+  SafetyConflictEvent:
+    frequency_hz: event
+    schema: specs/jsonschema/SafetyConflictEvent.json
+    fields:
+      conflict_id: {type: string, unit: none}
+      intersection_id: {type: "string|null", unit: none}
+      participant_a_id: {type: string, unit: none}
+      participant_a_type: {type: string, unit: none}
+      participant_b_id: {type: string, unit: none}
+      participant_b_type: {type: string, unit: none}
+      conflict_type: {type: string, unit: none}
+      position_xy: {type: "tuple[number, number]", unit: m}
+      ttc_s: {type: "number|null", unit: s}
+      pet_s: {type: "number|null", unit: s}
+      minimum_distance_m: {type: number, unit: m}
+      relative_speed_m_s: {type: number, unit: m/s}
+      severity: {type: string, unit: none}
+      observed: {type: boolean, unit: none}

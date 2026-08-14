@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "1.0",
+  "generatedFrom": "actual GLB headers and JSON chunks",
+  "assets": [
+    {
+      "asset": "/assets/3d/vehicles/delivery-van.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": false,
+      "bytes": 45748,
+      "sha256": "f485664499ca786e114b251fece33db821d620b8a6c2ada04b1ab389e7892ede",
+      "triangles": 720,
+      "embeddedTextureBytes": 0,
+      "draco": false,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/3d/vehicles/delivery-van.optimized.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": true,
+      "bytes": 16832,
+      "sha256": "5a1e5fd4cc9da87a870ba209b1279e601625424c823defda5eac6eb1c555b924",
+      "triangles": 720,
+      "embeddedTextureBytes": 0,
+      "draco": true,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/3d/vehicles/urban-bus.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": false,
+      "bytes": 42092,
+      "sha256": "39bae0829b1a7cdc336148e997ebe708a33718a970e5906b91568a99cb3f2b43",
+      "triangles": 660,
+      "embeddedTextureBytes": 0,
+      "draco": false,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/3d/vehicles/urban-bus.optimized.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": true,
+      "bytes": 15152,
+      "sha256": "742424fc982c9cc548474365e8afb515f7769d3b00d54ed088fec5af89ab7e3e",
+      "triangles": 660,
+      "embeddedTextureBytes": 0,
+      "draco": true,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/3d/vehicles/urban-truck.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": false,
+      "bytes": 45952,
+      "sha256": "522b6ed7ae7c4fbf93a32b4612293d3531572d4533108569466d146c93bdbeb5",
+      "triangles": 720,
+      "embeddedTextureBytes": 0,
+      "draco": false,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/3d/vehicles/urban-truck.optimized.glb",
+      "source": "tools/asset_pipeline/build_vehicle_variants.py",
+      "optimized": true,
+      "bytes": 16940,
+      "sha256": "a622531f84f5422f0534a86ed673707bd878fd5b869277bb66debe2f5db61647",
+      "triangles": 720,
+      "embeddedTextureBytes": 0,
+      "draco": true,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/k06/k06-hero.glb",
+      "source": "assets/3d/k06/k06-hero.blend",
+      "optimized": false,
+      "bytes": 2205708,
+      "sha256": "ebc78289117e277f1f40a0421b062d6136ea86119c11261e0eba8082f6c4e394",
+      "triangles": 28452,
+      "embeddedTextureBytes": 290767,
+      "draco": false,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/k06/k06-vehicle.glb",
+      "source": "assets/3d/k06/k06-hero.blend",
+      "optimized": false,
+      "bytes": 183756,
+      "sha256": "eb0e6337516d3ad7a9ed84d2530128744aa50401af81d95f8a2fb2c3fac0e750",
+      "triangles": 2044,
+      "embeddedTextureBytes": 0,
+      "draco": false,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    },
+    {
+      "asset": "/assets/k06/k06-vehicle.optimized.glb",
+      "source": "assets/3d/k06/k06-hero.blend",
+      "optimized": true,
+      "bytes": 28044,
+      "sha256": "9bad1b9bca63100225a920f712ff43bb8f8a1b9fccbf5855a0d278f58ffc2af4",
+      "triangles": 2044,
+      "embeddedTextureBytes": 0,
+      "draco": true,
+      "ktx2": false,
+      "license": "project-authored; see docs/3d/asset_licenses.md",
+      "lod": "runtime Three.LOD for vehicle assets; source-only otherwise"
+    }
+  ],
+  "textures": [
+    {
+      "asset": "/assets/3d/textures/k06_asphalt.ktx2",
+      "source": "assets/3d/k06/textures/k06_asphalt.png",
+      "bytes": 11192,
+      "sha256": "c50c4b7dce6b701c470e7c6ada288ea10183382c0145242134284f3688204f50",
+      "format": "KTX2",
+      "vkFormat": 0,
+      "typeSize": 1,
+      "width": 256,
+      "height": 256,
+      "depth": 0,
+      "layers": 0,
+      "faces": 1,
+      "levels": 9,
+      "supercompressionScheme": 1,
+      "license": "project-authored; see docs/3d/asset_licenses.md"
+    }
+  ],
+  "runtimeDecoders": {
+    "draco": "/assets/decoders/draco/",
+    "ktx2Basis": "/assets/decoders/basis/"
+  }
+}

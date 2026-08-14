@@ -1,0 +1,487 @@
+{
+  "$defs": {
+    "LaneState": {
+      "additionalProperties": false,
+      "description": "Aggregated one-second lane state.",
+      "properties": {
+        "schema_version": {
+          "default": "1.0",
+          "pattern": "^\\d+\\.\\d+$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "message_id": {
+          "format": "uuid",
+          "title": "Message Id",
+          "type": "string"
+        },
+        "trace_id": {
+          "minLength": 1,
+          "title": "Trace Id",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_type": {
+          "$ref": "#/$defs/SourceType"
+        },
+        "timestamp_utc": {
+          "format": "date-time",
+          "title": "Timestamp Utc",
+          "type": "string"
+        },
+        "simulation_time": {
+          "minimum": 0,
+          "title": "Simulation Time",
+          "type": "number"
+        },
+        "sequence_number": {
+          "minimum": 0,
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "correlation_id": {
+          "minLength": 1,
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "environment": {
+          "default": "development",
+          "minLength": 1,
+          "title": "Environment",
+          "type": "string"
+        },
+        "scenario_id": {
+          "minLength": 1,
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "experiment_id": {
+          "minLength": 1,
+          "title": "Experiment Id",
+          "type": "string"
+        },
+        "lane_id": {
+          "title": "Lane Id",
+          "type": "string"
+        },
+        "intersection_id": {
+          "title": "Intersection Id",
+          "type": "string"
+        },
+        "direction": {
+          "title": "Direction",
+          "type": "string"
+        },
+        "movement": {
+          "title": "Movement",
+          "type": "string"
+        },
+        "vehicle_count": {
+          "minimum": 0,
+          "title": "Vehicle Count",
+          "type": "integer"
+        },
+        "connected_vehicle_count": {
+          "minimum": 0,
+          "title": "Connected Vehicle Count",
+          "type": "integer"
+        },
+        "queue_vehicle_count": {
+          "minimum": 0,
+          "title": "Queue Vehicle Count",
+          "type": "integer"
+        },
+        "queue_length_m": {
+          "minimum": 0,
+          "title": "Queue Length M",
+          "type": "number"
+        },
+        "mean_speed": {
+          "minimum": 0,
+          "title": "Mean Speed",
+          "type": "number"
+        },
+        "occupancy": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Occupancy",
+          "type": "number"
+        },
+        "arrival_rate": {
+          "minimum": 0,
+          "title": "Arrival Rate",
+          "type": "number"
+        },
+        "discharge_rate": {
+          "minimum": 0,
+          "title": "Discharge Rate",
+          "type": "number"
+        },
+        "downstream_lane_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Downstream Lane Id"
+        },
+        "downstream_occupancy": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Downstream Occupancy",
+          "type": "number"
+        },
+        "downstream_available_capacity": {
+          "minimum": 0,
+          "title": "Downstream Available Capacity",
+          "type": "number"
+        },
+        "bicycle_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Bicycle Count",
+          "type": "integer"
+        },
+        "electric_bicycle_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Electric Bicycle Count",
+          "type": "integer"
+        },
+        "bicycle_queue_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Bicycle Queue Count",
+          "type": "integer"
+        },
+        "bicycle_queue_length_m": {
+          "default": 0.0,
+          "minimum": 0,
+          "title": "Bicycle Queue Length M",
+          "type": "number"
+        },
+        "pedestrian_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Pedestrian Count",
+          "type": "integer"
+        },
+        "pedestrian_waiting_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Pedestrian Waiting Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "trace_id",
+        "source_id",
+        "source_type",
+        "simulation_time",
+        "sequence_number",
+        "correlation_id",
+        "scenario_id",
+        "experiment_id",
+        "lane_id",
+        "intersection_id",
+        "direction",
+        "movement",
+        "vehicle_count",
+        "connected_vehicle_count",
+        "queue_vehicle_count",
+        "queue_length_m",
+        "mean_speed",
+        "occupancy",
+        "arrival_rate",
+        "discharge_rate",
+        "downstream_lane_id",
+        "downstream_occupancy",
+        "downstream_available_capacity"
+      ],
+      "title": "LaneState",
+      "type": "object"
+    },
+    "SourceType": {
+      "description": "Origin service categories used in every message envelope.",
+      "enum": [
+        "cloud",
+        "edge",
+        "vehicle",
+        "experiment",
+        "report",
+        "system",
+        "rsu"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Signal, lane and congestion state of one managed intersection.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "title": "Message Id",
+      "type": "string"
+    },
+    "trace_id": {
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "source_id": {
+      "minLength": 1,
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "title": "Timestamp Utc",
+      "type": "string"
+    },
+    "simulation_time": {
+      "minimum": 0,
+      "title": "Simulation Time",
+      "type": "number"
+    },
+    "sequence_number": {
+      "minimum": 0,
+      "title": "Sequence Number",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "minLength": 1,
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "environment": {
+      "default": "development",
+      "minLength": 1,
+      "title": "Environment",
+      "type": "string"
+    },
+    "scenario_id": {
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "experiment_id": {
+      "minLength": 1,
+      "title": "Experiment Id",
+      "type": "string"
+    },
+    "intersection_id": {
+      "title": "Intersection Id",
+      "type": "string"
+    },
+    "edge_id": {
+      "title": "Edge Id",
+      "type": "string"
+    },
+    "current_phase_id": {
+      "title": "Current Phase Id",
+      "type": "string"
+    },
+    "phase_state": {
+      "title": "Phase State",
+      "type": "string"
+    },
+    "phase_elapsed": {
+      "minimum": 0,
+      "title": "Phase Elapsed",
+      "type": "number"
+    },
+    "phase_remaining": {
+      "minimum": 0,
+      "title": "Phase Remaining",
+      "type": "number"
+    },
+    "cycle_elapsed": {
+      "minimum": 0,
+      "title": "Cycle Elapsed",
+      "type": "number"
+    },
+    "lane_states": {
+      "items": {
+        "$ref": "#/$defs/LaneState"
+      },
+      "title": "Lane States",
+      "type": "array"
+    },
+    "total_queue": {
+      "minimum": 0,
+      "title": "Total Queue",
+      "type": "integer"
+    },
+    "mean_speed": {
+      "minimum": 0,
+      "title": "Mean Speed",
+      "type": "number"
+    },
+    "throughput": {
+      "minimum": 0,
+      "title": "Throughput",
+      "type": "number"
+    },
+    "congestion_level": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Congestion Level",
+      "type": "number"
+    },
+    "spillback_risk": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Spillback Risk",
+      "type": "number"
+    },
+    "incident_state": {
+      "title": "Incident State",
+      "type": "string"
+    },
+    "emergency_priority_phase_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Emergency Priority Phase Id"
+    },
+    "communication_state": {
+      "title": "Communication State",
+      "type": "string"
+    },
+    "local_control_mode": {
+      "title": "Local Control Mode",
+      "type": "string"
+    },
+    "bicycle_queue_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Bicycle Queue Count",
+      "type": "integer"
+    },
+    "pedestrian_waiting_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Pedestrian Waiting Count",
+      "type": "integer"
+    },
+    "crossing_pedestrian_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Crossing Pedestrian Count",
+      "type": "integer"
+    },
+    "active_conflict_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Active Conflict Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "trace_id",
+    "source_id",
+    "source_type",
+    "simulation_time",
+    "sequence_number",
+    "correlation_id",
+    "scenario_id",
+    "experiment_id",
+    "intersection_id",
+    "edge_id",
+    "current_phase_id",
+    "phase_state",
+    "phase_elapsed",
+    "phase_remaining",
+    "cycle_elapsed",
+    "lane_states",
+    "total_queue",
+    "mean_speed",
+    "throughput",
+    "congestion_level",
+    "spillback_risk",
+    "incident_state",
+    "communication_state",
+    "local_control_mode"
+  ],
+  "title": "IntersectionState",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "examples": [
+    {
+      "schema_version": "1.0",
+      "trace_id": "example-trace_id",
+      "source_id": "example-source_id",
+      "source_type": "cloud",
+      "simulation_time": 0.0,
+      "sequence_number": 0,
+      "correlation_id": "example-correlation_id",
+      "environment": "development",
+      "scenario_id": "example-scenario_id",
+      "experiment_id": "example-experiment_id",
+      "intersection_id": "example-intersection_id",
+      "edge_id": "example-edge_id",
+      "current_phase_id": "example-current_phase_id",
+      "phase_state": "example-phase_state",
+      "phase_elapsed": 0.0,
+      "phase_remaining": 0.0,
+      "cycle_elapsed": 0.0,
+      "lane_states": [],
+      "total_queue": 0,
+      "mean_speed": 0.0,
+      "throughput": 0.0,
+      "congestion_level": 0.0,
+      "spillback_risk": 0.0,
+      "incident_state": "example-incident_state",
+      "emergency_priority_phase_id": null,
+      "communication_state": "example-communication_state",
+      "local_control_mode": "example-local_control_mode",
+      "bicycle_queue_count": 0,
+      "pedestrian_waiting_count": 0,
+      "crossing_pedestrian_count": 0,
+      "active_conflict_count": 0
+    }
+  ]
+}
