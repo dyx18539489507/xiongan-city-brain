@@ -63,6 +63,11 @@ npm run dev -- --host 127.0.0.1
 
 打开 `http://127.0.0.1:5173`。页面未运行实验时显示“尚未运行”，不会使用静态随机指标。
 
+网页默认进入比赛演示级 2D 仿真指挥中心，顶部可在共用同一 SUMO 真值流的
+`2D / 3D` 表现层之间切换。二维入口为 `http://127.0.0.1:5173/?view=2d`，
+三维入口为 `http://127.0.0.1:5173/?view=3d`。二维画布、数据契约、性能策略与
+运行控制说明见 [Web 2D 仿真指挥中心](docs/2d/simulation-command-center.md)。
+
 Windows 一键启动正式 Web 3D 演示（会启动一组真实 `xiongan_rongdong_20` fixed-time 实验）：
 
 ```powershell

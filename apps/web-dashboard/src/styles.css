@@ -1097,7 +1097,7 @@ button.fault-action { border-color: rgba(255, 139, 92, .55); color: #ffb495; }
   margin: 0;
   font-size: clamp(22px, 1.85vw, 30px);
   line-height: 1.08;
-  letter-spacing: -.045em;
+  letter-spacing: 0;
   color: #f7ffff;
 }
 .unity-title p {
@@ -1156,6 +1156,24 @@ button.fault-action { border-color: rgba(255, 139, 92, .55); color: #ffb495; }
 .unity-controls button:hover { color: #e3f0ef; background: rgba(255,255,255,.05); }
 .unity-controls button.active { color: #05231d; background: var(--accent); font-weight: 700; }
 .unity-view-controls { right: 32px; bottom: 30px; }
+.unity-junction-select {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border-right: 1px solid rgba(194, 226, 223, .14);
+  color: #829d9b;
+  font-size: 9px;
+}
+.unity-junction-select select {
+  width: 132px;
+  padding: 7px 22px 7px 7px;
+  border: 0;
+  border-radius: 0;
+  color: #d8e8e7;
+  background: rgba(7, 27, 29, .82);
+  font-size: 10px;
+}
 .unity-readout {
   position: absolute;
   z-index: 3;
@@ -1230,6 +1248,7 @@ button.fault-action { border-color: rgba(255, 139, 92, .55); color: #ffb495; }
   .unity-title h1 { font-size: 27px; }
   .unity-source { top: 132px; right: auto; left: 22px; }
   .unity-view-controls { right: 22px; bottom: 24px; left: 22px; }
+  .unity-junction-select { display: none; }
   .unity-view-controls button { flex: 1; min-width: 0; padding-inline: 5px; }
   .unity-readout { left: 22px; bottom: 78px; width: calc(100% - 44px); grid-template-columns: repeat(2, 1fr); gap: 14px 0; }
   .unity-readout > div:nth-child(3) { padding-left: 0; border-left: 0; }

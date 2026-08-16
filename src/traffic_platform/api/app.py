@@ -89,6 +89,12 @@ class FaultRequest(ApiModel):
     parameters: dict[str, float | str | bool] = Field(default_factory=dict)
 
 
+class SimulationRateRequest(ApiModel):
+    """Wall-clock playback rate for an active SUMO experiment."""
+
+    rate: float | None = Field(default=None, gt=0, le=32)
+
+
 class ScenarioGenerateRequest(ApiModel):
     """Request availability or generation of a known scenario."""
 
@@ -1002,6 +1008,19 @@ def create_app(workspace: Path | None = None) -> FastAPI:
         state.digital_twin.set_status("running")
         await state._update_persisted_status(id, "running")
         return {"id": id, "status": "running"}
+
+    @app.post("/api/v1/experiments/{id}/rate")
+    async def set_experiment_rate(
+        id: str,
+        request: SimulationRateRequest,
+    ) -> dict[str, object]:
+        record = experiment(id)
+        # ``start`` schedules the runner asynchronously. Accepting ``created``
+        # avoids a race when the UI configures pacing immediately after start.
+        if record["status"] not in {"created", "running", "paused"}:
+            raise HTTPException(status_code=409, detail="experiment cannot be paced")
+        state.controls[id].set_simulation_rate(request.rate)
+        return {"id": id, "simulation_rate": request.rate}
 
     @app.post("/api/v1/experiments/{id}/stop")
     async def stop_experiment(id: str) -> dict[str, object]:

@@ -49,6 +49,13 @@ export async function lifecycle(
   return jsonRequest(`/api/v1/experiments/${experimentId}/${action}`, {method: "POST"});
 }
 
+export async function setSimulationRate(experimentId: string, rate: number | null) {
+  return jsonRequest(`/api/v1/experiments/${experimentId}/rate`, {
+    method: "POST",
+    body: JSON.stringify({rate}),
+  });
+}
+
 export async function injectFault(
   fault_type: string,
   target: string,

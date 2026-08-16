@@ -1,8 +1,12 @@
 """TraCI/libsumo lifecycle, state collection and safe actuation adapter."""
 
 import os
+import shutil
 import socket
+import subprocess
 import sys
+import tempfile
+import xml.etree.ElementTree as ET
 from collections import defaultdict
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
@@ -10,6 +14,74 @@ from pathlib import Path
 from typing import Any, Literal
 
 from traffic_platform.common.errors import ErrorCode, PlatformError
+
+_OUTPUT_FILE_OPTIONS = frozenset(
+    {
+        "--summary-output",
+        "--tripinfo-output",
+        "--statistic-output",
+        "--fcd-output",
+        "--queue-output",
+        "--emission-output",
+        "--full-output",
+        "--vehroute-output",
+    }
+)
+
+
+def _is_ascii_path(path: Path | str) -> bool:
+    """Return whether a path can be passed safely to the Windows SUMO build."""
+
+    try:
+        str(path).encode("ascii")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
+def _stage_sumo_config(config: Path, destination: Path) -> Path:
+    """Copy a SUMO config and its declared inputs into an ASCII runtime folder."""
+
+    source_root = config.parent.resolve()
+    destination.mkdir(parents=True, exist_ok=True)
+    tree = ET.parse(config)
+    external_index = 0
+    for element in tree.getroot().findall("./input/*"):
+        raw_value = element.get("value")
+        if not raw_value:
+            continue
+        staged_values: list[str] = []
+        for raw_item in raw_value.split(","):
+            item = raw_item.strip()
+            if not item:
+                continue
+            candidate = Path(item)
+            source = candidate if candidate.is_absolute() else source_root / candidate
+            source = source.resolve()
+            if not source.is_file():
+                staged_values.append(item)
+                continue
+            try:
+                relative = source.relative_to(source_root)
+            except ValueError:
+                external_index += 1
+                relative = Path(f"external-{external_index:03d}-{source.name}")
+            target = destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+            staged_values.append(relative.as_posix())
+        element.set("value", ",".join(staged_values))
+    config_output_root = destination / "config-outputs"
+    for element in tree.getroot().findall("./output/*"):
+        raw_value = element.get("value")
+        if not raw_value:
+            continue
+        output_name = Path(raw_value).name or f"{element.tag}.xml"
+        config_output_root.mkdir(parents=True, exist_ok=True)
+        element.set("value", str((config_output_root / output_name).resolve()))
+    staged_config = destination / config.name
+    tree.write(staged_config, encoding="utf-8", xml_declaration=True)
+    return staged_config
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,6 +236,8 @@ class TraciSumoAdapter:
         self._paused = False
         self._closed_lane_permissions: dict[str, tuple[str, ...]] = {}
         self._metric_callbacks: list[Callable[[NetworkSnapshot], None]] = []
+        self._runtime_stage: tempfile.TemporaryDirectory[str] | None = None
+        self._staged_output_files: list[tuple[Path, Path]] = []
 
     @property
     def running(self) -> bool:
@@ -194,11 +268,19 @@ class TraciSumoAdapter:
                 ErrorCode.SUMO_UNAVAILABLE,
                 f"SUMO binary does not exist: {binary}",
             )
+        requested_extra_args = list(extra_args or [])
+        config, requested_extra_args = self._prepare_runtime_paths(
+            config,
+            requested_extra_args,
+        )
         command = [str(binary), "-c", str(config), "--no-step-log", "true"]
         if seed is not None:
             command.extend(["--seed", str(seed)])
-        if extra_args:
-            command.extend(extra_args)
+        command.extend(requested_extra_args)
+        if not gui:
+            # SUMO 1.27.1 on Windows may abort without diagnostics when the
+            # headless binary loads a GUI view-settings file from sumocfg.
+            command.extend(["--gui-settings-file", ""])
         if self.backend == "libsumo":
             try:
                 import libsumo
@@ -215,6 +297,7 @@ class TraciSumoAdapter:
             except Exception as exc:
                 self._api = None
                 self._root_module = None
+                self._finalize_runtime_stage(copy_outputs=False)
                 raise PlatformError(
                     ErrorCode.SUMO_UNAVAILABLE,
                     f"libsumo failed to start: {exc}",
@@ -224,17 +307,42 @@ class TraciSumoAdapter:
 
             used_port = port or find_free_port()
             try:
-                traci.start(
-                    command,
-                    port=used_port,
-                    numRetries=max(1, int(self.startup_timeout_s) + 1),
-                    label=self.label,
-                )
+                retry_count = max(1, int(self.startup_timeout_s) + 1)
+                if self._runtime_stage is None:
+                    traci.start(
+                        command,
+                        port=used_port,
+                        numRetries=retry_count,
+                        label=self.label,
+                    )
+                else:
+                    process_environment = os.environ.copy()
+                    if not _is_ascii_path(self.sumo_home):
+                        process_environment.pop("SUMO_HOME", None)
+                    process = subprocess.Popen(
+                        [*command, "--remote-port", str(used_port)],
+                        cwd=self._runtime_stage.name,
+                        env=process_environment,
+                    )
+                    try:
+                        traci.init(
+                            used_port,
+                            numRetries=retry_count,
+                            host="localhost",
+                            label=self.label,
+                            proc=process,
+                        )
+                    except Exception:
+                        if process.poll() is None:
+                            process.terminate()
+                            process.wait(timeout=5)
+                        raise
                 self._root_module = traci
                 self._api = traci.getConnection(self.label)
             except Exception as exc:
                 self._api = None
                 self._root_module = None
+                self._finalize_runtime_stage(copy_outputs=False)
                 raise PlatformError(
                     ErrorCode.SUMO_UNAVAILABLE,
                     (
@@ -278,6 +386,7 @@ class TraciSumoAdapter:
         """Close the connection and terminate the owned SUMO process."""
 
         if not self._running:
+            self._finalize_runtime_stage(copy_outputs=False)
             return
         try:
             if self.backend == "libsumo":
@@ -291,6 +400,68 @@ class TraciSumoAdapter:
             self._root_module = None
             self._running = False
             self._paused = False
+            self._finalize_runtime_stage(copy_outputs=True)
+
+    def _prepare_runtime_paths(
+        self,
+        config: Path,
+        extra_args: list[str],
+    ) -> tuple[Path, list[str]]:
+        """Stage non-ASCII Windows paths so SUMO can load and write reliably."""
+
+        if os.name != "nt":
+            return config, extra_args
+        output_indexes = [
+            index + 1
+            for index, value in enumerate(extra_args[:-1])
+            if value in _OUTPUT_FILE_OPTIONS
+        ]
+        path_values: list[Path | str] = [config, self.sumo_home]
+        path_values.extend(extra_args[index] for index in output_indexes)
+        if all(_is_ascii_path(value) for value in path_values):
+            return config, extra_args
+
+        runtime_root = os.environ.get("SUMO_RUNTIME_DIR")
+        self._runtime_stage = tempfile.TemporaryDirectory(
+            prefix="xiongan-sumo-",
+            dir=runtime_root or None,
+        )
+        stage_root = Path(self._runtime_stage.name)
+        if not _is_ascii_path(stage_root):
+            self._finalize_runtime_stage(copy_outputs=False)
+            raise PlatformError(
+                ErrorCode.SUMO_UNAVAILABLE,
+                (
+                    "SUMO requires an ASCII runtime path on Windows; set "
+                    "SUMO_RUNTIME_DIR to a writable ASCII-only directory"
+                ),
+            )
+        staged_config = _stage_sumo_config(config, stage_root / "scenario")
+        rewritten_args = list(extra_args)
+        output_root = stage_root / "outputs"
+        for sequence, index in enumerate(output_indexes, start=1):
+            destination = Path(extra_args[index])
+            if _is_ascii_path(destination):
+                continue
+            output_root.mkdir(parents=True, exist_ok=True)
+            staged_output = output_root / f"{sequence:02d}-{destination.name}"
+            rewritten_args[index] = str(staged_output)
+            self._staged_output_files.append((staged_output, destination))
+        return staged_config, rewritten_args
+
+    def _finalize_runtime_stage(self, *, copy_outputs: bool) -> None:
+        """Copy completed SUMO outputs back and release the temporary mirror."""
+
+        if copy_outputs:
+            for staged, destination in self._staged_output_files:
+                if not staged.is_file():
+                    continue
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(staged, destination)
+        self._staged_output_files.clear()
+        if self._runtime_stage is not None:
+            self._runtime_stage.cleanup()
+            self._runtime_stage = None
 
     def reset(self, config_file: Path, *, seed: int | None = None) -> None:
         """Stop and restart the same adapter with a new deterministic seed."""

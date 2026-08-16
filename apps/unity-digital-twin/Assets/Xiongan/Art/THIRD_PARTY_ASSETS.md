@@ -3,24 +3,31 @@
 ## Pure-three-dimensional runtime boundary
 
 The runtime contains no background photograph, road photograph, wall image,
-facade atlas, PBR surface image, or HDRI.  Roads, curbs, walls, windows, roofs,
-vegetation and sky are produced from real meshes, solid material parameters,
-procedural geometry, Unity lights and the procedural sky shader.
+facade atlas, terrain image, surface plate or HDRI. Roads, curbs, walls,
+windows, roofs, terrain and sky are produced from real meshes, solid material
+parameters, procedural geometry, Unity lights and the procedural sky shader.
+The editor build gate rejects any raster texture assigned to a road, wall or
+facade material and rejects raster files whose names imply road, asphalt, wall,
+facade, terrain, building or backdrop use.
 
 Previously generated visual plates and downloaded surface images are retained
 only under `outputs/3d/retired-image-assets` for audit history.  They are outside
 Unity `Assets`/`Resources`, cannot enter the WebGL player, and are not used by
 the runtime.
 
-The retained third-party *mesh geometry* is released under CC0. Its image textures are not used by the runtime.
+The retained third-party mesh geometry is released under CC0. The Island Tree
+and Street Lamp assets use their own 1K CC0 material maps exclusively on the
+corresponding three-dimensional prop meshes. They are not used on any road,
+ground, building, wall, background plane or screen-facing scene plate. The
+objects retain full mesh depth, camera parallax, occlusion and cast shadows.
 
 | Asset | Use | Source |
 |---|---|---|
 | Asphalt 03 | retired reference download; not packaged or rendered | https://polyhaven.com/a/asphalt_03 |
 | Concrete Pavement 03 | retired reference download; not packaged or rendered | https://polyhaven.com/a/concrete_pavement_03 |
 | Leafy Grass | retired reference download; not packaged or rendered | https://polyhaven.com/a/leafy_grass |
-| Island Tree 02 | high-detail foreground street trees | https://polyhaven.com/a/island_tree_02 |
-| Street Lamp 01 | high-detail foreground street lighting | https://polyhaven.com/a/street_lamp_01 |
+| Island Tree 02 | high-detail foreground mesh plus 1K bark/leaf PBR maps | https://polyhaven.com/a/island_tree_02 |
+| Street Lamp 01 | high-detail foreground mesh plus 1K prop material map | https://polyhaven.com/a/street_lamp_01 |
 | Kloofendal 48d Partly Cloudy Pure Sky | retired reference download; not packaged or rendered | https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky |
 | 3D Car by Lyricsz | SUMO passenger-vehicle mesh geometry | https://opengameart.org/content/3d-car-0 |
 | Low Poly Car 3D by byzmod3d | alternate SUMO passenger-vehicle mesh geometry | https://opengameart.org/content/low-poly-car-3d |

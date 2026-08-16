@@ -1,0 +1,6 @@
+<linker>
+  <assembly fullname="Xiongan.DigitalTwin.Runtime" preserve="all" />
+  <assembly fullname="UnityEngine.PhysicsModule">
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+  </assembly>
+</linker>

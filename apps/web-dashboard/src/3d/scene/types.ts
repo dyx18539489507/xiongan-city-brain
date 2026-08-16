@@ -23,12 +23,26 @@ export type SceneJunction = {
 };
 
 export type SceneEdge = {
+  sceneId?: string;
   sumoEdgeId: string;
+  roadId?: string | null;
   fromJunctionId: string | null;
   toJunctionId: string | null;
   function: string;
   roadType: string | null;
+  priority?: number;
+  shape?: Point2[];
   laneIds: string[];
+  lengthM?: number;
+};
+
+export type SceneRoad = {
+  sceneId: string;
+  sourceRoadId: string;
+  name: string | null;
+  roadClass: string;
+  edgeIds: string[];
+  provenance: string;
 };
 
 export type SceneLane = {
@@ -40,6 +54,10 @@ export type SceneLane = {
   laneKind: string;
   shape: Point2[];
   widthM: number;
+  speedMS?: number;
+  lengthM?: number;
+  allow?: string[];
+  disallow?: string[];
 };
 
 export type SceneCrossing = {
@@ -140,6 +158,7 @@ export type StaticSceneDocument = {
     sceneBounds: SceneBounds;
   };
   junctions: SceneJunction[];
+  roads?: SceneRoad[];
   edges: SceneEdge[];
   lanes: SceneLane[];
   crossings: SceneCrossing[];
@@ -160,6 +179,7 @@ export function assertStaticScene(value: unknown): asserts value is StaticSceneD
   if (
     !scene.coordinateSystem ||
     !Array.isArray(scene.junctions) ||
+    !Array.isArray(scene.roads) ||
     !Array.isArray(scene.edges) ||
     !Array.isArray(scene.lanes) ||
     !Array.isArray(scene.crossings) ||

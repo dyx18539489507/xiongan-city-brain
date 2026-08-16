@@ -1,4 +1,4 @@
-import {LineChart} from "echarts/charts";
+import {BarChart, LineChart} from "echarts/charts";
 import {
   GridComponent,
   LegendComponent,
@@ -14,6 +14,7 @@ export function initTrendChart(element: HTMLDivElement): echarts.EChartsType {
   if (!registered) {
     echarts.use([
       LineChart,
+      BarChart,
       GridComponent,
       LegendComponent,
       TooltipComponent,
@@ -23,3 +24,5 @@ export function initTrendChart(element: HTMLDivElement): echarts.EChartsType {
   }
   return echarts.init(element, undefined, {renderer: "canvas"});
 }
+
+export const initTrafficChart = initTrendChart;

@@ -45,17 +45,23 @@ if (Test-Path -LiteralPath $statePath) {
     }
 }
 
-$venvCommand = Join-Path $workspace '.venv\Scripts\traffic-platform.exe'
+$venvPython = Join-Path $workspace '.venv\Scripts\python.exe'
 $viteEntry = Join-Path $workspace 'apps\web-dashboard\node_modules\vite\bin\vite.js'
 $scenePath = Join-Path $workspace 'generated\scenes\xiongan_rongdong_20.scene.json'
-if (-not (Test-Path -LiteralPath $venvCommand)) { throw "Missing virtual environment command: $venvCommand" }
+if (-not (Test-Path -LiteralPath $venvPython)) { throw "Missing virtual environment Python: $venvPython" }
 if (-not (Test-Path -LiteralPath $viteEntry)) { throw "Missing Vite dependencies. Run npm install in apps\web-dashboard." }
 if (-not (Test-Path -LiteralPath $scenePath)) { throw "Missing generated 3D scene. Run deployment\scripts\task.ps1 generate-3d-scene." }
 
 $nodeCommand = (Get-Command node.exe -ErrorAction Stop).Source
 $sumoRoot = $env:SUMO_HOME
 if (-not $sumoRoot) {
-    $sumoRoot = Join-Path $env:LOCALAPPDATA 'xiongan-traffic-brain\sumo'
+    $workspaceSumo = Join-Path $workspace '.tools\sumo'
+    $portableSumo = Join-Path $workspace 'exports\xiongan_teammate_portable_20260812\runtime\sumo'
+    $sumoRoot = if (Test-Path -LiteralPath (Join-Path $workspaceSumo 'bin\sumo.exe')) {
+        $workspaceSumo
+    } else {
+        $portableSumo
+    }
 }
 $sumoBinary = Join-Path $sumoRoot 'bin\sumo.exe'
 if (-not (Test-Path -LiteralPath $sumoBinary)) {
@@ -71,8 +77,8 @@ $frontendProcess = $null
 try {
     $env:SUMO_HOME = $sumoRoot
     $env:VITE_API_TARGET = "http://127.0.0.1:$BackendPort"
-    $backendProcess = Start-Process -FilePath $venvCommand `
-        -ArgumentList 'serve', '--host', '127.0.0.1', '--port', $BackendPort `
+    $backendProcess = Start-Process -FilePath $venvPython `
+        -ArgumentList '-m', 'traffic_platform.cli', 'serve', '--host', '127.0.0.1', '--port', $BackendPort `
         -WorkingDirectory $workspace `
         -RedirectStandardOutput (Join-Path $logDir 'backend.stdout.log') `
         -RedirectStandardError (Join-Path $logDir 'backend.stderr.log') `

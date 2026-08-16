@@ -5,11 +5,11 @@ import {
   injectFault,
   lifecycle,
   loadInventory,
+  setSimulationRate,
 } from "./api";
-import {Inspector} from "./components/Inspector";
-import {UnityScene} from "./components/UnityScene";
+import {SimulationCommandCenter} from "./components/SimulationCommandCenter";
+import {AlgorithmComparisonChart} from "./components/AlgorithmComparisonChart";
 import {Timeline} from "./components/Timeline";
-import {TopologyView} from "./components/TopologyView";
 import {TrendChart} from "./components/TrendChart";
 import {useDigitalTwinPlayback} from "./3d/replay/useDigitalTwinPlayback";
 import type {
@@ -20,7 +20,6 @@ import type {
   RuntimeEvent,
   Scenario,
   TimelineEvent,
-  TopologyEdge,
 } from "./types";
 
 const dash = "—";
@@ -73,12 +72,12 @@ export function App() {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
   const [nodes, setNodes] = useState<IntersectionNode[]>([]);
-  const [edges, setEdges] = useState<TopologyEdge[]>([]);
   const [scenarioId, setScenarioId] = useState("xiongan_rongdong_20");
   const [scenarioProfile, setScenarioProfile] = useState("BASE");
   const [algorithm, setAlgorithm] = useState("coordinated-max-pressure");
   const [seed, setSeed] = useState(42);
   const [durationS, setDurationS] = useState(1800);
+  const [simulationRate, setSimulationRateState] = useState<number | null>(null);
   const [experimentId, setExperimentId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<RealtimeSnapshot>({
@@ -99,7 +98,8 @@ export function App() {
   const [candidateChoice, setCandidateChoice] = useState("");
   const previousRef = useRef<RealtimeSnapshot | null>(null);
   const replayExperimentRef = useRef<string | null>(null);
-  const showcaseReplayStartedRef = useRef(false);
+  const activeExperimentRef = useRef<string | null>(null);
+  const simulationRateRef = useRef<number | null>(null);
 
   useEffect(() => {
     loadInventory()
@@ -107,7 +107,6 @@ export function App() {
         setScenarios(inventory.scenarios);
         setAlgorithms(inventory.algorithms);
         setNodes(inventory.intersections);
-        setEdges(inventory.topologyEdges);
         setAlgorithm(inventory.activeAlgorithm);
         setSelectedId(
           inventory.intersections.find((item) => item.display_id === "K08")
@@ -129,25 +128,6 @@ export function App() {
     setCandidateChoice((current) => current || actual[0]?.experimentId || "");
   }, [playback.replays]);
 
-  useEffect(() => {
-    if (showcaseReplayStartedRef.current || !playback.replays.length) return;
-    const showcase = playback.replays[0];
-    const timer = window.setTimeout(() => {
-      if (showcaseReplayStartedRef.current) return;
-      showcaseReplayStartedRef.current = true;
-      playback
-        .loadReplay(showcase.experimentId)
-        .then(() => {
-          playback.seekReplay(Math.min(311, Math.max(0, showcase.simulationTimeS - 359)));
-        })
-        .catch((reason: unknown) => {
-          showcaseReplayStartedRef.current = false;
-          setError(String(reason));
-        });
-    }, 3200);
-    return () => window.clearTimeout(timer);
-  }, [playback.loadReplay, playback.replays, playback.seekReplay, playback.toggleReplay]);
-
   const replaySnapshot = useMemo<RealtimeSnapshot>(() => {
     const metrics = digitalTwin.state.metrics as unknown as Partial<RealtimeSnapshot>;
     const intersections = digitalTwin.state.intersectionMetrics.map((item) => ({
@@ -166,6 +146,18 @@ export function App() {
   }, [digitalTwin.state, playback.replay.playing]);
 
   const viewSnapshot = playback.mode === "replay" ? replaySnapshot : snapshot;
+
+  const currentScenario = scenarios.find((item) => item.scenario_id === scenarioId);
+  const profileOptions = [
+    {
+      code: "BASE",
+      name: "综合扰动主场景",
+      flow_multiplier: 1,
+      communication_profile: "configured",
+      disturbance_types: [],
+    },
+    ...(currentScenario?.profiles ?? []),
+  ];
 
   useEffect(() => {
     if (playback.mode !== "replay" || !digitalTwin.state.initialized) return;
@@ -252,24 +244,6 @@ export function App() {
     };
   }, []);
 
-  const selectedNode =
-    nodes.find((node) => node.intersection_id === selectedId) ?? null;
-  const selectedRealtime =
-    viewSnapshot.intersections?.find((item) => item.intersection_id === selectedId) ??
-    null;
-  const currentScenario = scenarios.find(
-    (item) => item.scenario_id === scenarioId,
-  );
-  const profileOptions = [
-    {
-      code: "BASE",
-      name: "综合扰动主场景",
-      flow_multiplier: 1,
-      communication_profile: "configured",
-      disturbance_types: [],
-    },
-    ...(currentScenario?.profiles ?? []),
-  ];
   const coreIds = nodes
     .filter((node) => node.role === "core_corridor")
     .map((node) => node.intersection_id);
@@ -318,6 +292,7 @@ export function App() {
 
   const start = () =>
     runCommand("正在启动 SUMO 与协同链路", async () => {
+      activeExperimentRef.current = null;
       const id = await createAndStartExperiment({
         scenario_id: scenarioId,
         profile: scenarioProfile,
@@ -325,6 +300,10 @@ export function App() {
         seed,
         duration_s: durationS,
       });
+      activeExperimentRef.current = id;
+      if (simulationRateRef.current !== null) {
+        await setSimulationRate(id, simulationRateRef.current);
+      }
       setExperimentId(id);
       setHistory([]);
       setLocalEvents([
@@ -343,6 +322,7 @@ export function App() {
       if (experimentId && ["running", "paused"].includes(snapshot.status)) {
         await lifecycle(experimentId, "stop");
       }
+      activeExperimentRef.current = null;
       setExperimentId(null);
       setHistory([]);
       setLocalEvents([]);
@@ -371,7 +351,7 @@ export function App() {
       ]);
     });
 
-  const kpis = useMemo(
+  const kpis = useMemo<Array<[string, string, string]>>(
     () => [
       ["平均速度", formatMetric(viewSnapshot.mean_speed_m_s), "m/s"],
       ["平均等待", formatMetric(viewSnapshot.waiting_time_s), "s"],
@@ -392,86 +372,19 @@ export function App() {
     [averageLatency, viewSnapshot],
   );
 
+  const cockpitHistory = playback.mode === "replay" ? replayHistory : history;
+  const cockpitComparison = baselineReplay?.actualRun && candidateReplay?.actualRun
+    && candidateReplay.experimentId === viewSnapshot.experiment_id
+    ? {
+        baselineLabel: baselineReplay.algorithm ?? "Baseline",
+        candidateLabel: candidateReplay.algorithm ?? "Candidate",
+        baseline: baselineReplay.summaryMetrics,
+        candidate: candidateReplay.summaryMetrics,
+      }
+    : null;
+
   return (
     <main className="app-shell">
-      <header className="status-rail">
-        <div className="brand-block">
-          <span className="brand-mark">XA</span>
-          <div>
-            <strong>雄安交通协同控制台</strong>
-            <small>ROAD · EDGE · CLOUD</small>
-          </div>
-        </div>
-        <dl>
-          <div>
-            <dt>场景</dt>
-            <dd>{currentScenario?.display_name ?? "加载中"}</dd>
-          </div>
-          <div>
-            <dt>工况</dt>
-            <dd>{viewSnapshot.scenario_profile ?? scenarioProfile}</dd>
-          </div>
-          <div>
-            <dt>实验</dt>
-            <dd>{viewSnapshot.experiment_id ?? experimentId ?? "尚未创建"}</dd>
-          </div>
-          <div>
-            <dt>算法</dt>
-            <dd>{viewSnapshot.algorithm ?? algorithm}</dd>
-          </div>
-          <div>
-            <dt>仿真时间</dt>
-            <dd>
-              {viewSnapshot.simulation_time_s === undefined
-                ? dash
-                : `T+${viewSnapshot.simulation_time_s.toFixed(0)}s`}
-            </dd>
-          </div>
-        </dl>
-        <div className="live-states">
-          <span
-            className={`status-chip ${
-              viewSnapshot.cloud_online === false ? "fault" : "ok"
-            }`}
-          >
-            云端 {viewSnapshot.cloud_online === false ? "离线" : "在线"}
-          </span>
-          <span
-            className={`status-chip ${
-              viewSnapshot.mqtt_online === false ? "fault" : "ok"
-            }`}
-          >
-            MQTT {viewSnapshot.mqtt_online === false ? "中断" : "在线"}
-          </span>
-          <span className={`status-chip ${connection}`}>
-            WS {connection === "online" ? "在线" : "重连中"}
-          </span>
-          <span className="status-chip mode">
-            {playback.mode === "replay" ? "REPLAY" : (viewSnapshot.fallback_mode ?? "IDLE")}
-          </span>
-        </div>
-      </header>
-
-      <UnityScene
-        digitalTwin={digitalTwin}
-        node={selectedNode}
-        realtime={selectedRealtime}
-        simulationTime={viewSnapshot.simulation_time_s}
-        status={viewSnapshot.status}
-        websocketOnline={connection === "online"}
-        sourceMode={playback.mode}
-      />
-
-      <section className="kpi-strip" aria-label="实时关键指标">
-        {kpis.map(([label, value, unit]) => (
-          <div key={label}>
-            <span>{label}</span>
-            <strong>{value}</strong>
-            <small>{unit}</small>
-          </div>
-        ))}
-      </section>
-
       {commandLabel && (
         <div className="command-banner" role="status">
           <span />
@@ -484,21 +397,63 @@ export function App() {
         </div>
       )}
 
-      <div className="primary-grid">
-        <TopologyView
-          nodes={nodes}
-          edges={edges}
-          realtime={viewSnapshot.intersections ?? []}
-          selectedId={selectedId}
-          activeDisturbances={viewSnapshot.active_disturbances ?? []}
-          congestedIntersections={viewSnapshot.congested_intersection_ids ?? []}
-          spillbackEdges={viewSnapshot.spillback_edges ?? []}
-          onSelect={setSelectedId}
-        />
-        <Inspector node={selectedNode} realtime={selectedRealtime} />
-      </div>
+      <SimulationCommandCenter
+        algorithm={algorithm}
+        algorithms={algorithms}
+        commandBusy={commandBusy}
+        digitalTwin={digitalTwin}
+        durationS={durationS}
+        experimentId={experimentId}
+        comparison={cockpitComparison}
+        history={cockpitHistory}
+        nodes={nodes}
+        onAlgorithmChange={setAlgorithm}
+        onClearFaults={() => runCommand("正在清除故障", clearFaults)}
+        onDurationChange={setDurationS}
+        onFault={fault}
+        onIntersectionSelect={setSelectedId}
+        onGoLive={playback.goLive}
+        onLoadReplay={(id) => runCommand("正在载入真实仿真回放", () => playback.loadReplay(id))}
+        onPause={() => experimentId && runCommand("正在暂停", () => lifecycle(experimentId, "pause"))}
+        onProfileChange={setScenarioProfile}
+        onReplaySpeed={playback.setReplaySpeed}
+        onSeekReplay={playback.seekReplay}
+        onReset={reset}
+        onResume={() => experimentId && runCommand("正在继续", () => lifecycle(experimentId, "resume"))}
+        onScenarioChange={(value) => { setScenarioId(value); setScenarioProfile("BASE"); }}
+        onSeedChange={setSeed}
+        onSimulationRate={(value) => {
+          simulationRateRef.current = value;
+          setSimulationRateState(value);
+          const activeExperimentId = activeExperimentRef.current;
+          if (activeExperimentId) {
+            void runCommand("正在调整 SUMO 运行倍速", () => setSimulationRate(activeExperimentId, value));
+          }
+        }}
+        onStart={start}
+        onStop={() => experimentId && runCommand("正在停止", () => lifecycle(experimentId, "stop"))}
+        onToggleReplay={playback.toggleReplay}
+        replayPlaying={playback.replay.playing}
+        replayBusy={playback.replayBusy}
+        replayCurrentTimeS={playback.replay.currentTimeS}
+        replayDurationS={playback.replay.durationS}
+        replayLoaded={playback.replay.loaded}
+        replaySpeed={playback.replay.speed}
+        replays={playback.replays}
+        scenarioId={scenarioId}
+        scenarioProfile={scenarioProfile}
+        scenarios={scenarios}
+        seed={seed}
+        simulationRate={simulationRate}
+        selectedIntersectionId={selectedId}
+        selectedReplayId={playback.selectedReplayId}
+        snapshot={viewSnapshot}
+        sourceMode={playback.mode}
+        timelineEvents={timelineEvents}
+        websocketOnline={connection === "online"}
+      />
 
-      <div className="analysis-grid">
+      {false && <><div className="analysis-grid">
         <section className="trend-section" aria-labelledby="trend-title">
           <div className="section-heading compact">
             <div>
@@ -631,6 +586,12 @@ export function App() {
               ))}
             </select>
           </label>
+          <AlgorithmComparisonChart
+            baseline={baselineReplay?.summaryMetrics}
+            baselineLabel={baselineReplay?.algorithm ?? "Baseline"}
+            candidate={candidateReplay?.summaryMetrics}
+            candidateLabel={candidateReplay?.algorithm ?? "Candidate"}
+          />
           <div className="comparison-values">
             {comparisonMetrics.map(([key, label, higherBetter]) => {
               const baseline = baselineReplay?.summaryMetrics?.[key];
@@ -878,7 +839,7 @@ export function App() {
             导出报告
           </a>
         </div>
-      </section>
+      </section></>}
     </main>
   );
 }

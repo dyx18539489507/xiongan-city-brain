@@ -1,23 +1,29 @@
 import {expect, test} from "@playwright/test";
 import path from "node:path";
 
-test("renders the actual twenty-intersection operating surface", async ({page}) => {
+test("renders the map-first SUMO 2D cockpit and switches views", async ({page}) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
-  await page.goto("/");
-  await page.waitForTimeout(1500);
+  await page.goto("/?view=2d");
+  const canvas = page.getByLabel("SUMO 实时二维交通数字孪生地图");
+  await expect(canvas).toBeVisible({timeout: 180_000});
+  await expect(page.locator(".scene-loading")).toHaveCount(0, {timeout: 180_000});
   expect(pageErrors).toEqual([]);
-  await expect(page.getByText("雄安交通协同控制台")).toBeVisible();
-  await expect(page.getByText("容东 20 路口协同拓扑")).toBeVisible();
-  await expect(page.locator(".intersection-node")).toHaveCount(20);
-  await expect(page.getByText("实验与故障控制")).toBeVisible();
+  await expect(page.getByRole("heading", {name: "雄安城市交通数字孪生"})).toBeVisible();
+  await expect(page.getByText("SUMO / TraCI LIVE")).toBeVisible();
+  await expect(page.getByText(/20\s*信号机/)).toBeVisible();
+  await expect(page.getByRole("button", {name: /2D/})).toHaveClass(/active/);
   const profile = page.getByLabel("仿真工况");
-  await expect(profile.getByRole("option")).toHaveCount(8);
-  await profile.selectOption("S04");
-  await expect(profile).toHaveValue("S04");
+  await expect(profile.first().getByRole("option")).toHaveCount(8);
+  await profile.first().selectOption("S04");
+  await expect(profile.first()).toHaveValue("S04");
   await expect(
-    page.getByRole("option", {name: "主办方20个独立路口复现集（资料复现集）"}),
+    page.getByRole("option", {name: "主办方20个独立路口复现集"}),
   ).toHaveAttribute("disabled", "");
+  await page.getByRole("button", {name: /3D/}).click();
+  await expect(page.locator(".twin-cockpit.view-3d")).toBeVisible();
+  await page.getByRole("button", {name: /2D/}).click();
+  await expect(canvas).toBeVisible();
 });
 
 test("loads the WebGL digital twin and applies real scene controls", async ({page}) => {
@@ -25,6 +31,7 @@ test("loads the WebGL digital twin and applies real scene controls", async ({pag
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
 
   await page.goto("/");
+  await page.getByRole("button", {name: /3D/}).click();
   const scene = page.getByRole("region", {
     name: "雄安交通 Unity 三维数字孪生",
   });

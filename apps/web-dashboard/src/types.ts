@@ -88,6 +88,7 @@ export type RealtimeSnapshot = {
   scenario_profile?: string;
   algorithm?: string;
   simulation_time_s?: number;
+  simulation_rate?: number | null;
   mean_speed_m_s?: number;
   total_queue_vehicles?: number;
   total_queue_m?: number;

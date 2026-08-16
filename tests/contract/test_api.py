@@ -81,6 +81,33 @@ def test_experiment_lifecycle_contract_before_run() -> None:
         assert missing.json()["error_code"] == "RESOURCE_NOT_FOUND"
 
 
+def test_experiment_accepts_wall_clock_rate_without_changing_request() -> None:
+    app = create_app()
+    with TestClient(app) as client:
+        created = client.post(
+            "/api/v1/experiments",
+            json={
+                "scenario_id": "xiongan_rongdong_20",
+                "algorithm": "fixed-time",
+                "seed": 12,
+                "duration_s": 5.0,
+                "gui": False,
+            },
+        )
+        experiment_id = created.json()["id"]
+        response = client.post(
+            f"/api/v1/experiments/{experiment_id}/rate",
+            json={"rate": 4.0},
+        )
+        assert response.status_code == 200
+        assert response.json()["simulation_rate"] == 4.0
+        assert app.state.platform.controls[experiment_id].simulation_rate == 4.0
+        assert client.post(
+            f"/api/v1/experiments/{experiment_id}/rate",
+            json={"rate": None},
+        ).json()["simulation_rate"] is None
+
+
 def test_validated_scenario_profile_is_preserved_in_experiment_request() -> None:
     app = create_app()
     with TestClient(app) as client:

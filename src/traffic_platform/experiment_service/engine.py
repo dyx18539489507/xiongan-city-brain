@@ -111,6 +111,10 @@ class ExperimentControl:
         self.roadwork_active = False
         self.channel_config = ChannelConfig()
         self.simulation_time_s = 0.0
+        # ``None`` preserves the historical maximum-throughput runner. A finite
+        # value paces SUMO simulation seconds against wall-clock seconds without
+        # changing SUMO state, demand or control decisions.
+        self.simulation_rate: float | None = None
         self._active_faults: dict[
             str,
             tuple[float, dict[str, float | str | bool]],
@@ -133,6 +137,13 @@ class ExperimentControl:
 
         self.stop_requested = True
         self._running.set()
+
+    def set_simulation_rate(self, rate: float | None) -> None:
+        """Set wall-clock pacing; ``None`` means maximum computation speed."""
+
+        if rate is not None and (rate <= 0 or rate > 32):
+            raise ValueError("simulation rate must be in (0, 32]")
+        self.simulation_rate = rate
 
     async def wait_until_running(self) -> None:
         """Wait without blocking the service event loop."""
@@ -485,6 +496,7 @@ class ExperimentRunner:
             broker_outage_end_s: float | None = None
             edge_outage_end_s: float | None = None
             distributed_control_mode = EdgeMode.EDGE_AUTONOMOUS.value
+            last_paced_simulation_time: float | None = None
             while adapter.running:
                 await self.control.wait_until_running()
                 if self.control.stop_requested:
@@ -495,6 +507,7 @@ class ExperimentRunner:
                         }
                     )
                     break
+                step_wall_started = time.perf_counter()
                 network = await asyncio.to_thread(adapter.step)
                 if network.simulation_time_s > self.config.duration_s:
                     break
@@ -1179,6 +1192,7 @@ class ExperimentRunner:
                                 else None
                             ),
                             "mqtt_online": self.control.broker_online,
+                            "simulation_rate": self.control.simulation_rate,
                             "active_disturbances": (regional.active_disturbances),
                             "spillback_edges": regional.spillback_edges,
                             "congested_intersection_ids": (regional.congested_intersections),
@@ -1186,7 +1200,19 @@ class ExperimentRunner:
                             **sample_dict,
                         }
                     )
-                await asyncio.sleep(0)
+                simulation_rate = self.control.simulation_rate
+                if simulation_rate is None or last_paced_simulation_time is None:
+                    await asyncio.sleep(0)
+                else:
+                    simulated_delta = max(
+                        0.0,
+                        network.simulation_time_s - last_paced_simulation_time,
+                    )
+                    wall_budget = simulated_delta / simulation_rate
+                    await asyncio.sleep(
+                        max(0.0, wall_budget - (time.perf_counter() - step_wall_started))
+                    )
+                last_paced_simulation_time = network.simulation_time_s
         finally:
             adapter.stop_simulation()
             if controller is not None:

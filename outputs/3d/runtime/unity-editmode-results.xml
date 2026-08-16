@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.0807194">
+  <test-suite type="TestSuite" id="1000" name="雄安交通协同控制数字孪生" fullname="雄安交通协同控制数字孪生" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.080719" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1009" name="Xiongan.DigitalTwin.Tests.EditMode.dll" fullname="D:/程序项目/面向雄安新区的城市大脑/apps/unity-digital-twin/Library/ScriptAssemblies/Xiongan.DigitalTwin.Tests.EditMode.dll" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.065753" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="15884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1010" name="Xiongan" fullname="Xiongan" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.064755" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1011" name="DigitalTwin" fullname="Xiongan.DigitalTwin" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.064303" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1012" name="Tests" fullname="Xiongan.DigitalTwin.Tests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.063785" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1006" name="CoordinateServiceTests" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.061602" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1007" name="K06UsesTheSharedFloatingOrigin" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests.K06UsesTheSharedFloatingOrigin" methodname="K06UsesTheSharedFloatingOrigin" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" seed="779232780" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.030283" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="SumoHeadingMapsToUnityYaw" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests.SumoHeadingMapsToUnityYaw" methodname="SumoHeadingMapsToUnityYaw" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" seed="385919910" result="Passed" start-time="2026-08-15 08:53:45Z" end-time="2026-08-15 08:53:45Z" duration="0.007022" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/15493/AppData/LocalLow/Xiongan Traffic Brain/雄安交通协同控制数字孪生\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

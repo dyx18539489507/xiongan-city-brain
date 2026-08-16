@@ -5,6 +5,8 @@ import type {IntersectionNode, IntersectionRealtime} from "../types";
 type UnitySceneProps = {
   digitalTwin: DigitalTwinStream;
   node: IntersectionNode | null;
+  nodes: IntersectionNode[];
+  onNodeSelect: (id: string | null) => void;
   realtime: IntersectionRealtime | null;
   simulationTime?: number;
   status: string;
@@ -34,6 +36,8 @@ const showcaseJunctionId = "cluster_11122023464_11122023574";
 export function UnityScene({
   digitalTwin,
   node,
+  nodes,
+  onNodeSelect,
   realtime,
   simulationTime,
   status,
@@ -163,6 +167,21 @@ export function UnityScene({
       </div>
 
       <div className="unity-controls unity-view-controls" aria-label="摄像机视角">
+        <label className="unity-junction-select">
+          <span>路口</span>
+          <select
+            aria-label="选择三维路口"
+            onChange={(event) => onNodeSelect(event.target.value || null)}
+            value={node?.intersection_id ?? ""}
+          >
+            <option value="">K08 主展示区</option>
+            {nodes.map((item) => (
+              <option key={item.intersection_id} value={item.intersection_id}>
+                {item.display_id} · {item.display_name}
+              </option>
+            ))}
+          </select>
+        </label>
         {views.map(([key, label]) => (
           <button key={key} type="button" className={view === key ? "active" : ""} onClick={() => changeView(key)}>
             {label}

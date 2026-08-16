@@ -68,6 +68,12 @@ paths:
     post: {$ref: "#/components/pathItems/ExperimentAction"}
   /api/v1/experiments/{id}/resume:
     post: {$ref: "#/components/pathItems/ExperimentAction"}
+  /api/v1/experiments/{id}/rate:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    post:
+      operationId: setExperimentSimulationRate
+      requestBody: {$ref: "#/components/requestBodies/SimulationRateBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
   /api/v1/experiments/{id}/stop:
     post: {$ref: "#/components/pathItems/ExperimentAction"}
   /api/v1/experiments/{id}:
@@ -143,6 +149,11 @@ components:
       content:
         application/json:
           schema: {$ref: "#/components/schemas/ExperimentRequest"}
+    SimulationRateBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/SimulationRateRequest"}
     AlgorithmConfigBody:
       required: true
       content:
@@ -204,6 +215,15 @@ components:
           enum: [BASE, S01, S02, S03, S04, S05, S06, S07]
           default: BASE
           example: S02
+    SimulationRateRequest:
+      type: object
+      additionalProperties: false
+      required: [rate]
+      properties:
+        rate:
+          oneOf:
+            - {type: number, exclusiveMinimum: 0, maximum: 32, example: 4}
+            - {type: "null"}
     AlgorithmConfig:
       type: object
       additionalProperties: false

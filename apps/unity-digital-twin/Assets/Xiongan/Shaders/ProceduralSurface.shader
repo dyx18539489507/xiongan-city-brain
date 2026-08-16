@@ -13,7 +13,7 @@ Shader "Xiongan/ProceduralSurface"
     SubShader
     {
         Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" "Queue"="Geometry" }
-        LOD 250
+        LOD 300
 
         Pass
         {
@@ -25,6 +25,8 @@ Shader "Xiongan/ProceduralSurface"
             #pragma fragment Frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile_fog
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -44,6 +46,7 @@ Shader "Xiongan/ProceduralSurface"
                 float4 positionOS : POSITION;
                 float3 normalOS : NORMAL;
             };
+
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
@@ -60,74 +63,101 @@ Shader "Xiongan/ProceduralSurface"
                 return frac(p.x * p.y);
             }
 
-            float Noise(float2 p)
+            float ValueNoise(float2 p)
             {
                 float2 i = floor(p);
                 float2 f = frac(p);
                 f = f * f * (3.0 - 2.0 * f);
-                return lerp(lerp(Hash21(i), Hash21(i + float2(1,0)), f.x),
-                            lerp(Hash21(i + float2(0,1)), Hash21(i + 1), f.x), f.y);
+                return lerp(lerp(Hash21(i), Hash21(i + float2(1, 0)), f.x),
+                            lerp(Hash21(i + float2(0, 1)), Hash21(i + 1), f.x), f.y);
+            }
+
+            float Fbm(float2 p)
+            {
+                float value = ValueNoise(p) * 0.58;
+                value += ValueNoise(p * 2.07 + 19.7) * 0.28;
+                value += ValueNoise(p * 4.13 - 8.4) * 0.14;
+                return value;
+            }
+
+            float2 SurfacePlane(float3 positionWS, half3 normalWS)
+            {
+                if (_Mode < 1.5 || abs(normalWS.y) > 0.72h) return positionWS.xz;
+                return abs(normalWS.x) > abs(normalWS.z) ? positionWS.zy : positionWS.xy;
             }
 
             Varyings Vert(Attributes input)
             {
                 Varyings output;
-                VertexPositionInputs pos = GetVertexPositionInputs(input.positionOS.xyz);
-                output.positionCS = pos.positionCS;
-                output.positionWS = pos.positionWS;
+                VertexPositionInputs positionInputs = GetVertexPositionInputs(input.positionOS.xyz);
+                output.positionCS = positionInputs.positionCS;
+                output.positionWS = positionInputs.positionWS;
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
-                output.fogFactor = ComputeFogFactor(pos.positionCS.z);
-                output.shadowCoord = TransformWorldToShadowCoord(pos.positionWS);
+                output.fogFactor = ComputeFogFactor(positionInputs.positionCS.z);
+                output.shadowCoord = TransformWorldToShadowCoord(positionInputs.positionWS);
                 return output;
             }
 
             half4 Frag(Varyings input) : SV_Target
             {
-                float2 plane = input.positionWS.xz;
-                if (_Mode > 1.5) plane = input.positionWS.xy + input.positionWS.zy * 0.31;
-                float fine = Noise(plane * _DetailScale);
-                float broad = Noise(plane * (_DetailScale * 0.13) + 17.7);
-                float aggregate = saturate(fine * 0.68 + broad * 0.32);
-                float blend = saturate(0.5 + (aggregate - 0.5) * (1.0 + _DetailStrength * 3.0));
+                half3 normalWS = normalize(input.normalWS);
+                float2 plane = SurfacePlane(input.positionWS, normalWS);
+                float fine = Fbm(plane * _DetailScale);
+                float broad = Fbm(plane * (_DetailScale * 0.115) + 17.7);
+                float grain = Hash21(floor(plane * _DetailScale * 7.0));
+                float aggregate = saturate(fine * 0.66 + broad * 0.27 + grain * 0.07);
+                float blend = saturate(0.5 + (aggregate - 0.5) * (0.72 + _DetailStrength * 1.65));
                 half3 albedo = lerp(_SecondaryColor.rgb, _BaseColor.rgb, blend);
 
+                // Paving joints and cast-concrete seams are generated in the
+                // shader. The material never samples an asphalt or wall image.
                 if (_Mode > 0.5 && _Mode < 1.5)
                 {
-                    float2 tile = abs(frac(plane * 0.42) - 0.5);
-                    float joint = smoothstep(0.465, 0.495, max(tile.x, tile.y));
-                    albedo *= lerp(1.0h, 0.79h, joint);
+                    float2 tile = abs(frac(plane * 0.46) - 0.5);
+                    float joint = smoothstep(0.472, 0.497, max(tile.x, tile.y));
+                    float stagger = step(0.5, frac(floor(plane.y * 0.46) * 0.5));
+                    float verticalJoint = smoothstep(0.478, 0.498, abs(frac(plane.x * 0.46 + stagger * 0.5) - 0.5));
+                    albedo *= lerp(1.0h, 0.72h, max(joint * 0.45, verticalJoint * 0.5));
                 }
-                if (_Mode > 1.5)
+                else if (_Mode > 1.5)
                 {
-                    float floorBand = smoothstep(0.46, 0.5, abs(frac(input.positionWS.y * 0.295) - 0.5));
-                    albedo *= lerp(1.0h, 0.91h, floorBand * 0.45);
+                    float floorJoint = smoothstep(0.485, 0.5, abs(frac(input.positionWS.y / 3.35) - 0.5));
+                    float formwork = smoothstep(0.493, 0.5, abs(frac(plane.x * 0.28) - 0.5));
+                    albedo *= lerp(1.0h, 0.88h, floorJoint * 0.36 + formwork * 0.08);
                 }
 
-                half3 n = normalize(input.normalWS);
-                if (_Mode < 1.5 && abs(n.y) > 0.72h)
+                if (_Mode < 1.5 && abs(normalWS.y) > 0.72h)
                 {
-                    float detailX = Noise((plane + float2(0.065, 0.0)) * _DetailScale);
-                    float detailY = Noise((plane + float2(0.0, 0.065)) * _DetailScale);
-                    float bump = _DetailStrength * 0.34;
-                    n = normalize(n + half3((fine - detailX) * bump, 0, (fine - detailY) * bump));
+                    float epsilon = 0.045;
+                    float dx = Fbm((plane + float2(epsilon, 0.0)) * _DetailScale) - fine;
+                    float dz = Fbm((plane + float2(0.0, epsilon)) * _DetailScale) - fine;
+                    normalWS = normalize(normalWS + half3(-dx, 0.0h, -dz) * (_DetailStrength * 0.62));
                 }
-                Light light = GetMainLight(input.shadowCoord);
-                half ndl = saturate(dot(n, light.direction));
-                half3 ambient = max(SampleSH(n), half3(0.15h, 0.16h, 0.145h)) * albedo;
-                half3 diffuse = albedo * light.color * ndl * light.distanceAttenuation * light.shadowAttenuation;
-                half3 viewDir = normalize(GetWorldSpaceViewDir(input.positionWS));
-                half3 halfDir = normalize(light.direction + viewDir);
-                half specPower = lerp(10.0h, 120.0h, _Smoothness);
-                half spec = pow(saturate(dot(n, halfDir)), specPower) * lerp(0.05h, 0.72h, _Smoothness);
-                half3 specular = light.color * spec * light.shadowAttenuation * lerp(0.25h, 1.0h, _Metallic);
-                half3 color = ambient * 1.06h + diffuse + specular;
-                color = MixFog(color, input.fogFactor);
-                return half4(color, 1);
+
+                InputData inputData = (InputData)0;
+                inputData.positionWS = input.positionWS;
+                inputData.positionCS = input.positionCS;
+                inputData.normalWS = normalWS;
+                inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
+                inputData.shadowCoord = input.shadowCoord;
+                inputData.fogCoord = input.fogFactor;
+                inputData.vertexLighting = half3(0, 0, 0);
+                inputData.bakedGI = SampleSH(normalWS);
+                inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+                inputData.shadowMask = half4(1, 1, 1, 1);
+
+                half occlusion = lerp(1.0h, 0.88h, _DetailStrength * saturate(0.58h - aggregate));
+                half4 color = UniversalFragmentPBR(
+                    inputData, albedo, _Metallic, half3(0, 0, 0),
+                    _Smoothness, occlusion, half3(0, 0, 0), 1.0h);
+                color.rgb = MixFog(color.rgb, input.fogFactor);
+                return color;
             }
             ENDHLSL
         }
 
         UsePass "Universal Render Pipeline/Lit/ShadowCaster"
         UsePass "Universal Render Pipeline/Lit/DepthOnly"
+        UsePass "Universal Render Pipeline/Lit/DepthNormals"
     }
 }

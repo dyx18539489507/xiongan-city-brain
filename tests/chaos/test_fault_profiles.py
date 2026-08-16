@@ -73,3 +73,14 @@ def test_live_faults_expire_independently_on_simulation_clock() -> None:
     assert control.channel_config.packet_loss_rate == 0.1
     assert control.advance_simulation_time(20.0) == ["packet_loss"]
     assert control.channel_config == ChannelConfig()
+
+
+def test_simulation_rate_only_paces_wall_clock() -> None:
+    control = ExperimentControl()
+    assert control.simulation_rate is None
+    control.set_simulation_rate(4.0)
+    assert control.simulation_rate == 4.0
+    control.set_simulation_rate(None)
+    assert control.simulation_rate is None
+    with pytest.raises(ValueError, match="simulation rate"):
+        control.set_simulation_rate(0.0)

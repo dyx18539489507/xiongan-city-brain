@@ -16,7 +16,7 @@ build/
 
 # Generated runtime and experiment artifacts
 results/
-runtime/
+/runtime/
 scenarios/generated/*
 !scenarios/generated/.gitkeep
 !scenarios/generated/official_20_independent/
@@ -36,6 +36,7 @@ tmp/
 Thumbs.db
 
 # Unity local/generated state
+*.alf
 /apps/unity-digital-twin/[Ll]ibrary/
 /apps/unity-digital-twin/[Tt]emp/
 /apps/unity-digital-twin/[Oo]bj/
