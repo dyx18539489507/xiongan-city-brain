@@ -54,6 +54,15 @@ describe("MapCamera synchronized pose", () => {
 });
 
 describe("MapCamera resize and navigation bounds", () => {
+  it("caps zoom relative to the fitted scene instead of exposing raw geometry", () => {
+    const camera = new MapCamera();
+    camera.resize(800, 500, 1);
+    camera.setSceneBounds({minX: 0, minY: 0, maxX: 20_000, maxY: 12_000});
+    for (let index = 0; index < 100; index += 1) camera.zoomAt(400, 250, 2);
+
+    expect(camera.getZoomRatio()).toBeLessThanOrEqual(48.0001);
+  });
+
   it("preserves an intentional zoom when the canvas size changes", () => {
     const camera = new MapCamera();
     camera.resize(800, 500, 1);

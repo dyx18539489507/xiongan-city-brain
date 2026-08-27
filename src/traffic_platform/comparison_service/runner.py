@@ -111,6 +111,13 @@ class PairedExperimentControl:
     def __init__(self) -> None:
         self.baseline = ExperimentControl()
         self.candidate = ExperimentControl()
+        self.simulation_rate: float | None = None
+        self._digital_twin_next_time_s = 0.0
+        self._digital_twin_decisions: dict[float, float | None] = {}
+        self._fault_manifests: dict[str, dict[str, object]] = {}
+        self._fault_failure_reason: str | None = None
+        self.baseline.set_fault_status_callback(self._fault_callback("baseline"))
+        self.candidate.set_fault_status_callback(self._fault_callback("candidate"))
 
     @property
     def stop_requested(self) -> bool:
@@ -129,20 +136,173 @@ class PairedExperimentControl:
         self.candidate.stop()
 
     def set_simulation_rate(self, rate: float | None) -> None:
+        if rate is not None and (rate <= 0 or rate > 32):
+            raise ValueError("simulation rate must be in (0, 32]")
+        self.simulation_rate = rate
         self.baseline.set_simulation_rate(rate)
         self.candidate.set_simulation_rate(rate)
+
+    def digital_twin_interval_for(
+        self,
+        simulation_time_s: float,
+        base_interval_s: float,
+    ) -> float | None:
+        """Return one shared visualization decision for a paired SUMO timestamp."""
+
+        if base_interval_s <= 0:
+            raise ValueError("digital twin base interval must be positive")
+        timestamp = round(float(simulation_time_s), 6)
+        if timestamp in self._digital_twin_decisions:
+            return self._digital_twin_decisions[timestamp]
+        if simulation_time_s + 1e-9 < self._digital_twin_next_time_s:
+            interval = None
+        else:
+            interval = (
+                base_interval_s
+                if self.simulation_rate is None
+                else max(base_interval_s, self.simulation_rate / 4.0)
+            )
+            self._digital_twin_next_time_s = simulation_time_s + interval
+        self._digital_twin_decisions[timestamp] = interval
+        return interval
 
     def inject_fault(
         self,
         fault_type: str,
         parameters: dict[str, float | str | bool],
-    ) -> None:
-        self.baseline.inject_fault(fault_type, dict(parameters))
-        self.candidate.inject_fault(fault_type, dict(parameters))
+        *,
+        event_id: str | None = None,
+        target: str | None = None,
+        seed: int = 0,
+    ) -> dict[str, object]:
+        if event_id is None:
+            self.baseline.inject_fault(fault_type, dict(parameters))
+            self.candidate.inject_fault(fault_type, dict(parameters))
+            return {}
+
+        duration_s = float(parameters.get("duration_s", 30.0))
+        apply_at = (
+            max(
+                self.baseline.simulation_time_s,
+                self.candidate.simulation_time_s,
+            )
+            + 1.0
+        )
+        canonical_parameters = {
+            **parameters,
+            "duration_s": duration_s,
+            "target": target or str(parameters.get("target", "network")),
+            "event_seed": seed,
+        }
+        manifest: dict[str, object] = {
+            "id": event_id,
+            "event_id": event_id,
+            "fault_type": fault_type,
+            "target": canonical_parameters["target"],
+            "parameters": dict(canonical_parameters),
+            "duration_s": duration_s,
+            "deterministic_seed": seed,
+            "injection_simulation_time_s": apply_at,
+            "expires_at_simulation_time": apply_at + duration_s,
+            "status": "pending",
+            "runner_status": {
+                "baseline": {"status": "pending"},
+                "candidate": {"status": "pending"},
+            },
+        }
+        self._fault_manifests[event_id] = manifest
+        self.baseline.queue_fault(
+            event_id=event_id,
+            fault_type=fault_type,
+            apply_at_simulation_time_s=apply_at,
+            parameters=dict(canonical_parameters),
+        )
+        self.candidate.queue_fault(
+            event_id=event_id,
+            fault_type=fault_type,
+            apply_at_simulation_time_s=apply_at,
+            parameters=dict(canonical_parameters),
+        )
+        return manifest
 
     def clear_faults(self) -> None:
         self.baseline.clear_faults()
         self.candidate.clear_faults()
+
+    def fault_manifest(self, event_id: str) -> dict[str, object] | None:
+        return self._fault_manifests.get(event_id)
+
+    @property
+    def fault_failure_reason(self) -> str | None:
+        return self._fault_failure_reason
+
+    def _fault_callback(
+        self,
+        role: Role,
+    ) -> Callable[[str, str, float, str | None], None]:
+        def receive(
+            event_id: str,
+            status: str,
+            simulation_time_s: float,
+            detail: str | None,
+        ) -> None:
+            manifest = self._fault_manifests.get(event_id)
+            if manifest is None:
+                return
+            runner_status = manifest["runner_status"]
+            assert isinstance(runner_status, dict)
+            runner_status[role] = {
+                "status": status,
+                "simulation_time_s": simulation_time_s,
+                **({"detail": detail} if detail else {}),
+            }
+            statuses = {
+                str(item.get("status")) for item in runner_status.values() if isinstance(item, dict)
+            }
+            if statuses == {"applied"}:
+                baseline_status = runner_status.get("baseline")
+                candidate_status = runner_status.get("candidate")
+                physical_details = {
+                    str(item.get("detail"))
+                    for item in (baseline_status, candidate_status)
+                    if isinstance(item, dict) and item.get("detail") is not None
+                }
+                if (
+                    manifest.get("fault_type")
+                    in {
+                        "incident",
+                        "roadwork",
+                        "flow_surge",
+                        "large_event",
+                    }
+                    and len(physical_details) > 1
+                ):
+                    manifest["status"] = "failed"
+                    self._fault_failure_reason = (
+                        f"paired event {event_id} selected mismatched physical targets: "
+                        f"baseline={baseline_status}, candidate={candidate_status}"
+                    )
+                else:
+                    manifest["status"] = "applied"
+                    manifest["applied_at_simulation_time_s"] = simulation_time_s
+                    manifest["physical_target"] = next(iter(physical_details), None)
+            elif statuses == {"expired"}:
+                manifest["status"] = "expired"
+            elif statuses == {"cleared"}:
+                manifest["status"] = "cleared"
+            elif "failed" in statuses:
+                manifest["status"] = "failed"
+                self._fault_failure_reason = (
+                    f"paired event {event_id} failed physical application: "
+                    f"baseline={runner_status.get('baseline')}, "
+                    f"candidate={runner_status.get('candidate')}"
+                )
+            elif "scheduled" in statuses or "applied" in statuses:
+                manifest["status"] = "applying"
+            else:
+                manifest["status"] = "pending"
+
+        return receive
 
 
 class LivePairedExperimentRunner:
@@ -171,6 +331,15 @@ class LivePairedExperimentRunner:
 
     async def run(self) -> dict[str, object]:
         barrier = PairedStepBarrier()
+
+        def paired_step_callback(role: Role) -> Callable[[float], Awaitable[None]]:
+            async def synchronize(simulation_time_s: float) -> None:
+                await barrier.wait(role, simulation_time_s)
+                if self.control.fault_failure_reason is not None:
+                    raise PairSynchronizationError(self.control.fault_failure_reason)
+
+            return synchronize
+
         baseline_runner = ExperimentRunner(
             self.baseline_config,
             sumo_home=self.sumo_home,
@@ -179,7 +348,8 @@ class LivePairedExperimentRunner:
             snapshot_callback=self._snapshot_callback("baseline"),
             snapshot_detail="progress",
             digital_twin_callback=self.hub.publish_baseline,
-            step_barrier_callback=barrier.callback("baseline"),
+            digital_twin_schedule_callback=self.control.digital_twin_interval_for,
+            step_barrier_callback=paired_step_callback("baseline"),
         )
         candidate_runner = ExperimentRunner(
             self.candidate_config,
@@ -189,7 +359,8 @@ class LivePairedExperimentRunner:
             snapshot_callback=self._snapshot_callback("candidate"),
             snapshot_detail="progress",
             digital_twin_callback=self.hub.publish_candidate,
-            step_barrier_callback=barrier.callback("candidate"),
+            digital_twin_schedule_callback=self.control.digital_twin_interval_for,
+            step_barrier_callback=paired_step_callback("candidate"),
         )
 
         async def run_role(role: Role, runner: ExperimentRunner) -> dict[str, object]:

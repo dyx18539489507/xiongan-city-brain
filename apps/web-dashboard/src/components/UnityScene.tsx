@@ -4,6 +4,7 @@ import type {IntersectionNode} from "../types";
 import {TwinIcon} from "./twin/TwinIcon";
 
 type UnitySceneProps = {
+  active: boolean;
   algorithmEvidenceVisible: boolean;
   digitalTwin: DigitalTwinStream;
   node: IntersectionNode | null;
@@ -20,23 +21,11 @@ type UnityEvent = {
 
 type ViewMode = "hero" | "monitor" | "overview";
 
-const views: Array<{mode: ViewMode; label: string; detail: string; image: string}> = [
-  {mode: "hero", label: "主视角", detail: "B01 路口", image: "/assets/cameras/hero.png"},
-  {mode: "monitor", label: "路口监控", detail: "信号与过街", image: "/assets/cameras/junction.png"},
-  {mode: "overview", label: "全域鸟瞰", detail: "容东片区", image: "/assets/cameras/overview.png"},
+const views: Array<{mode: ViewMode; label: string; detail: string}> = [
+  {mode: "hero", label: "运营主视角", detail: "路口与车流"},
+  {mode: "monitor", label: "路口监控", detail: "信号与排队"},
+  {mode: "overview", label: "全域总览", detail: "无雾路网"},
 ];
-
-const selectionKindLabels: Record<string, string> = {
-  vehicle: "机动车",
-  bicycle: "非机动车",
-  pedestrian: "行人",
-  lane: "车道",
-  road: "道路",
-  junction: "路口",
-  traffic_light: "信号灯",
-  device: "路侧设备",
-  vehicle_cluster: "车辆聚合",
-};
 
 const showcaseJunctionId = "cluster_10739806290_13007678851_13007678852_9999059766";
 
@@ -58,6 +47,7 @@ export function shouldForwardUnitySnapshot(
 }
 
 export function UnityScene({
+  active,
   algorithmEvidenceVisible,
   digitalTwin,
   node,
@@ -67,6 +57,7 @@ export function UnityScene({
   sourceMode,
 }: UnitySceneProps) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
+  const previewRuntimeRef = useRef<string | null>(null);
   const [unityReady, setUnityReady] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
   const [fatal, setFatal] = useState<string | null>(null);
@@ -75,6 +66,7 @@ export function UnityScene({
   const [selection, setSelection] = useState<{id: string; kind: string; provenance: string} | null>(null);
   const [locatorOpen, setLocatorOpen] = useState(false);
   const [locatorStatus, setLocatorStatus] = useState<string | null>(null);
+  const [cameraPreviews, setCameraPreviews] = useState<Partial<Record<ViewMode, string>>>({});
 
   const unityFrameSource = useMemo(() => resolveUnityFrameSource(scenarioId), [scenarioId]);
 
@@ -98,10 +90,33 @@ export function UnityScene({
     setSceneReady(false);
     setFatal(null);
     setLoading("正在启动中");
+    setView("hero");
     setLocatorOpen(false);
     setLocatorStatus(null);
     setSelection(null);
+    setCameraPreviews({});
+    previewRuntimeRef.current = null;
   }, [scenarioId]);
+
+  useEffect(() => {
+    if (runtimeId && digitalTwin.state.initialized) return;
+    setView("hero");
+    setSelection(null);
+    setLocatorOpen(false);
+    setLocatorStatus(null);
+    previewRuntimeRef.current = null;
+    if (unityReady && sceneReady) {
+      setCameraPreviews({});
+      post("xiongan-unity-command", {action: "runtime-reset"});
+      post("xiongan-unity-command", {action: "camera", mode: "hero", id: cameraTarget});
+      post("xiongan-unity-command", {action: "camera-previews", id: cameraTarget});
+    }
+  }, [cameraTarget, digitalTwin.state.initialized, post, runtimeId, sceneReady, unityReady]);
+
+  useEffect(() => {
+    if (!unityReady || !sceneReady) return;
+    post("xiongan-unity-command", {action: "visibility", visible: active});
+  }, [active, post, sceneReady, unityReady]);
 
   useEffect(() => {
     const receive = (event: MessageEvent) => {
@@ -124,6 +139,13 @@ export function UnityScene({
         }
         setSceneReady(true);
       }
+      if (message.type === "camera-preview") {
+        const mode = String(message.payload?.mode ?? "") as ViewMode;
+        const image = String(message.payload?.image ?? "");
+        if (views.some((item) => item.mode === mode) && image.startsWith("data:image/")) {
+          setCameraPreviews((current) => ({...current, [mode]: image}));
+        }
+      }
       if (message.type === "loading" && typeof message.payload?.message === "string") setLoading(message.payload.message);
       if (message.type === "fatal") setFatal(String(message.payload?.message ?? "场景加载失败"));
       if (message.type === "selection") {
@@ -137,9 +159,15 @@ export function UnityScene({
         const found = Boolean(message.payload?.found);
         const count = Number(message.payload?.count ?? 0);
         const id = String(message.payload?.id ?? "");
-        setLocatorStatus(found ? count > 1 ? `已定位 ${count} 辆车` : "已定位车辆" : "当前无在途车辆");
+        const mode = String(message.payload?.mode ?? "");
+        const reason = String(message.payload?.reason ?? "");
+        setLocatorStatus(found
+          ? mode === "cluster" ? `已查看车流热点 · ${count} 辆` : "已锁定当前车辆"
+          : reason === "departed" ? "车辆已离开仿真" : "当前无可定位车辆");
         if (found && id) {
           setSelection({id, kind: "vehicle", provenance: "SUMO/TraCI realtime entity"});
+        } else if (reason === "departed") {
+          setSelection(null);
         }
       }
     };
@@ -163,6 +191,11 @@ export function UnityScene({
     if (!unityReady || !sceneReady) return;
     post("xiongan-unity-command", {action: "camera", mode: view, id: cameraTarget ?? ""});
   }, [cameraTarget, post, sceneReady, unityReady, view]);
+
+  useEffect(() => {
+    if (!unityReady || !sceneReady) return;
+    post("xiongan-unity-command", {action: "camera-previews", id: cameraTarget});
+  }, [cameraTarget, post, sceneReady, unityReady]);
 
   useEffect(() => {
     if (!unityReady || !sceneReady) return;
@@ -192,7 +225,11 @@ export function UnityScene({
       metrics: state.metrics,
       intersectionMetrics: algorithmEvidenceVisible ? state.intersectionMetrics : [],
     });
-  }, [algorithmEvidenceVisible, digitalTwin.state, post, renderRate, runtimeId, scenarioId, sceneReady, unityReady]);
+    if (previewRuntimeRef.current !== state.experimentId) {
+      previewRuntimeRef.current = state.experimentId;
+      post("xiongan-unity-command", {action: "camera-previews", id: cameraTarget});
+    }
+  }, [algorithmEvidenceVisible, cameraTarget, digitalTwin.state, post, renderRate, runtimeId, scenarioId, sceneReady, unityReady]);
 
   const changeView = (next: ViewMode) => {
     setView(next);
@@ -223,7 +260,8 @@ export function UnityScene({
       locateVehicle("restore");
       return;
     }
-    locateVehicle("cluster");
+    setLocatorOpen(true);
+    setLocatorStatus(digitalTwin.state.vehicles.size > 0 ? "请选择定位方式" : "当前无在途车辆");
   };
 
   return (
@@ -240,9 +278,11 @@ export function UnityScene({
       <div className="unity-vignette" aria-hidden="true" />
       <aside className="unity-camera-rail" aria-label="三维摄像机视角">
         {cameraViews.map((item) => (
-          <button key={item.mode} type="button" className={view === item.mode ? "active" : ""} onClick={() => changeView(item.mode)} aria-pressed={view === item.mode}>
-            <img alt="" src={item.image} />
-            <i className={sceneReady ? "camera-online" : ""} aria-hidden="true" />
+          <button disabled={!sceneReady} key={item.mode} type="button" className={view === item.mode ? "active" : ""} onClick={() => changeView(item.mode)} aria-pressed={view === item.mode}>
+            {cameraPreviews[item.mode]
+              ? <img alt={`${item.label}实时场景缩略图`} src={cameraPreviews[item.mode]} />
+              : <span aria-hidden="true" className="camera-preview-pending"><TwinIcon name="focus" /><b>{sceneReady ? "生成画面中" : "启动中"}</b></span>}
+            <i className={sceneReady && cameraPreviews[item.mode] ? "camera-online" : ""} aria-hidden="true" />
             <span><strong>{item.label}</strong><small>{item.detail}</small></span>
           </button>
         ))}
@@ -268,14 +308,6 @@ export function UnityScene({
         </div>
       )}
 
-      {selection && (
-        <aside className="unity-selection">
-          <button type="button" aria-label="关闭对象信息" onClick={() => setSelection(null)}>×</button>
-          <span>{selectionKindLabels[selection.kind] ?? "交通对象"}</span>
-          <strong>{selection.id}</strong>
-          <small>{selection.provenance}</small>
-        </aside>
-      )}
     </section>
   );
 }

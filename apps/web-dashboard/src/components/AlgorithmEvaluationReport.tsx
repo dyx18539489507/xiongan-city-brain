@@ -78,13 +78,12 @@ export function AlgorithmEvaluationReport({benchmark, evidenceIssue, evidenceLoa
   }
 
   const result = benchmark.result;
-  const isDemo = result.actual_run === false;
   const verdict = Object.values(result.fairness_controls).every(Boolean)
     ? result.b3_verdict.label.replaceAll("B3", "雄安车路云协同智控")
     : "公平性校验未通过，暂不输出最优结论";
 
   return (
-    <section className={`evaluation-report ${isDemo ? "demo" : "actual"}`} aria-label="算法评估报告">
+    <section className="evaluation-report actual" aria-label="算法评估报告">
       <AlgorithmEvaluationCharts benchmark={benchmark} evidenceRuns={evidenceRuns} />
       <section className="evaluation-band">
         <header className="evaluation-section-heading">
@@ -92,7 +91,7 @@ export function AlgorithmEvaluationReport({benchmark, evidenceIssue, evidenceLoa
           <div><h2>标准化指标数据</h2><p>{verdict} · {result.seeds.length}个随机种子</p></div>
         </header>
         <div className="evaluation-ranking-table wide">
-          <header><div><h3>{isDemo ? "预置场景聚合指标" : "实际 SUMO 聚合指标"}</h3><small>{isDemo ? "五组随机种子的评估窗口汇总" : "所有数值均来自完成的评估窗口"}</small></div></header>
+          <header><div><h3>实际 SUMO 聚合指标</h3><small>所有数值均来自完成的评估窗口</small></div></header>
           <div style={{overflowX: "auto"}}>
             <table>
               <thead><tr><th>控制策略</th>{metrics.map((metric) => <th key={metric.key}>{metric.label}</th>)}</tr></thead>
@@ -115,7 +114,7 @@ export function AlgorithmEvaluationReport({benchmark, evidenceIssue, evidenceLoa
       <section className="evaluation-band">
         <header className="evaluation-section-heading">
           <span>08</span>
-          <div><h2>协同智控逐基线检验</h2><p>{isDemo ? "同种子配对比较，正值表示协同智控相对基线改善" : "同种子配对比较，改善比例和显著性均由后端统计结果给出"}</p></div>
+          <div><h2>协同智控逐基线检验</h2><p>同种子配对比较，改善比例和显著性均由后端统计结果给出</p></div>
         </header>
         <div className="evaluation-ranking-table wide">
           <header><div><h3>雄安车路云协同智控相对改善</h3><small>正值表示协同智控优于对应基线</small></div></header>
@@ -141,13 +140,13 @@ export function AlgorithmEvaluationReport({benchmark, evidenceIssue, evidenceLoa
       <section className="evaluation-band">
         <header className="evaluation-section-heading">
           <span>09</span>
-          <div><h2>{isDemo ? "运行记录" : "实验事实证据"}</h2><p>{isDemo ? "每个条目对应一组随机种子及其采样序列" : "每个条目对应一个实际运行实验及其采样序列"}</p></div>
+          <div><h2>实验事实证据</h2><p>每个条目对应一个实际运行实验及其采样序列</p></div>
         </header>
         {evidenceLoading ? <div className="evaluation-chart-empty" role="status"><b>正在加载实验事实</b><span>等待证据序列返回</span></div> : null}
         {evidenceIssue ? <p className="benchmark-issue" role="alert">{evidenceIssue}</p> : null}
         {!evidenceLoading && !evidenceIssue && (
           <div className="evaluation-ranking-table wide">
-            <header><div><h3>{isDemo ? "数据记录" : "可追溯运行记录"}</h3><small>{evidenceRuns.length} 组{isDemo ? "运行记录" : "真实证据"}</small></div></header>
+            <header><div><h3>可追溯运行记录</h3><small>{evidenceRuns.length} 组真实证据</small></div></header>
             <div style={{overflowX: "auto"}}>
               <table>
                 <thead><tr><th>算法</th><th>随机种子</th><th>采样点</th><th>实验编号</th></tr></thead>

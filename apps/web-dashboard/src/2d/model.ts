@@ -2,6 +2,7 @@ export type SimulationViewMode = "2d" | "3d";
 
 export type LayerKey =
   | "baseMap"
+  | "geographicBaseMap"
   | "buildings"
   | "roadMarkings"
   | "vehicles"
@@ -22,7 +23,8 @@ export type LayerKey =
 export type LayerVisibility = Record<LayerKey, boolean>;
 
 export const defaultLayerVisibility: LayerVisibility = {
-  baseMap: false,
+  baseMap: true,
+  geographicBaseMap: false,
   buildings: true,
   roadMarkings: true,
   vehicles: true,

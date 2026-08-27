@@ -123,6 +123,7 @@ export function App() {
     const value = new URLSearchParams(window.location.search).get("workspace");
     return value === "algorithms" || value === "scenarios" ? value : "simulation";
   });
+  const [simulationMounted, setSimulationMounted] = useState(workspace === "simulation");
   const [scenarioId, setScenarioId] = useState("xiongan_rongdong_20");
   const [scenarioProfile, setScenarioProfile] = useState("BASE");
   const [algorithm, setAlgorithm] = useState("fixed-time");
@@ -177,6 +178,7 @@ export function App() {
 
   const changeWorkspace = useCallback((next: PlatformWorkspace) => {
     setError(null);
+    if (next === "simulation") setSimulationMounted(true);
     setWorkspace(next);
     const url = new URL(window.location.href);
     if (next === "simulation") url.searchParams.delete("workspace");
@@ -474,8 +476,8 @@ export function App() {
     }
   };
 
-  const stopSingleRuntimeBeforeComparison = async () => {
-    const activeId = experimentId ?? snapshot.experiment_id ?? digitalTwin.state.experimentId;
+  const stopSingleRuntimeBeforeComparison = async (requestedId?: string | null) => {
+    const activeId = requestedId ?? experimentId ?? snapshot.experiment_id ?? digitalTwin.state.experimentId;
     if (!activeId) return;
     const state = await loadExperimentState(activeId);
     if (!terminalRuntimeStatuses.has(state.status)) {
@@ -490,11 +492,11 @@ export function App() {
     setSnapshot({status: "idle", message: "单路仿真已停止"});
   };
 
-  const stopComparisonRuntimeBeforeExperiment = async () => {
-    const activeId = comparisonId ?? pairedDigitalTwin.state.pairId;
+  const stopComparisonRuntimeBeforeExperiment = async (requestedId?: string | null) => {
+    const activeId = requestedId ?? comparisonId ?? pairedDigitalTwin.state.pairId;
     if (!activeId) return;
-    if (!terminalRuntimeStatuses.has(pairedDigitalTwin.state.status)) {
-      const state = await loadLiveComparisonState(activeId);
+    const state = await loadLiveComparisonState(activeId);
+    if (!terminalRuntimeStatuses.has(state.status)) {
       if (state.status !== "stopping") {
         await liveComparisonLifecycle(activeId, "stop");
       }
@@ -526,12 +528,15 @@ export function App() {
     pairedDigitalTwin.reset?.();
   };
 
-  const changeSimulationView = (next: "2d" | "3d") =>
-    runCommand(`正在重置并切换到 ${next.toUpperCase()}`, async () => {
-      await stopSingleRuntimeBeforeComparison();
-      await stopComparisonRuntimeBeforeExperiment();
-      clearRuntimePresentation(`已切换到 ${next.toUpperCase()}，等待启动`);
+  const changeSimulationView = (next: "2d" | "3d") => {
+    const activeSingleId = experimentId ?? snapshot.experiment_id ?? digitalTwin.state.experimentId;
+    const activeComparisonId = comparisonId ?? pairedDigitalTwin.state.pairId;
+    clearRuntimePresentation(`已切换到 ${next.toUpperCase()}，等待启动`);
+    return runCommand(`正在重置并切换到 ${next.toUpperCase()}`, async () => {
+      await stopSingleRuntimeBeforeComparison(activeSingleId);
+      await stopComparisonRuntimeBeforeExperiment(activeComparisonId);
     }, "reset");
+  };
 
   const start = (
     targetScenarioId = scenarioId,
@@ -823,7 +828,7 @@ export function App() {
         </div>
       )}
 
-      {workspace === "simulation" && <SimulationCommandCenter
+      {simulationMounted && <SimulationCommandCenter
         activeTransportCommand={activeTransportCommand}
         algorithm={algorithm}
         algorithms={algorithms}
@@ -884,6 +889,7 @@ export function App() {
         startupStage={startupStage}
         timelineEvents={timelineEvents}
         websocketOnline={connection === "online"}
+        workspaceActive={workspace === "simulation"}
       />}
 
       {workspace === "algorithms" && <Suspense fallback={<div aria-live="polite" className="workspace-loading" role="status"><i className="factory-spinner" aria-hidden="true" /><div><strong>正在载入算法评估</strong><span>准备实验矩阵、配对证据与指标视图</span></div><div aria-hidden="true" className="workspace-loading-skeleton"><b /><b /><b /></div></div>}><AlgorithmEvaluationWorkspace

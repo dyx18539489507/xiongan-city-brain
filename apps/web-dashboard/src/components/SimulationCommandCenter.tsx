@@ -20,6 +20,7 @@ import {UnityScene} from "./UnityScene";
 export type TransportCommand = "start" | "pause" | "stop" | "reset";
 
 type Props = {
+  workspaceActive: boolean;
   scenarios: Scenario[]; algorithms: Algorithm[]; nodes: IntersectionNode[]; scenarioId: string; scenarioProfile: string; algorithm: string; candidateAlgorithm: string; seed: number; durationS: number; experimentId: string | null; comparisonId: string | null; snapshot: RealtimeSnapshot; digitalTwin: DigitalTwinStream; pairedDigitalTwin: PairedDigitalTwinStream; sourceMode: "live" | "replay"; websocketOnline: boolean; commandBusy: boolean; activeTransportCommand: TransportCommand | null; startupStage: string | null; selectedIntersectionId: string | null;
   history: RealtimeSnapshot[]; comparisonHistory: RealtimeSnapshot[]; timelineEvents: TimelineEvent[]; comparison: RealComparison | null; replays: ReplayItem[]; selectedReplayId: string | null; replayLoaded: boolean; replayBusy: boolean; replayPlaying: boolean; replaySpeed: number; replayCurrentTimeS: number; replayDurationS: number; simulationRate: number | null;
   onScenarioChange: (value: string) => void; onProfileChange: (value: string) => void; onAlgorithmChange: (value: string) => void; onCandidateAlgorithmChange: (value: string) => void; onSeedChange: (value: number) => void; onSimulationRate: (value: number | null) => Promise<string | null>; onComparisonSimulationRate: (value: number | null) => Promise<string | null>; onDurationChange: (value: number) => void; onIntersectionSelect: (value: string | null) => void; onStart: () => void; onComparisonStart: () => void; onPause: () => void; onComparisonPause: () => void; onResume: () => void; onComparisonResume: () => void; onStop: () => void; onComparisonStop: () => void; onReset: () => void; onComparisonReset: () => void; onFault: (type: string, target: string, detail: string, parameters?: Record<string, number | string | boolean>, durationS?: number) => Promise<string | null>; onClearFaults: () => void; onToggleReplay: () => void; onReplaySpeed: (value: number) => void; onSeekReplay: (value: number) => void; onLoadReplay: (id: string) => void; onGoLive: () => void; onViewModeChange: (value: SimulationViewMode) => Promise<string | null>;
@@ -219,13 +220,20 @@ export function SimulationCommandCenter(props: Props) {
     setViewSwitching(true);
     setDrawerEvent(null);
     setSelection(null);
-    const issue = await props.onViewModeChange(next);
-    if (issue === null) setViewMode(next);
+    setViewMode(next);
+    await props.onViewModeChange(next);
     setViewSwitching(false);
   };
 
-  return <section aria-label="雄安城市交通数字孪生驾驶舱" className={`twin-cockpit view-${viewMode} ${leftCollapsed ? "left-collapsed" : ""} ${rightCollapsed ? "right-collapsed" : ""}`}>
-    <div className="twin-map-surface">{viewMode === "2d" ? comparisonView ? <PairedTraffic2DScene configuredCandidateAlgorithm={props.candidateAlgorithm} layers={layers} loadState={loadState} onRetry={reloadScene} onSelectionChange={updateSelection} paired={props.pairedDigitalTwin} scene={scene} selection={selection} /> : <Traffic2DScene layers={layers} loadState={loadState} onRetry={reloadScene} onSelectionChange={updateSelection} scene={scene} selection={selection} snapshot={activeSnapshot} sourceMode={activeSourceMode} stream={activeStream} websocketOnline={props.websocketOnline} /> : <UnityScene algorithmEvidenceVisible={layers.algorithm} digitalTwin={activeStream} node={selectedNode} renderRate={visualRate} runtimeId={activeRuntimeId ? activeDigitalTwin.experimentId : null} scenarioId={props.scenarioId} sourceMode={comparisonView ? "replay" : props.sourceMode} />}</div>
+  return <section aria-label="雄安城市交通数字孪生驾驶舱" className={`twin-cockpit view-${viewMode} ${props.workspaceActive ? "" : "workspace-inactive"} ${leftCollapsed ? "left-collapsed" : ""} ${rightCollapsed ? "right-collapsed" : ""}`}>
+    <div className="twin-map-surface">
+      {viewMode === "2d" && (comparisonView
+        ? <PairedTraffic2DScene configuredCandidateAlgorithm={props.candidateAlgorithm} layers={layers} loadState={loadState} onRetry={reloadScene} onSelectionChange={updateSelection} paired={props.pairedDigitalTwin} scene={scene} selection={selection} />
+        : <Traffic2DScene layers={layers} loadState={loadState} onRetry={reloadScene} onSelectionChange={updateSelection} scene={scene} selection={selection} snapshot={activeSnapshot} sourceMode={activeSourceMode} stream={activeStream} websocketOnline={props.websocketOnline} />)}
+      <div aria-hidden={viewMode !== "3d"} className={`unity-stage-host ${viewMode === "3d" ? "active" : "parked"}`}>
+        <UnityScene active={props.workspaceActive && viewMode === "3d"} algorithmEvidenceVisible={layers.algorithm} digitalTwin={activeStream} node={selectedNode} renderRate={visualRate} runtimeId={activeRuntimeId ? activeDigitalTwin.experimentId : null} scenarioId={props.scenarioId} sourceMode={comparisonView ? "replay" : props.sourceMode} />
+      </div>
+    </div>
 
     <header className="twin-header">
       <div className="brand-lockup"><h1>雄安城市交通数字孪生</h1></div>

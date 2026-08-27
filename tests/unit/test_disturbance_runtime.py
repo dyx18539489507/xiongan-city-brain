@@ -209,3 +209,50 @@ def test_live_control_schedules_real_incident_and_event_dispersal() -> None:
         "EVENT_DISPERSAL_STARTED",
         "EVENT_DISPERSAL_VEHICLE_INJECTED",
     }
+
+
+def test_incident_uses_the_canonical_paired_vehicle_when_provided() -> None:
+    adapter = FakeAdapter()
+    runtime = DisturbanceRuntime(
+        scenario().model_copy(update={"disturbances": []}),
+        seed=11,
+        fallback_roadwork_lane="fallback-lane",
+    )
+    runtime.schedule(
+        Disturbance(
+            event_id="paired-incident",
+            type="incident",
+            simulation_time_s=5.0,
+            duration_s=30.0,
+            target="downstream_bottleneck",
+            parameters={"vehicle_id": "shared-vehicle", "edge_id": "edge-a"},
+        )
+    )
+
+    runtime.tick(5.0, adapter)
+
+    assert adapter.stopped == [("shared-vehicle", 30.0)]
+
+
+def test_paired_control_preserves_the_canonical_incident_target() -> None:
+    control = ExperimentControl()
+    control.queue_fault(
+        event_id="paired-incident",
+        fault_type="incident",
+        apply_at_simulation_time_s=12.0,
+        parameters={
+            "duration_s": 30.0,
+            "target": "downstream_bottleneck",
+            "vehicle_id": "shared-vehicle",
+            "edge_id": "edge-a",
+        },
+    )
+
+    control.advance_simulation_time(12.0)
+
+    pending = control.drain_pending_disturbances()
+    assert len(pending) == 1
+    assert pending[0].parameters == {
+        "vehicle_id": "shared-vehicle",
+        "edge_id": "edge-a",
+    }

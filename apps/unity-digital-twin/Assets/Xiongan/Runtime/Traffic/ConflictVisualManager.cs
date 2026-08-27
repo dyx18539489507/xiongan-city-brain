@@ -50,6 +50,11 @@ namespace Xiongan.DigitalTwin.Traffic
             }
         }
 
+        public void ResetRuntime()
+        {
+            ClearVisuals();
+        }
+
         private void ClearVisuals()
         {
             if (visuals.Count == 0) return;

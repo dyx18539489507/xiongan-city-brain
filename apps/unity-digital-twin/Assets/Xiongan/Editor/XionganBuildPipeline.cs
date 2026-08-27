@@ -545,11 +545,11 @@ namespace Xiongan.DigitalTwin.Editor
             PlayerSettings.productName = "雄安交通协同控制数字孪生";
             PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.runInBackground = true;
-            // Local competition delivery is served on loopback.  Uncompressed
-            // artifacts preserve identical rendering quality while avoiding a
-            // second long Brotli pass whenever the hero art is updated.
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+            // The baked city is large enough that compressed transfer and the
+            // browser's persistent data cache materially improve cold and warm starts.
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
             PlayerSettings.WebGL.decompressionFallback = false;
+            PlayerSettings.WebGL.dataCaching = true;
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
             PlayerSettings.WebGL.template = "PROJECT:Xiongan";
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.WebGL, ScriptingImplementation.IL2CPP);

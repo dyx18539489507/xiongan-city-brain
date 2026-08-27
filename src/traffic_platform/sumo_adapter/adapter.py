@@ -1315,7 +1315,8 @@ class TraciSumoAdapter:
         # SUMO exposes bicycles through the vehicle domain as well. Incidents
         # in this platform represent a stopped motor vehicle, so active-mode
         # participants must not be selected merely because they departed first.
-        if str(api.vehicle.getVehicleClass(vehicle_id)).lower() in {
+        vehicle_class = str(api.vehicle.getVehicleClass(vehicle_id)).lower()
+        if vehicle_class in {
             "bicycle",
             "moped",
             "pedestrian",
@@ -1333,24 +1334,49 @@ class TraciSumoAdapter:
             lane_count = int(api.edge.getLaneNumber(edge_id))
             if lane_count <= 0:
                 continue
-            lane_index = min(current_lane_index, lane_count - 1)
-            lane_id = f"{edge_id}_{lane_index}"
             edge_start = current_position if index == route_index else 0.0
-            lane_length = float(api.lane.getLength(lane_id))
-            available = max(0.0, lane_length - edge_start - 1.0)
-            if distance_before_edge + available >= required_distance:
-                position = edge_start + (required_distance - distance_before_edge)
-                api.vehicle.setStop(
-                    vehicle_id,
-                    edge_id,
-                    pos=min(lane_length - 1.0, position),
-                    laneIndex=lane_index,
-                    # Explicit clearing owns the event end; the margin is a
-                    # fail-safe if a run terminates before the clear action.
-                    duration=duration_s + 60.0,
-                )
-                return True
-            distance_before_edge += available
+            preferred_lane_index = min(current_lane_index, lane_count - 1)
+            lane_indices = [preferred_lane_index, *range(lane_count)]
+            permitted_lanes: list[tuple[int, float]] = []
+            for lane_index in dict.fromkeys(lane_indices):
+                lane_id = f"{edge_id}_{lane_index}"
+                allowed = {str(item).lower() for item in api.lane.getAllowed(lane_id)}
+                disallowed = {
+                    str(item).lower() for item in api.lane.getDisallowed(lane_id)
+                }
+                if (
+                    "all" in disallowed
+                    or (allowed and "all" not in allowed and vehicle_class not in allowed)
+                    or vehicle_class in disallowed
+                ):
+                    continue
+                permitted_lanes.append((lane_index, float(api.lane.getLength(lane_id))))
+            if not permitted_lanes:
+                continue
+
+            edge_available = max(
+                max(0.0, lane_length - edge_start - 1.0)
+                for _lane_index, lane_length in permitted_lanes
+            )
+            distance_on_edge = max(required_distance - distance_before_edge, 5.0)
+            if edge_available >= distance_on_edge:
+                for lane_index, lane_length in permitted_lanes:
+                    if lane_length - edge_start - 1.0 < distance_on_edge:
+                        continue
+                    try:
+                        api.vehicle.setStop(
+                            vehicle_id,
+                            edge_id,
+                            pos=min(lane_length - 1.0, edge_start + distance_on_edge),
+                            laneIndex=lane_index,
+                            # Explicit clearing owns the event end; the margin is a
+                            # fail-safe if a run terminates before the clear action.
+                            duration=duration_s + 60.0,
+                        )
+                    except Exception:
+                        continue
+                    return True
+            distance_before_edge += edge_available
         return False
 
     def incident_is_stopped(self, vehicle_id: str) -> bool:

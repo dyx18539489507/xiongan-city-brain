@@ -30,7 +30,6 @@
 html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 body { color: var(--text-primary); background: var(--bg-primary); font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif; }
 .app-shell { width: 100%; max-width: none; height: 100%; margin: 0; padding: 0; }
-.twin-cockpit ~ * { display: none !important; }
 button, select, input { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .42; }
@@ -39,6 +38,9 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 .twin-cockpit { position: fixed; inset: 0; isolation: isolate; overflow: hidden; color: var(--text-primary); background: var(--bg-primary); }
 .twin-map-surface { position: absolute; z-index: 0; inset: 0; background: var(--bg-primary); }
 .twin-map-surface > * { width: 100%; height: 100%; }
+.unity-stage-host { position: absolute; inset: 0; width: 100%; height: 100%; }
+.unity-stage-host.parked { visibility: hidden; opacity: 0; pointer-events: none; }
+.unity-stage-host.active { visibility: visible; opacity: 1; }
 
 .twin-header { position: absolute; z-index: 40; top: 0; right: 0; left: 0; display: grid; grid-template-columns: minmax(250px, 1fr) auto; align-items: center; min-height: 76px; padding: 0 18px 0 22px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(7, 15, 18, .98), rgba(7, 15, 18, .94)); box-shadow: 0 12px 30px rgba(0, 0, 0, .18); }
 .brand-lockup span, .floating-panel-header span { display: block; margin-bottom: 4px; color: var(--text-muted); font-size: 10px; font-weight: 650; letter-spacing: .13em; }
@@ -433,8 +435,7 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 .traffic-2d-stage.embedded .connection-notice { top: 58px; right: 10px; left: 10px; }
 .traffic-2d-stage.embedded .scene-loading { padding: 58px 18px 28px; }
 .traffic-2d-stage.embedded .data-waiting-overlay { width: min(250px, calc(100% - 30px)); }
-.comparison-map-legend { position: absolute; z-index: 8; right: 350px; bottom: 198px; display: flex; align-items: center; gap: 6px; padding: 5px 7px 5px 0; border: 1px solid rgba(39, 75, 93, .15); border-left: 0; border-radius: 0 7px 7px 0; color: #546f7d; background: rgba(255,255,255,.94); box-shadow: 0 6px 18px rgba(45, 72, 82, .10); transition: right .25s var(--ease-standard); }
-.right-collapsed .comparison-map-legend { right: 92px; }
+.comparison-map-legend { position: absolute; z-index: 8; top: 58px; right: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px; max-width: calc(100% - 20px); padding: 5px 7px; border: 1px solid rgba(39, 75, 93, .15); border-radius: 7px; color: #546f7d; background: rgba(255,255,255,.94); box-shadow: 0 6px 18px rgba(45, 72, 82, .10); }
 .comparison-map-legend span { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
 .comparison-map-legend .improved { color: #087a72; background: rgba(7, 143, 132, .10); }
 .comparison-map-legend .stable { color: #657a82; background: rgba(112, 131, 138, .11); }
@@ -705,17 +706,21 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 .reference-metric-matrix b { margin-top: 2px; color: #e7f3f9; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
 .reference-metric-matrix small { color: #718d9e; font-size: 7px; font-weight: 400; }
 
-.reference-phase-diagram { display: block; width: 100%; height: 52px; overflow: visible; }
+.reference-phase-diagram { display: block; width: 100%; height: 58px; overflow: visible; }
 .reference-phase-diagram .phase-road { fill: rgba(7, 22, 34, .72); stroke: rgba(134, 176, 203, .21); stroke-width: 1; }
 .reference-phase-diagram .phase-lane { fill: none; stroke: rgba(140, 178, 201, .22); stroke-dasharray: 4 3; stroke-width: .8; }
 .reference-phase-diagram .phase-flow { fill: none; stroke: #6e8491; stroke-width: 2.5; }
 .reference-phase-diagram .phase-flow.active { stroke: #43d5a0; }
-.reference-phase-diagram .phase-flow.secondary { stroke: #df6760; }
-.reference-phase-diagram .phase-lamp { fill: #758894; }
-.reference-phase-diagram .phase-lamp.green { fill: #43d5a0; }
-.reference-phase-diagram .phase-lamp.red { fill: #e3655d; }
+.reference-phase-diagram .phase-flow.warning { stroke: #e0ad4f; }
+.reference-phase-diagram .phase-signal-head rect { fill: #07131c; stroke: rgba(154, 191, 211, .32); stroke-width: .5; }
+.reference-phase-diagram .phase-lamp { fill: #263c48; }
+.reference-phase-diagram .phase-lamp.green.active { fill: #43d5a0; filter: drop-shadow(0 0 2px rgba(67, 213, 160, .8)); }
+.reference-phase-diagram .phase-lamp.yellow.active { fill: #e0ad4f; filter: drop-shadow(0 0 2px rgba(224, 173, 79, .8)); }
+.reference-phase-diagram .phase-lamp.red.active { fill: #e3655d; filter: drop-shadow(0 0 2px rgba(227, 101, 93, .8)); }
 .reference-phase-diagram text { fill: #718d9e; font-size: 7px; }
 .reference-phase-diagram text.phase-id { fill: #d9eaf3; font-size: 7px; text-anchor: middle; }
+.reference-phase-diagram text.phase-direction { font-size: 6px; }
+.reference-phase-diagram text.phase-waiting { fill: #7f9aa9; font-size: 7px; text-anchor: middle; }
 
 .reference-bar-chart { position: relative; display: flex; align-items: end; gap: 5px; height: 49px; padding: 4px 6px 14px; box-sizing: border-box; border-left: 1px solid rgba(137, 182, 211, .17); border-bottom: 1px solid rgba(137, 182, 211, .17); }
 .reference-chart-grid { position: absolute; inset: 4px 0 14px; display: grid; grid-template-rows: repeat(3, 1fr); pointer-events: none; }
@@ -851,9 +856,12 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 .unity-camera-rail > button:hover { border-color: rgba(87, 181, 229, .72); }
 .unity-camera-rail > button.active { border-color: #43afe6; box-shadow: 0 0 0 1px rgba(225, 248, 255, .62), 0 8px 22px rgba(3, 13, 21, .3); }
 .unity-camera-rail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.unity-camera-rail .camera-preview-pending { position: absolute; z-index: 0; inset: 0; display: grid; place-content: center; justify-items: center; gap: 5px; color: #6f8997; background: #07131c; }
+.unity-camera-rail .camera-preview-pending svg { width: 18px; }
+.unity-camera-rail .camera-preview-pending b { font-size: 8px; font-weight: 500; }
 .unity-camera-rail button > i { position: absolute; z-index: 2; top: 7px; right: 7px; width: 5px; height: 5px; border-radius: 50%; background: #738895; }
 .unity-camera-rail button > i.camera-online { background: #43d59f; box-shadow: 0 0 0 3px rgba(67, 213, 159, .14); }
-.unity-camera-rail button > span { position: absolute; z-index: 2; right: 8px; bottom: 6px; left: 8px; display: flex; align-items: flex-end; justify-content: space-between; gap: 5px; }
+.unity-camera-rail button > span:not(.camera-preview-pending) { position: absolute; z-index: 2; right: 8px; bottom: 6px; left: 8px; display: flex; align-items: flex-end; justify-content: space-between; gap: 5px; }
 .unity-camera-rail strong { min-width: 0; overflow: hidden; font-size: 10px; font-weight: 620; text-overflow: ellipsis; white-space: nowrap; }
 .unity-camera-rail small { flex: 0 0 auto; color: rgba(223, 237, 245, .68); font-size: 8px; }
 .unity-vehicle-locator { position: relative; }

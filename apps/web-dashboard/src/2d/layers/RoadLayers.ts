@@ -3,6 +3,34 @@ import {mapTheme} from "../theme";
 import type {LayerRenderContext, TrafficMapLayer} from "./LayerTypes";
 import {appendPolygon, appendPolyline, geometryIntersectsBounds} from "./LayerTypes";
 
+export type RoadLevelOfDetail = "overview" | "district" | "street";
+
+export function roadLevelOfDetail(zoomRatio: number): RoadLevelOfDetail {
+  if (zoomRatio < 2.5) return "overview";
+  if (zoomRatio < 9) return "district";
+  return "street";
+}
+
+function isSpecialLane(lane: SceneLane): boolean {
+  return lane.laneKind === "bicycle" || lane.laneKind === "pedestrian";
+}
+
+function roundedWidth(width: number): number {
+  return Math.round(width * 2) / 2;
+}
+
+export function offsetPolyline(points: readonly Point2[], offsetM: number): Point2[] {
+  if (points.length < 2 || offsetM === 0) return [...points];
+  return points.map((point, index) => {
+    const previous = points[Math.max(0, index - 1)];
+    const next = points[Math.min(points.length - 1, index + 1)];
+    const dx = next.x - previous.x;
+    const dy = next.y - previous.y;
+    const length = Math.hypot(dx, dy) || 1;
+    return {x: point.x - dy / length * offsetM, y: point.y + dx / length * offsetM};
+  });
+}
+
 function laneSurface(lane: SceneLane): string {
   if (lane.laneKind === "bicycle") return mapTheme.bicycleLane;
   if (lane.laneKind === "pedestrian") return mapTheme.pedestrianLane;
@@ -14,25 +42,31 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
   readonly isStatic = true;
 
   render({ctx, camera, world, visibleBounds}: LayerRenderContext): void {
+    const detail = roadLevelOfDetail(camera.getZoomRatio());
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     const edgeBatches = new Map<number, Array<readonly Point2[]>>();
     const surfaceBatches = new Map<string, {color: string; width: number; shapes: Array<readonly Point2[]>}>();
-    for (const indexed of world.indexedLanes) {
-      const lane = indexed.lane;
-      if (lane.shape.length < 2 || (lane.edgeFunction === "internal" && camera.scale < .22)) continue;
+    for (const indexed of world.indexedEdges) {
+      const edge = indexed.edge;
+      if (edge.function === "internal") continue;
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
-      const width = Math.max(.8, Math.min(14, lane.widthM * camera.scale));
-      const edgeWidth = width + Math.max(1.4, camera.scale * 1.8);
+      const lanes = edge.laneIds.map((id) => world.laneById.get(id)).filter((lane): lane is SceneLane => Boolean(lane));
+      const motorLanes = lanes.filter((lane) => !isSpecialLane(lane));
+      const surfaceLanes = motorLanes.length ? motorLanes : lanes;
+      const widthM = Math.max(3.2, Math.min(28, surfaceLanes.reduce((sum, lane) => sum + lane.widthM, 0)));
+      const maximumWidth = detail === "overview" ? 12 : detail === "district" ? 32 : 48;
+      const width = roundedWidth(Math.max(detail === "overview" ? 1.5 : 2.2, Math.min(maximumWidth, widthM * camera.scale)));
+      const edgeWidth = roundedWidth(width + (detail === "overview" ? 1.2 : 2));
       const edgeShapes = edgeBatches.get(edgeWidth);
-      if (edgeShapes) edgeShapes.push(lane.shape);
-      else edgeBatches.set(edgeWidth, [lane.shape]);
+      if (edgeShapes) edgeShapes.push(indexed.shape);
+      else edgeBatches.set(edgeWidth, [indexed.shape]);
 
-      const color = laneSurface(lane);
+      const color = mapTheme.roadSurface;
       const key = `${color}|${width}`;
       const surfaceBatch = surfaceBatches.get(key);
-      if (surfaceBatch) surfaceBatch.shapes.push(lane.shape);
-      else surfaceBatches.set(key, {color, width, shapes: [lane.shape]});
+      if (surfaceBatch) surfaceBatch.shapes.push(indexed.shape);
+      else surfaceBatches.set(key, {color, width, shapes: [indexed.shape]});
     }
 
     ctx.strokeStyle = mapTheme.roadEdge;
@@ -50,11 +84,32 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
       ctx.stroke();
     }
 
+    if (detail !== "overview") {
+      const specialBatches = new Map<string, {color: string; width: number; shapes: Array<readonly Point2[]>}>();
+      for (const indexed of world.indexedLanes) {
+        const lane = indexed.lane;
+        if (!isSpecialLane(lane) || lane.edgeFunction === "internal" || !geometryIntersectsBounds(indexed, visibleBounds)) continue;
+        const color = laneSurface(lane);
+        const width = roundedWidth(Math.max(1.2, Math.min(12, lane.widthM * camera.scale)));
+        const key = `${color}|${width}`;
+        const batch = specialBatches.get(key);
+        if (batch) batch.shapes.push(lane.shape);
+        else specialBatches.set(key, {color, width, shapes: [lane.shape]});
+      }
+      for (const batch of specialBatches.values()) {
+        ctx.strokeStyle = batch.color;
+        ctx.lineWidth = batch.width;
+        ctx.beginPath();
+        for (const shape of batch.shapes) appendPolyline(ctx, camera, shape);
+        ctx.stroke();
+      }
+    }
+
     const junctionShapes: Array<readonly Point2[]> = [];
     for (const indexed of world.indexedJunctions) {
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
       const junction = indexed.junction;
-      if (junction.shape.length < 3 || (!junction.controlled && camera.scale < .34)) continue;
+      if (junction.shape.length < 3 || !junction.controlled) continue;
       junctionShapes.push(junction.shape);
     }
     if (junctionShapes.length) {
@@ -62,7 +117,7 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
       for (const shape of junctionShapes) appendPolygon(ctx, camera, shape);
       ctx.fillStyle = mapTheme.junction;
       ctx.fill();
-      if (camera.scale > .55) {
+      if (detail === "street") {
         ctx.strokeStyle = mapTheme.roadEdgeLine;
         ctx.lineWidth = .8;
         ctx.stroke();
@@ -100,24 +155,30 @@ export class RoadMarkingLayer implements TrafficMapLayer {
   readonly isStatic = true;
 
   render({ctx, camera, world, visibleBounds}: LayerRenderContext): void {
-    if (camera.scale < .28) return;
+    const detail = roadLevelOfDetail(camera.getZoomRatio());
+    if (detail === "overview") return;
     ctx.save();
     ctx.lineCap = "butt";
     ctx.strokeStyle = mapTheme.laneMarking;
-    ctx.lineWidth = camera.scale > .75 ? 1.15 : .75;
-    ctx.setLineDash(camera.scale > .75 ? [9, 9] : [5, 7]);
+    ctx.lineWidth = detail === "street" ? 1.1 : .75;
+    ctx.setLineDash(detail === "street" ? [9, 9] : [6, 8]);
     ctx.beginPath();
-    for (const indexed of world.indexedLanes) {
-      const lane = indexed.lane;
-      if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
-      if (lane.edgeFunction === "internal" || lane.laneKind === "bicycle" || lane.laneKind === "pedestrian" || lane.shape.length < 2) continue;
-      appendPolyline(ctx, camera, lane.shape);
+    for (const indexed of world.indexedEdges) {
+      if (!geometryIntersectsBounds(indexed, visibleBounds) || indexed.edge.function === "internal") continue;
+      const lanes = indexed.edge.laneIds
+        .map((id) => world.laneById.get(id))
+        .filter((lane): lane is SceneLane => lane !== undefined && !isSpecialLane(lane))
+        .sort((left, right) => left.index - right.index);
+      for (let index = 1; index < lanes.length; index += 1) {
+        const lane = lanes[index];
+        appendPolyline(ctx, camera, offsetPolyline(lane.shape, -lane.widthM / 2));
+      }
     }
     ctx.stroke();
     ctx.setLineDash([]);
 
     // SUMO lane endpoints provide truthful stop-line placement; no turn movement is inferred.
-    if (camera.scale > .48) {
+    if (detail === "street") {
       ctx.strokeStyle = mapTheme.crossing;
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -145,7 +206,7 @@ export class RoadMarkingLayer implements TrafficMapLayer {
       ctx.setLineDash([]);
     }
 
-    if (camera.scale > .72) {
+    if (detail === "street") {
       ctx.fillStyle = mapTheme.laneMarking;
       for (const indexed of world.indexedLanes) {
         const lane = indexed.lane;

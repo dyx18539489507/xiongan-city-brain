@@ -57,6 +57,11 @@ namespace Xiongan.DigitalTwin.Traffic
                 SetActive(item.Value, active.Contains(item.Key));
         }
 
+        public void ResetRuntime()
+        {
+            foreach (var visual in visuals.Values) SetActive(visual, false);
+        }
+
         private LaneVisual EnsureVisual(LaneRecord lane)
         {
             if (visuals.TryGetValue(lane.SumoLaneId, out var existing)) return existing;

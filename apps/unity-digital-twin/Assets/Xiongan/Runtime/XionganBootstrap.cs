@@ -114,6 +114,8 @@ namespace Xiongan.DigitalTwin
                 buildings = sceneBuilder.BakedBuildingCount,
                 claimBoundary = sceneBuilder.Document.Metadata.ClaimBoundary,
             });
+            cameraDirector.CaptureViewPreviews(
+                useBakedScene ? ReferenceShowcaseLayout.JunctionId : null);
         }
 
         public void HandleBrowserCommand(string json)
@@ -126,7 +128,12 @@ namespace Xiongan.DigitalTwin
                 switch (action)
                 {
                     case "camera":
-                        cameraDirector.SetView(command.Value<string>("mode") ?? "junction", command.Value<string>("id"));
+                        var cameraMode = command.Value<string>("mode") ?? "junction";
+                        cameraDirector.SetView(cameraMode, command.Value<string>("id"));
+                        environmentController.SetCameraMode(cameraMode);
+                        break;
+                    case "camera-previews":
+                        cameraDirector.CaptureViewPreviews(command.Value<string>("id"));
                         break;
                     case "focus":
                         cameraDirector.Focus(command.Value<string>("id") ?? string.Empty);
@@ -147,6 +154,14 @@ namespace Xiongan.DigitalTwin
                         break;
                     case "algorithm-visuals":
                         algorithmVisuals.SetVisible(command.Value<bool?>("visible") ?? false);
+                        break;
+                    case "runtime-reset":
+                        digitalTwin.ResetRuntime();
+                        cameraDirector.ResetRuntime();
+                        environmentController.SetCameraMode("hero");
+                        break;
+                    case "visibility":
+                        cameraDirector.SetRenderingActive(command.Value<bool?>("visible") ?? true);
                         break;
                 }
                 bridge.Emit("command-applied", new { action, mode = command.Value<string>("mode") ?? string.Empty });

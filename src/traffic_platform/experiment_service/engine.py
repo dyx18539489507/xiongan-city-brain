@@ -7,12 +7,15 @@ import platform
 import statistics
 import time
 import xml.etree.ElementTree as ET
+from collections import deque
 from collections.abc import Awaitable, Callable
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import suppress
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
+from functools import partial
 from pathlib import Path
-from typing import Literal, cast
+from typing import Any, Literal, cast
 from uuid import uuid4
 
 import psutil
@@ -95,6 +98,17 @@ class ScheduledFault:
 
 
 @dataclass(frozen=True, slots=True)
+class QueuedLiveFault:
+    """One canonical live fault waiting for its authoritative SUMO timestamp."""
+
+    event_id: str
+    fault_type: str
+    apply_at_simulation_time_s: float
+    duration_s: float
+    parameters: dict[str, float | str | bool]
+
+
+@dataclass(frozen=True, slots=True)
 class ExperimentConfig:
     """One reproducible experiment execution request."""
 
@@ -153,10 +167,14 @@ class ExperimentControl:
         self.simulation_rate: float | None = None
         self._active_faults: dict[
             str,
-            tuple[float, dict[str, float | str | bool]],
+            tuple[str, float, dict[str, float | str | bool]],
         ] = {}
+        self._queued_faults: list[QueuedLiveFault] = []
         self._pending_disturbances: list[Disturbance] = []
         self._dynamic_disturbance_counter = 0
+        self._dynamic_fault_ids: set[str] = set()
+        self._applied_dynamic_fault_ids: set[str] = set()
+        self._fault_status_callback: Callable[[str, str, float, str | None], None] | None = None
 
     def pause(self) -> None:
         """Pause before the next SUMO simulation step."""
@@ -193,16 +211,90 @@ class ExperimentControl:
     ) -> None:
         """Apply a live, runner-observed fault configuration."""
 
+        self._activate_fault(
+            f"standalone-{uuid4().hex[:12]}",
+            fault_type,
+            parameters,
+            canonical_dynamic=False,
+        )
+
+    def set_fault_status_callback(
+        self,
+        callback: Callable[[str, str, float, str | None], None] | None,
+    ) -> None:
+        """Receive causal state changes for pair-level fault auditing."""
+
+        self._fault_status_callback = callback
+
+    def queue_fault(
+        self,
+        *,
+        event_id: str,
+        fault_type: str,
+        apply_at_simulation_time_s: float,
+        parameters: dict[str, float | str | bool],
+    ) -> None:
+        """Queue a canonical event without applying it between SUMO steps."""
+
         duration_s = float(parameters.get("duration_s", 30.0))
         if duration_s <= 0:
             raise ValueError("fault duration_s must be positive")
-        if fault_type in {"incident", "flow_surge", "large_event"}:
+        if apply_at_simulation_time_s < self.simulation_time_s:
+            raise ValueError("fault application time cannot precede the SUMO clock")
+        if any(item.event_id == event_id for item in self._queued_faults):
+            raise ValueError(f"duplicate queued fault event_id: {event_id}")
+        self._queued_faults.append(
+            QueuedLiveFault(
+                event_id=event_id,
+                fault_type=fault_type,
+                apply_at_simulation_time_s=apply_at_simulation_time_s,
+                duration_s=duration_s,
+                parameters=dict(parameters),
+            )
+        )
+        self._report_fault_status(event_id, "pending", self.simulation_time_s)
+
+    def _activate_fault(
+        self,
+        event_id: str,
+        fault_type: str,
+        parameters: dict[str, float | str | bool],
+        *,
+        canonical_dynamic: bool,
+    ) -> None:
+        duration_s = float(parameters.get("duration_s", 30.0))
+        if duration_s <= 0:
+            raise ValueError("fault duration_s must be positive")
+        dynamic_types = {"incident", "flow_surge", "large_event"}
+        if canonical_dynamic:
+            dynamic_types.add("roadwork")
+        if fault_type in dynamic_types:
             self._dynamic_disturbance_counter += 1
+            disturbance_parameters: dict[str, float | str | bool] = {}
+            if fault_type in {"flow_surge", "large_event"}:
+                disturbance_parameters["flow_multiplier"] = float(
+                    parameters.get(
+                        "flow_multiplier",
+                        2.5 if fault_type == "large_event" else 1.8,
+                    )
+                )
+            if fault_type == "incident":
+                for parameter_name in ("vehicle_id", "edge_id"):
+                    parameter_value = parameters.get(parameter_name)
+                    if isinstance(parameter_value, str) and parameter_value:
+                        disturbance_parameters[parameter_name] = parameter_value
+            lane_id = parameters.get("lane_id")
+            if fault_type == "roadwork" and isinstance(lane_id, str) and lane_id:
+                disturbance_parameters["lane_id"] = lane_id
             self._pending_disturbances.append(
                 Disturbance.model_validate(
                     {
-                        "event_id": (f"live_{fault_type}_{self._dynamic_disturbance_counter:04d}"),
-                        "type": ("incident" if fault_type == "incident" else "event_dispersal"),
+                        "event_id": event_id,
+                        "type": (
+                            fault_type
+                            if fault_type in {"incident", "roadwork"}
+                            else "event_dispersal"
+                        ),
                         "simulation_time_s": self.simulation_time_s,
                         "duration_s": duration_s,
                         "target": str(
@@ -217,23 +309,26 @@ class ExperimentControl:
                                 ),
                             )
                         ),
-                        "parameters": {
-                            "flow_multiplier": float(
-                                parameters.get(
-                                    "flow_multiplier",
-                                    2.5 if fault_type == "large_event" else 1.8,
-                                )
-                            )
-                        },
+                        "parameters": disturbance_parameters,
                     },
                     strict=True,
                 )
             )
-        self._active_faults[fault_type] = (
+            self._dynamic_fault_ids.add(event_id)
+        active_parameters = dict(parameters)
+        if canonical_dynamic and fault_type == "roadwork":
+            active_parameters["_physical_disturbance"] = True
+        self._active_faults[event_id] = (
+            fault_type,
             self.simulation_time_s + duration_s,
-            dict(parameters),
+            active_parameters,
         )
         self._recompute_fault_state()
+        self._report_fault_status(
+            event_id,
+            "scheduled" if event_id in self._dynamic_fault_ids else "applied",
+            self.simulation_time_s,
+        )
 
     def drain_pending_disturbances(self) -> list[Disturbance]:
         pending = self._pending_disturbances
@@ -253,7 +348,7 @@ class ExperimentControl:
         jitter_ms = 0.0
         packet_loss_rate = 0.0
         corruption_rate = 0.0
-        for fault_type, (_expires_at, parameters) in self._active_faults.items():
+        for fault_type, _expires_at, parameters in self._active_faults.values():
             if fault_type == "cloud_offline":
                 self.cloud_online = False
             elif fault_type == "edge_offline":
@@ -262,7 +357,9 @@ class ExperimentControl:
             elif fault_type in {"mqtt_broker_offline", "broker_offline"}:
                 self.broker_online = False
                 self.broker_outage_duration_s = float(parameters.get("duration_s", 30.0))
-            elif fault_type == "roadwork":
+            elif fault_type == "roadwork" and not bool(
+                parameters.get("_physical_disturbance", False)
+            ):
                 self.roadwork_active = True
             elif fault_type == "communication_latency":
                 base_latency_ms = float(parameters.get("latency_ms", 0.0))
@@ -282,22 +379,75 @@ class ExperimentControl:
         """Expire live faults on the causal SUMO clock and report removals."""
 
         self.simulation_time_s = simulation_time_s
+        due = [
+            item
+            for item in self._queued_faults
+            if simulation_time_s + 1e-9 >= item.apply_at_simulation_time_s
+        ]
+        self._queued_faults = [item for item in self._queued_faults if item not in due]
+        for item in due:
+            self._activate_fault(
+                item.event_id,
+                item.fault_type,
+                item.parameters,
+                canonical_dynamic=True,
+            )
         expired = [
-            fault_type
-            for fault_type, (expires_at, _parameters) in self._active_faults.items()
+            (event_id, fault_type)
+            for event_id, (fault_type, expires_at, _parameters) in self._active_faults.items()
             if simulation_time_s >= expires_at
         ]
         if expired:
-            for fault_type in expired:
-                del self._active_faults[fault_type]
+            for event_id, _fault_type in expired:
+                del self._active_faults[event_id]
+                was_dynamic = event_id in self._dynamic_fault_ids
+                self._dynamic_fault_ids.discard(event_id)
+                if was_dynamic and event_id not in self._applied_dynamic_fault_ids:
+                    self._report_fault_status(
+                        event_id,
+                        "failed",
+                        simulation_time_s,
+                        "physical disturbance was not applied before expiry",
+                    )
+                else:
+                    self._report_fault_status(event_id, "expired", simulation_time_s)
+                self._applied_dynamic_fault_ids.discard(event_id)
             self._recompute_fault_state()
-        return expired
+        return [fault_type for _event_id, fault_type in expired]
+
+    def mark_disturbance_applied(
+        self,
+        event_id: str,
+        simulation_time_s: float,
+        detail: str | None = None,
+    ) -> None:
+        """Acknowledge that a queued physical disturbance reached TraCI."""
+
+        if event_id in self._dynamic_fault_ids:
+            self._applied_dynamic_fault_ids.add(event_id)
+            self._report_fault_status(event_id, "applied", simulation_time_s, detail)
+
+    def _report_fault_status(
+        self,
+        event_id: str,
+        status: str,
+        simulation_time_s: float,
+        detail: str | None = None,
+    ) -> None:
+        if self._fault_status_callback is not None:
+            self._fault_status_callback(event_id, status, simulation_time_s, detail)
 
     def clear_faults(self) -> None:
         """Restore normal cloud, road and communication conditions."""
 
+        event_ids = [*self._active_faults, *(item.event_id for item in self._queued_faults)]
         self._active_faults.clear()
+        self._queued_faults.clear()
+        self._dynamic_fault_ids.clear()
+        self._applied_dynamic_fault_ids.clear()
         self._recompute_fault_state()
+        for event_id in event_ids:
+            self._report_fault_status(event_id, "cleared", self.simulation_time_s)
 
 
 def _traci_label(experiment_id: str) -> str:
@@ -319,6 +469,9 @@ class ExperimentRunner:
         snapshot_callback: Callable[[dict[str, object]], None] | None = None,
         snapshot_detail: Literal["full", "progress"] = "full",
         digital_twin_callback: Callable[[DigitalTwinSourceFrame], None] | None = None,
+        digital_twin_schedule_callback: (
+            Callable[[float, float], float | None] | None
+        ) = None,
         step_barrier_callback: Callable[[float], Awaitable[None]] | None = None,
         persistence_callback: (Callable[[str, dict[str, object]], Awaitable[None]] | None) = None,
     ) -> None:
@@ -329,6 +482,7 @@ class ExperimentRunner:
         self.snapshot_callback = snapshot_callback
         self.snapshot_detail = snapshot_detail
         self.digital_twin_callback = digital_twin_callback
+        self.digital_twin_schedule_callback = digital_twin_schedule_callback
         self.step_barrier_callback = step_barrier_callback
         self.persistence_callback = persistence_callback
         self.events: list[dict[str, str | float]] = []
@@ -391,6 +545,73 @@ class ExperimentRunner:
         digital_twin_interval_s = 1.0 / dashboard_hz
         next_digital_twin_time_s = 0.0
         started_wall = time.perf_counter()
+        executor = ThreadPoolExecutor(
+            max_workers=1,
+            thread_name_prefix=f"sumo-{self.config.experiment_id[-20:]}",
+        )
+        loop = asyncio.get_running_loop()
+
+        async def run_blocking(
+            function: Callable[..., Any],
+            /,
+            *args: Any,
+            **kwargs: Any,
+        ) -> Any:
+            # One dedicated worker keeps each TraCI connection thread-affine and
+            # prevents paired runners from contending for the process-wide pool.
+            return await loop.run_in_executor(executor, partial(function, *args, **kwargs))
+
+        phase_history_ms: dict[str, deque[float]] = {
+            name: deque(maxlen=120)
+            for name in (
+                "sumo_step",
+                "disturbance",
+                "aggregation",
+                "control",
+                "telemetry",
+                "barrier",
+                "total",
+            )
+        }
+
+        def record_phase(name: str, started_at: float) -> None:
+            phase_history_ms[name].append((time.perf_counter() - started_at) * 1000.0)
+
+        def percentile(values: deque[float], fraction: float) -> float:
+            if not values:
+                return 0.0
+            ordered = sorted(values)
+            return ordered[min(len(ordered) - 1, round((len(ordered) - 1) * fraction))]
+
+        def performance_snapshot() -> dict[str, object]:
+            total_p50_ms = percentile(phase_history_ms["total"], 0.50)
+            total_p95_ms = percentile(phase_history_ms["total"], 0.95)
+            return {
+                "sample_count": len(phase_history_ms["total"]),
+                "step_p50_ms": round(total_p50_ms, 3),
+                "step_p95_ms": round(total_p95_ms, 3),
+                "achievable_rate_p50": (
+                    round(1000.0 / total_p50_ms, 3) if total_p50_ms > 0 else None
+                ),
+                "achievable_rate_p95": (
+                    round(1000.0 / total_p95_ms, 3) if total_p95_ms > 0 else None
+                ),
+                "phase_p95_ms": {
+                    name: round(percentile(values, 0.95), 3)
+                    for name, values in phase_history_ms.items()
+                    if name != "total"
+                },
+            }
+
+        def current_digital_twin_interval_s() -> float:
+            target_rate = self.control.simulation_rate
+            if target_rate is None:
+                return digital_twin_interval_s
+            # The browser interpolates SUMO frames. Four wall-clock updates per
+            # second are enough for smooth motion and avoid making x8 encode and
+            # fan out eight full paired frames every second.
+            return max(digital_twin_interval_s, target_rate / 4.0)
+
         controller: EdgeController | None = None
         edge_runtime: EdgeRuntime | None = None
         pending_vehicle_commands: dict[str, VehicleGuidanceCommand] = {}
@@ -477,7 +698,7 @@ class ExperimentRunner:
                 qos=1,
             )
         try:
-            await asyncio.to_thread(
+            await run_blocking(
                 adapter.start_simulation,
                 self.config.config_file,
                 gui=self.config.gui,
@@ -495,7 +716,7 @@ class ExperimentRunner:
                 ],
             )
             evaluation_start_simulation_time_s = (
-                await asyncio.to_thread(adapter.get_network_state)
+                await run_blocking(adapter.get_network_state)
             ).simulation_time_s
             aggregator = EdgeStateAggregator(
                 adapter,
@@ -505,7 +726,7 @@ class ExperimentRunner:
             # Topology discovery performs many synchronous TraCI round trips.
             # Keep health checks, WebSockets and the control API responsive
             # while the live SUMO connection is being initialized.
-            topology = await asyncio.to_thread(aggregator.build_topology)
+            topology = await run_blocking(aggregator.build_topology)
             controller = EdgeController(
                 adapter,
                 edge_factory,
@@ -567,7 +788,9 @@ class ExperimentRunner:
                     )
                     break
                 step_wall_started = time.perf_counter()
-                network = await asyncio.to_thread(adapter.step)
+                phase_started = time.perf_counter()
+                network = await run_blocking(adapter.step)
+                record_phase("sumo_step", phase_started)
                 if (
                     network.simulation_time_s
                     > evaluation_start_simulation_time_s + self.config.duration_s
@@ -664,7 +887,7 @@ class ExperimentRunner:
                         )
                     await self.bus.advance(network.simulation_time_s)
                 if self.control.roadwork_active and not roadwork_applied:
-                    await asyncio.to_thread(adapter.close_lane, roadwork_lane_id)
+                    await run_blocking(adapter.close_lane, roadwork_lane_id)
                     roadwork_applied = True
                     self.events.append(
                         {
@@ -674,7 +897,7 @@ class ExperimentRunner:
                         }
                     )
                 elif not self.control.roadwork_active and roadwork_applied:
-                    await asyncio.to_thread(adapter.reopen_lane, roadwork_lane_id)
+                    await run_blocking(adapter.reopen_lane, roadwork_lane_id)
                     roadwork_applied = False
                     self.events.append(
                         {
@@ -686,15 +909,31 @@ class ExperimentRunner:
                 if disturbance_runtime is not None:
                     for disturbance in self.control.drain_pending_disturbances():
                         disturbance_runtime.schedule(disturbance)
-                    self.events.extend(
-                        await asyncio.to_thread(
-                            disturbance_runtime.tick,
-                            network.simulation_time_s,
-                            adapter,
-                        )
+                    disturbance_events = await run_blocking(
+                        disturbance_runtime.tick,
+                        network.simulation_time_s,
+                        adapter,
                     )
+                    self.events.extend(disturbance_events)
+                    for event in disturbance_events:
+                        if event.get("event") not in {
+                            "ROADWORK_LANE_CLOSED",
+                            "INCIDENT_STOP_SCHEDULED",
+                            "EVENT_DISPERSAL_STARTED",
+                        }:
+                            continue
+                        disturbance_id = event.get("disturbance_id")
+                        if isinstance(disturbance_id, str):
+                            detail = event.get("detail")
+                            self.control.mark_disturbance_applied(
+                                disturbance_id,
+                                network.simulation_time_s,
+                                str(detail) if detail is not None else None,
+                            )
                 self._apply_scheduled_cloud_outage(network.simulation_time_s)
-                regional = await asyncio.to_thread(
+                record_phase("disturbance", phase_started)
+                phase_started = time.perf_counter()
+                regional = await run_blocking(
                     aggregator.collect_regional,
                     network=network,
                     control_mode=(
@@ -708,6 +947,8 @@ class ExperimentRunner:
                         else []
                     ),
                 )
+                record_phase("aggregation", phase_started)
+                phase_started = time.perf_counter()
                 vehicle_states = aggregator.last_vehicle_states
                 for intersection_state in regional.intersection_states:
                     emergency_phase = intersection_state.emergency_priority_phase_id
@@ -780,7 +1021,7 @@ class ExperimentRunner:
                             None,
                         )
                         feedback = (
-                            await asyncio.to_thread(
+                            await run_blocking(
                                 self._apply_remote_edge_action,
                                 adapter,
                                 edge_factory,
@@ -845,7 +1086,7 @@ class ExperimentRunner:
                             if isinstance(edge_latency, int | float):
                                 remote_edge_latencies_ms.append(float(edge_latency))
                     else:
-                        feedback = await asyncio.to_thread(
+                        feedback = await run_blocking(
                             controller.control,
                             intersection_state,
                         )
@@ -949,7 +1190,7 @@ class ExperimentRunner:
                 )
                 guidance_request_count = 0
                 if isinstance(self.bus, MqttMessageBus):
-                    guidance_count = await asyncio.to_thread(
+                    guidance_count = await run_blocking(
                         self._apply_vehicle_commands,
                         adapter,
                         pending_vehicle_commands,
@@ -969,7 +1210,7 @@ class ExperimentRunner:
                         guidance_count,
                         guidance_rejections,
                         guidance_modifications,
-                    ) = await asyncio.to_thread(
+                    ) = await run_blocking(
                         self._apply_guidance,
                         adapter,
                         controller,
@@ -988,8 +1229,10 @@ class ExperimentRunner:
                             ),
                         }
                     )
+                record_phase("control", phase_started)
+                phase_started = time.perf_counter()
                 pedestrian_states = aggregator.last_pedestrian_states
-                arrived_vehicle_ids = await asyncio.to_thread(adapter.get_arrived_vehicle_ids)
+                arrived_vehicle_ids = await run_blocking(adapter.get_arrived_vehicle_ids)
                 completed_bicycle_total += sum(
                     vehicle_class_history.get(identifier) == "bicycle"
                     for identifier in arrived_vehicle_ids
@@ -998,7 +1241,7 @@ class ExperimentRunner:
                     vehicle_class_history.get(identifier) != "bicycle"
                     for identifier in arrived_vehicle_ids
                 )
-                arrived_pedestrian_ids = await asyncio.to_thread(adapter.get_arrived_pedestrian_ids)
+                arrived_pedestrian_ids = await run_blocking(adapter.get_arrived_pedestrian_ids)
                 completed_pedestrian_total += len(arrived_pedestrian_ids)
                 vehicle_class_history.update(
                     {vehicle.vehicle_id: vehicle.vehicle_class for vehicle in vehicle_states}
@@ -1288,16 +1531,24 @@ class ExperimentRunner:
                             },
                         )
                         next_trajectory_time_s = network.simulation_time_s + trajectory_interval_s
+                effective_digital_twin_interval_s: float | None = None
+                if self.digital_twin_schedule_callback is not None:
+                    effective_digital_twin_interval_s = self.digital_twin_schedule_callback(
+                        network.simulation_time_s,
+                        digital_twin_interval_s,
+                    )
+                elif network.simulation_time_s >= next_digital_twin_time_s:
+                    effective_digital_twin_interval_s = current_digital_twin_interval_s()
                 if (
                     self.digital_twin_callback is not None
-                    and network.simulation_time_s >= next_digital_twin_time_s
+                    and effective_digital_twin_interval_s is not None
                 ):
                     self.digital_twin_callback(
                         DigitalTwinSourceFrame(
                             experiment_id=self.config.experiment_id,
                             scenario_id=self.config.scenario_id,
                             simulation_time_s=network.simulation_time_s,
-                            tick_hz=dashboard_hz,
+                            tick_hz=1.0 / effective_digital_twin_interval_s,
                             vehicles=vehicle_states,
                             pedestrians=pedestrian_states,
                             traffic_lights=[
@@ -1380,7 +1631,10 @@ class ExperimentRunner:
                         )
                     )
                     digital_twin_event_index = len(self.events)
-                    next_digital_twin_time_s = network.simulation_time_s + digital_twin_interval_s
+                    if self.digital_twin_schedule_callback is None:
+                        next_digital_twin_time_s = (
+                            network.simulation_time_s + effective_digital_twin_interval_s
+                        )
                 if self.snapshot_callback is not None:
                     snapshot: dict[str, object] = {
                         "experiment_id": self.config.experiment_id,
@@ -1389,11 +1643,10 @@ class ExperimentRunner:
                         "algorithm": self.config.algorithm,
                         "seed": self.config.seed,
                         "duration_s": self.config.duration_s,
-                        "evaluation_start_simulation_time_s": (
-                            evaluation_start_simulation_time_s
-                        ),
+                        "evaluation_start_simulation_time_s": (evaluation_start_simulation_time_s),
                         "simulation_time_s": network.simulation_time_s,
                         "simulation_rate": self.control.simulation_rate,
+                        "performance": performance_snapshot(),
                     }
                     if self.snapshot_detail == "full":
                         current_max_queue = max(
@@ -1407,90 +1660,98 @@ class ExperimentRunner:
                         ]
                         snapshot.update(
                             {
-                            "intersections": [
-                                {
-                                    "intersection_id": state.intersection_id,
-                                    **latest_control_evidence.get(state.intersection_id, {}),
-                                    "phase_id": state.current_phase_id,
-                                    "phase_state": state.phase_state,
-                                    "queue_vehicles": state.total_queue,
-                                    "mean_speed_m_s": state.mean_speed,
-                                    "congestion_level": state.congestion_level,
-                                    "spillback_risk": state.spillback_risk,
-                                    "control_mode": state.local_control_mode,
-                                    "incident_state": state.incident_state,
-                                    "bicycle_count": sum(
-                                        lane.bicycle_count + lane.electric_bicycle_count
-                                        for lane in state.lane_states
-                                    ),
-                                    "bicycle_queue_count": state.bicycle_queue_count,
-                                    "pedestrian_count": sum(
-                                        lane.pedestrian_count for lane in state.lane_states
-                                    ),
-                                    "pedestrian_waiting_count": (state.pedestrian_waiting_count),
-                                    "pedestrian_crossing_count": (state.crossing_pedestrian_count),
-                                    "emergency_priority_phase_id": (
-                                        state.emergency_priority_phase_id
-                                    ),
-                                    "lane_states": [
-                                        {
-                                            "lane_id": lane.lane_id,
-                                            "direction": lane.direction,
-                                            "movement": lane.movement,
-                                            "vehicle_count": lane.vehicle_count,
-                                            "queue_vehicle_count": (lane.queue_vehicle_count),
-                                            "bicycle_count": lane.bicycle_count,
-                                            "e_bike_count": (lane.electric_bicycle_count),
-                                            "bicycle_queue_count": (lane.bicycle_queue_count),
-                                            "pedestrian_count": lane.pedestrian_count,
-                                            "pedestrian_waiting_count": (
-                                                lane.pedestrian_waiting_count
-                                            ),
-                                            "queue_length_m": (lane.queue_length_m),
-                                            "mean_speed_m_s": lane.mean_speed,
-                                            "occupancy": lane.occupancy,
-                                            "downstream_occupancy": (lane.downstream_occupancy),
-                                            "downstream_available_capacity": (
-                                                lane.downstream_available_capacity
-                                            ),
-                                        }
-                                        for lane in state.lane_states
-                                    ],
-                                }
-                                for state in regional.intersection_states
-                            ],
-                            "max_queue_vehicles": current_max_queue,
-                            "downstream_occupancy": (
-                                statistics.fmean(downstream_occupancies)
-                                if downstream_occupancies
-                                else 0.0
-                            ),
-                            "cloud_decision_latency_ms": (
-                                remote_cloud_latencies_ms[-1]
-                                if remote_cloud_latencies_ms
-                                else (cloud_latencies_ms[-1] if cloud_latencies_ms else None)
-                            ),
-                            "edge_decision_latency_ms": (
-                                remote_edge_latencies_ms[-1]
-                                if remote_edge_latencies_ms
-                                else (edge_latencies_ms[-1] if edge_latencies_ms else None)
-                            ),
-                            "end_to_end_control_latency_ms": (
-                                remote_control_latencies_ms[-1]
-                                if remote_control_latencies_ms
-                                else None
-                            ),
-                            "mqtt_online": self.control.broker_online,
-                            "active_disturbances": (regional.active_disturbances),
-                            "spillback_edges": regional.spillback_edges,
-                            "congested_intersection_ids": (regional.congested_intersections),
-                            "recent_events": self.events[-60:],
-                            **sample_dict,
+                                "intersections": [
+                                    {
+                                        "intersection_id": state.intersection_id,
+                                        **latest_control_evidence.get(state.intersection_id, {}),
+                                        "phase_id": state.current_phase_id,
+                                        "phase_state": state.phase_state,
+                                        "queue_vehicles": state.total_queue,
+                                        "mean_speed_m_s": state.mean_speed,
+                                        "congestion_level": state.congestion_level,
+                                        "spillback_risk": state.spillback_risk,
+                                        "control_mode": state.local_control_mode,
+                                        "incident_state": state.incident_state,
+                                        "bicycle_count": sum(
+                                            lane.bicycle_count + lane.electric_bicycle_count
+                                            for lane in state.lane_states
+                                        ),
+                                        "bicycle_queue_count": state.bicycle_queue_count,
+                                        "pedestrian_count": sum(
+                                            lane.pedestrian_count for lane in state.lane_states
+                                        ),
+                                        "pedestrian_waiting_count": (
+                                            state.pedestrian_waiting_count
+                                        ),
+                                        "pedestrian_crossing_count": (
+                                            state.crossing_pedestrian_count
+                                        ),
+                                        "emergency_priority_phase_id": (
+                                            state.emergency_priority_phase_id
+                                        ),
+                                        "lane_states": [
+                                            {
+                                                "lane_id": lane.lane_id,
+                                                "direction": lane.direction,
+                                                "movement": lane.movement,
+                                                "vehicle_count": lane.vehicle_count,
+                                                "queue_vehicle_count": (lane.queue_vehicle_count),
+                                                "bicycle_count": lane.bicycle_count,
+                                                "e_bike_count": (lane.electric_bicycle_count),
+                                                "bicycle_queue_count": (lane.bicycle_queue_count),
+                                                "pedestrian_count": lane.pedestrian_count,
+                                                "pedestrian_waiting_count": (
+                                                    lane.pedestrian_waiting_count
+                                                ),
+                                                "queue_length_m": (lane.queue_length_m),
+                                                "mean_speed_m_s": lane.mean_speed,
+                                                "occupancy": lane.occupancy,
+                                                "downstream_occupancy": (lane.downstream_occupancy),
+                                                "downstream_available_capacity": (
+                                                    lane.downstream_available_capacity
+                                                ),
+                                            }
+                                            for lane in state.lane_states
+                                        ],
+                                    }
+                                    for state in regional.intersection_states
+                                ],
+                                "max_queue_vehicles": current_max_queue,
+                                "downstream_occupancy": (
+                                    statistics.fmean(downstream_occupancies)
+                                    if downstream_occupancies
+                                    else 0.0
+                                ),
+                                "cloud_decision_latency_ms": (
+                                    remote_cloud_latencies_ms[-1]
+                                    if remote_cloud_latencies_ms
+                                    else (cloud_latencies_ms[-1] if cloud_latencies_ms else None)
+                                ),
+                                "edge_decision_latency_ms": (
+                                    remote_edge_latencies_ms[-1]
+                                    if remote_edge_latencies_ms
+                                    else (edge_latencies_ms[-1] if edge_latencies_ms else None)
+                                ),
+                                "end_to_end_control_latency_ms": (
+                                    remote_control_latencies_ms[-1]
+                                    if remote_control_latencies_ms
+                                    else None
+                                ),
+                                "mqtt_online": self.control.broker_online,
+                                "active_disturbances": (regional.active_disturbances),
+                                "spillback_edges": regional.spillback_edges,
+                                "congested_intersection_ids": (regional.congested_intersections),
+                                "recent_events": self.events[-60:],
+                                **sample_dict,
                             }
                         )
                     self.snapshot_callback(snapshot)
+                record_phase("telemetry", phase_started)
+                phase_started = time.perf_counter()
                 if self.step_barrier_callback is not None:
                     await self.step_barrier_callback(network.simulation_time_s)
+                record_phase("barrier", phase_started)
+                phase_history_ms["total"].append((time.perf_counter() - step_wall_started) * 1000.0)
                 simulation_rate = self.control.simulation_rate
                 if simulation_rate is None or last_paced_simulation_time is None:
                     await asyncio.sleep(0)
@@ -1505,12 +1766,16 @@ class ExperimentRunner:
                     )
                 last_paced_simulation_time = network.simulation_time_s
         finally:
-            await asyncio.to_thread(adapter.stop_simulation)
-            if controller is not None:
-                await asyncio.to_thread(controller.close)
-            await self.bus.disconnect()
+            try:
+                await run_blocking(adapter.stop_simulation)
+                if controller is not None:
+                    await run_blocking(controller.close)
+            finally:
+                executor.shutdown(wait=True, cancel_futures=True)
+                await self.bus.disconnect()
         wall_duration = time.perf_counter() - started_wall
-        metrics = accumulator.summary()
+        metrics: dict[str, object] = {**accumulator.summary()}
+        metrics["runner_performance"] = performance_snapshot()
         metrics.update(self._signal_control_metrics(samples))
         if controller is not None:
             metrics["algorithm_timeout_count"] = controller.algorithm_timeout_count

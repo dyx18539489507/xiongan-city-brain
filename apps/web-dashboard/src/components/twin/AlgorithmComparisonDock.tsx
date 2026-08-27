@@ -135,7 +135,10 @@ export function AlgorithmComparisonPanel({paired, selectedRole, onRoleChange}: P
   const metric = comparisonMetrics.find((item) => item.key === metricKey) ?? comparisonMetrics[0];
 
   useEffect(() => {
-    if (!state.pairId || !state.initialized) return;
+    if (!state.pairId || !state.initialized) {
+      setSamples((current) => current.length ? [] : current);
+      return;
+    }
     const sample: Sample = {
       pairId: state.pairId,
       time: state.simulationTimeS,

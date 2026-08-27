@@ -13,6 +13,7 @@ type Flight = {from: CameraPose; to: CameraPose; startedAt: number; durationMs: 
 export type MapViewportInsets = {top: number; right: number; bottom: number; left: number};
 
 const DEFAULT_SCENE_PADDING = 36;
+const MAX_ZOOM_RATIO = 48;
 
 export class MapCamera {
   width = 1;
@@ -76,7 +77,7 @@ export class MapCamera {
   }
 
   focusPoint(point: Point2, targetScale = 1.25): void {
-    this.moveTo({centerX: point.x, centerY: point.y, scale: clamp(targetScale, this.fittedScale, 5)}, true);
+    this.moveTo({centerX: point.x, centerY: point.y, scale: clamp(targetScale, this.fittedScale, this.maximumScale)}, true);
   }
 
   pan(deltaX: number, deltaY: number): void {
@@ -90,7 +91,7 @@ export class MapCamera {
   zoomAt(screenX: number, screenY: number, factor: number): void {
     this.flight = null;
     const before = this.screenToWorld(screenX, screenY);
-    this.scale = clamp(this.scale * factor, this.fittedScale * 0.72, 5);
+    this.scale = clamp(this.scale * factor, this.fittedScale * 0.72, this.maximumScale);
     const after = this.screenToWorld(screenX, screenY);
     this.centerX += before.x - after.x;
     this.centerY += before.y - after.y;
@@ -146,7 +147,7 @@ export class MapCamera {
     const next = {
       centerX: pose.centerX,
       centerY: pose.centerY,
-      scale: clamp(pose.scale, this.fittedScale * 0.72, 5),
+      scale: clamp(pose.scale, this.fittedScale * 0.72, this.maximumScale),
     };
     this.constrainPose(next);
     if (!animate
@@ -205,7 +206,7 @@ export class MapCamera {
       this.flight = null;
       return;
     }
-    this.scale = clamp(this.scale, this.fittedScale * .72, 5);
+    this.scale = clamp(this.scale, this.fittedScale * .72, this.maximumScale);
     this.constrainCenter();
   }
 
@@ -226,4 +227,5 @@ export class MapCamera {
   private get viewportHeight(): number { return Math.max(1, this.height - this.insets.top - this.insets.bottom); }
   private get viewportCenterX(): number { return this.insets.left + this.viewportWidth / 2; }
   private get viewportCenterY(): number { return this.insets.top + this.viewportHeight / 2; }
+  private get maximumScale(): number { return Math.max(this.fittedScale, Math.min(5, this.fittedScale * MAX_ZOOM_RATIO)); }
 }

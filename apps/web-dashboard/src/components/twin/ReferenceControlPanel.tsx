@@ -1,4 +1,5 @@
 import {useMemo, useState} from "react";
+import type {StaticSceneDocument} from "../../3d/scene/types";
 import type {RealtimeSnapshot, ScenarioProfile} from "../../types";
 import {algorithmOptionLabel, sortAlgorithms} from "../../algorithmLabels";
 import {supportedEvents} from "./EventDrawer";
@@ -43,17 +44,84 @@ function directionLabel(direction: string): string {
   return direction.slice(0, 3) || "进口";
 }
 
-function SignalDiagram({phaseId, phaseState}: {phaseId?: string; phaseState?: string}) {
-  const hasLivePhase = Boolean(phaseId || phaseState);
-  return <svg aria-label="当前路口信号相位图" className="reference-phase-diagram" role="img" viewBox="0 0 220 74">
-    <path className="phase-road" d="M0 27h83V0h54v27h83v20h-83v27H83V47H0Z" />
-    <path className="phase-lane" d="M0 34h83M137 34h83M101 0v27M101 47v27M119 0v27M119 47v27M0 41h83M137 41h83" />
-    <path className={hasLivePhase ? "phase-flow active" : "phase-flow"} d="M110 66V47m0-20V8" />
-    <path className={hasLivePhase ? "phase-flow secondary" : "phase-flow"} d="M74 37H18m184 0h-56" />
-    <circle className={hasLivePhase ? "phase-lamp green" : "phase-lamp"} cx="76" cy="52" r="3" />
-    <circle className="phase-lamp red" cx="144" cy="22" r="3" />
-    <text x="7" y="14">W</text><text x="204" y="14">E</text><text x="90" y="10">N</text><text x="90" y="70">S</text>
-    <text className="phase-id" x="110" y="43">{phaseId || "--"}</text>
+type SignalColor = "red" | "yellow" | "green" | "off";
+type SignalApproach = "north" | "east" | "south" | "west";
+
+export type SignalApproachState = {
+  hasData: boolean;
+  colors: Record<SignalApproach, SignalColor>;
+};
+
+const signalPriority: Record<SignalColor, number> = {off: 0, red: 1, yellow: 2, green: 3};
+
+function signalColor(value: string | undefined): SignalColor {
+  if (value === "G" || value === "g" || value === "s") return "green";
+  if (value === "Y" || value === "y" || value === "u") return "yellow";
+  if (value === "R" || value === "r") return "red";
+  return "off";
+}
+
+function incomingApproach(shape: Array<{x: number; y: number}>): SignalApproach | null {
+  if (shape.length < 2) return null;
+  const end = shape.at(-1)!;
+  const previous = shape.at(-2)!;
+  const dx = end.x - previous.x;
+  const dy = end.y - previous.y;
+  if (Math.abs(dx) >= Math.abs(dy)) return dx >= 0 ? "west" : "east";
+  return dy >= 0 ? "south" : "north";
+}
+
+export function resolveSignalApproachState(
+  scene: StaticSceneDocument | null,
+  intersectionId: string | null,
+  phaseState?: string,
+): SignalApproachState {
+  const colors: Record<SignalApproach, SignalColor> = {north: "off", east: "off", south: "off", west: "off"};
+  if (!scene || !intersectionId || !phaseState) return {hasData: false, colors};
+  const controller = scene.trafficLights.find((item) =>
+    item.controlledJunctionId === intersectionId || item.sumoTlsId === intersectionId);
+  if (!controller) return {hasData: false, colors};
+  const lanes = new Map(scene.lanes.map((lane) => [lane.sumoLaneId, lane]));
+  let mapped = 0;
+  controller.links.forEach((link) => {
+    const approach = incomingApproach(lanes.get(link.fromLaneId)?.shape ?? []);
+    if (!approach || link.linkIndex < 0 || link.linkIndex >= phaseState.length) return;
+    const next = signalColor(phaseState[link.linkIndex]);
+    if (signalPriority[next] > signalPriority[colors[approach]]) colors[approach] = next;
+    mapped += 1;
+  });
+  return {hasData: mapped > 0, colors};
+}
+
+function SignalHead({x, y, color}: {x: number; y: number; color: SignalColor}) {
+  return <g className="phase-signal-head" transform={`translate(${x} ${y})`}>
+    <rect height="8" rx="1" width="18" x="-9" y="-4" />
+    {(["red", "yellow", "green"] as const).map((lamp, index) =>
+      <circle className={color === lamp ? `phase-lamp ${lamp} active` : `phase-lamp ${lamp}`} cx={-5 + index * 5} cy="0" key={lamp} r="1.6" />)}
+  </g>;
+}
+
+function SignalDiagram({phaseId, phaseState, scene, intersectionId}: {phaseId?: string; phaseState?: string; scene: StaticSceneDocument | null; intersectionId: string | null}) {
+  const state = resolveSignalApproachState(scene, intersectionId, phaseState);
+  const flowClass = (approach: SignalApproach) => `phase-flow ${state.colors[approach] === "green" ? "active" : state.colors[approach] === "yellow" ? "warning" : ""}`;
+  return <svg aria-label={state.hasData ? "当前路口真实信号相位图" : "等待当前路口信号数据"} className="reference-phase-diagram" role="img" viewBox="0 0 220 82">
+    <path className="phase-road" d="M0 29h82V0h56v29h82v24h-82v29H82V53H0Z" />
+    <path className="phase-lane" d="M0 35h82M138 35h82M103 0v29M103 53v29M117 0v29M117 53v29M0 47h82M138 47h82" />
+    <path className={flowClass("north")} d="M110 8v20" />
+    <path className={flowClass("east")} d="M204 41h-64" />
+    <path className={flowClass("south")} d="M110 74V54" />
+    <path className={flowClass("west")} d="M16 41h64" />
+    <SignalHead color={state.colors.north} x={126} y={17} />
+    <SignalHead color={state.colors.east} x={158} y={58} />
+    <SignalHead color={state.colors.south} x={94} y={65} />
+    <SignalHead color={state.colors.west} x={62} y={24} />
+    <text className="phase-direction" x="88" y="10">北进口</text>
+    <text className="phase-direction" x="187" y="26">东进口</text>
+    <text className="phase-direction" x="116" y="78">南进口</text>
+    <text className="phase-direction" x="4" y="63">西进口</text>
+    {state.hasData
+      ? <text className="phase-id" x="110" y="44">{phaseId || "实时"}</text>
+      : <text className="phase-waiting" x="110" y="44">等待路口数据</text>}
   </svg>;
 }
 
@@ -134,12 +202,12 @@ export function ReferenceControlPanel(props: TwinControlPanelProps) {
     {signalTab === "control" && <>
       {algorithmSelector}
       {metrics}
-      <PanelSection title="路口信号状态" value={phaseId || "--"}><SignalDiagram phaseId={phaseId} phaseState={phaseState} /></PanelSection>
+      <PanelSection title="路口信号状态" value={phaseId || "等待中"}><SignalDiagram intersectionId={props.selectedIntersectionId} phaseId={phaseId} phaseState={phaseState} scene={props.scene} /></PanelSection>
       <PanelSection title="进口道排队"><QueueBars lanes={selectedRealtime?.lane_states ?? []} /></PanelSection>
       <PanelSection title="区域运行趋势"><TrendChart history={props.history} /></PanelSection>
     </>}
     {signalTab === "phase" && <>
-      <PanelSection title="实时相位" value={phaseState || "等待数据"}><SignalDiagram phaseId={phaseId} phaseState={phaseState} /></PanelSection>
+      <PanelSection title="实时相位" value={phaseState || "等待数据"}><SignalDiagram intersectionId={props.selectedIntersectionId} phaseId={phaseId} phaseState={phaseState} scene={props.scene} /></PanelSection>
       {metrics}
       <div className="reference-phase-ledger">
         <div><span>控制模式</span><b>{selectedRealtime?.control_mode || "--"}</b></div>

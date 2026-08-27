@@ -3,6 +3,7 @@ from pathlib import Path
 
 from traffic_platform.comparison_service import PairedDigitalTwinHub
 from traffic_platform.realtime.models import DigitalTwinSourceFrame
+from traffic_platform.sumo_adapter import VehicleSnapshot
 
 
 def _workspace(tmp_path: Path) -> Path:
@@ -23,13 +24,41 @@ def _workspace(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def _frame(experiment_id: str, time_s: float, queue: int) -> DigitalTwinSourceFrame:
+def _vehicle(vehicle_id: str, road_id: str, lane_id: str) -> VehicleSnapshot:
+    return VehicleSnapshot(
+        vehicle_id=vehicle_id,
+        vehicle_type="passenger",
+        vehicle_class="passenger",
+        road_id=road_id,
+        lane_id=lane_id,
+        x_m=0.0,
+        y_m=0.0,
+        lane_position_m=10.0,
+        speed_m_s=5.0,
+        acceleration_m_s2=0.0,
+        heading_deg=0.0,
+        route_id="route-1",
+        next_intersection_id=None,
+        distance_to_stop_line_m=20.0,
+        waiting_time_s=0.0,
+        co2_mg_s=0.0,
+        nox_mg_s=0.0,
+        fuel_mg_s=0.0,
+    )
+
+
+def _frame(
+    experiment_id: str,
+    time_s: float,
+    queue: int,
+    vehicles: tuple[VehicleSnapshot, ...] = (),
+) -> DigitalTwinSourceFrame:
     return DigitalTwinSourceFrame(
         experiment_id=experiment_id,
         scenario_id="scene",
         simulation_time_s=time_s,
         tick_hz=10.0,
-        vehicles=(),
+        vehicles=vehicles,
         pedestrians=(),
         traffic_lights=(),
         events=(),
@@ -106,3 +135,35 @@ def test_paired_hub_preserves_pause_during_an_in_flight_frame(tmp_path: Path) ->
 
     assert hub.status == "paused"
     assert hub.frames[-1]["status"] == "paused"
+
+
+def test_paired_hub_selects_one_vehicle_on_the_same_physical_edge(tmp_path: Path) -> None:
+    hub = _configured_hub(tmp_path)
+    hub.publish_baseline(
+        _frame(
+            "baseline-1",
+            10.0,
+            3,
+            (_vehicle("shared-1", "edge-a", "edge-a_0"),),
+        )
+    )
+    hub.publish_candidate(
+        _frame(
+            "candidate-1",
+            10.0,
+            2,
+            (
+                _vehicle("shared-1", "edge-a", "edge-a_1"),
+                _vehicle("candidate-only", "edge-b", "edge-b_0"),
+            ),
+        )
+    )
+
+    selected = hub.select_shared_incident_vehicle("downstream_bottleneck", 42)
+
+    assert selected == {
+        "vehicle_id": "shared-1",
+        "edge_id": "edge-a",
+        "baseline_lane_id": "edge-a_0",
+        "candidate_lane_id": "edge-a_1",
+    }

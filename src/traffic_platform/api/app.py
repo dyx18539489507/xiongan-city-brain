@@ -207,9 +207,7 @@ class LiveComparisonRequest(ApiModel):
     candidate_algorithm: str = "coordinated-max-pressure"
     seed: int = Field(default=42, ge=0)
     duration_s: float = Field(default=300.0, gt=0, le=18_000)
-    profile: Literal["BASE", "S01", "S02", "S03", "S04", "S05", "S06", "S07"] = (
-        "BASE"
-    )
+    profile: Literal["BASE", "S01", "S02", "S03", "S04", "S05", "S06", "S07"] = "BASE"
     gui: Literal[False] = False
 
 
@@ -450,41 +448,90 @@ class PlatformState:
         }
 
     def _load_benchmarks(self) -> dict[str, dict[str, Any]]:
-        """Recover completed benchmark evidence after an API restart."""
+        """Recover benchmark progress and completed evidence from disk."""
 
         records: dict[str, dict[str, Any]] = {}
         benchmark_root = self.workspace / "results" / "benchmarks"
-        for result_path in sorted(benchmark_root.glob("*/benchmark.json")):
+        directories = {
+            path.parent
+            for pattern in ("*/runner-status.json", "*/benchmark.json")
+            for path in benchmark_root.glob(pattern)
+        }
+        for output_dir in sorted(directories):
+            result_path = output_dir / "benchmark.json"
+            status_path = output_dir / "runner-status.json"
+            if result_path.is_file():
+                try:
+                    payload = json.loads(result_path.read_text(encoding="utf-8"))
+                    request = BenchmarkRequest(
+                        algorithms=payload["algorithms"],
+                        seeds=payload["seeds"],
+                        duration_s=payload["duration_s"],
+                        warmup_s=payload.get("warmup_s", 0.0),
+                    )
+                except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+                    continue
+                identifier = output_dir.name
+                rows = payload.get("rows", [])
+                records[identifier] = {
+                    "id": identifier,
+                    "status": "completed",
+                    "progress": 100,
+                    "message": "已从磁盘恢复实际公平配对实验矩阵",
+                    "request": request,
+                    "completed_runs": len(rows),
+                    "total_runs": len(request.algorithms) * len(request.seeds),
+                    "rows": rows,
+                    "result": payload,
+                    "output_dir": str(output_dir),
+                    "error": None,
+                    "created_at": datetime.fromtimestamp(
+                        result_path.stat().st_mtime,
+                        tz=UTC,
+                    ).isoformat(),
+                }
+                continue
+            if not status_path.is_file():
+                continue
             try:
-                payload = json.loads(result_path.read_text(encoding="utf-8"))
+                status_payload = json.loads(status_path.read_text(encoding="utf-8"))
                 request = BenchmarkRequest(
-                    algorithms=payload["algorithms"],
-                    seeds=payload["seeds"],
-                    duration_s=payload["duration_s"],
-                    warmup_s=payload.get("warmup_s", 0.0),
+                    algorithms=status_payload["algorithms"],
+                    seeds=status_payload["seeds"],
+                    duration_s=status_payload["duration_s"],
+                    warmup_s=status_payload.get("warmup_s", 0.0),
                 )
             except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
                 continue
-            identifier = result_path.parent.name
-            rows = payload.get("rows", [])
+            identifier = output_dir.name
             records[identifier] = {
                 "id": identifier,
-                "status": "completed",
-                "progress": 100,
-                "message": "已从磁盘恢复实际公平配对实验矩阵",
+                "status": status_payload.get("status", "failed"),
+                "progress": status_payload.get("progress", 0),
+                "message": status_payload.get("message", "正在读取正式实验状态"),
                 "request": request,
-                "completed_runs": len(rows),
-                "total_runs": len(request.algorithms) * len(request.seeds),
-                "rows": rows,
-                "result": payload,
-                "output_dir": str(result_path.parent),
-                "error": None,
-                "created_at": datetime.fromtimestamp(
-                    result_path.stat().st_mtime,
-                    tz=UTC,
-                ).isoformat(),
+                "completed_runs": status_payload.get("completed_runs", 0),
+                "total_runs": status_payload.get(
+                    "total_runs", len(request.algorithms) * len(request.seeds)
+                ),
+                "rows": [],
+                "result": None,
+                "output_dir": str(output_dir),
+                "error": status_payload.get("error"),
+                "created_at": status_payload.get("started_at")
+                or datetime.fromtimestamp(status_path.stat().st_mtime, tz=UTC).isoformat(),
             }
         return records
+
+    def refresh_benchmarks_from_disk(self) -> None:
+        """Merge independent runner progress without replacing active API tasks."""
+
+        active_ids = {
+            identifier for identifier, task in self.benchmark_tasks.items() if not task.done()
+        }
+        for identifier, record in self._load_benchmarks().items():
+            if identifier not in active_ids:
+                self.benchmarks[identifier] = record
 
     def _load_scenario_profiles(self) -> dict[str, ScenarioProfileSet]:
         profile_path = self.workspace / "scenarios" / "configs" / "presets" / "S01-S07.yaml"
@@ -1853,9 +1900,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
                 status_code=409,
                 detail="stop the single experiment before creating a live comparison",
             )
-        if any(
-            item["status"] in {"queued", "running"} for item in state.benchmarks.values()
-        ):
+        if any(item["status"] in {"queued", "running"} for item in state.benchmarks.values()):
             raise HTTPException(
                 status_code=409,
                 detail="wait for the algorithm benchmark before creating a live comparison",
@@ -1877,9 +1922,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
         scenario_definition_file = (
             state.workspace / "scenarios" / "configs" / f"{request.scenario_id}.yaml"
         )
-        profile_file = (
-            state.workspace / "scenarios" / "configs" / "presets" / "S01-S07.yaml"
-        )
+        profile_file = state.workspace / "scenarios" / "configs" / "presets" / "S01-S07.yaml"
         profile_set = state.scenario_profiles.get(request.scenario_id)
         profile = (
             profile_set.get(request.profile)
@@ -1952,9 +1995,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
         record = live_comparison(pair_id)
         snapshots = record["snapshots"]
         result = record.get("result")
-        final_comparison = (
-            result.get("comparison") if isinstance(result, dict) else None
-        )
+        final_comparison = result.get("comparison") if isinstance(result, dict) else None
         comparison = (
             final_comparison
             if isinstance(final_comparison, dict)
@@ -2062,43 +2103,51 @@ def create_app(workspace: Path | None = None) -> FastAPI:
             raise HTTPException(status_code=409, detail="live comparison control is unavailable")
 
         now = datetime.now(UTC)
-        state.faults = [
-            item
-            for item in state.faults
-            if datetime.fromisoformat(str(item["expires_at"])) > now
-        ]
-        snapshots = record["snapshots"]
-        pair_times = [
-            float(snapshot["simulation_time_s"])
-            for snapshot in snapshots.values()
-            if isinstance(snapshot, dict)
-            and isinstance(snapshot.get("simulation_time_s"), int | float)
-        ]
-        current_simulation_time = min(pair_times) if pair_times else 0.0
         experiment_ids = [
             record["baseline_experiment_id"],
             record["candidate_experiment_id"],
         ]
-        fault = {
-            "id": f"fault-{uuid4().hex[:10]}",
-            **request.model_dump(mode="json"),
-            "pair_id": pair_id,
-            "experiment_ids": experiment_ids,
-            "injected_at": now.isoformat(),
-            "expires_at": (now + timedelta(seconds=request.duration_s)).isoformat(),
-            "expires_at_simulation_time": (
-                current_simulation_time + request.duration_s
-            ),
-        }
-        state.faults.append(fault)
-        control.inject_fault(
+        fault_id = f"fault-{uuid4().hex[:10]}"
+        comparison_request: LiveComparisonRequest = record["request"]
+        canonical_parameters = dict(request.parameters)
+        if request.fault_type == "incident":
+            try:
+                incident_target = state.comparison_twin.select_shared_incident_vehicle(
+                    request.target,
+                    comparison_request.seed,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=409, detail=str(exc)) from exc
+            canonical_parameters.update(
+                {
+                    "vehicle_id": incident_target["vehicle_id"],
+                    "edge_id": incident_target["edge_id"],
+                }
+            )
+        fault = control.inject_fault(
             request.fault_type,
             {
-                **request.parameters,
+                **canonical_parameters,
                 "duration_s": request.duration_s,
                 "target": request.target,
             },
+            event_id=fault_id,
+            target=request.target,
+            seed=comparison_request.seed,
         )
+        fault.update(
+            {
+                "pair_id": pair_id,
+                "experiment_ids": experiment_ids,
+                "severity": request.severity,
+                "injected_at": now.isoformat(),
+                # Kept only for older API consumers. Paired event activity and
+                # expiry are authoritative on the SUMO timestamps above.
+                "expires_at": (now + timedelta(seconds=request.duration_s)).isoformat(),
+                "clock_authority": "simulation_time",
+            }
+        )
+        state.faults.append(fault)
         await state.publish_fault_profile()
         return fault
 
@@ -2120,9 +2169,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
         retained = [
             fault
             for fault in state.faults
-            if experiment_ids.isdisjoint(
-                {str(item) for item in fault.get("experiment_ids", [])}
-            )
+            if experiment_ids.isdisjoint({str(item) for item in fault.get("experiment_ids", [])})
         ]
         cleared = len(state.faults) - len(retained)
         state.faults = retained
@@ -2190,18 +2237,16 @@ def create_app(workspace: Path | None = None) -> FastAPI:
                         "acceleration_variance": sample.get("acceleration_variance"),
                         "motor_motor_conflict_count": sample.get("motor_motor_conflict_count"),
                         "motor_bicycle_conflict_count": sample.get("motor_bicycle_conflict_count"),
-                        "motor_pedestrian_conflict_count": sample.get("motor_pedestrian_conflict_count"),
+                        "motor_pedestrian_conflict_count": sample.get(
+                            "motor_pedestrian_conflict_count"
+                        ),
                         "bicycle_pedestrian_conflict_count": sample.get(
                             "bicycle_pedestrian_conflict_count"
                         ),
                         "minimum_ttc_s": sample.get("minimum_ttc_s"),
                         "minimum_pet_s": sample.get("minimum_pet_s"),
-                        "intersection_queue_vehicles": sample.get(
-                            "intersection_queue_vehicles"
-                        ),
-                        "intersection_mean_speed_m_s": sample.get(
-                            "intersection_mean_speed_m_s"
-                        ),
+                        "intersection_queue_vehicles": sample.get("intersection_queue_vehicles"),
+                        "intersection_mean_speed_m_s": sample.get("intersection_mean_speed_m_s"),
                         "max_downstream_occupancy": sample.get("max_downstream_occupancy"),
                         "vehicle_trajectory_probes": sample.get("vehicle_trajectory_probes"),
                         "cpu_percent": sample.get("cpu_percent"),
@@ -2216,19 +2261,11 @@ def create_app(workspace: Path | None = None) -> FastAPI:
                         "predicted_queue_vehicles": sample.get("predicted_queue_vehicles"),
                         "predicted_spillback_risk": sample.get("predicted_spillback_risk"),
                         "selected_policy_counts": sample.get("selected_policy_counts"),
-                        "candidate_policy_score_mean": sample.get(
-                            "candidate_policy_score_mean"
-                        ),
+                        "candidate_policy_score_mean": sample.get("candidate_policy_score_mean"),
                         "b3_expected_gain_ratio": sample.get("b3_expected_gain_ratio"),
-                        "target_speed_factor_mean": sample.get(
-                            "target_speed_factor_mean"
-                        ),
-                        "signal_action_executed_count": sample.get(
-                            "signal_action_executed_count"
-                        ),
-                        "signal_action_modified_count": sample.get(
-                            "signal_action_modified_count"
-                        ),
+                        "target_speed_factor_mean": sample.get("target_speed_factor_mean"),
+                        "signal_action_executed_count": sample.get("signal_action_executed_count"),
+                        "signal_action_modified_count": sample.get("signal_action_modified_count"),
                         "signal_action_rejected_count": sample.get("signal_action_rejected_count"),
                         "signal_action_rejection_reasons": sample.get(
                             "signal_action_rejection_reasons"
@@ -2300,6 +2337,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
 
     @app.post("/api/v1/benchmarks", status_code=202)
     async def create_benchmark(request: BenchmarkRequest) -> dict[str, object]:
+        state.refresh_benchmarks_from_disk()
         available = {item["name"] for item in state.registry.discover()}
         if len(set(request.algorithms)) != len(request.algorithms):
             raise HTTPException(status_code=422, detail="algorithms must be unique")
@@ -2351,6 +2389,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
 
     @app.get("/api/v1/benchmarks")
     async def list_benchmarks() -> dict[str, object]:
+        state.refresh_benchmarks_from_disk()
         return {
             "items": [
                 {
@@ -2367,6 +2406,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
 
     @app.get("/api/v1/benchmarks/{benchmark_id}")
     async def get_benchmark(benchmark_id: str) -> dict[str, object]:
+        state.refresh_benchmarks_from_disk()
         record = state.benchmarks.get(benchmark_id)
         if record is None:
             raise HTTPException(status_code=404, detail="benchmark not found")
@@ -2377,6 +2417,7 @@ def create_app(workspace: Path | None = None) -> FastAPI:
 
     @app.get("/api/v1/benchmarks/{benchmark_id}/artifacts/{name}")
     async def get_benchmark_artifact(benchmark_id: str, name: str) -> FileResponse:
+        state.refresh_benchmarks_from_disk()
         record = state.benchmarks.get(benchmark_id)
         if record is None or record.get("status") != "completed":
             raise HTTPException(status_code=404, detail="benchmark artifact not found")
@@ -2457,7 +2498,15 @@ def create_app(workspace: Path | None = None) -> FastAPI:
     async def faults() -> dict[str, object]:
         now = datetime.now(UTC)
         state.faults = [
-            item for item in state.faults if datetime.fromisoformat(str(item["expires_at"])) > now
+            item
+            for item in state.faults
+            if (
+                item.get("status") not in {"expired", "cleared", "failed"}
+                and (
+                    item.get("clock_authority") == "simulation_time"
+                    or datetime.fromisoformat(str(item["expires_at"])) > now
+                )
+            )
         ]
         return {"items": state.faults}
 

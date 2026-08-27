@@ -170,7 +170,12 @@ class DisturbanceRuntime:
             ]
 
         if disturbance.type == "incident":
-            vehicle_ids = adapter.get_vehicle_ids(self.preferred_route_edges or None)
+            configured_vehicle_id = disturbance.parameters.get("vehicle_id")
+            vehicle_ids = (
+                (configured_vehicle_id,)
+                if isinstance(configured_vehicle_id, str) and configured_vehicle_id
+                else adapter.get_vehicle_ids(self.preferred_route_edges or None)
+            )
             if not vehicle_ids:
                 return []
             vehicle_id = next(

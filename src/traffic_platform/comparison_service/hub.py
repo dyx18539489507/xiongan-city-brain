@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 from collections import deque
 from collections.abc import Mapping
 from pathlib import Path
@@ -45,6 +46,8 @@ class PairedDigitalTwinHub:
         self.fairness_fingerprint = ""
         self._baseline_pending: DigitalTwinSourceFrame | None = None
         self._candidate_pending: DigitalTwinSourceFrame | None = None
+        self._latest_baseline: DigitalTwinSourceFrame | None = None
+        self._latest_candidate: DigitalTwinSourceFrame | None = None
         self._has_published = False
 
     def configure(
@@ -75,6 +78,8 @@ class PairedDigitalTwinHub:
         self.fairness_fingerprint = fairness_fingerprint
         self._baseline_pending = None
         self._candidate_pending = None
+        self._latest_baseline = None
+        self._latest_candidate = None
         self._has_published = False
         self.frames.append(self.initial_message())
 
@@ -96,6 +101,46 @@ class PairedDigitalTwinHub:
         self._baseline_pending = None
         self._candidate_pending = None
         self.set_status("invalid")
+
+    def select_shared_incident_vehicle(self, target: str, seed: int) -> dict[str, str]:
+        """Choose one motor vehicle occupying the same edge in both synchronized frames."""
+
+        baseline = self._latest_baseline
+        candidate = self._latest_candidate
+        if baseline is None or candidate is None:
+            raise ValueError("paired incident injection requires a synchronized traffic frame")
+        candidate_by_id = {vehicle.vehicle_id: vehicle for vehicle in candidate.vehicles}
+        shared = sorted(
+            (
+                vehicle.vehicle_id,
+                vehicle.road_id,
+                vehicle.lane_id,
+                candidate_by_id[vehicle.vehicle_id].lane_id,
+            )
+            for vehicle in baseline.vehicles
+            if (
+                vehicle.vehicle_class != "bicycle"
+                and not vehicle.road_id.startswith(":")
+                and vehicle.vehicle_id in candidate_by_id
+                and candidate_by_id[vehicle.vehicle_id].road_id == vehicle.road_id
+            )
+        )
+        if not shared:
+            raise ValueError(
+                "no shared motor vehicle occupies the same edge in both synchronized runs"
+            )
+        selector = hashlib.sha256(
+            f"{seed}:{target}:{baseline.simulation_time_s:.6f}".encode()
+        ).digest()
+        vehicle_id, edge_id, baseline_lane_id, candidate_lane_id = shared[
+            int.from_bytes(selector[:8], "big") % len(shared)
+        ]
+        return {
+            "vehicle_id": vehicle_id,
+            "edge_id": edge_id,
+            "baseline_lane_id": baseline_lane_id,
+            "candidate_lane_id": candidate_lane_id,
+        }
 
     def messages_after(self, sequence: int) -> list[dict[str, Any]]:
         if sequence >= self.sequence:
@@ -146,6 +191,8 @@ class PairedDigitalTwinHub:
         except ValueError:
             self.set_status("invalid")
             return
+        self._latest_baseline = baseline
+        self._latest_candidate = candidate
 
         self.sequence += 1
         if self.status in {"configured", "starting"}:

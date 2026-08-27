@@ -189,6 +189,13 @@ namespace Xiongan.DigitalTwin.Entities
             foreach (var marker in vehicleLocatorMarkers) marker.Root.SetActive(false);
         }
 
+        public void ResetRuntime()
+        {
+            vehicleLocatorsVisible = false;
+            nextVehicleLocatorFrame = 0;
+            ClearAll();
+        }
+
         private void SyncSnapshot(IEnumerable<VehicleEntity> source, Dictionary<string, EntityActor> target, Stack<EntityActor> pool, string category)
         {
             var ids = new HashSet<string>();

@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -39,6 +42,33 @@ namespace Xiongan.DigitalTwin.CameraSystem
         private string? identifierBeforeVehicleLocate;
         private string currentVehicleId = string.Empty;
         private bool vehicleLocatorActive;
+        private bool previewCaptureRunning;
+        private bool renderingActive = true;
+        private List<PreviewPose> previewPoses = new();
+        private GameObject? previewObject;
+        private Camera? previewCamera;
+        private RenderTexture? previewTarget;
+        private Texture2D? previewPixels;
+
+        private readonly struct PreviewPose
+        {
+            public PreviewPose(string mode, Vector3 lookTarget, float viewDistance, float viewPitch, float viewYaw, float fieldOfView)
+            {
+                Mode = mode;
+                LookTarget = lookTarget;
+                ViewDistance = viewDistance;
+                ViewPitch = viewPitch;
+                ViewYaw = viewYaw;
+                FieldOfView = fieldOfView;
+            }
+
+            public string Mode { get; }
+            public Vector3 LookTarget { get; }
+            public float ViewDistance { get; }
+            public float ViewPitch { get; }
+            public float ViewYaw { get; }
+            public float FieldOfView { get; }
+        }
 
         public UnityEngine.Camera ViewCamera => cameraComponent;
         public bool IsZooming => Time.unscaledTime < zoomIdleDeadline ||
@@ -75,18 +105,18 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     if (HasReferenceShowcase)
                     {
                         var heroShowcase = ReferenceShowcaseLayout.Resolve(scene);
-                        desiredTarget = heroShowcase.Center + heroShowcase.Forward * 50f - Vector3.up * 1f;
-                        desiredDistance = 160f;
-                        pitch = 7.2f;
+                        desiredTarget = heroShowcase.Center + heroShowcase.Forward * 14f + Vector3.up * 1.5f;
+                        desiredDistance = 225f;
+                        pitch = 34f;
                         yaw = heroShowcase.CameraYaw;
-                        cameraComponent.fieldOfView = 34f;
+                        cameraComponent.fieldOfView = 43f;
                     }
                     else
                     {
                         var bounds = ResolveSceneBounds();
                         desiredTarget = ResolveTarget(identifier);
-                        desiredDistance = Mathf.Clamp(Mathf.Max(bounds.size.x, bounds.size.z) * 0.24f, 85f, 240f);
-                        pitch = 31f;
+                        desiredDistance = Mathf.Clamp(Mathf.Max(bounds.size.x, bounds.size.z) * 0.3f, 110f, 320f);
+                        pitch = 38f;
                         yaw = 145f;
                         cameraComponent.fieldOfView = 46f;
                     }
@@ -115,12 +145,12 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     }
                     break;
                 case "overview":
-                    cameraComponent.fieldOfView = 52f;
+                    cameraComponent.fieldOfView = 45f;
                     var sceneBounds = ResolveSceneBounds();
                     desiredTarget = sceneBounds.center;
-                    desiredDistance = CalculateOverviewDistance(sceneBounds.size);
-                    pitch = 58f;
-                    yaw = 15f;
+                    desiredDistance = CalculateOverviewDistance(sceneBounds.size) * 1.08f;
+                    pitch = 72f;
+                    yaw = 28f;
                     break;
                 case "corridor":
                     cameraComponent.fieldOfView = 49f;
@@ -150,25 +180,25 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     if (HasReferenceShowcase && identifier == ShowcaseJunctionId)
                     {
                         var monitorShowcase = ReferenceShowcaseLayout.Resolve(scene);
-                        desiredTarget = monitorShowcase.Center + monitorShowcase.Forward * 16f + Vector3.up * 2.5f;
-                        desiredDistance = 116f;
-                        pitch = 20f;
+                        desiredTarget = monitorShowcase.Center + Vector3.up * 1.5f;
+                        desiredDistance = 138f;
+                        pitch = 38f;
                         yaw = monitorShowcase.CameraYaw;
-                        cameraComponent.fieldOfView = 42f;
+                        cameraComponent.fieldOfView = 40f;
                     }
                     else
                     {
                         if (identifier == "K06")
                         {
-                            desiredDistance = 148f;
-                            pitch = 34f;
+                            desiredDistance = 158f;
+                            pitch = 40f;
                             yaw = 106f;
                             cameraComponent.fieldOfView = 49f;
                         }
                         else
                         {
-                            desiredDistance = 116f;
-                            pitch = 29f;
+                            desiredDistance = 138f;
+                            pitch = 38f;
                             yaw = 160f;
                             cameraComponent.fieldOfView = 48f;
                         }
@@ -205,6 +235,168 @@ namespace Xiongan.DigitalTwin.CameraSystem
             entities.SetVehicleLocatorsVisible(visible);
         }
 
+        public void SetRenderingActive(bool visible)
+        {
+            renderingActive = visible;
+            cameraComponent.enabled = visible;
+            Application.targetFrameRate = visible ? 60 : 10;
+        }
+
+        public void CaptureViewPreviews(string? identifier = null)
+        {
+            previewPoses = ResolvePreviewPoses(identifier);
+            if (previewCaptureRunning) return;
+            StartCoroutine(CaptureViewPreviewsRoutine());
+        }
+
+        private List<PreviewPose> ResolvePreviewPoses(string? identifier)
+        {
+            var savedViewMode = currentViewMode;
+            var savedViewIdentifier = currentViewIdentifier;
+            var savedTarget = target;
+            var savedDesiredTarget = desiredTarget;
+            var savedDistance = distance;
+            var savedDesiredDistance = desiredDistance;
+            var savedPitch = pitch;
+            var savedYaw = yaw;
+            var savedFov = cameraComponent.fieldOfView;
+            var savedFollowActor = followActor;
+            var savedFollowCluster = followTrafficCluster;
+            var savedLocatorActive = vehicleLocatorActive;
+            var poses = new List<PreviewPose>(3);
+            foreach (var mode in new[] { "hero", "monitor", "overview" })
+            {
+                SetView(mode, identifier);
+                poses.Add(new PreviewPose(mode, desiredTarget, desiredDistance, pitch, yaw, cameraComponent.fieldOfView));
+            }
+            currentViewMode = savedViewMode;
+            currentViewIdentifier = savedViewIdentifier;
+            target = savedTarget;
+            desiredTarget = savedDesiredTarget;
+            distance = savedDistance;
+            desiredDistance = savedDesiredDistance;
+            pitch = savedPitch;
+            yaw = savedYaw;
+            cameraComponent.fieldOfView = savedFov;
+            followActor = savedFollowActor;
+            followTrafficCluster = savedFollowCluster;
+            vehicleLocatorActive = savedLocatorActive;
+            return poses;
+        }
+
+        private void EnsurePreviewResources()
+        {
+            if (previewCamera != null && previewTarget != null && previewPixels != null) return;
+            const int width = 240;
+            const int height = 135;
+            previewObject = new GameObject("三镜头实时监控");
+            previewObject.transform.SetParent(transform, false);
+            previewCamera = previewObject.AddComponent<Camera>();
+            previewCamera.CopyFrom(cameraComponent);
+            previewCamera.enabled = false;
+            var previewData = previewObject.AddComponent<UniversalAdditionalCameraData>();
+            StableCameraRendering.ConfigureCamera(previewCamera, previewData, distance);
+            previewTarget = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32)
+            {
+                name = "三镜头实时监控画布",
+            };
+            previewTarget.Create();
+            previewPixels = new Texture2D(width, height, TextureFormat.RGB24, false);
+            previewCamera.targetTexture = previewTarget;
+        }
+
+        private IEnumerator CaptureViewPreviewsRoutine()
+        {
+            previewCaptureRunning = true;
+            EnsurePreviewResources();
+            var previewIndex = 0;
+            var nextCaptureAt = 0f;
+            try
+            {
+                while (true)
+                {
+                    if (!renderingActive || previewCamera == null || previewTarget == null ||
+                        previewPixels == null || previewPoses.Count == 0 ||
+                        Time.realtimeSinceStartup < nextCaptureAt)
+                    {
+                        yield return null;
+                        continue;
+                    }
+
+                    var pose = previewPoses[previewIndex % previewPoses.Count];
+                    previewCamera.fieldOfView = pose.FieldOfView;
+                    var orbit = Quaternion.Euler(pose.ViewPitch, pose.ViewYaw, 0f) * Vector3.back * pose.ViewDistance;
+                    previewCamera.transform.position = pose.LookTarget + orbit;
+                    previewCamera.transform.LookAt(pose.LookTarget + Vector3.up * 1.5f);
+                    StableCameraRendering.UpdateClipPlanes(previewCamera, pose.ViewDistance);
+
+                    var previousActive = RenderTexture.active;
+                    var previousFog = RenderSettings.fog;
+                    try
+                    {
+                        RenderSettings.fog = pose.Mode != "overview";
+                        previewCamera.Render();
+                        RenderTexture.active = previewTarget;
+                        previewPixels.ReadPixels(
+                            new Rect(0, 0, previewTarget.width, previewTarget.height), 0, 0, false);
+                        previewPixels.Apply(false, false);
+                        bridge.Emit("camera-preview", new
+                        {
+                            mode = pose.Mode,
+                            image = $"data:image/jpeg;base64,{Convert.ToBase64String(previewPixels.EncodeToJPG(62))}",
+                            frame = Time.frameCount,
+                        });
+                    }
+                    finally
+                    {
+                        RenderSettings.fog = previousFog;
+                        RenderTexture.active = previousActive;
+                    }
+
+                    previewIndex = (previewIndex + 1) % previewPoses.Count;
+                    nextCaptureAt = Time.realtimeSinceStartup + 0.27f;
+                    yield return null;
+                }
+            }
+            finally
+            {
+                ReleasePreviewResources();
+                previewCaptureRunning = false;
+            }
+        }
+
+        private void ReleasePreviewResources()
+        {
+            if (previewCamera != null) previewCamera.targetTexture = null;
+            if (previewTarget != null)
+            {
+                previewTarget.Release();
+                Destroy(previewTarget);
+            }
+            if (previewPixels != null) Destroy(previewPixels);
+            if (previewObject != null) Destroy(previewObject);
+            previewCamera = null;
+            previewTarget = null;
+            previewPixels = null;
+            previewObject = null;
+        }
+
+        private void OnDestroy()
+        {
+            ReleasePreviewResources();
+        }
+
+        public void ResetRuntime()
+        {
+            followActor = null;
+            followTrafficCluster = false;
+            currentVehicleId = string.Empty;
+            vehicleLocatorActive = false;
+            entities.SetVehicleLocatorsVisible(false);
+            SetView("hero", HasReferenceShowcase ? ShowcaseJunctionId : ResolvePrimaryJunctionId());
+            SnapToCurrentView();
+        }
+
         public void LocateVehicle(string mode, string? identifier = null)
         {
             if (mode == "restore")
@@ -229,7 +421,7 @@ namespace Xiongan.DigitalTwin.CameraSystem
             if (mode == "cluster")
             {
                 followActor = null;
-                if (!entities.TryGetVehicleClusterCenter(out var center, out var count, out var representativeId))
+                if (!entities.TryGetVehicleClusterCenter(out var center, out var count, out _))
                 {
                     bridge.Emit("vehicle-locator", new { found = false, mode, count = 0, id = string.Empty });
                     return;
@@ -237,20 +429,20 @@ namespace Xiongan.DigitalTwin.CameraSystem
                 desiredTarget = center;
                 desiredDistance = Mathf.Clamp(105f + count * 2.5f, 120f, 230f);
                 pitch = 52f;
-                followTrafficCluster = true;
-                currentVehicleId = representativeId;
-                bridge.Emit("vehicle-locator", new { found = true, mode, count, id = representativeId });
+                followTrafficCluster = false;
+                currentVehicleId = string.Empty;
+                bridge.Emit("vehicle-locator", new { found = true, mode, count, id = string.Empty });
                 return;
             }
 
-            EntityActor actor;
+            EntityActor actor = null!;
             var found = mode switch
             {
                 "nearest" => entities.TryGetNearestVehicle(desiredTarget, out actor),
                 "previous" => entities.TryGetVehicleByOffset(currentVehicleId, -1, out actor),
                 "next" => entities.TryGetVehicleByOffset(currentVehicleId, 1, out actor),
                 "follow" when !string.IsNullOrWhiteSpace(identifier) && entities.Find(identifier) is { } selected => AssignActor(selected, out actor),
-                "follow" => entities.TryGetVehicleByOffset(currentVehicleId, 1, out actor),
+                "follow" => false,
                 _ => entities.TryGetNearestVehicle(desiredTarget, out actor),
             };
             if (!found)
@@ -332,6 +524,23 @@ namespace Xiongan.DigitalTwin.CameraSystem
             HandleInput(frameTime);
             if (followActor != null)
             {
+                if (!followActor.gameObject.activeInHierarchy || followActor.Identifier != currentVehicleId)
+                {
+                    var departedId = currentVehicleId;
+                    followActor = null;
+                    currentVehicleId = string.Empty;
+                    vehicleLocatorActive = false;
+                    entities.SetVehicleLocatorsVisible(false);
+                    bridge.Emit("vehicle-locator", new
+                    {
+                        found = false,
+                        mode = "follow",
+                        count = 0,
+                        id = departedId,
+                        reason = "departed",
+                    });
+                    return;
+                }
                 var forward = Vector3.ProjectOnPlane(followActor.transform.forward, Vector3.up).normalized;
                 if (forward.sqrMagnitude < 0.1f) forward = Vector3.forward;
                 var lookTarget = followActor.transform.position + Vector3.up * 1.25f + forward * 4.2f;

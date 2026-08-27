@@ -47,7 +47,7 @@ export type TwinControlPanelProps = {
 
 type AccordionKey = "scene" | "algorithm" | "event" | "layer";
 export const layerGroups: Array<{label: string; items: Array<[LayerKey, string]>}> = [
-  {label: "城市空间", items: [["baseMap", "基础路网"], ["buildings", "建筑地块"], ["roadMarkings", "车道标线"], ["corridor", "核心走廊"], ["rsu", "路侧设备"]]},
+  {label: "城市空间", items: [["baseMap", "基础路网"], ["geographicBaseMap", "地理底图"], ["buildings", "建筑地块"], ["roadMarkings", "车道标线"], ["corridor", "核心走廊"], ["rsu", "路侧设备"]]},
   {label: "交通主体", items: [["vehicles", "小汽车"], ["buses", "公交车"], ["trucks", "货车"], ["bicycles", "非机动车"], ["pedestrians", "行人"]]},
   {label: "运行态势", items: [["signals", "信号灯"], ["trafficState", "交通状态"], ["queues", "排队长度"], ["trails", "车辆轨迹"], ["algorithm", "算法证据"], ["events", "扰动事件"], ["labels", "路口标注"]]},
 ];

@@ -574,6 +574,14 @@
 .evidence-load-strip { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 34px; margin: 0 0 16px; color: #08756d; border: 1px solid #cde4dc; background: #f1f9f6; font-size: 9px; }
 .evidence-load-strip.failed { color: #a53e3a; border-color: #f0d1ce; background: #fff5f4; }
 
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .evaluation-runner {
+    grid-template-columns: minmax(280px, 1fr) repeat(2, minmax(180px, .65fr));
+  }
+  .evaluation-runner .benchmark-algorithm-locks { grid-column: 2 / -1; }
+  .evaluation-runner .benchmark-progress { grid-column: 1 / -1; }
+}
+
 @media (max-width: 1100px) {
   .algorithm-results-grid,
   .temporal-evidence-grid,
@@ -770,7 +778,19 @@
   --danger: #d64d48;
   color-scheme: light;
 }
-.view-3d .twin-map-surface > .intersection-stage { width: 100%; margin: 0; }
+.view-3d.twin-cockpit { overflow: clip; }
+.twin-cockpit.workspace-inactive { visibility: hidden; pointer-events: none; }
+.twin-cockpit:not(.workspace-inactive) ~ * { display: none !important; }
+.view-3d .unity-stage-host > .intersection-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  animation: none;
+}
 .view-3d .twin-header {
   border-bottom-color: rgba(50, 81, 96, .16);
   background: rgba(255, 255, 255, .96);
@@ -899,11 +919,14 @@
 .workspace-simulation .view-3d .unity-selection { border-left: 3px solid var(--workspace-cyan); }
 .workspace-simulation .view-3d .unity-selection span { color: #08756d; letter-spacing: 0; }
 .workspace-simulation .view-3d .unity-loader {
-  color: #17364d;
-  background: #edf3ef;
+  color: #ffffff;
+  background:
+    linear-gradient(rgba(4, 18, 27, .48), rgba(4, 18, 27, .68)),
+    url("/assets/cameras/hero.png") center / cover no-repeat;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .48);
 }
 .workspace-simulation .view-3d .unity-loader > span { background: var(--workspace-cyan); }
-.workspace-simulation .view-3d .unity-loader small { color: #607887; }
+.workspace-simulation .view-3d .unity-loader small { color: rgba(235, 247, 251, .82); }
 .workspace-simulation .view-3d .unity-loader.error { color: #a53e3a; background: #fff7f6; }
 .workspace-simulation .view-3d .unity-loader.error > span { background: var(--workspace-danger); }
 .view-3d .scene-loading { color: #14344e; background: #edf3ef; }

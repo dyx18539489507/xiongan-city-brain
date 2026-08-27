@@ -98,6 +98,21 @@ namespace Xiongan.DigitalTwin.Network
             }
         }
 
+        public void ResetRuntime()
+        {
+            entities.ResetRuntime();
+            trafficLights.ResetRuntime();
+            conflicts.ResetRuntime();
+            events.Reset();
+            algorithmVisuals.ResetRuntime();
+            while (messages.TryDequeue(out _)) { }
+            lastSequence = -1;
+            initialised = false;
+            ExperimentId = null;
+            SimulationTimeS = 0f;
+            Metrics = new JObject();
+        }
+
         public void OnWebSocketOpen(string _)
         {
             reconnectAttempt = 0;

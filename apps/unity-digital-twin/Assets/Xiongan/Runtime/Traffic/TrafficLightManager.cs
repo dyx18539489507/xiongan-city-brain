@@ -165,6 +165,17 @@ namespace Xiongan.DigitalTwin.Traffic
             }
         }
 
+        public void ResetRuntime()
+        {
+            foreach (var heads in controllers.Values)
+            foreach (var head in heads)
+            {
+                SetLamp(head.Red, true, materials.SignalRed);
+                if (head.Yellow != null) SetLamp(head.Yellow, false, materials.SignalYellow);
+                SetLamp(head.Green, false, materials.SignalGreen);
+            }
+        }
+
         private List<Head> CreateApproach(
             string tlsId,
             IReadOnlyList<SignalApproachLane> lanes,

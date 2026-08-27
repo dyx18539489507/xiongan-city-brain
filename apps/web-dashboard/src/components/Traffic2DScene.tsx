@@ -80,7 +80,18 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
   const lastCameraPoseRef = useRef<CameraPose | null>(null);
   const [hover, setHover] = useState<{selection: MapSelection; x: number; y: number} | null>(null);
   const [stats, setStats] = useState<RendererStats>({fps: 0, targetFps: 60, drawMs: 0, visibleEntities: 0, totalEntities: 0});
-  const geographicMapVisible = supportsGeographicMap(scene) && layers.baseMap;
+  const geographicMapVisible = supportsGeographicMap(scene) && layers.geographicBaseMap;
+  const edgeDisplayNames = useMemo(() => {
+    const names = new Map<string, string>();
+    for (const road of scene?.roads ?? []) {
+      const label = road.name?.trim() || road.sourceRoadId;
+      for (const edgeId of road.edgeIds) names.set(edgeId, label);
+    }
+    for (const edge of scene?.edges ?? []) {
+      if (!names.has(edge.sumoEdgeId)) names.set(edge.sumoEdgeId, edge.roadId?.trim() || edge.sumoEdgeId);
+    }
+    return names;
+  }, [scene]);
 
   sceneRef.current = scene;
 
@@ -329,7 +340,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     <div className="traffic-legend"><span><i className="neutral" />无车 / 无数据</span><span><i className="free" />畅通</span><span><i className="slow" />缓行</span><span><i className="congested" />拥堵</span><span><i className="severe" />严重拥堵</span></div>
 
     {!websocketOnline && sourceMode === "live" && <div className="connection-notice"><TwinIcon name="warning" /><span><strong>实时数据连接中断</strong><small>保留最后一帧，正在自动重连</small></span></div>}
-    {hover && <div className="map-hover-tooltip" style={{left: hover.x + 14, top: hover.y + 14}}><span>{selectionLabel(hover.selection)}</span><strong>{hover.selection.kind === "junction" ? scene?.junctions.find((item) => item.sumoJunctionId === hover.selection.id)?.displayId ?? "受控路口" : selectionLabel(hover.selection)}</strong></div>}
+    {hover && <div className="map-hover-tooltip" style={{left: hover.x + 14, top: hover.y + 14}}><span>{selectionLabel(hover.selection)}</span><strong>{hover.selection.kind === "junction" ? scene?.junctions.find((item) => item.sumoJunctionId === hover.selection.id)?.displayId ?? "受控路口" : hover.selection.kind === "edge" ? edgeDisplayNames.get(hover.selection.id) ?? hover.selection.id : hover.selection.id}</strong></div>}
 
     {showLoadState && loadState.status !== "ready" && <div aria-live="polite" className={`scene-loading ${loadState.status}`} role="status"><div className="loading-brand"><TwinIcon name={loadState.status === "error" ? "warning" : "map"} /></div><span>雄安交通数字孪生</span><strong>{loadState.status === "error" ? "数字场景暂时无法加载" : "正在加载当前数字场景"}</strong>{loadState.status === "loading" && <i aria-hidden="true" className="scene-loading-spinner" />}<div className="loading-steps"><i className={loadState.status === "error" ? "" : "done"} />路网几何<i className={loadState.loadedBytes > 0 ? "done" : ""} />城市空间<i className={loadState.loadedBytes > 0 ? "active" : ""} />实时数据</div><small>{loadState.message}</small>{loadState.status === "loading" && loadState.loadedBytes > 0 && <em>{formatBytes(loadState.loadedBytes)}{loadState.totalBytes ? ` / ${formatBytes(loadState.totalBytes)}` : ""}</em>}{loadState.status === "error" && onRetry && <button className="scene-retry" onClick={onRetry}><TwinIcon name="reset" />重新加载路网</button>}</div>}
     {loadState.status === "ready" && !stream.state.initialized && <div className="data-waiting-overlay"><span><TwinIcon name="activity" /></span><strong>等待第一帧交通数据</strong><small>{embedded ? "静态路网已就绪，可启动同条件双 SUMO 实时对照。" : "静态路网已就绪，可启动 SUMO 实验或载入真实回放。"}</small></div>}
@@ -389,9 +400,9 @@ export function PairedTraffic2DScene({scene, loadState, paired, layers, selectio
       <section className="paired-map-pane candidate-pane" aria-label="候选算法实时地图与改善差值">
         <header><span>候选</span><strong>{algorithmLabel(paired.state.candidateAlgorithm || configuredCandidateAlgorithm)}</strong><small>独立 SUMO · {candidate.stream.state.vehicles.size} 辆在途</small></header>
         <Traffic2DScene cameraSyncBus={cameraSyncBus} comparison={paired.state.comparison} embedded layers={layers} loadState={loadState} mapRole="candidate" onSelectionChange={onSelectionChange} scene={scene} selection={selection} showLoadState={false} snapshot={candidate.snapshot} sourceMode="live" stream={candidate.stream} websocketOnline={paired.connection === "online"} />
+        <div className="comparison-map-legend" aria-label="改善差值图例"><span className="improved">↓ 排队减少</span><span className="stable">≈ 基本持平</span><span className="worse">↑ 排队增加</span><small>60 秒滚动窗口</small></div>
       </section>
       {loadState.status !== "ready" && <div aria-live="polite" className={`paired-scene-state ${loadState.status}`} role={loadState.status === "error" ? "alert" : "status"}><div className="loading-brand"><TwinIcon name={loadState.status === "error" ? "warning" : "map"} /></div>{loadState.status === "error" && <strong>双路数字场景暂时无法加载</strong>}{loadState.status === "loading" && <i aria-hidden="true" className="scene-loading-spinner" />}<span>{loadState.message}</span>{loadState.status === "loading" && loadState.loadedBytes > 0 && <small>{formatBytes(loadState.loadedBytes)}{loadState.totalBytes ? ` / ${formatBytes(loadState.totalBytes)}` : ""}</small>}{loadState.status === "error" && onRetry && <button className="scene-retry" onClick={onRetry}><TwinIcon name="reset" />重新加载路网</button>}</div>}
     </div>
-    <div className="comparison-map-legend" aria-label="改善差值图例"><span className="improved">↓ 排队减少</span><span className="stable">≈ 基本持平</span><span className="worse">↑ 排队增加</span><small>右图进口道与路口相对左图，60 秒滚动窗口</small></div>
   </div>;
 }

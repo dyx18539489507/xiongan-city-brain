@@ -78,6 +78,11 @@ namespace Xiongan.DigitalTwin.Environment
             RenderSettings.ambientSkyColor = new Color(0.68f, 0.73f, 0.8f);
         }
 
+        public void SetCameraMode(string mode)
+        {
+            RenderSettings.fog = mode != "overview";
+        }
+
         private void CreatePostProcessing()
         {
             var volumeObject = new GameObject("电影级全局后处理");

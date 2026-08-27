@@ -9,10 +9,6 @@ import {
   type BenchmarkRecord,
   type ExperimentEvidence,
 } from "../api";
-import {
-  algorithmEvaluationDemoBenchmark,
-  algorithmEvaluationDemoEvidence,
-} from "../algorithmEvaluationDemoData";
 import type {Algorithm} from "../types";
 import {AlgorithmEvaluationReport} from "./AlgorithmEvaluationReport";
 
@@ -27,7 +23,6 @@ type Props = {
 };
 
 type NumericMetrics = Record<string, number | string | boolean | null>;
-type EvaluationDataMode = "demo" | "actual";
 
 export const ALGORITHM_ORDER = [
   "fixed-time",
@@ -109,6 +104,10 @@ function benchmarkMessage(message: string): string {
     localized = localized.replaceAll(algorithm, evaluationAlgorithmNames[algorithm]);
   }
   return localized
+    .replaceAll("Formal paired benchmark completed", "正式公平配对实验已完成")
+    .replaceAll("Formal paired benchmark failed", "正式公平配对实验失败")
+    .replaceAll("Preparing the formal paired benchmark matrix", "正在准备正式公平配对实验矩阵")
+    .replaceAll("Completed", "已完成")
     .replaceAll("B0", evaluationAlgorithmNames["fixed-time"])
     .replaceAll("B1", evaluationAlgorithmNames["actuated-control"])
     .replaceAll("B2", evaluationAlgorithmNames["max-pressure"])
@@ -127,7 +126,6 @@ const fairnessLabels: Record<string, string> = {
 };
 
 export function AlgorithmEvaluationWorkspace(props: Props) {
-  const [dataMode, setDataMode] = useState<EvaluationDataMode>("demo");
   const [matrixSeeds, setMatrixSeeds] = useState([11, 23, 37, 41, 59]);
   const [matrixDuration, setMatrixDuration] = useState(1800);
   const [benchmark, setBenchmark] = useState<BenchmarkRecord | null>(null);
@@ -149,8 +147,9 @@ export function AlgorithmEvaluationWorkspace(props: Props) {
   const evidenceKey = evidenceIds.join("|");
   const fairness = benchmark?.result?.fairness_controls ?? {};
   const fairnessPassed = Boolean(benchmark?.result && Object.values(fairness).every(Boolean));
-  const displayedBenchmark = dataMode === "demo" ? algorithmEvaluationDemoBenchmark : benchmark;
-  const displayedEvidence = dataMode === "demo" ? algorithmEvaluationDemoEvidence : evidenceRuns;
+  const benchmarkRunning = benchmark?.status === "queued" || benchmark?.status === "running";
+  const benchmarkActive = benchmarkBusy || benchmarkRunning;
+  const benchmarkControlsDisabled = benchmarkActive || benchmarksLoading;
 
   useEffect(() => {
     let cancelled = false;
@@ -163,15 +162,42 @@ export function AlgorithmEvaluationWorkspace(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (!benchmarkBusy) return;
-    const startedAt = Date.now();
-    setBenchmarkElapsedS(0);
+    if (!benchmarkActive) return;
+    const recordedStart = benchmark?.created_at ? Date.parse(benchmark.created_at) : Number.NaN;
+    const startedAt = Number.isFinite(recordedStart) ? recordedStart : Date.now();
+    setBenchmarkElapsedS(Math.max(0, Math.floor((Date.now() - startedAt) / 1000)));
     const timer = window.setInterval(
       () => setBenchmarkElapsedS(Math.floor((Date.now() - startedAt) / 1000)),
       1000,
     );
     return () => window.clearInterval(timer);
-  }, [benchmarkBusy]);
+  }, [benchmark?.created_at, benchmarkActive]);
+
+  useEffect(() => {
+    if (!benchmarkRunning || benchmarkBusy || !benchmark) return;
+    let cancelled = false;
+    let polling = false;
+    const refresh = async () => {
+      if (polling) return;
+      polling = true;
+      try {
+        const record = await loadBenchmark(benchmark.id);
+        if (cancelled) return;
+        setBenchmark(record);
+        setBenchmarkIssue(record.status === "failed" ? record.error ?? "算法实验矩阵运行失败" : null);
+        if (record.status === "completed") await props.onRefresh();
+      } catch (reason) {
+        if (!cancelled) setBenchmarkIssue(describeRequestError(reason));
+      } finally {
+        polling = false;
+      }
+    };
+    const timer = window.setInterval(refresh, 1000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [benchmark?.id, benchmarkBusy, benchmarkRunning, props.onRefresh]);
 
   useEffect(() => {
     let cancelled = false;
@@ -187,7 +213,6 @@ export function AlgorithmEvaluationWorkspace(props: Props) {
   }, [evidenceKey]);
 
   const launchBenchmark = async () => {
-    setDataMode("actual");
     setBenchmarkBusy(true);
     setBenchmarkIssue(null);
     setBenchmark(null);
@@ -233,24 +258,24 @@ export function AlgorithmEvaluationWorkspace(props: Props) {
             </span>
           ))}
         </div>
-        <label><span>随机种子组</span><select disabled={benchmarkBusy} value={matrixSeeds.join(",")} onChange={(event) => setMatrixSeeds(event.target.value.split(",").map(Number))}><option value="11,23,37">3个 · 最低证明门槛</option><option value="11,23,37,41,59">5个 · 正式评测</option></select></label>
-        <label><span>评估时长</span><select disabled={benchmarkBusy} value={matrixDuration} onChange={(event) => setMatrixDuration(Number(event.target.value))}><option value={300}>300秒诊断</option><option value={900}>900秒压力测试</option><option value={1800}>1800秒完整场景</option></select></label>
-        <button aria-busy={benchmarkBusy} className="workspace-primary" disabled={benchmarkBusy || !matrixReady} onClick={launchBenchmark}>{benchmarkBusy ? `SUMO运行中 ${formatElapsed(benchmarkElapsedS)}` : !matrixReady ? "等待四种策略注册" : `运行${ALGORITHM_ORDER.length * matrixSeeds.length}组真实实验`}</button>
-        {dataMode === "actual" && benchmarksLoading && !benchmark && <div className="benchmark-catalog-state" role="status"><i className="factory-spinner" aria-hidden="true" /><span>正在读取最近一次实验矩阵</span></div>}
-        {dataMode === "actual" && benchmark && <div aria-live="polite" className={`benchmark-progress ${benchmark.status}`}><div><i style={{width: `${benchmark.progress}%`}} /></div><b>{benchmark.progress}% · {benchmarkMessage(benchmark.message)}</b><span>{benchmark.completed_runs}/{benchmark.total_runs}组{benchmarkBusy ? ` · ${formatElapsed(benchmarkElapsedS)}` : ""}</span>{benchmark.status === "completed" && <nav><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.html`} target="_blank" rel="noreferrer">HTML报告</a><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.csv`}>CSV</a><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.json`}>JSON</a></nav>}</div>}
-        {dataMode === "actual" && benchmarkIssue && <p className="benchmark-issue" role="alert">{benchmarkIssue}</p>}
+        <label><span>随机种子组</span><select disabled={benchmarkControlsDisabled} value={matrixSeeds.join(",")} onChange={(event) => setMatrixSeeds(event.target.value.split(",").map(Number))}><option value="11,23,37">3个 · 最低证明门槛</option><option value="11,23,37,41,59">5个 · 正式评测</option></select></label>
+        <label><span>评估时长</span><select disabled={benchmarkControlsDisabled} value={matrixDuration} onChange={(event) => setMatrixDuration(Number(event.target.value))}><option value={300}>300秒诊断</option><option value={900}>900秒压力测试</option><option value={1800}>1800秒完整场景</option></select></label>
+        <button aria-busy={benchmarkActive} className="workspace-primary" disabled={benchmarkControlsDisabled || !matrixReady} onClick={launchBenchmark}>{benchmarksLoading ? "正在读取实验状态" : benchmarkActive ? `SUMO运行中 ${formatElapsed(benchmarkElapsedS)}` : !matrixReady ? "等待四种策略注册" : `运行${ALGORITHM_ORDER.length * matrixSeeds.length}组真实实验`}</button>
+        {benchmarksLoading && !benchmark && <div className="benchmark-catalog-state" role="status"><i className="factory-spinner" aria-hidden="true" /><span>正在读取最近一次实验矩阵</span></div>}
+        {benchmark && <div aria-live="polite" className={`benchmark-progress ${benchmark.status}`}><div><i style={{width: `${benchmark.progress}%`}} /></div><b>{benchmark.progress}% · {benchmarkMessage(benchmark.message)}</b><span>{benchmark.completed_runs}/{benchmark.total_runs}组{benchmarkActive ? ` · ${formatElapsed(benchmarkElapsedS)}` : ""}</span>{benchmark.status === "completed" && <nav><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.html`} target="_blank" rel="noreferrer">HTML报告</a><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.csv`}>CSV</a><a href={`/api/v1/benchmarks/${benchmark.id}/artifacts/benchmark.json`}>JSON</a></nav>}</div>}
+        {benchmarkIssue && <p className="benchmark-issue" role="alert">{benchmarkIssue}</p>}
       </section>
 
-      {dataMode === "actual" && benchmark?.result && <section className="fairness-strip" aria-label="公平性校验">
+      {benchmark?.result && <section className="fairness-strip" aria-label="公平性校验">
         <strong className={fairnessPassed ? "passed" : "failed"}>{fairnessPassed ? "公平性校验通过" : "公平性校验未通过"}</strong>
         {Object.entries(fairness).map(([key, passed]) => <span className={passed ? "passed" : "failed"} key={key}><i />{fairnessLabels[key] ?? key}</span>)}
       </section>}
 
       <AlgorithmEvaluationReport
-        benchmark={displayedBenchmark}
-        evidenceIssue={dataMode === "demo" ? null : evidenceIssue}
-        evidenceLoading={dataMode === "actual" && evidenceLoading}
-        evidenceRuns={displayedEvidence}
+        benchmark={benchmark}
+        evidenceIssue={evidenceIssue}
+        evidenceLoading={evidenceLoading}
+        evidenceRuns={evidenceRuns}
       />
     </section>
   );
