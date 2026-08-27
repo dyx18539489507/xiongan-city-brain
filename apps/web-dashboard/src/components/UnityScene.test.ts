@@ -5,12 +5,12 @@ import {resolveUnityFrameSource, shouldForwardUnitySnapshot} from "./UnityScene"
 describe("resolveUnityFrameSource", () => {
   it("passes the generated scenario identity to the reusable Unity build", () => {
     expect(resolveUnityFrameSource("xiongan osm/01", ""))
-      .toBe("/unity/index.html?scenarioId=xiongan+osm%2F01");
+      .toBe("/unity/index.html?scenarioId=xiongan+osm%2F01&build=20260828-0327");
   });
 
   it("preserves the optional performance diagnostics flag", () => {
     expect(resolveUnityFrameSource("generated-osm", "?perf=1"))
-      .toBe("/unity/index.html?scenarioId=generated-osm&perf=1");
+      .toBe("/unity/index.html?scenarioId=generated-osm&build=20260828-0327&perf=1");
   });
 });
 

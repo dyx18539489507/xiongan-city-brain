@@ -195,6 +195,24 @@ namespace Xiongan.DigitalTwin.Tests
         }
 
         [Test]
+        public void ShowcaseSurfaceTapersIntoTheSurroundingRoadNetwork()
+        {
+            var frame = new ReferenceShowcaseFrame(Vector3.zero, Vector3.forward);
+
+            Assert.That(ReferenceShowcaseLayout.CoversMotorCarriageway(
+                frame, frame.Point(24f, 0f, 110f)), Is.True);
+            Assert.That(ReferenceShowcaseLayout.CoversMotorCarriageway(
+                frame, frame.Point(24f, 0f, 190f)), Is.False);
+            Assert.That(ReferenceShowcaseLayout.CoversMotorCarriageway(
+                frame, frame.Point(9f, 0f, 216f)), Is.True);
+            Assert.That(ReferenceShowcaseLayout.CoversRoadSurfaceOverride(
+                frame, frame.Point(18f, 0f, 221f)), Is.False);
+            Assert.That(ReferenceShowcaseLayout.ResolveMotorLaneScale(220f, true),
+                Is.EqualTo(ReferenceShowcaseLayout.TransitionMotorHalfWidth /
+                           ReferenceShowcaseLayout.LongitudinalMotorHalfWidth).Within(0.001f));
+        }
+
+        [Test]
         public void CivicHallStopsBeforeMainFacadeInsteadOfIntersectingIt()
         {
             var frame = new ReferenceShowcaseFrame(Vector3.zero, Vector3.forward);

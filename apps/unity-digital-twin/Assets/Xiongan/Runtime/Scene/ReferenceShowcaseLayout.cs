@@ -42,6 +42,16 @@ namespace Xiongan.DigitalTwin.Scene
     {
         public const string JunctionId = "cluster_10739806290_13007678851_13007678852_9999059766";
         public const string DisplayId = "B01";
+        public const float LongitudinalTransitionStart = 126f;
+        public const float LongitudinalTransitionEnd = 220f;
+        public const float CrossTransitionStart = 112f;
+        public const float CrossTransitionEnd = 205f;
+        public const float LongitudinalMotorHalfWidth = 26f;
+        public const float CrossMotorHalfWidth = 25f;
+        public const float TransitionMotorHalfWidth = 11.5f;
+        public const float LongitudinalSurfaceHalfWidth = 34.5f;
+        public const float CrossSurfaceHalfWidth = 33.5f;
+        public const float TransitionSurfaceHalfWidth = 17.5f;
         private const float RoadsideDeviceAcross = 118f;
         private const float RoadsideDeviceAlong = 29.4f;
 
@@ -79,11 +89,7 @@ namespace Xiongan.DigitalTwin.Scene
         public static bool CoversRoadMarkingOverride(
             ReferenceShowcaseFrame frame, Vector3 point)
         {
-            var relative = Vector3.ProjectOnPlane(point - frame.Center, Vector3.up);
-            var across = Mathf.Abs(Vector3.Dot(relative, frame.Right));
-            var along = Mathf.Abs(Vector3.Dot(relative, frame.Forward));
-            return across <= 34f && along <= 182f ||
-                   along <= 33f && across <= 150f;
+            return CoversRoadSurfaceOverride(frame, point, -0.5f);
         }
 
         public static Vector2 ToLocal(ReferenceShowcaseFrame frame, Vector3 point)
@@ -100,8 +106,20 @@ namespace Xiongan.DigitalTwin.Scene
             var local = ToLocal(frame, point);
             var across = Mathf.Abs(local.x);
             var along = Mathf.Abs(local.y);
-            return across <= 34.5f + margin && along <= 180f + margin ||
-                   along <= 33.5f + margin && across <= 147f + margin;
+            return along <= LongitudinalTransitionEnd + margin &&
+                   across <= ResolveHalfWidth(
+                       along,
+                       LongitudinalTransitionStart,
+                       LongitudinalTransitionEnd,
+                       LongitudinalSurfaceHalfWidth,
+                       TransitionSurfaceHalfWidth) + margin ||
+                   across <= CrossTransitionEnd + margin &&
+                   along <= ResolveHalfWidth(
+                       across,
+                       CrossTransitionStart,
+                       CrossTransitionEnd,
+                       CrossSurfaceHalfWidth,
+                       TransitionSurfaceHalfWidth) + margin;
         }
 
         public static bool CoversMotorCarriageway(
@@ -110,8 +128,43 @@ namespace Xiongan.DigitalTwin.Scene
             var local = ToLocal(frame, point);
             var across = Mathf.Abs(local.x);
             var along = Mathf.Abs(local.y);
-            return across <= 26f + margin && along <= 180f + margin ||
-                   along <= 25f + margin && across <= 147f + margin;
+            return along <= LongitudinalTransitionEnd + margin &&
+                   across <= ResolveLongitudinalMotorHalfWidth(along) + margin ||
+                   across <= CrossTransitionEnd + margin &&
+                   along <= ResolveCrossMotorHalfWidth(across) + margin;
+        }
+
+        public static float ResolveLongitudinalMotorHalfWidth(float along) =>
+            ResolveHalfWidth(
+                Mathf.Abs(along),
+                LongitudinalTransitionStart,
+                LongitudinalTransitionEnd,
+                LongitudinalMotorHalfWidth,
+                TransitionMotorHalfWidth);
+
+        public static float ResolveCrossMotorHalfWidth(float across) =>
+            ResolveHalfWidth(
+                Mathf.Abs(across),
+                CrossTransitionStart,
+                CrossTransitionEnd,
+                CrossMotorHalfWidth,
+                TransitionMotorHalfWidth);
+
+        public static float ResolveMotorLaneScale(float distance, bool longitudinal)
+        {
+            var fullWidth = longitudinal ? LongitudinalMotorHalfWidth : CrossMotorHalfWidth;
+            var halfWidth = longitudinal
+                ? ResolveLongitudinalMotorHalfWidth(distance)
+                : ResolveCrossMotorHalfWidth(distance);
+            return halfWidth / fullWidth;
+        }
+
+        private static float ResolveHalfWidth(
+            float distance, float transitionStart, float transitionEnd,
+            float fullHalfWidth, float endHalfWidth)
+        {
+            var progress = Mathf.InverseLerp(transitionStart, transitionEnd, distance);
+            return Mathf.Lerp(fullHalfWidth, endHalfWidth, progress);
         }
 
         public static bool IsSignalPoleOnInnerFootwayEdge(

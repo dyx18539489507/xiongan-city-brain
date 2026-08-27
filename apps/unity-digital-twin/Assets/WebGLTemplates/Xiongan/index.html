@@ -18,6 +18,8 @@
   <script>
     const canvas = document.querySelector('#unity-canvas');
     const loading = document.querySelector('#loading');
+    const buildVersion = new URLSearchParams(window.location.search).get('build') || '1';
+    const buildAsset = (path) => `${path}?build=${encodeURIComponent(buildVersion)}`;
     function resolveUnityPixelRatio() {
       const width = Math.max(1, document.documentElement.clientWidth);
       const height = Math.max(1, document.documentElement.clientHeight);
@@ -27,9 +29,9 @@
       return Math.max(0.75, Math.min(nativeRatio, 2, 2560 / width, 1440 / height));
     }
     const config = {
-      dataUrl: 'Build/{{{ DATA_FILENAME }}}',
-      frameworkUrl: 'Build/{{{ FRAMEWORK_FILENAME }}}',
-      codeUrl: 'Build/{{{ CODE_FILENAME }}}',
+      dataUrl: buildAsset('Build/{{{ DATA_FILENAME }}}'),
+      frameworkUrl: buildAsset('Build/{{{ FRAMEWORK_FILENAME }}}'),
+      codeUrl: buildAsset('Build/{{{ CODE_FILENAME }}}'),
       streamingAssetsUrl: 'StreamingAssets',
       companyName: '{{{ COMPANY_NAME }}}',
       productName: '{{{ PRODUCT_NAME }}}',

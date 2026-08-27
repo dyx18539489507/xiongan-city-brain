@@ -47,7 +47,7 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
     ctx.lineJoin = "round";
     const edgeBatches = new Map<number, Array<readonly Point2[]>>();
     const surfaceBatches = new Map<string, {color: string; width: number; shapes: Array<readonly Point2[]>}>();
-    for (const indexed of world.indexedEdges) {
+    for (const indexed of world.edgeSpatialIndex.query(visibleBounds)) {
       const edge = indexed.edge;
       if (edge.function === "internal") continue;
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
@@ -86,7 +86,7 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
 
     if (detail !== "overview") {
       const specialBatches = new Map<string, {color: string; width: number; shapes: Array<readonly Point2[]>}>();
-      for (const indexed of world.indexedLanes) {
+      for (const indexed of world.laneSpatialIndex.query(visibleBounds)) {
         const lane = indexed.lane;
         if (!isSpecialLane(lane) || lane.edgeFunction === "internal" || !geometryIntersectsBounds(indexed, visibleBounds)) continue;
         const color = laneSurface(lane);
@@ -106,7 +106,7 @@ export class RoadSurfaceLayer implements TrafficMapLayer {
     }
 
     const junctionShapes: Array<readonly Point2[]> = [];
-    for (const indexed of world.indexedJunctions) {
+    for (const indexed of world.junctionSpatialIndex.query(visibleBounds)) {
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
       const junction = indexed.junction;
       if (junction.shape.length < 3 || !junction.controlled) continue;
@@ -163,7 +163,7 @@ export class RoadMarkingLayer implements TrafficMapLayer {
     ctx.lineWidth = detail === "street" ? 1.1 : .75;
     ctx.setLineDash(detail === "street" ? [9, 9] : [6, 8]);
     ctx.beginPath();
-    for (const indexed of world.indexedEdges) {
+    for (const indexed of world.edgeSpatialIndex.query(visibleBounds)) {
       if (!geometryIntersectsBounds(indexed, visibleBounds) || indexed.edge.function === "internal") continue;
       const lanes = indexed.edge.laneIds
         .map((id) => world.laneById.get(id))
@@ -182,7 +182,7 @@ export class RoadMarkingLayer implements TrafficMapLayer {
       ctx.strokeStyle = mapTheme.crossing;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      for (const indexed of world.indexedLanes) {
+      for (const indexed of world.laneSpatialIndex.query(visibleBounds)) {
         const lane = indexed.lane;
         if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
         if (lane.laneKind === "bicycle" || lane.laneKind === "pedestrian" || lane.edgeFunction === "internal" || lane.shape.length < 2) continue;
@@ -208,7 +208,7 @@ export class RoadMarkingLayer implements TrafficMapLayer {
 
     if (detail === "street") {
       ctx.fillStyle = mapTheme.laneMarking;
-      for (const indexed of world.indexedLanes) {
+      for (const indexed of world.laneSpatialIndex.query(visibleBounds)) {
         const lane = indexed.lane;
         if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
         if (lane.laneKind === "bicycle" || lane.laneKind === "pedestrian" || lane.edgeFunction === "internal" || lane.shape.length < 2) continue;

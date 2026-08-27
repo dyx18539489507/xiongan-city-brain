@@ -3,7 +3,12 @@
 import pytest
 from tests.factories import cloud_strategy, edge_factory, intersection, topology
 
-from traffic_platform.algorithm_sdk.types import AlgorithmConfig, ControlObservation
+from traffic_platform.algorithm_sdk.types import (
+    AlgorithmConfig,
+    ControlObservation,
+    PhaseDefinition,
+    PhaseMovement,
+)
 from traffic_platform.algorithms import builtin_registry
 from traffic_platform.algorithms.coordinated import CoordinatedMaxPressureController
 from traffic_platform.algorithms.max_pressure import MaxPressureController
@@ -76,7 +81,7 @@ def test_coordinated_controller_falls_back_until_prediction_is_ready() -> None:
     controller.initialize(AlgorithmConfig(cloud_weight=2.0), topology())
     decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
     assert decision.requested_phase_id == "P1"
-    assert decision.selected_policy == "B2"
+    assert decision.selected_policy == "B1"
     assert decision.action_type == "extend_green"
     assert "PREDICTIVE_GAIN_BELOW_GATE" in decision.reason_codes
     assert "PREDICTION_FALLBACK_CURRENT_STATE" in decision.reason_codes
@@ -149,13 +154,13 @@ def test_coordinated_controller_fuses_confident_prediction() -> None:
     assert "PREDICTION_MODEL:test-forecast-v1" in decision.reason_codes
 
 
-def test_coordinated_controller_preserves_b2_signal_phase_by_default() -> None:
+def test_coordinated_controller_preserves_b1_signal_action_by_default() -> None:
     factory = edge_factory()
     state = intersection(
         factory,
         phase="P2",
         phase_elapsed=15.0,
-        north_queue=12,
+        north_queue=5,
         south_queue=2,
     )
     strategy = cloud_strategy(
@@ -184,7 +189,7 @@ def test_coordinated_controller_preserves_b2_signal_phase_by_default() -> None:
         predicted_queue_weight=5.0,
         predicted_spillback_weight=0.0,
     )
-    baseline = MaxPressureController()
+    baseline = builtin_registry().create("actuated-control")
     baseline.initialize(config, topology())
     coordinated = CoordinatedMaxPressureController()
     coordinated.initialize(config, topology())
@@ -193,10 +198,145 @@ def test_coordinated_controller_preserves_b2_signal_phase_by_default() -> None:
     baseline_decision = baseline.decide(observation)
     coordinated_decision = coordinated.decide(observation)
 
-    assert baseline_decision.requested_phase_id == "P1"
+    assert baseline_decision.requested_phase_id == "P2"
     assert coordinated_decision.action_type == baseline_decision.action_type
     assert coordinated_decision.requested_phase_id == baseline_decision.requested_phase_id
     assert coordinated_decision.requested_duration_s == baseline_decision.requested_duration_s
+
+
+def test_coordinated_controller_gaps_out_for_confirmed_queue_imbalance() -> None:
+    factory = edge_factory()
+    state = intersection(
+        factory,
+        phase="P2",
+        phase_elapsed=15.0,
+        north_queue=12,
+        south_queue=2,
+    )
+    strategy = cloud_strategy(factory).model_copy(
+        update={
+            "forecasts": [
+                TrafficForecast(
+                    horizon_s=60,
+                    phase_arrivals={"P1": 20.0, "P2": 0.0},
+                    phase_queues={"P1": 20.0, "P2": 0.0},
+                    spillback_risk=0.0,
+                    confidence=0.95,
+                    model_id="queue-imbalance-v1",
+                    sample_count=10,
+                    generated_at_sim_time=10.0,
+                )
+            ],
+            "prediction_status": "ready",
+        }
+    )
+    controller = CoordinatedMaxPressureController()
+    controller.initialize(
+        AlgorithmConfig(coordinated_gap_out_minimum_queue_vehicles=8.0),
+        topology(),
+    )
+
+    decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
+
+    assert decision.selected_policy == "B3"
+    assert decision.action_type == "request_next_phase"
+    assert decision.requested_phase_id == "P1"
+    assert "PREDICTED_QUEUE_IMBALANCE_GAP_OUT" in decision.reason_codes
+
+
+def test_coordinated_gap_out_counts_each_incoming_lane_once() -> None:
+    factory = edge_factory()
+    state = intersection(
+        factory,
+        phase="P1",
+        phase_elapsed=15.0,
+        north_queue=3,
+        south_queue=5,
+    )
+    duplicate_movement_topology = topology().model_copy(
+        update={
+            "phases": {
+                "J1": [
+                    topology().phases["J1"][0],
+                    PhaseDefinition(
+                        phase_id="P2",
+                        movements=[
+                            PhaseMovement(
+                                incoming_lane_id="S.in",
+                                outgoing_lane_id="S.out",
+                            ),
+                            PhaseMovement(
+                                incoming_lane_id="S.in",
+                                outgoing_lane_id="N.out",
+                            ),
+                        ],
+                    ),
+                ]
+            }
+        }
+    )
+    strategy = cloud_strategy(factory).model_copy(
+        update={
+            "forecasts": [
+                TrafficForecast(
+                    horizon_s=60,
+                    phase_arrivals={"P1": 0.0, "P2": 20.0},
+                    phase_queues={"P1": 0.0, "P2": 20.0},
+                    spillback_risk=0.0,
+                    confidence=0.95,
+                    model_id="duplicate-lane-guard-v1",
+                    sample_count=10,
+                    generated_at_sim_time=10.0,
+                )
+            ],
+            "prediction_status": "ready",
+        }
+    )
+    controller = CoordinatedMaxPressureController()
+    controller.initialize(AlgorithmConfig(), duplicate_movement_topology)
+
+    decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
+
+    assert decision.selected_policy == "B1"
+    assert decision.requested_phase_id == "P1"
+    assert "PREDICTED_QUEUE_IMBALANCE_GAP_OUT" not in decision.reason_codes
+
+
+def test_coordinated_gap_out_requires_usable_downstream_capacity() -> None:
+    factory = edge_factory()
+    state = intersection(
+        factory,
+        phase="P2",
+        phase_elapsed=15.0,
+        north_queue=40,
+        south_queue=2,
+        north_downstream_occupancy=0.86,
+    )
+    strategy = cloud_strategy(factory).model_copy(
+        update={
+            "forecasts": [
+                TrafficForecast(
+                    horizon_s=60,
+                    phase_arrivals={"P1": 40.0, "P2": 0.0},
+                    phase_queues={"P1": 40.0, "P2": 0.0},
+                    spillback_risk=0.0,
+                    confidence=0.95,
+                    model_id="downstream-capacity-guard-v1",
+                    sample_count=10,
+                    generated_at_sim_time=10.0,
+                )
+            ],
+            "prediction_status": "ready",
+        }
+    )
+    controller = CoordinatedMaxPressureController()
+    controller.initialize(AlgorithmConfig(), topology())
+
+    decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
+
+    assert decision.selected_policy == "B1"
+    assert decision.requested_phase_id == "P2"
+    assert "PREDICTED_QUEUE_IMBALANCE_GAP_OUT" not in decision.reason_codes
 
 
 def test_coordinated_controller_uses_mobility_only_as_score_tiebreak() -> None:
@@ -238,12 +378,8 @@ def test_coordinated_controller_uses_mobility_only_as_score_tiebreak() -> None:
         topology(),
     )
 
-    first = controller.decide(
-        ControlObservation(intersection=state, cloud_strategy=strategy)
-    )
-    decision = controller.decide(
-        ControlObservation(intersection=state, cloud_strategy=strategy)
-    )
+    first = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
+    decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
 
     assert first.selected_policy == "B3"
     assert "SWITCH_AWAITING_CONFIRMATION" in first.reason_codes
@@ -300,9 +436,7 @@ def test_coordinated_controller_executes_confirmed_target_at_min_green() -> None
         topology(),
     )
 
-    controller.decide(
-        ControlObservation(intersection=early_state, cloud_strategy=target_p2)
-    )
+    controller.decide(ControlObservation(intersection=early_state, cloud_strategy=target_p2))
     committed = controller.decide(
         ControlObservation(intersection=early_state, cloud_strategy=target_p2)
     )
@@ -350,7 +484,7 @@ def test_coordinated_controller_preserves_dominant_current_pressure() -> None:
 
     decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
 
-    assert decision.selected_policy == "B2"
+    assert decision.selected_policy == "B1"
     assert decision.requested_phase_id == "P1"
     assert "CURRENT_PRESSURE_DOMINANCE_GUARD" in decision.reason_codes
 
@@ -388,7 +522,7 @@ def test_coordinated_controller_does_not_extend_a_demandless_phase() -> None:
 
     decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
 
-    assert decision.selected_policy == "B2"
+    assert decision.selected_policy == "B1"
     assert decision.requested_phase_id == "P2"
     assert decision.action_type == "request_next_phase"
 
@@ -418,7 +552,7 @@ def test_coordinated_controller_uses_baseline_candidate_for_low_demand() -> None
 
     decision = controller.decide(ControlObservation(intersection=state, cloud_strategy=strategy))
 
-    assert decision.selected_policy == "B2"
+    assert decision.selected_policy == "B1"
     assert decision.action_type == "hold_phase"
     assert "PREDICTIVE_GAIN_BELOW_GATE" in decision.reason_codes
 

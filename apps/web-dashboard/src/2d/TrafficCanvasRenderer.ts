@@ -85,12 +85,15 @@ export class TrafficCanvasRenderer {
     private readonly canvas: HTMLCanvasElement,
     private readonly staticCanvas: HTMLCanvasElement,
     layers: LayerVisibility,
+    private readonly maximumFps = 60,
   ) {
     this.dynamicContext = canvas.getContext("2d", {alpha: true});
     this.staticContext = staticCanvas.getContext("2d", {alpha: true});
     this.staticBuffer = document.createElement("canvas");
     this.staticBufferContext = this.staticBuffer.getContext("2d", {alpha: true});
     this.layerVisibility = layers;
+    this.stats.targetFps = maximumFps;
+    this.frameIntervalMs = 1000 / maximumFps;
     this.layers = [
       new BackgroundLayer(),
       new BuildingLayer(),
@@ -223,8 +226,16 @@ export class TrafficCanvasRenderer {
   }
 
   focusJunction(id: string): void { this.focusSelection({kind: "junction", id}); }
-  pan(deltaX: number, deltaY: number): void { this.camera.pan(deltaX, deltaY); this.invalidateStaticForCameraMotion(); }
-  zoomAt(screenX: number, screenY: number, factor: number): void { this.camera.zoomAt(screenX, screenY, factor); this.invalidateStaticForCameraMotion(); }
+  pan(deltaX: number, deltaY: number): void {
+    const revision = this.camera.revision;
+    this.camera.pan(deltaX, deltaY);
+    if (this.camera.revision !== revision) this.invalidateStaticForCameraMotion();
+  }
+  zoomAt(screenX: number, screenY: number, factor: number): void {
+    const revision = this.camera.revision;
+    this.camera.zoomAt(screenX, screenY, factor);
+    if (this.camera.revision !== revision) this.invalidateStaticForCameraMotion();
+  }
   getScale(): number { return this.camera.scale; }
   getCameraPose(): CameraPose { return this.camera.getPose(); }
   getGeographicMapPose(): GeographicMapPose {
@@ -309,7 +320,13 @@ export class TrafficCanvasRenderer {
 
     let edgePick: {id: string; distance: number} | null = null;
     const tolerance = 8 / this.camera.scale;
-    for (const indexed of this.world.indexedEdges) {
+    const pickBounds = {
+      minX: worldPoint.x - tolerance,
+      minY: worldPoint.y - tolerance,
+      maxX: worldPoint.x + tolerance,
+      maxY: worldPoint.y + tolerance,
+    };
+    for (const indexed of this.world.edgeSpatialIndex.query(pickBounds)) {
       if (worldPoint.x < indexed.minX - tolerance || worldPoint.x > indexed.maxX + tolerance || worldPoint.y < indexed.minY - tolerance || worldPoint.y > indexed.maxY + tolerance) continue;
       for (let index = 0; index < indexed.shape.length - 1; index += 1) {
         const distance = distanceToSegment(worldPoint, indexed.shape[index], indexed.shape[index + 1]);
@@ -407,7 +424,10 @@ export class TrafficCanvasRenderer {
     const drawMs = now - started;
     this.averageDrawMs = this.averageDrawMs ? this.averageDrawMs * .9 + drawMs * .1 : drawMs;
     if (now - this.lastFrameBudgetUpdate >= 1000) {
-      const targetFps = this.averageDrawMs > 20 ? 30 : this.averageDrawMs > 11 ? 45 : 60;
+      const targetFps = Math.min(
+        this.maximumFps,
+        this.averageDrawMs > 20 ? 30 : this.averageDrawMs > 11 ? 45 : 60,
+      );
       this.frameIntervalMs = 1000 / targetFps;
       this.stats.targetFps = targetFps;
       this.lastFrameBudgetUpdate = now;

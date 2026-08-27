@@ -63,6 +63,50 @@ describe("MapCamera resize and navigation bounds", () => {
     expect(camera.getZoomRatio()).toBeLessThanOrEqual(48.0001);
   });
 
+  it("can always zoom out and pan after reaching the maximum zoom", () => {
+    const camera = new MapCamera();
+    camera.resize(800, 500, 1);
+    camera.setSceneBounds({minX: 0, minY: 0, maxX: 20_000, maxY: 12_000});
+    for (let index = 0; index < 100; index += 1) camera.zoomAt(400, 250, 2);
+    const maximum = camera.getPose();
+
+    camera.zoomAt(400, 250, .5);
+    camera.pan(80, -45);
+
+    const recovered = camera.getPose();
+    expect(recovered.scale).toBeLessThan(maximum.scale);
+    expect(recovered.centerX).not.toBeCloseTo(maximum.centerX);
+    expect(recovered.centerY).not.toBeCloseTo(maximum.centerY);
+  });
+
+  it("does not revise the camera for repeated zoom input at the maximum", () => {
+    const camera = new MapCamera();
+    camera.resize(800, 500, 1);
+    camera.setSceneBounds({minX: 0, minY: 0, maxX: 20_000, maxY: 12_000});
+    for (let index = 0; index < 100; index += 1) camera.zoomAt(400, 250, 2);
+    const maximum = camera.getPose();
+    const revision = camera.revision;
+
+    for (let index = 0; index < 1000; index += 1) camera.zoomAt(400, 250, 2);
+
+    expect(camera.getPose()).toEqual(maximum);
+    expect(camera.revision).toBe(revision);
+  });
+
+  it("does not revise the camera for repeated pan input at a scene boundary", () => {
+    const camera = new MapCamera();
+    camera.resize(800, 500, 1);
+    camera.setSceneBounds({minX: 0, minY: 0, maxX: 1000, maxY: 600});
+    camera.pan(1_000_000, 0);
+    const boundary = camera.getPose();
+    const revision = camera.revision;
+
+    for (let index = 0; index < 1000; index += 1) camera.pan(1_000_000, 0);
+
+    expect(camera.getPose()).toEqual(boundary);
+    expect(camera.revision).toBe(revision);
+  });
+
   it("preserves an intentional zoom when the canvas size changes", () => {
     const camera = new MapCamera();
     camera.resize(800, 500, 1);

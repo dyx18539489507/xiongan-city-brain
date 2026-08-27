@@ -18,7 +18,7 @@ class CoordinatedMaxPressureController(MaxPressureController):
     """Select among B0-B3 candidates, then apply predictive coordination."""
 
     name = "coordinated-max-pressure"
-    version = "4.34.0"
+    version = "4.46.0"
 
     def __init__(self) -> None:
         super().__init__()
@@ -167,25 +167,28 @@ class CoordinatedMaxPressureController(MaxPressureController):
             )
             for phase in phases
         }
-        if pressure_best != current and intersection.phase_elapsed >= min_green_s:
-            baseline_action = "request_next_phase"
-            baseline_target = pressure_best
-            baseline_duration: float | None = min_green_s
-            baseline_reason = "MAX_PRESSURE_SWITCH"
-        elif (
-            pressure_best == current
-            and intersection.phase_elapsed < max_green_s
-            and local_scores.get(current, 0.0) > 0.0
-        ):
-            baseline_action = "extend_green"
-            baseline_target = current
-            baseline_duration = config.extension_s
-            baseline_reason = "MAX_PRESSURE_EXTEND"
-        else:
-            baseline_action = "hold_phase"
-            baseline_target = current
-            baseline_duration = None
-            baseline_reason = "MIN_MAX_GREEN_OR_NO_POSITIVE_PRESSURE"
+        # A lane can serve several turning movements in the same green phase.
+        # Count it once for the early-switch evidence so duplicated connections
+        # cannot turn a small queue into an apparent severe imbalance.
+        unique_phase_demand = {
+            phase.phase_id: sum(
+                queues.get(lane_id, 0.0)
+                for lane_id in {movement.incoming_lane_id for movement in phase.movements}
+            )
+            for phase in phases
+        }
+        lane_by_id = {lane.lane_id: lane for lane in intersection.lane_states}
+        phase_downstream_occupancy = {
+            phase.phase_id: max(
+                (
+                    lane_by_id[lane_id].downstream_occupancy
+                    for lane_id in {movement.incoming_lane_id for movement in phase.movements}
+                    if lane_id in lane_by_id
+                ),
+                default=0.0,
+            )
+            for phase in phases
+        }
         current_demand = phase_demand.get(current, 0.0)
         actuated_best = (
             max(phase_demand, key=lambda phase_id: phase_demand[phase_id])
@@ -199,13 +202,65 @@ class CoordinatedMaxPressureController(MaxPressureController):
             if actuated_best != current and intersection.phase_elapsed >= min_green_s
             else current
         )
+        competing_demand, competing_target = max(
+            (
+                (demand, phase_id)
+                for phase_id, demand in unique_phase_demand.items()
+                if phase_id != current
+            ),
+            default=(0.0, current),
+        )
+        current_unique_demand = unique_phase_demand.get(current, 0.0)
+        competing_downstream_occupancy = phase_downstream_occupancy.get(
+            competing_target,
+            1.0,
+        )
+        competing_usable_demand = competing_demand * max(
+            0.0,
+            1.0 - competing_downstream_occupancy,
+        )
+        regional_release_limit = (
+            strategy.upstream_release_limit if cloud_valid and strategy is not None else 0.0
+        )
+        forecast_spillback_risk = (
+            selected_forecast.spillback_risk
+            if prediction_ready and selected_forecast is not None
+            else 1.0
+        )
+        queue_imbalance_override = bool(
+            competing_target != current
+            and intersection.phase_elapsed >= min_green_s
+            and competing_demand >= config.coordinated_gap_out_minimum_queue_vehicles
+            and competing_demand >= current_unique_demand * config.coordinated_gap_out_queue_ratio
+            and competing_downstream_occupancy
+            <= config.coordinated_gap_out_maximum_downstream_occupancy
+        )
+        if current_demand > 0.0 and intersection.phase_elapsed < max_green_s:
+            actuated_action = "extend_green"
+            actuated_duration: float | None = config.extension_s
+            actuated_reason = "CURRENT_GREEN_HAS_DEMAND"
+        elif actuated_target != current and intersection.phase_elapsed >= min_green_s:
+            actuated_action = "request_next_phase"
+            actuated_duration = min_green_s
+            actuated_reason = "QUEUED_PHASE_REQUESTED"
+        else:
+            actuated_action = "hold_phase"
+            actuated_duration = None
+            actuated_reason = "MIN_GREEN_OR_NO_COMPETING_DEMAND"
         candidate_phases = {
             "B0": current,
             "B1": actuated_target,
-            "B2": baseline_target,
+            "B2": pressure_target,
         }
-        baseline_policy = "B2"
+        # The portfolio falls back to the most robust observed local controller.
+        # Cloud prediction and connected-vehicle guidance then add value without
+        # inheriting maximum-pressure's excessive phase switching under saturation.
+        baseline_policy = "B1"
         baseline_phase = candidate_phases[baseline_policy]
+        baseline_action = actuated_action
+        baseline_target = actuated_target
+        baseline_duration = actuated_duration
+        baseline_reason = actuated_reason
         baseline_pressure = local_scores.get(baseline_phase, 0.0)
         pressure_floor = max(0.0, baseline_pressure) * config.predictive_pressure_retention_ratio
         eligible_phases = [
@@ -242,7 +297,9 @@ class CoordinatedMaxPressureController(MaxPressureController):
             unconstrained_phase not in eligible_phases or forecast_challenges_pressure_guard
         )
         candidate_phases["B3"] = (
-            baseline_phase
+            competing_target
+            if queue_imbalance_override and prediction_ready
+            else baseline_phase
             if preserve_pressure_phase
             else max(
                 eligible_phases,
@@ -344,11 +401,22 @@ class CoordinatedMaxPressureController(MaxPressureController):
         elif selected_policy != "B3":
             reasons.append("PREDICTIVE_GAIN_BELOW_GATE")
         elif preserve_pressure_phase:
-            reasons.append("PREDICTION_CONFIRMS_PRESSURE_PHASE")
+            reasons.append("PREDICTION_CONFIRMS_BASELINE_PHASE")
         if selected_policy == "B3" and best != current and not switch_confirmed:
             reasons.append("SWITCH_AWAITING_CONFIRMATION")
         elif selected_policy == "B3" and best != current:
             reasons.append("SWITCH_TARGET_COMMITTED")
+            if queue_imbalance_override:
+                reasons.append("PREDICTED_QUEUE_IMBALANCE_GAP_OUT")
+                reasons.extend(
+                    [
+                        f"GAP_OUT_COMPETING_DEMAND:{competing_demand:.3f}",
+                        f"GAP_OUT_USABLE_DEMAND:{competing_usable_demand:.3f}",
+                        (f"GAP_OUT_DOWNSTREAM_OCCUPANCY:{competing_downstream_occupancy:.3f}"),
+                        f"GAP_OUT_RELEASE_LIMIT:{regional_release_limit:.3f}",
+                        f"GAP_OUT_FORECAST_SPILLBACK:{forecast_spillback_risk:.3f}",
+                    ]
+                )
         if selected_policy != "B3":
             reasons.append(baseline_reason)
         if cloud_valid and strategy is not None and strategy.target_offsets:
@@ -378,7 +446,7 @@ class CoordinatedMaxPressureController(MaxPressureController):
             reason_codes=reasons,
             explanation=(
                 "B3 evaluates B0 fixed, B1 actuated, B2 pressure and B3 predictive "
-                "candidates, preserving the B2 pressure-optimal signal phase by default "
+                "candidates, preserving the robust B1 actuated signal phase by default "
                 "and applying prediction only when confidence and gain clear explicit gates."
             ),
         )

@@ -18,6 +18,8 @@
   <script>
     const canvas = document.querySelector('#unity-canvas');
     const loading = document.querySelector('#loading');
+    const buildVersion = new URLSearchParams(window.location.search).get('build') || '1';
+    const buildAsset = (path) => `${path}?build=${encodeURIComponent(buildVersion)}`;
     function resolveUnityPixelRatio() {
       const width = Math.max(1, document.documentElement.clientWidth);
       const height = Math.max(1, document.documentElement.clientHeight);
@@ -27,9 +29,9 @@
       return Math.max(0.75, Math.min(nativeRatio, 2, 2560 / width, 1440 / height));
     }
     const config = {
-      dataUrl: 'Build/unity.data.br',
-      frameworkUrl: 'Build/unity.framework.js.br',
-      codeUrl: 'Build/unity.wasm.br',
+      dataUrl: buildAsset('Build/unity.data.br'),
+      frameworkUrl: buildAsset('Build/unity.framework.js.br'),
+      codeUrl: buildAsset('Build/unity.wasm.br'),
       streamingAssetsUrl: 'StreamingAssets',
       companyName: 'Xiongan Traffic Brain',
       productName: '雄安交通协同控制数字孪生',

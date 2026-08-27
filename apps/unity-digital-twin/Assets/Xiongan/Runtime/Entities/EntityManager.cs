@@ -556,7 +556,8 @@ namespace Xiongan.DigitalTwin.Entities
                 var side = Mathf.Abs(across) > 2.8f
                     ? Mathf.Sign(across)
                     : Vector3.Dot(sourceTangent, showcaseFrame.Forward) >= 0f ? 1f : -1f;
-                across = side * ResolveLaneCenter(Mathf.Abs(across));
+                var transitionScale = ReferenceShowcaseLayout.ResolveMotorLaneScale(along, true);
+                across = side * ResolveLaneCenter(Mathf.Abs(across)) * transitionScale;
                 position = showcaseFrame.Point(across, displayHeight, along);
                 displayForward = Vector3.Dot(sourceTangent, showcaseFrame.Forward) >= 0f
                     ? showcaseFrame.Forward
@@ -567,7 +568,8 @@ namespace Xiongan.DigitalTwin.Entities
                 var side = Mathf.Abs(along) > 2.8f
                     ? Mathf.Sign(along)
                     : Vector3.Dot(sourceTangent, showcaseFrame.Right) >= 0f ? -1f : 1f;
-                along = side * ResolveLaneCenter(Mathf.Abs(along));
+                var transitionScale = ReferenceShowcaseLayout.ResolveMotorLaneScale(across, false);
+                along = side * ResolveLaneCenter(Mathf.Abs(along)) * transitionScale;
                 position = showcaseFrame.Point(across, displayHeight, along);
                 displayForward = Vector3.Dot(sourceTangent, showcaseFrame.Right) >= 0f
                     ? showcaseFrame.Right

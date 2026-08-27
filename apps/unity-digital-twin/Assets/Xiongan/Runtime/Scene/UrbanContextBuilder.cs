@@ -937,6 +937,55 @@ namespace Xiongan.DigitalTwin.Scene
             }
             coveredCells = coverageCells.Count(cell => CellOccupancy(cell) >= cell.Target);
 
+            // Large OSM land-use polygons can remain visually empty even when
+            // their sparse source footprints are valid. Add a bounded layer of
+            // low-poly planning trees to unused, road-connected parts of each
+            // developed block, including the green buffers of construction land.
+            var supplementalTrees = 0;
+            foreach (var zone in zones)
+            {
+                var spacing = zone.Type == "construction" ? 42f : 55f;
+                var target = Mathf.Clamp(
+                    Mathf.FloorToInt(zone.Area / (spacing * spacing)),
+                    2,
+                    zone.Type == "construction" ? 36 : 18);
+                var minX = Mathf.Max(sceneMinX, zone.Polygon.Min(point => point.x));
+                var maxX = Mathf.Min(sceneMaxX, zone.Polygon.Max(point => point.x));
+                var minZ = Mathf.Max(sceneMinZ, zone.Polygon.Min(point => point.z));
+                var maxZ = Mathf.Min(sceneMaxZ, zone.Polygon.Max(point => point.z));
+                var seed = StableHash($"supplemental-green:{zone.Id}");
+                var placed = 0;
+                var row = 0;
+                for (var z = minZ + spacing * 0.45f; z < maxZ && placed < target; z += spacing, row++)
+                {
+                    var column = 0;
+                    for (var x = minX + spacing * 0.45f; x < maxX && placed < target; x += spacing, column++)
+                    {
+                        var pointSeed = StableHash($"supplemental-green:{zone.Id}:{row}:{column}");
+                        var point = new Vector3(
+                            x + ((pointSeed % 101) / 100f - 0.5f) * spacing * 0.34f,
+                            0f,
+                            z + (((pointSeed / 101) % 101) / 100f - 0.5f) * spacing * 0.34f);
+                        if (!PointInPolygon(point, zone.Polygon)) continue;
+                        if (IsInsideShowcaseExclusion(point, showcaseCenter, 225f)) continue;
+                        if (controlledCenters.Any(center => Vector3.Distance(center, point) < 38f)) continue;
+                        if (!TryFindNearestRoadSegment(point, roadSegments, out _, out _, out var roadDistanceSquared))
+                            continue;
+                        var roadDistance = Mathf.Sqrt(roadDistanceSquared);
+                        if (roadDistance < 11f || roadDistance > 92f) continue;
+                        if (occupied.Any(existing =>
+                                Vector3.Distance(existing.Center, point) < existing.Radius + 5f)) continue;
+
+                        var height = 5.6f + (seed + pointSeed) % 17 * 0.14f;
+                        AddPlanningTree(
+                            districtTreeTrunks, districtTreeCrowns,
+                            point, height, pointSeed);
+                        placed++;
+                        supplementalTrees++;
+                    }
+                }
+            }
+
             for (var index = 0; index < facades.Length; index++)
                 facades[index].Build($"全城背景建筑立面-{index + 1}", scene.Materials.Facades[index],
                     root.transform, true, SceneDetailClass.Essential, 768f);
@@ -963,7 +1012,7 @@ namespace Xiongan.DigitalTwin.Scene
             Debug.Log($"Citywide land-use infill complete: {created} buildings; " +
                       string.Join(", ", counts.OrderBy(item => item.Key).Select(item => $"{item.Key}={item.Value}")) +
                       $"; coverage infill={coverageCreated}; road-edge infill={roadEdgeCreated}; " +
-                      $"cells={coveredCells}/{coverageCells.Count}");
+                      $"cells={coveredCells}/{coverageCells.Count}; supplemental trees={supplementalTrees}");
         }
 
         private static int XionganFacadeIndex(string areaType, int seed, int materialCount)
@@ -1520,29 +1569,37 @@ namespace Xiongan.DigitalTwin.Scene
             int seed)
         {
             var count = areaType is "residential" or "school" or "kindergarten"
-                ? 1
-                : (areaType is "commercial" or "exhibition_centre") && seed % 3 == 0 ? 1 : 0;
+                ? 4
+                : areaType is "commercial" or "exhibition_centre" ? 2 : 1;
             for (var index = 0; index < count; index++)
             {
                 var treeSeed = StableHash($"plot-tree:{seed}:{index}");
                 var sideSign = (treeSeed & 1) == 0 ? -1f : 1f;
+                var frontSign = index < 2 ? 1f : -1f;
                 var point = center +
-                            streetDirection * (depth * 0.5f + 2.1f) +
-                            roadDirection * (width * 0.31f * sideSign);
+                            streetDirection * (depth * 0.5f + 2.35f) * frontSign +
+                            roadDirection * (width * (0.26f + index % 2 * 0.12f) * sideSign);
                 var height = 5.8f + treeSeed % 13 * 0.16f;
-                trunks.AddCylinder(
-                    point + Vector3.up * height * 0.27f,
-                    height * 0.042f,
-                    height * 0.54f,
-                    5);
-                var crownCenter = point + Vector3.up * height * 0.7f;
-                var crownWidth = height * (0.23f + treeSeed / 17 % 5 * 0.012f);
-                crowns.AddEllipsoid(
-                    crownCenter,
-                    new Vector3(crownWidth, height * 0.25f, crownWidth * 0.84f),
-                    5,
-                    7);
+                AddPlanningTree(trunks, crowns, point, height, treeSeed);
             }
+        }
+
+        private static void AddPlanningTree(
+            MeshAccumulator trunks, MeshAccumulator crowns,
+            Vector3 point, float height, int seed)
+        {
+            trunks.AddCylinder(
+                point + Vector3.up * height * 0.27f,
+                height * 0.042f,
+                height * 0.54f,
+                5);
+            var crownCenter = point + Vector3.up * height * 0.7f;
+            var crownWidth = height * (0.23f + seed / 17 % 5 * 0.012f);
+            crowns.AddEllipsoid(
+                crownCenter,
+                new Vector3(crownWidth, height * 0.25f, crownWidth * 0.84f),
+                5,
+                7);
         }
 
         private static void AddFacadeStrip(

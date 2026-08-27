@@ -75,7 +75,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const staticCanvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<TrafficCanvasRenderer | null>(null);
-  const dragRef = useRef({active: false, moved: false, x: 0, y: 0});
+  const dragRef = useRef({active: false, moved: false, pointerId: null as number | null, x: 0, y: 0});
   const lastHoverPickRef = useRef(0);
   const lastCameraPoseRef = useRef<CameraPose | null>(null);
   const [hover, setHover] = useState<{selection: MapSelection; x: number; y: number} | null>(null);
@@ -133,7 +133,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     const staticCanvas = staticCanvasRef.current;
     const stage = stageRef.current;
     if (!canvas || !staticCanvas || !stage) return;
-    const renderer = new TrafficCanvasRenderer(canvas, staticCanvas, layers);
+    const renderer = new TrafficCanvasRenderer(canvas, staticCanvas, layers, embedded ? 30 : 60);
     rendererRef.current = renderer;
     const unsubscribeCameraSync = cameraSyncBus && mapRole
       ? cameraSyncBus.subscribe(mapRole, (pose) => {
@@ -187,6 +187,14 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     if (cockpit) mutationObserver.observe(cockpit, {attributes: true, subtree: true, attributeFilter: ["class"]});
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
+      if (event.buttons === 0 && dragRef.current.active) {
+        const pointerId = dragRef.current.pointerId;
+        dragRef.current.active = false;
+        dragRef.current.pointerId = null;
+        if (pointerId !== null && canvas.hasPointerCapture(pointerId)) {
+          canvas.releasePointerCapture(pointerId);
+        }
+      }
       const bounds = canvas.getBoundingClientRect();
       renderer.zoomAt(event.clientX - bounds.left, event.clientY - bounds.top, event.deltaY < 0 ? 1.14 : .88);
       const pose = renderer.getCameraPose();
@@ -195,8 +203,13 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     };
     observer.observe(stage);
     updateViewportInsets();
-    canvas.addEventListener("wheel", handleWheel, {passive: false});
+    stage.addEventListener("wheel", handleWheel, {passive: false});
     window.addEventListener("resize", updateViewportInsets);
+    const resetPointerInteraction = () => {
+      dragRef.current.active = false;
+      dragRef.current.pointerId = null;
+    };
+    window.addEventListener("blur", resetPointerInteraction);
     let frame = 0;
     const animate = (now: number) => {
       renderer.render(now);
@@ -231,7 +244,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     };
     frame = window.requestAnimationFrame(animate);
     const statsTimer = window.setInterval(() => setStats(renderer.getStats()), 1000);
-    return () => { unsubscribeCameraSync(); observer.disconnect(); overlayObserver.disconnect(); mutationObserver.disconnect(); canvas.removeEventListener("wheel", handleWheel); window.removeEventListener("resize", updateViewportInsets); window.cancelAnimationFrame(frame); window.clearInterval(statsTimer); renderer.destroy(); rendererRef.current = null; };
+    return () => { unsubscribeCameraSync(); observer.disconnect(); overlayObserver.disconnect(); mutationObserver.disconnect(); stage.removeEventListener("wheel", handleWheel); window.removeEventListener("resize", updateViewportInsets); window.removeEventListener("blur", resetPointerInteraction); window.cancelAnimationFrame(frame); window.clearInterval(statsTimer); renderer.destroy(); rendererRef.current = null; };
   }, [cameraSyncBus, embedded, mapRole]);
 
   useEffect(() => {
@@ -276,12 +289,53 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
     <canvas
       aria-label="SUMO 实时二维交通数字孪生地图"
       className="traffic-2d-canvas"
+      tabIndex={0}
       onContextMenu={(event) => event.preventDefault()}
       onDoubleClick={() => rendererRef.current?.fitScene()}
+      onKeyDown={(event) => {
+        const renderer = rendererRef.current;
+        if (!renderer) return;
+        let handled = true;
+        if (event.key === "+" || event.key === "=") {
+          renderer.zoomAt(event.currentTarget.clientWidth / 2, event.currentTarget.clientHeight / 2, 1.25);
+        } else if (event.key === "-" || event.key === "_") {
+          renderer.zoomAt(event.currentTarget.clientWidth / 2, event.currentTarget.clientHeight / 2, .8);
+        } else if (event.key === "ArrowLeft") {
+          renderer.pan(48, 0);
+        } else if (event.key === "ArrowRight") {
+          renderer.pan(-48, 0);
+        } else if (event.key === "ArrowUp") {
+          renderer.pan(0, 48);
+        } else if (event.key === "ArrowDown") {
+          renderer.pan(0, -48);
+        } else if (event.key === "Home") {
+          renderer.fitScene();
+        } else {
+          handled = false;
+        }
+        if (!handled) return;
+        event.preventDefault();
+        const pose = renderer.getCameraPose();
+        lastCameraPoseRef.current = pose;
+        if (cameraSyncBus && mapRole) cameraSyncBus.publish(mapRole, pose);
+      }}
       onPointerDown={(event) => {
         const point = pointerPosition(event);
-        dragRef.current = {active: true, moved: false, ...point};
+        dragRef.current = {active: true, moved: false, pointerId: event.pointerId, ...point};
         event.currentTarget.setPointerCapture(event.pointerId);
+      }}
+      onLostPointerCapture={(event) => {
+        if (dragRef.current.pointerId !== event.pointerId) return;
+        dragRef.current.active = false;
+        dragRef.current.pointerId = null;
+      }}
+      onPointerCancel={(event) => {
+        if (dragRef.current.pointerId !== event.pointerId) return;
+        dragRef.current.active = false;
+        dragRef.current.pointerId = null;
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
       }}
       onPointerLeave={() => {
         rendererRef.current?.setHover(null);
@@ -290,7 +344,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
       onPointerMove={(event) => {
         const point = pointerPosition(event);
         const drag = dragRef.current;
-        if (drag.active) {
+        if (drag.active && drag.pointerId === event.pointerId) {
           const dx = point.x - drag.x;
           const dy = point.y - drag.y;
           if (Math.hypot(dx, dy) > 1) drag.moved = true;
@@ -317,6 +371,7 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
         event.currentTarget.style.cursor = picked ? "pointer" : "grab";
       }}
       onPointerUp={(event) => {
+        if (!dragRef.current.active || dragRef.current.pointerId !== event.pointerId) return;
         const point = pointerPosition(event);
         if (!dragRef.current.moved) onSelectionChange(rendererRef.current?.pick(point.x, point.y) ?? null);
         const renderer = rendererRef.current;
@@ -326,7 +381,10 @@ export function Traffic2DScene({scene, loadState, stream, snapshot, layers, sele
           cameraSyncBus.publish(mapRole, pose);
         }
         dragRef.current.active = false;
-        event.currentTarget.releasePointerCapture(event.pointerId);
+        dragRef.current.pointerId = null;
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
       }}
       ref={canvasRef}
     />

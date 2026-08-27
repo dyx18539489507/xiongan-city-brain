@@ -450,7 +450,10 @@ namespace Xiongan.DigitalTwin.CameraSystem
                 bridge.Emit("vehicle-locator", new { found = false, mode, count = 0, id = string.Empty });
                 return;
             }
-            FocusLocatedActor(actor, mode == "follow");
+            // Keep the chosen vehicle in frame. The locator must hold this exact
+            // actor until it departs; selecting a new nearest actor every frame
+            // makes the camera appear to jump between unrelated vehicles.
+            FocusLocatedActor(actor, true);
             bridge.Emit("vehicle-locator", new { found = true, mode, count = 1, id = actor.Identifier });
         }
 

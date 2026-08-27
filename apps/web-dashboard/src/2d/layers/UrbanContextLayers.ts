@@ -50,7 +50,7 @@ export class BuildingLayer implements TrafficMapLayer {
     if (camera.scale < .08) return;
     ctx.beginPath();
     let visible = 0;
-    for (const indexed of world.indexedBuildings) {
+    for (const indexed of world.buildingSpatialIndex.query(visibleBounds)) {
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
       const building = indexed.building;
       appendPolygon(ctx, camera, building.footprint);

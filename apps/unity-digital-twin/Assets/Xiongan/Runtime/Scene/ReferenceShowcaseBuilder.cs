@@ -56,36 +56,67 @@ namespace Xiongan.DigitalTwin.Scene
             foreach (var along in new[] { -88f, 88f })
                 ground.AddPolygon(frame.Rectangle(across, along, 124f, 124f), 0.018f);
 
-            // One concave polygon owns the complete B01 carriageway. Separate
-            // crossing rectangles produced overlapping top faces and zoom-time
-            // depth fighting at every road seam.
+            // One concave polygon owns the complete B01 carriageway. Its four
+            // arms now taper into the source SUMO roads instead of ending as a
+            // standalone wide cross laid over the surrounding network.
             asphalt.AddPolygon(new[]
             {
-                frame.Point(-26f, 0f, -180f), frame.Point(26f, 0f, -180f),
-                frame.Point(26f, 0f, -25f), frame.Point(147f, 0f, -25f),
-                frame.Point(147f, 0f, 25f), frame.Point(26f, 0f, 25f),
-                frame.Point(26f, 0f, 180f), frame.Point(-26f, 0f, 180f),
-                frame.Point(-26f, 0f, 25f), frame.Point(-147f, 0f, 25f),
-                frame.Point(-147f, 0f, -25f), frame.Point(-26f, 0f, -25f),
+                frame.Point(-ReferenceShowcaseLayout.TransitionMotorHalfWidth, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                frame.Point(ReferenceShowcaseLayout.TransitionMotorHalfWidth, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                frame.Point(ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionStart),
+                frame.Point(ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, -ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.CrossTransitionStart, 0f, -ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.CrossTransitionEnd, 0f, -ReferenceShowcaseLayout.TransitionMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.CrossTransitionEnd, 0f, ReferenceShowcaseLayout.TransitionMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.CrossTransitionStart, 0f, ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, ReferenceShowcaseLayout.LongitudinalTransitionStart),
+                frame.Point(ReferenceShowcaseLayout.TransitionMotorHalfWidth, 0f, ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                frame.Point(-ReferenceShowcaseLayout.TransitionMotorHalfWidth, 0f, ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                frame.Point(-ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, ReferenceShowcaseLayout.LongitudinalTransitionStart),
+                frame.Point(-ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.CrossTransitionStart, 0f, ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.CrossTransitionEnd, 0f, ReferenceShowcaseLayout.TransitionMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.CrossTransitionEnd, 0f, -ReferenceShowcaseLayout.TransitionMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.CrossTransitionStart, 0f, -ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, -ReferenceShowcaseLayout.CrossMotorHalfWidth),
+                frame.Point(-ReferenceShowcaseLayout.LongitudinalMotorHalfWidth, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionStart),
             }, 0.09f);
 
             foreach (var across in new[] { -30.4f, 30.4f })
-                sidewalk.AddPolygon(frame.Rectangle(across, 0f, 7.8f, 360f), 0.105f);
+                sidewalk.AddPolygon(frame.Rectangle(
+                    across, 0f, 7.8f,
+                    ReferenceShowcaseLayout.LongitudinalTransitionStart * 2f), 0.105f);
             foreach (var along in new[] { -29.4f, 29.4f })
-                sidewalk.AddPolygon(frame.Rectangle(0f, along, 294f, 7.8f), 0.106f);
+                sidewalk.AddPolygon(frame.Rectangle(
+                    0f, along,
+                    ReferenceShowcaseLayout.CrossTransitionStart * 2f, 7.8f), 0.106f);
+            AddTransitionSidewalks(frame, sidewalk);
 
-            AddMedian(frame, planting, curb, shrubs, 0f, -108f, 5.8f, 138f, true);
-            AddMedian(frame, planting, curb, shrubs, 0f, 108f, 5.8f, 138f, true);
-            AddMedian(frame, planting, curb, shrubs, -96f, 0f, 118f, 5.2f, false);
-            AddMedian(frame, planting, curb, shrubs, 96f, 0f, 118f, 5.2f, false);
+            AddMedian(frame, planting, curb, shrubs, 0f, -92f, 5.8f, 106f, true);
+            AddMedian(frame, planting, curb, shrubs, 0f, 92f, 5.8f, 106f, true);
+            AddMedian(frame, planting, curb, shrubs, -80f, 0f, 84f, 5.2f, false);
+            AddMedian(frame, planting, curb, shrubs, 80f, 0f, 84f, 5.2f, false);
 
             foreach (var across in new[] { -26.2f, 26.2f })
                 curb.AddExtrudedRibbon(
-                    new[] { frame.Point(across, 0f, -180f), frame.Point(across, 0f, 180f) },
+                    new[]
+                    {
+                        frame.Point(Mathf.Sign(across) * 11.7f, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                        frame.Point(across, 0f, -ReferenceShowcaseLayout.LongitudinalTransitionStart),
+                        frame.Point(across, 0f, ReferenceShowcaseLayout.LongitudinalTransitionStart),
+                        frame.Point(Mathf.Sign(across) * 11.7f, 0f, ReferenceShowcaseLayout.LongitudinalTransitionEnd),
+                    },
                     0.38f, 0.09f, 0.27f);
             foreach (var along in new[] { -25.2f, 25.2f })
                 curb.AddExtrudedRibbon(
-                    new[] { frame.Point(-147f, 0f, along), frame.Point(147f, 0f, along) },
+                    new[]
+                    {
+                        frame.Point(-ReferenceShowcaseLayout.CrossTransitionEnd, 0f, Mathf.Sign(along) * 11.7f),
+                        frame.Point(-ReferenceShowcaseLayout.CrossTransitionStart, 0f, along),
+                        frame.Point(ReferenceShowcaseLayout.CrossTransitionStart, 0f, along),
+                        frame.Point(ReferenceShowcaseLayout.CrossTransitionEnd, 0f, Mathf.Sign(along) * 11.7f),
+                    },
                     0.38f, 0.091f, 0.27f);
 
             ground.Build("B01四角连续城市绿地", scene.Materials.HeroGrass, parent, false);
@@ -94,6 +125,34 @@ namespace Xiongan.DigitalTwin.Scene
             planting.Build("B01中央林荫隔离带", scene.Materials.HeroGrass, parent, false);
             curb.Build("B01花岗岩实体路缘", scene.Materials.Curb, parent, true);
             shrubs.Build("B01中央隔离带灌木", scene.Materials.ShrubLeaves, parent, true);
+        }
+
+        private static void AddTransitionSidewalks(
+            ReferenceShowcaseFrame frame, MeshAccumulator sidewalk)
+        {
+            foreach (var side in new[] { -1f, 1f })
+            foreach (var direction in new[] { -1f, 1f })
+            {
+                var startAlong = direction * ReferenceShowcaseLayout.LongitudinalTransitionStart;
+                var endAlong = direction * ReferenceShowcaseLayout.LongitudinalTransitionEnd;
+                sidewalk.AddPolygon(new[]
+                {
+                    frame.Point(side * 26.5f, 0f, startAlong),
+                    frame.Point(side * 11.9f, 0f, endAlong),
+                    frame.Point(side * 17.3f, 0f, endAlong),
+                    frame.Point(side * 34.3f, 0f, startAlong),
+                }, 0.105f);
+
+                var startAcross = direction * ReferenceShowcaseLayout.CrossTransitionStart;
+                var endAcross = direction * ReferenceShowcaseLayout.CrossTransitionEnd;
+                sidewalk.AddPolygon(new[]
+                {
+                    frame.Point(startAcross, 0f, side * 25.5f),
+                    frame.Point(endAcross, 0f, side * 11.9f),
+                    frame.Point(endAcross, 0f, side * 17.3f),
+                    frame.Point(startAcross, 0f, side * 33.3f),
+                }, 0.106f);
+            }
         }
 
         private static void AddMedian(
@@ -132,18 +191,26 @@ namespace Xiongan.DigitalTwin.Scene
             foreach (var sign in new[] { -1f, 1f })
             foreach (var offset in new[] { 8.6f, 14.4f, 20.2f })
             {
-                AddDashedLine(markings, frame.Point(sign * offset, 0f, -176f),
+                AddDashedLine(markings, frame.Point(sign * offset * 0.44f, 0f, -216f),
+                    frame.Point(sign * offset, 0f, -116f), paintHeight);
+                AddDashedLine(markings, frame.Point(sign * offset, 0f, -116f),
                     frame.Point(sign * offset, 0f, -34f), paintHeight);
                 AddDashedLine(markings, frame.Point(sign * offset, 0f, 34f),
-                    frame.Point(sign * offset, 0f, 176f), paintHeight);
+                    frame.Point(sign * offset, 0f, 116f), paintHeight);
+                AddDashedLine(markings, frame.Point(sign * offset, 0f, 116f),
+                    frame.Point(sign * offset * 0.44f, 0f, 216f), paintHeight);
             }
             foreach (var sign in new[] { -1f, 1f })
             foreach (var offset in new[] { 8.1f, 13.75f, 19.4f })
             {
-                AddDashedLine(markings, frame.Point(-144f, 0f, sign * offset),
+                AddDashedLine(markings, frame.Point(-201f, 0f, sign * offset * 0.46f),
+                    frame.Point(-104f, 0f, sign * offset), paintHeight);
+                AddDashedLine(markings, frame.Point(-104f, 0f, sign * offset),
                     frame.Point(-34f, 0f, sign * offset), paintHeight);
                 AddDashedLine(markings, frame.Point(34f, 0f, sign * offset),
-                    frame.Point(144f, 0f, sign * offset), paintHeight);
+                    frame.Point(104f, 0f, sign * offset), paintHeight);
+                AddDashedLine(markings, frame.Point(104f, 0f, sign * offset),
+                    frame.Point(201f, 0f, sign * offset * 0.46f), paintHeight);
             }
 
             AddCrosswalk(markings, frame, true, -29.1f, paintHeight);
@@ -259,6 +326,12 @@ namespace Xiongan.DigitalTwin.Scene
         {
             var specs = new[]
             {
+                new BuildingSpec(-93f, -82f, 46f, 25f, 13.8f, 2),
+                new BuildingSpec(-108f, -128f, 40f, 23f, 16.4f, 5),
+                new BuildingSpec(-78f, -171f, 43f, 22f, 14.6f, 7),
+                new BuildingSpec(91f, -84f, 52f, 26f, 14.2f, 0),
+                new BuildingSpec(109f, -130f, 40f, 23f, 17.1f, 3),
+                new BuildingSpec(80f, -172f, 43f, 22f, 15.2f, 6),
                 new BuildingSpec(-91f, 82f, 50f, 27f, 15.4f, 0),
                 new BuildingSpec(-106f, 126f, 42f, 25f, 18.2f, 3),
                 new BuildingSpec(-78f, 169f, 44f, 23f, 15.8f, 6),
@@ -543,10 +616,21 @@ namespace Xiongan.DigitalTwin.Scene
             var seed = 0;
 
             foreach (var across in new[] { -37.2f, 37.2f })
-            foreach (var along in new[] { -72f, -53f, 47f, 63f, 79f, 96f, 114f, 133f, 153f, 174f })
+            foreach (var along in new[]
+                     {
+                         -194f, -174f, -153f, -133f, -114f, -96f, -79f, -63f, -47f,
+                         47f, 63f, 79f, 96f, 114f, 133f, 153f, 174f, 194f,
+                     })
                 AddTree(frame.Point(across, 0f, along), seed++, trunks, crowns);
             foreach (var along in new[] { -35.5f, 35.5f })
-            foreach (var across in new[] { -132f, -108f, -84f, -58f, 58f, 84f, 108f, 132f })
+            foreach (var across in new[]
+                     {
+                         -186f, -162f, -138f, -114f, -90f, -64f,
+                         64f, 90f, 114f, 138f, 162f, 186f,
+                     })
+                AddTree(frame.Point(across, 0f, along), seed++, trunks, crowns);
+            foreach (var across in new[] { -140f, 140f })
+            foreach (var along in new[] { -178f, -148f, -116f, -84f, -54f, 54f, 84f, 116f, 148f, 178f })
                 AddTree(frame.Point(across, 0f, along), seed++, trunks, crowns);
             foreach (var across in new[] { -32.2f, 32.2f })
             for (var along = -145f; along <= 145f; along += 18f)

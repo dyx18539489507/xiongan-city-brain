@@ -15,7 +15,7 @@ class GuidancePerformanceSample:
 
 @dataclass(slots=True)
 class GlosaEffectivenessGate:
-    """Suspend arrival alignment when speed loss does not reduce queues."""
+    """Authorize arrival alignment only after measured queue reduction."""
 
     window_s: float = 30.0
     cooldown_s: float = 20.0
@@ -23,7 +23,7 @@ class GlosaEffectivenessGate:
     minimum_queue_reduction_ratio: float = 0.02
     samples: deque[GuidancePerformanceSample] = field(default_factory=deque)
     cooldown_until_s: float = 0.0
-    active: bool = True
+    active: bool = False
     reason: str = "WARMING_UP"
     speed_change_ratio: float | None = None
     queue_reduction_ratio: float | None = None
@@ -53,27 +53,21 @@ class GlosaEffectivenessGate:
             self.reason = "COOLDOWN_AFTER_NO_QUEUE_PAYOFF"
             return False
 
-        observed_span_s = (
-            self.samples[-1].simulation_time_s - self.samples[0].simulation_time_s
-        )
+        observed_span_s = self.samples[-1].simulation_time_s - self.samples[0].simulation_time_s
         if len(self.samples) < 4 or observed_span_s < self.window_s * 0.8:
-            self.active = True
+            self.active = False
             self.reason = "WARMING_UP"
             self.speed_change_ratio = None
             self.queue_reduction_ratio = None
-            return True
+            return False
 
         midpoint_s = self.samples[0].simulation_time_s + observed_span_s / 2.0
-        earlier = [
-            sample for sample in self.samples if sample.simulation_time_s <= midpoint_s
-        ]
-        recent = [
-            sample for sample in self.samples if sample.simulation_time_s > midpoint_s
-        ]
+        earlier = [sample for sample in self.samples if sample.simulation_time_s <= midpoint_s]
+        recent = [sample for sample in self.samples if sample.simulation_time_s > midpoint_s]
         if not earlier or not recent:
-            self.active = True
+            self.active = False
             self.reason = "INSUFFICIENT_SPLIT_WINDOW"
-            return True
+            return False
 
         earlier_speed = sum(sample.mean_speed_m_s for sample in earlier) / len(earlier)
         recent_speed = sum(sample.mean_speed_m_s for sample in recent) / len(recent)
@@ -97,13 +91,14 @@ class GlosaEffectivenessGate:
             self.reason = "SPEED_LOSS_WITHOUT_QUEUE_PAYOFF"
             return False
 
-        self.active = True
-        self.reason = (
-            "QUEUE_REDUCTION_JUSTIFIES_GUIDANCE"
-            if self.queue_reduction_ratio >= self.minimum_queue_reduction_ratio
-            else "NO_HARM_DETECTED"
-        )
-        return True
+        if self.queue_reduction_ratio >= self.minimum_queue_reduction_ratio:
+            self.active = True
+            self.reason = "QUEUE_REDUCTION_JUSTIFIES_GUIDANCE"
+            return True
+
+        self.active = False
+        self.reason = "QUEUE_REDUCTION_NOT_PROVEN"
+        return False
 
 
 @dataclass(slots=True)
@@ -128,21 +123,17 @@ class GlosaMobilityRegimeClassifier:
                 queue_vehicles=0,
             )
         )
-        observed_span_s = (
-            self.samples[-1].simulation_time_s - self.samples[0].simulation_time_s
-        )
+        observed_span_s = self.samples[-1].simulation_time_s - self.samples[0].simulation_time_s
         if self.window_s > 1.0 and (
-            len(self.samples) < 2
-            or observed_span_s < max(0.0, self.window_s - 1.0)
+            len(self.samples) < 2 or observed_span_s < max(0.0, self.window_s - 1.0)
         ):
             return self.regime
-        self.baseline_mean_speed_m_s = sum(
-            sample.mean_speed_m_s for sample in self.samples
-        ) / len(self.samples)
+        self.baseline_mean_speed_m_s = sum(sample.mean_speed_m_s for sample in self.samples) / len(
+            self.samples
+        )
         self.regime = (
             "high_mobility"
-            if self.baseline_mean_speed_m_s
-            >= self.high_mobility_speed_threshold_m_s
+            if self.baseline_mean_speed_m_s >= self.high_mobility_speed_threshold_m_s
             else "congested"
         )
         self.samples.clear()
@@ -196,8 +187,7 @@ class VehicleGuidanceAgent:
         reasons: list[str] = []
         lower = max(
             dynamics.minimum_safe_speed_m_s,
-            dynamics.current_speed_m_s
-            - dynamics.max_comfort_deceleration_m_s2 * horizon_s,
+            dynamics.current_speed_m_s - dynamics.max_comfort_deceleration_m_s2 * horizon_s,
         )
         upper = min(
             dynamics.speed_limit_m_s,

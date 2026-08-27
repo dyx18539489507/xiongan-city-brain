@@ -82,20 +82,32 @@ export class MapCamera {
 
   pan(deltaX: number, deltaY: number): void {
     this.flight = null;
+    const previousX = this.centerX;
+    const previousY = this.centerY;
     this.centerX -= deltaX / this.scale;
     this.centerY += deltaY / this.scale;
     this.constrainCenter();
+    if (
+      Math.abs(this.centerX - previousX) < .0001
+      && Math.abs(this.centerY - previousY) < .0001
+    ) return;
     this.revision += 1;
   }
 
   zoomAt(screenX: number, screenY: number, factor: number): void {
     this.flight = null;
+    const previous = this.getPose();
     const before = this.screenToWorld(screenX, screenY);
     this.scale = clamp(this.scale * factor, this.fittedScale * 0.72, this.maximumScale);
     const after = this.screenToWorld(screenX, screenY);
     this.centerX += before.x - after.x;
     this.centerY += before.y - after.y;
     this.constrainCenter();
+    if (
+      Math.abs(this.centerX - previous.centerX) < .0001
+      && Math.abs(this.centerY - previous.centerY) < .0001
+      && Math.abs(this.scale - previous.scale) < .000001
+    ) return;
     this.revision += 1;
   }
 

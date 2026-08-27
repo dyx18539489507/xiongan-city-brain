@@ -172,6 +172,27 @@ def test_full_disturbance_schedule_mutates_adapter_and_records_events() -> None:
     assert runtime.active_event_ids(5.0) == []
 
 
+def test_disturbance_runtime_skips_timestamps_without_due_physical_work() -> None:
+    configured = scenario()
+    roadwork_only = configured.model_copy(
+        update={"disturbances": [configured.disturbances[0]]}
+    )
+    runtime = DisturbanceRuntime(
+        roadwork_only,
+        seed=11,
+        fallback_roadwork_lane="fallback-lane",
+    )
+    adapter = FakeAdapter()
+
+    assert runtime.needs_tick(0.0) is False
+    assert runtime.needs_tick(1.0) is True
+    runtime.tick(1.0, adapter)
+    assert runtime.needs_tick(2.0) is False
+    assert runtime.needs_tick(3.0) is True
+    runtime.tick(3.0, adapter)
+    assert runtime.needs_tick(4.0) is False
+
+
 def test_live_control_schedules_real_incident_and_event_dispersal() -> None:
     control = ExperimentControl()
     control.advance_simulation_time(12.0)

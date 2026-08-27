@@ -517,15 +517,34 @@ def test_replay_inventory_reports_terminal_duration_and_download(tmp_path: Path)
     frames = [
         {
             "type": "init",
+            "sequence": 8,
             "scenarioId": "xiongan_rongdong_20",
             "simulationTimeS": 1.0,
             "status": "running",
         },
-        {"type": "delta", "simulationTimeS": 2.0},
-        {"type": "init", "simulationTimeS": 60.0, "status": "completed"},
+        {"type": "delta", "sequence": 9, "simulationTimeS": 2.0},
+        {
+            "type": "init",
+            "sequence": 10,
+            "simulationTimeS": 60.0,
+            "status": "completed",
+        },
     ]
     replay_path.write_text(
         "\n".join(json.dumps(frame) for frame in frames) + "\n",
+        encoding="utf-8",
+    )
+    (replay_path.parent / "result.json").write_text(
+        json.dumps(
+            {
+                "actual_run": True,
+                "algorithm": "fixed-time",
+                "scenario_profile": "BASE",
+                "seed": 42,
+                "metrics": {"mean_speed_m_s": 4.2},
+                "samples": [{"simulation_time_s": index} for index in range(20_000)],
+            }
+        ),
         encoding="utf-8",
     )
     app = create_app(tmp_path)
@@ -534,6 +553,11 @@ def test_replay_inventory_reports_terminal_duration_and_download(tmp_path: Path)
         assert item["simulationTimeS"] == 60.0
         assert item["status"] == "completed"
         assert item["frameCount"] == 3
+        assert item["algorithm"] == "fixed-time"
+        assert item["profile"] == "BASE"
+        assert item["seed"] == 42
+        assert item["summaryMetrics"]["mean_speed_m_s"] == 4.2
+        assert item["actualRun"] is True
         assert item["createdAt"]
         response = client.get("/api/v1/replays/exp-replay")
         assert response.status_code == 200

@@ -28,9 +28,10 @@ const views: Array<{mode: ViewMode; label: string; detail: string}> = [
 ];
 
 const showcaseJunctionId = "cluster_10739806290_13007678851_13007678852_9999059766";
+export const unityBuildVersion = "20260828-0327";
 
 export function resolveUnityFrameSource(scenarioId: string, search = window.location.search): string {
-  const parameters = new URLSearchParams({scenarioId});
+  const parameters = new URLSearchParams({scenarioId, build: unityBuildVersion});
   if (new URLSearchParams(search).get("perf") === "1") parameters.set("perf", "1");
   return `/unity/index.html?${parameters.toString()}`;
 }

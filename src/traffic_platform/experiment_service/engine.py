@@ -791,6 +791,7 @@ class ExperimentRunner:
                 phase_started = time.perf_counter()
                 network = await run_blocking(adapter.step)
                 record_phase("sumo_step", phase_started)
+                phase_started = time.perf_counter()
                 if (
                     network.simulation_time_s
                     > evaluation_start_simulation_time_s + self.config.duration_s
@@ -909,10 +910,14 @@ class ExperimentRunner:
                 if disturbance_runtime is not None:
                     for disturbance in self.control.drain_pending_disturbances():
                         disturbance_runtime.schedule(disturbance)
-                    disturbance_events = await run_blocking(
-                        disturbance_runtime.tick,
-                        network.simulation_time_s,
-                        adapter,
+                    disturbance_events = (
+                        await run_blocking(
+                            disturbance_runtime.tick,
+                            network.simulation_time_s,
+                            adapter,
+                        )
+                        if disturbance_runtime.needs_tick(network.simulation_time_s)
+                        else []
                     )
                     self.events.extend(disturbance_events)
                     for event in disturbance_events:
@@ -2538,7 +2543,10 @@ class ExperimentRunner:
             simulation_time_s=simulation_time_s,
             mean_speed_m_s=mean_speed_m_s,
         )
-        glosa_enabled = mobility_regime == "high_mobility" or effectiveness_gate_active
+        # A high-mobility classification is only an eligibility signal. The
+        # rolling effectiveness gate must still be able to suspend GLOSA when
+        # speed loss stops paying back in lower queues later in a long run.
+        glosa_enabled = mobility_regime == "high_mobility" and effectiveness_gate_active
         controller.last_glosa_intervention_enabled = glosa_enabled
         minimum_glosa_speed_m_s = (
             controller.algorithm_config.high_mobility_minimum_glosa_speed_m_s

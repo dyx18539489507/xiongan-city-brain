@@ -19,6 +19,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse, Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic_core import from_json as parse_partial_json
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
@@ -1659,42 +1660,55 @@ def create_app(workspace: Path | None = None) -> FastAPI:
             for replay_path in replay_paths:
                 try:
                     replay_stat = replay_path.stat()
-                    cached_count = replay_frame_count_cache.get(replay_path)
                     with replay_path.open("rb") as stream:
                         first_line = stream.readline()
-                        if (
-                            cached_count is not None
-                            and cached_count[0] == replay_stat.st_size
-                            and cached_count[1] == replay_stat.st_mtime_ns
-                        ):
-                            frame_count = cached_count[2]
-                        else:
-                            frame_count = 1 if first_line.strip() else 0
-                            last_byte = first_line[-1:] if first_line else b""
-                            remainder_bytes = 0
-                            while chunk := stream.read(1024 * 1024):
-                                remainder_bytes += len(chunk)
-                                frame_count += chunk.count(b"\n")
-                                last_byte = chunk[-1:]
-                            if remainder_bytes and last_byte not in {b"\n", b"\r"}:
-                                frame_count += 1
-                            replay_frame_count_cache[replay_path] = (
-                                replay_stat.st_size,
-                                replay_stat.st_mtime_ns,
-                                frame_count,
-                            )
                     first = json.loads(first_line)
                     last = json.loads(last_nonempty_line(replay_path))
+                    cached_count = replay_frame_count_cache.get(replay_path)
+                    if (
+                        cached_count is not None
+                        and cached_count[0] == replay_stat.st_size
+                        and cached_count[1] == replay_stat.st_mtime_ns
+                    ):
+                        frame_count = cached_count[2]
+                    else:
+                        first_sequence = first.get("sequence")
+                        last_sequence = last.get("sequence")
+                        if (
+                            isinstance(first_sequence, int)
+                            and not isinstance(first_sequence, bool)
+                            and isinstance(last_sequence, int)
+                            and not isinstance(last_sequence, bool)
+                            and last_sequence >= first_sequence
+                        ):
+                            frame_count = last_sequence - first_sequence + 1
+                        else:
+                            with replay_path.open("rb") as stream:
+                                frame_count = 0
+                                last_byte = b""
+                                while chunk := stream.read(1024 * 1024):
+                                    frame_count += chunk.count(b"\n")
+                                    last_byte = chunk[-1:]
+                                if last_byte not in {b"", b"\n", b"\r"}:
+                                    frame_count += 1
+                        replay_frame_count_cache[replay_path] = (
+                            replay_stat.st_size,
+                            replay_stat.st_mtime_ns,
+                            frame_count,
+                        )
                 except (OSError, ValueError, UnicodeDecodeError, json.JSONDecodeError):
                     continue
                 result_path = replay_path.parent / "result.json"
                 result_payload: dict[str, Any] = {}
                 if result_path.is_file():
                     try:
-                        candidate = json.loads(result_path.read_text(encoding="utf-8"))
+                        with result_path.open("rb") as stream:
+                            candidate = parse_partial_json(
+                                stream.read(256 * 1024), allow_partial=True
+                            )
                         if isinstance(candidate, dict) and candidate.get("actual_run") is True:
                             result_payload = candidate
-                    except (OSError, json.JSONDecodeError):
+                    except (OSError, ValueError):
                         result_payload = {}
                 items.append(
                     {

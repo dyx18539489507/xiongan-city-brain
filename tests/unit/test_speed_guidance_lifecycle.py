@@ -27,6 +27,22 @@ class _Adapter:
         self.applied.append((vehicle_id, speed_m_s))
 
 
+def test_glosa_gate_stays_inactive_while_collecting_evidence() -> None:
+    gate = GlosaEffectivenessGate(window_s=10.0)
+
+    active = gate.observe(
+        simulation_time_s=0.0,
+        mean_speed_m_s=10.0,
+        queue_vehicles=100,
+    )
+
+    assert active is False
+    assert gate.active is False
+    assert gate.reason == "WARMING_UP"
+    assert gate.speed_change_ratio is None
+    assert gate.queue_reduction_ratio is None
+
+
 def test_glosa_gate_stays_active_when_queue_is_falling() -> None:
     gate = GlosaEffectivenessGate(
         window_s=10.0,
@@ -47,6 +63,29 @@ def test_glosa_gate_stays_active_when_queue_is_falling() -> None:
     assert gate.reason == "QUEUE_REDUCTION_JUSTIFIES_GUIDANCE"
     assert gate.queue_reduction_ratio is not None
     assert gate.queue_reduction_ratio >= 0.02
+
+
+def test_glosa_gate_stays_inactive_without_proven_queue_reduction() -> None:
+    gate = GlosaEffectivenessGate(
+        window_s=10.0,
+        minimum_speed_loss_ratio=0.01,
+        minimum_queue_reduction_ratio=0.02,
+    )
+
+    active = False
+    for second in range(11):
+        active = gate.observe(
+            simulation_time_s=float(second),
+            mean_speed_m_s=10.0 + 0.1 * second,
+            queue_vehicles=100,
+        )
+
+    assert active is False
+    assert gate.active is False
+    assert gate.reason == "QUEUE_REDUCTION_NOT_PROVEN"
+    assert gate.speed_change_ratio is not None
+    assert gate.speed_change_ratio > 0.0
+    assert gate.queue_reduction_ratio == pytest.approx(0.0)
 
 
 def test_glosa_gate_pauses_when_speed_loss_has_no_queue_payoff() -> None:
@@ -75,7 +114,7 @@ def test_glosa_gate_pauses_when_speed_loss_has_no_queue_payoff() -> None:
     assert gate.cooldown_until_s > 10.0
 
 
-def test_glosa_gate_cooldown_releases_until_high_mobility_is_locked() -> None:
+def test_glosa_gate_cooldown_releases_even_when_high_mobility_is_locked() -> None:
     adapter = _Adapter()
     gate = GlosaEffectivenessGate(window_s=10.0, cooldown_s=20.0)
     for second in range(11):
@@ -93,9 +132,7 @@ def test_glosa_gate_cooldown_releases_until_high_mobility_is_locked() -> None:
         control_algorithm="coordinated-max-pressure",
         algorithm_config=AlgorithmConfig(),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 1.0}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 1.0})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-red": 10.0},
@@ -163,8 +200,9 @@ def test_glosa_gate_cooldown_releases_until_high_mobility_is_locked() -> None:
         simulation_time_s=12.0,
     )
 
-    assert high_mobility_result == (1, 0, 1)
-    assert adapter.applied == [("cv-red", pytest.approx(4.0))]
+    assert high_mobility_result == (0, 0, 0)
+    assert adapter.applied == []
+    assert adapter.released == ["cv-red", "cv-red"]
 
 
 def test_inactive_guidance_releases_connected_vehicle_speed_override() -> None:
@@ -173,9 +211,7 @@ def test_inactive_guidance_releases_connected_vehicle_speed_override() -> None:
         control_algorithm="coordinated-max-pressure",
         algorithm_config=AlgorithmConfig(),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 1.0}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 1.0})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-1": 10.0},
@@ -229,9 +265,7 @@ def test_small_speed_reduction_releases_connected_vehicle_speed_override() -> No
             minimum_actionable_speed_reduction_ratio=0.05,
         ),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 0.99}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 0.99})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-1": 10.0},
@@ -283,9 +317,7 @@ def test_small_speed_target_accelerates_green_queue_connected_vehicle() -> None:
         control_algorithm="coordinated-max-pressure",
         algorithm_config=AlgorithmConfig(),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 0.99}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 0.99})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-1": 10.0},
@@ -359,13 +391,19 @@ def test_small_speed_target_accelerates_green_queue_connected_vehicle() -> None:
 
 def test_red_approach_guidance_aligns_connected_vehicle_to_next_green() -> None:
     adapter = _Adapter()
+    gate = GlosaEffectivenessGate(window_s=10.0)
+    for second in range(11):
+        gate.observe(
+            simulation_time_s=float(second),
+            mean_speed_m_s=10.0,
+            queue_vehicles=100 - 4 * second,
+        )
     controller: Any = SimpleNamespace(
         control_algorithm="coordinated-max-pressure",
         algorithm_config=AlgorithmConfig(),
+        glosa_effectiveness_gate=gate,
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 1.0}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 1.0})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-red": 10.0},
@@ -418,7 +456,7 @@ def test_red_approach_guidance_aligns_connected_vehicle_to_next_green() -> None:
 
 @pytest.mark.parametrize(
     ("high_mobility_threshold_m_s", "expected_minimum_m_s", "should_apply"),
-    [(4.85, 3.0, False), (11.0, 1.0, True)],
+    [(4.85, 3.0, False), (11.0, 1.0, False)],
 )
 def test_glosa_minimum_speed_adapts_to_network_mobility(
     high_mobility_threshold_m_s: float,
@@ -437,9 +475,7 @@ def test_glosa_minimum_speed_adapts_to_network_mobility(
             high_mobility_speed_threshold_m_s=high_mobility_threshold_m_s,
         ),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 1.0}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 1.0})
         },
         topology=SimpleNamespace(
             speed_limits_m_s={"lane-red": 10.0},
@@ -492,9 +528,7 @@ def test_glosa_minimum_speed_adapts_to_network_mobility(
         "high_mobility" if expected_minimum_m_s == 3.0 else "congested"
     )
     assert result == ((1, 0, 1) if should_apply else (0, 0, 0))
-    assert adapter.applied == (
-        [("cv-red", pytest.approx(4.0))] if should_apply else []
-    )
+    assert adapter.applied == ([("cv-red", pytest.approx(4.0))] if should_apply else [])
     assert adapter.released == ([] if should_apply else ["cv-red"])
 
 
@@ -552,9 +586,7 @@ def test_actionable_speed_reduction_is_applied() -> None:
             minimum_actionable_speed_reduction_ratio=0.05,
         ),
         last_strategy_by_intersection={
-            "K01": SimpleNamespace(
-                speed_guidance_parameters={"target_speed_factor": 0.94}
-            )
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 0.94})
         },
         topology=SimpleNamespace(speed_limits_m_s={"lane-1": 10.0}),
         safety=SafetyKernel(),
@@ -580,3 +612,43 @@ def test_actionable_speed_reduction_is_applied() -> None:
     assert result == (1, 0, 0)
     assert adapter.released == []
     assert adapter.applied == [("cv-1", pytest.approx(9.4))]
+
+
+def test_default_rejects_small_network_wide_speed_cap() -> None:
+    adapter = _Adapter()
+    controller: Any = SimpleNamespace(
+        control_algorithm="coordinated-max-pressure",
+        algorithm_config=AlgorithmConfig(),
+        last_strategy_by_intersection={
+            "K01": SimpleNamespace(speed_guidance_parameters={"target_speed_factor": 0.94})
+        },
+        last_state_by_intersection={},
+        topology=SimpleNamespace(
+            speed_limits_m_s={"lane-1": 10.0},
+            phases={},
+            phase_order={},
+            phase_durations_s={},
+        ),
+        safety=SafetyKernel(),
+        factory=SimpleNamespace(experiment_id="guidance-test"),
+    )
+    vehicles: Any = [
+        SimpleNamespace(
+            vehicle_id="cv-1",
+            vehicle_type="connected_vehicle",
+            lane_id="lane-1",
+            speed_m_s=10.0,
+        )
+    ]
+
+    result = ExperimentRunner._apply_guidance(
+        adapter,  # type: ignore[arg-type]
+        controller,
+        VehicleGuidanceAgent(),
+        vehicles,
+        simulation_time_s=10.0,
+    )
+
+    assert result == (0, 0, 0)
+    assert adapter.applied == []
+    assert adapter.released == ["cv-1"]

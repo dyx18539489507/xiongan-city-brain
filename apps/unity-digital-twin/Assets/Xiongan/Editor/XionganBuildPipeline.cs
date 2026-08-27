@@ -93,7 +93,8 @@ namespace Xiongan.DigitalTwin.Editor
             sceneBuilder.RestoreBaked();
 
             var previewRoot = new GameObject("固定镜头三维验收环境");
-            previewRoot.AddComponent<EnvironmentController>().Initialise(sceneBuilder.Materials);
+            var environment = previewRoot.AddComponent<EnvironmentController>();
+            environment.Initialise(sceneBuilder.Materials);
             var entities = new GameObject("固定镜头实体管理器").AddComponent<EntityManager>();
             entities.Initialise(sceneBuilder);
             PopulateHeroPreviewTraffic(sceneBuilder, entities);
@@ -128,6 +129,7 @@ namespace Xiongan.DigitalTwin.Editor
             File.WriteAllBytes(output, pixels.EncodeToPNG());
 
             director.SetView("overview");
+            environment.SetCameraMode("overview");
             director.SnapToCurrentView();
             camera.Render();
             RenderTexture.active = target;
@@ -136,6 +138,20 @@ namespace Xiongan.DigitalTwin.Editor
             var overviewOutput = Path.GetFullPath(Path.Combine(
                 Application.dataPath, "..", "..", "..", "outputs", "3d", "audit", "latest-city-overview.png"));
             File.WriteAllBytes(overviewOutput, pixels.EncodeToPNG());
+
+            var showcaseFrame = ReferenceShowcaseLayout.Resolve(sceneBuilder);
+            camera.fieldOfView = 46f;
+            camera.transform.position = showcaseFrame.Point(0f, 360f, -22f);
+            camera.transform.LookAt(showcaseFrame.Point(0f, 0f, 0f), Vector3.forward);
+            camera.Render();
+            RenderTexture.active = target;
+            pixels.ReadPixels(new Rect(0f, 0f, width, height), 0, 0);
+            pixels.Apply(false, false);
+            var showcaseNetworkOutput = Path.GetFullPath(Path.Combine(
+                Application.dataPath, "..", "..", "..", "outputs", "3d", "audit", "latest-b01-network-overview.png"));
+            File.WriteAllBytes(showcaseNetworkOutput, pixels.EncodeToPNG());
+
+            environment.SetCameraMode("monitor");
             foreach (var auditView in new[]
                      {
                          (Id: ReferenceShowcaseLayout.JunctionId, File: "latest-b01-monitor.png"),
@@ -157,7 +173,6 @@ namespace Xiongan.DigitalTwin.Editor
                 Debug.Log($"Junction audit captured: {auditView.Id} -> {auditOutput}");
             }
 
-            var showcaseFrame = ReferenceShowcaseLayout.Resolve(sceneBuilder);
             var showcaseSignals = UnityEngine.Object.FindFirstObjectByType<TrafficLightManager>()
                 ?.GetComponentsInChildren<Transform>(true)
                 .Where(item => item.name.StartsWith("B01四角信号悬臂-", StringComparison.Ordinal))

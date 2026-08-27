@@ -76,6 +76,30 @@ class DisturbanceRuntime:
             raise ValueError(f"duplicate disturbance event_id: {disturbance.event_id}")
         self._dynamic[disturbance.event_id] = disturbance
 
+    def needs_tick(self, simulation_time_s: float) -> bool:
+        """Return whether this timestamp can perform a physical mutation."""
+
+        for disturbance in [*self.scenario.disturbances, *self._dynamic.values()]:
+            event_id = disturbance.event_id
+            start = disturbance.simulation_time_s
+            end = start + disturbance.duration_s
+            if event_id not in self._started:
+                if simulation_time_s >= start:
+                    return True
+                continue
+            if event_id in self._ended:
+                continue
+            if simulation_time_s >= end:
+                return True
+            if (
+                disturbance.type == "incident"
+                and event_id not in self._incident_stopped_announced
+            ):
+                return True
+            if disturbance.type == "event_dispersal" and simulation_time_s >= start:
+                return True
+        return False
+
     def tick(
         self,
         simulation_time_s: float,

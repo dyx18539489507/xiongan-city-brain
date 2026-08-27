@@ -72,8 +72,15 @@ class AlgorithmConfig(SdkModel):
     policy_gain_threshold: float = Field(default=0.1, ge=0, le=1)
     policy_switch_confirmation_steps: int = Field(default=2, ge=1, le=10)
     low_demand_queue_threshold: float = Field(default=3.0, ge=0)
+    coordinated_gap_out_queue_ratio: float = Field(default=3.0, ge=1)
+    coordinated_gap_out_minimum_queue_vehicles: float = Field(default=8.0, ge=0)
+    coordinated_gap_out_maximum_downstream_occupancy: float = Field(
+        default=0.85,
+        ge=0,
+        le=1,
+    )
     minimum_actionable_speed_reduction_ratio: float = Field(
-        default=0.05,
+        default=0.15,
         ge=0,
         le=1,
     )
