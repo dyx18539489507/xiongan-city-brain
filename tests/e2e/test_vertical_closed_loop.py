@@ -16,6 +16,7 @@ async def test_complete_twenty_intersection_vertical_loop(tmp_path: Path) -> Non
     if not sumo_home:
         pytest.skip("SUMO_HOME is not configured")
     bus = InMemoryMessageBus()
+    snapshots: list[dict[str, object]] = []
     config = smoke_config(
         "coordinated-max-pressure",
         duration_s=15.0,
@@ -26,9 +27,13 @@ async def test_complete_twenty_intersection_vertical_loop(tmp_path: Path) -> Non
         config,
         sumo_home=Path(sumo_home),
         bus=bus,
+        snapshot_callback=snapshots.append,
     ).run()
     topics = [message.topic for message in bus.messages]
     assert result["actual_run"] is True
+    assert snapshots
+    assert {snapshot["seed"] for snapshot in snapshots} == {42}
+    assert {snapshot["duration_s"] for snapshot in snapshots} == {15.0}
     assert len(result["samples"]) == 15
     assert any("/edge/edge-rongdong/state" in topic for topic in topics)
     assert any("/cloud/strategy/" in topic for topic in topics)
@@ -44,4 +49,3 @@ async def test_complete_twenty_intersection_vertical_loop(tmp_path: Path) -> Non
     artifacts = result["artifacts"]
     assert Path(artifacts["html"]).is_file()
     assert Path(artifacts["json"]).is_file()
-

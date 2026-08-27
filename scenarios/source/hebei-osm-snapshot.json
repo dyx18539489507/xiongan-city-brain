@@ -1,0 +1,9 @@
+{
+  "region": "河北省",
+  "snapshot_date": "2026-08-21",
+  "source": "https://download.openstreetmap.fr/extracts/asia/china/hebei.osm.pbf",
+  "pbf_file": "hebei-2026-08-21.osm.pbf",
+  "sha256": "5c331e032fe5d35922876a2a05976b131fac1e9c8993e3e4cdd96ed9d195d197",
+  "road_index_file": "hebei-2026-08-21-roads.sqlite",
+  "update_policy": "固定快照，暂不自动更新"
+}

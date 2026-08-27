@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.916155195" minlat="39.055480585" maxlon="115.918053014" maxlat="39.056760651" />
+  <node id="-1" lon="115.916794999" lat="39.056760651" version="1" />
+  <node id="-2" lon="115.9171152" lat="39.0561271" version="1" />
+  <node id="-3" lon="115.917443007" lat="39.055480585" version="1" />
+  <node id="-4" lon="115.916155195" lat="39.055828002" version="1" />
+  <node id="-5" lon="115.918053014" lat="39.056423259" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <tag k="highway" v="tertiary" />
+    <tag k="lanes" v="2" />
+    <tag k="maxspeed" v="40" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819231" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-4" />
+    <nd ref="-2" />
+    <nd ref="-5" />
+    <tag k="highway" v="unclassified" />
+    <tag k="maxspeed" v="30" />
+    <tag k="source_way_id" v="1415517619" />
+  </way>
+</osm>

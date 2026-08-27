@@ -1,0 +1,28 @@
+{
+  "valid": true,
+  "selected_intersection_count": 1,
+  "selected_intersection_ids": [
+    "-76"
+  ],
+  "errors": [],
+  "warnings": [],
+  "rule": "selected_count_is_authoritative",
+  "source_type": "osm_bbox",
+  "confidence": "high",
+  "review_confirmed": true,
+  "scenario_id": "codex-osm-ui-smoke-0823",
+  "version": "v0001",
+  "generated_at": "2026-08-23T07:29:28.837217+00:00",
+  "sumo_smoke": {
+    "passed": true,
+    "exit_code": 0,
+    "stdout_tail": "",
+    "stderr_tail": "Warning: Environment variable SUMO_HOME is not set properly, disabling XML validation. Set 'auto' or 'always' for web lookups.\n"
+  },
+  "checks": {
+    "selected_count_matches_registry": true,
+    "twenty_intersection_requirement": "not_applied_user_selection_is_authoritative",
+    "source_review_required": false,
+    "source_review_confirmed": true
+  }
+}

@@ -82,6 +82,31 @@ def workspace(tmp_path: Path) -> Path:
     return tmp_path
 
 
+def test_hub_switches_to_the_selected_scenario_manifest(tmp_path: Path) -> None:
+    root = workspace(tmp_path)
+    manifest = root / "generated" / "scenes" / "planning-cross.scene.manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "sceneId": "planning-cross",
+                "schemaVersion": "1.1",
+                "sceneSha256": "planning123",
+                "sceneBytes": 321,
+                "counts": {"trafficLights": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    hub = DigitalTwinHub(root, max_frames=4)
+
+    hub.select_scene("planning-cross")
+
+    initial = hub.initial_message()
+    assert initial["scene"]["sceneId"] == "planning-cross"
+    assert initial["scene"]["sha256"] == "planning123"
+    assert initial["scene"]["url"] == "/api/v1/scenes/planning-cross/3d"
+
+
 def test_hub_splits_motor_bicycle_pedestrian_and_emits_deltas(tmp_path: Path) -> None:
     hub = DigitalTwinHub(workspace(tmp_path), max_frames=4)
     idle = hub.initial_message()

@@ -1,0 +1,47 @@
+schema_version: "1.0"
+campaign: formal_2026
+scenario: xiongan_rongdong_20
+transport: deterministic_emulated_message_bus
+sumo_backend: traci
+step_length_s: 1.0
+seeds: [42, 123, 2026, 3407, 9001]
+algorithms:
+  B0: fixed-time
+  B1: actuated-control
+  B2: max-pressure
+  B3: coordinated-max-pressure
+demand_levels:
+  Low: {profile: S01, multiplier: 0.75, generated_motor_vehicles: 737}
+  Medium: {profile: S03, multiplier: 1.0, generated_motor_vehicles: 983}
+  High: {profile: S04, multiplier: 1.2, generated_motor_vehicles: 1180}
+  Oversaturated: {profile: S02, multiplier: 1.6, generated_motor_vehicles: 1573}
+pilot:
+  duration_s: 120
+  warmup_s: 30
+formal_candidate:
+  duration_s: 600
+  warmup_s: 120
+  disturbance_time_scale: 0.25
+runner:
+  isolate_builtin_algorithms: false
+  publish_feedback_to_bus: false
+  publish_runtime_telemetry_to_bus: false
+  surrogate_safety_interval_s: 5.0
+  retain_communication_events_for_baseline: false
+  max_parallel_workers: 2
+statistics:
+  confidence_level: 0.95
+  descriptive: [mean, std, min, max, ci95]
+  paired_tests: [paired_t_test, wilcoxon_signed_rank]
+  minimum_paired_sample_size: 5
+raw_outputs:
+  - run_config.json
+  - environment.json
+  - result.json
+  - tripinfo.xml
+  - summary.xml
+  - statistics.xml
+  - execution.log
+  - status.json
+  - SHA256SUMS.txt
+

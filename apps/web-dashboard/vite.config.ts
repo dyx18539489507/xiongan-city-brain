@@ -19,6 +19,7 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: true,
     sourcemap: true,
     rolldownOptions: {
       output: {

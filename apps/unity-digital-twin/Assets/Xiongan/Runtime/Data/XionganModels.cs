@@ -229,6 +229,7 @@ namespace Xiongan.DigitalTwin.Data
         [JsonProperty("conflicts")] public List<ConflictEntity> Conflicts = new();
         [JsonProperty("activeEvents")] public List<RealtimeEvent> ActiveEvents = new();
         [JsonProperty("metrics")] public JObject Metrics = new();
+        [JsonProperty("intersectionMetrics")] public JArray IntersectionMetrics = new();
     }
 
     [Serializable]
@@ -245,6 +246,7 @@ namespace Xiongan.DigitalTwin.Data
         [JsonProperty("conflicts")] public List<ConflictEntity> Conflicts = new();
         [JsonProperty("events")] public List<RealtimeEvent> Events = new();
         [JsonProperty("metrics")] public JObject Metrics = new();
+        [JsonProperty("intersectionMetrics")] public JArray IntersectionMetrics = new();
     }
 
     [Serializable]
@@ -259,5 +261,6 @@ namespace Xiongan.DigitalTwin.Data
         [JsonProperty("conflicts")] public List<ConflictEntity> Conflicts = new();
         [JsonProperty("events")] public List<RealtimeEvent> Events = new();
         [JsonProperty("metrics")] public JObject Metrics = new();
+        [JsonProperty("intersectionMetrics")] public JArray IntersectionMetrics = new();
     }
 }

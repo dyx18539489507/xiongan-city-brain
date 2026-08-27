@@ -5,7 +5,6 @@ export function Timeline({events}: {events: TimelineEvent[]}) {
     <section className="timeline" aria-labelledby="timeline-title">
       <div className="section-heading compact">
         <div>
-          <p className="eyebrow">CONTROL TRACE</p>
           <h2 id="timeline-title">事件时间线</h2>
         </div>
         <span className="count-label">{events.length} 条</span>

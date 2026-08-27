@@ -49,7 +49,8 @@ export class AlgorithmLayer implements TrafficMapLayer {
   readonly id = "algorithm" as const;
   readonly isStatic = false;
 
-  render({ctx, camera, world, now}: LayerRenderContext): void {
+  render({ctx, camera, world, selection, now}: LayerRenderContext): void {
+    const zoomRatio = camera.getZoomRatio();
     const coordinated = world.snapshot.fallback_mode === "CLOUD_COORDINATED";
     let hasControlled = false;
     for (const item of world.intersectionRealtime.values()) {
@@ -79,10 +80,11 @@ export class AlgorithmLayer implements TrafficMapLayer {
       if (!junction) continue;
       const point = camera.worldToScreen(junction.position);
       ctx.beginPath(); ctx.arc(point.x, point.y, 8 + pulse * 3, 0, Math.PI * 2); ctx.stroke();
-      if (camera.scale > .56) {
+      const selected = selection?.kind === "junction" && selection.id === metric.intersection_id;
+      if ((selected && zoomRatio > 1.25) || zoomRatio > 2.2) {
         ctx.globalAlpha = .9;
         ctx.font = '600 10px "Microsoft YaHei", sans-serif';
-        ctx.fillText("协同控制", point.x + 12, point.y - 10);
+        ctx.fillText("协同控制", point.x + 12, point.y + (selected ? 18 : -10));
       }
     }
     ctx.restore();
@@ -103,7 +105,7 @@ export class EventLayer implements TrafficMapLayer {
       const color = danger ? mapTheme.danger : mapTheme.warning;
       const pulse = 1 + Math.sin(now / 260) * .08;
       ctx.save(); ctx.translate(point.x, point.y); ctx.scale(pulse, pulse);
-      ctx.fillStyle = "rgba(6, 11, 13, .92)";
+      ctx.fillStyle = "rgba(255, 255, 255, .96)";
       ctx.strokeStyle = color;
       ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(0, -11); ctx.lineTo(10, 8); ctx.lineTo(-10, 8); ctx.closePath(); ctx.fill(); ctx.stroke();
@@ -121,7 +123,7 @@ export class RoadsideDeviceLayer implements TrafficMapLayer {
   readonly isStatic = false;
 
   render({ctx, camera, world}: LayerRenderContext): void {
-    if (camera.scale < .55) return;
+    if (camera.getZoomRatio() < 1.35) return;
     for (const device of world.scene.roadsideDevices) {
       const point = camera.worldToScreen(device.position);
       const online = /online|active|normal/i.test(`${device.status} ${device.communicationStatus}`);
@@ -145,15 +147,37 @@ export class LabelLayer implements TrafficMapLayer {
   render({ctx, camera, world, selection, hover}: LayerRenderContext): void {
     ctx.save();
     ctx.textBaseline = "middle";
-    for (const junction of world.controlledJunctions) {
+    const viewport = camera.viewportBounds(6);
+    const zoomRatio = camera.getZoomRatio();
+    const occupied: Array<{left: number; top: number; right: number; bottom: number}> = [];
+    const candidates = world.controlledJunctions.map((junction) => {
       const point = camera.worldToScreen(junction.position);
       const selected = selection?.kind === "junction" && selection.id === junction.sumoJunctionId;
       const hovered = hover?.kind === "junction" && hover.id === junction.sumoJunctionId;
       const metric = world.intersectionRealtime.get(junction.sumoJunctionId);
       const severity = Math.max(metric?.congestion_level ?? 0, metric?.spillback_risk ?? 0);
+      const core = junction.role === "core_corridor" || world.corridorJunctionIds.has(junction.sumoJunctionId);
+      return {junction, point, selected, hovered, severity, core, priority: selected ? 4 : hovered ? 3 : core ? 2 : 1};
+    }).filter((item) => {
+      if (item.point.x < viewport.left || item.point.x > viewport.right || item.point.y < viewport.top || item.point.y > viewport.bottom) return false;
+      if (item.selected || item.hovered) return true;
+      if (zoomRatio < 1.15) return item.core;
+      if (zoomRatio < 1.6) return item.core || item.severity > .6;
+      return true;
+    }).sort((left, right) => right.priority - left.priority || right.severity - left.severity);
+
+    for (const {junction, point, selected, hovered, severity} of candidates) {
+      const label = junction.displayId ?? junction.sumoJunctionId;
+      const fontSize = selected ? 13 : zoomRatio > 1.35 ? 12 : 11;
+      ctx.font = `${selected ? 700 : 600} ${fontSize}px "Microsoft YaHei", sans-serif`;
+      const width = ctx.measureText(label).width;
+      const labelX = point.x + 7 + width > viewport.right ? point.x - width - 7 : point.x + 7;
+      const box = {left: labelX - 8, top: point.y - 8 - fontSize / 2 - 11, right: labelX + width + 8, bottom: point.y - 8 + fontSize / 2 + 11};
+      const collision = occupied.some((item) => box.left < item.right && box.right > item.left && box.top < item.bottom && box.bottom > item.top);
+      if (collision && !selected && !hovered) continue;
+      occupied.push(box);
       ctx.fillStyle = selected || hovered ? mapTheme.selection : severity > .6 ? trafficColor(severity) : mapTheme.textSecondary;
-      ctx.font = `${selected ? 700 : 600} ${camera.scale > .5 ? 13 : 11}px "Microsoft YaHei", sans-serif`;
-      ctx.fillText(junction.displayId ?? junction.sumoJunctionId, point.x + 7, point.y - 8);
+      ctx.fillText(label, labelX, point.y - 8);
     }
     ctx.restore();
   }

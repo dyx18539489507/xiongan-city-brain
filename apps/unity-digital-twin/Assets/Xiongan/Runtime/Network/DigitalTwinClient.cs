@@ -16,6 +16,8 @@ namespace Xiongan.DigitalTwin.Network
 {
     public sealed class DigitalTwinClient : MonoBehaviour
     {
+        private const int MaxMessagesPerFrame = 6;
+
         public string ConnectionState { get; private set; } = "connecting";
         public string? ExperimentId { get; private set; }
         public float SimulationTimeS { get; private set; }
@@ -28,6 +30,7 @@ namespace Xiongan.DigitalTwin.Network
         private TrafficLightManager trafficLights = null!;
         private ConflictVisualManager conflicts = null!;
         private EventVisualManager events = null!;
+        private AlgorithmVisualManager algorithmVisuals = null!;
         private string url = string.Empty;
         private long lastSequence = -1;
         private bool initialised;
@@ -44,13 +47,14 @@ namespace Xiongan.DigitalTwin.Network
         private CancellationTokenSource? cancellation;
 #endif
 
-        public void Initialise(string socketUrl, EntityManager entityManager, TrafficLightManager lightManager, ConflictVisualManager conflictManager, EventVisualManager eventManager)
+        public void Initialise(string socketUrl, EntityManager entityManager, TrafficLightManager lightManager, ConflictVisualManager conflictManager, EventVisualManager eventManager, AlgorithmVisualManager algorithmVisualManager)
         {
             url = socketUrl;
             entities = entityManager;
             trafficLights = lightManager;
             conflicts = conflictManager;
             events = eventManager;
+            algorithmVisuals = algorithmVisualManager;
             Connect();
         }
 
@@ -81,6 +85,7 @@ namespace Xiongan.DigitalTwin.Network
                 trafficLights.Apply(snapshot.TrafficLights);
                 conflicts.Apply(snapshot.Conflicts);
                 events.Apply(snapshot.Events);
+                algorithmVisuals.Apply(snapshot.IntersectionMetrics);
                 lastSequence = snapshot.Sequence;
                 ExperimentId = snapshot.ExperimentId;
                 SimulationTimeS = snapshot.SimulationTimeS;
@@ -113,7 +118,12 @@ namespace Xiongan.DigitalTwin.Network
 
         private void Update()
         {
-            while (messages.TryDequeue(out var message)) ApplyMessage(message);
+            // MAX simulation can advance many SUMO seconds during one rendered
+            // frame. Preserve every ordered delta, but bound work per frame so
+            // a burst cannot stall camera input and rendering.
+            var processed = 0;
+            while (processed++ < MaxMessagesPerFrame && messages.TryDequeue(out var message))
+                ApplyMessage(message);
             if (!externalReplay && ConnectionState == "offline" && Time.unscaledTime >= reconnectAt) Connect();
         }
 
@@ -132,6 +142,7 @@ namespace Xiongan.DigitalTwin.Network
                     conflicts.Apply(message.Conflicts);
                     events.Reset();
                     events.Apply(message.ActiveEvents);
+                    algorithmVisuals.Apply(message.IntersectionMetrics);
                     lastSequence = message.Sequence;
                     ExperimentId = message.ExperimentId;
                     SimulationTimeS = message.SimulationTimeS;
@@ -150,6 +161,7 @@ namespace Xiongan.DigitalTwin.Network
                     trafficLights.Apply(message.TrafficLights);
                     conflicts.Apply(message.Conflicts);
                     events.Apply(message.Events);
+                    algorithmVisuals.Apply(message.IntersectionMetrics);
                     lastSequence = message.Sequence;
                     ExperimentId = message.ExperimentId;
                     SimulationTimeS = message.SimulationTimeS;

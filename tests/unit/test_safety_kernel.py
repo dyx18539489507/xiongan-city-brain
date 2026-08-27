@@ -66,6 +66,17 @@ def test_clamps_extension_at_maximum_green() -> None:
     assert result.validated.requested_duration_s == 5.0
 
 
+def test_raises_remaining_green_to_minimum() -> None:
+    result = SafetyKernel().validate(
+        decision(action="extend_green", phase="P1", duration=2.0),
+        context(current_phase_elapsed_s=3.0, min_green_s=10.0),
+    )
+    assert result.outcome == SafetyOutcome.MODIFIED
+    assert result.validated is not None
+    assert result.validated.requested_duration_s == 7.0
+    assert "EXTENSION_RAISED_TO_MIN_GREEN" in result.reasons
+
+
 def test_clamps_speed_limit_and_comfort_deceleration() -> None:
     result = SafetyKernel().validate(
         decision(
@@ -84,4 +95,3 @@ def test_clamps_speed_limit_and_comfort_deceleration() -> None:
     assert result.outcome == SafetyOutcome.MODIFIED
     assert result.validated is not None
     assert result.validated.scores["recommended_speed_m_s"] == 9.0
-

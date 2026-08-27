@@ -1,13 +1,14 @@
 {
-  "status": "running",
-  "workspace": "D:\\程序项目\\面向雄安新区的城市大脑",
-  "startedAt": "2026-08-15T13:24:42.7355416Z",
-  "backendPid": 15840,
-  "frontendPid": 15200,
-  "backendUrl": "http://127.0.0.1:8013",
-  "frontendUrl": "http://127.0.0.1:5177",
-  "experimentId": null,
-  "scenarioProfile": "BASE",
-  "sumoHome": "D:\\程序项目\\面向雄安新区的城市大脑\\exports\\xiongan_teammate_portable_20260812\\runtime\\sumo",
-  "logs": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\runtime\\logs"
+    "status":  "running",
+    "workspace":  "D:\\程序项目\\面向雄安新区的城市大脑",
+    "startedAt":  "2026-08-27T02:20:13.8237151Z",
+    "backendPid":  15888,
+    "frontendPid":  14084,
+    "backendUrl":  "http://127.0.0.1:8014",
+    "frontendUrl":  "http://127.0.0.1:5178",
+    "experimentId":  null,
+    "scenarioProfile":  "BASE",
+    "simulationRate":  1,
+    "sumoHome":  "D:\\程序项目\\面向雄安新区的城市大脑\\.tools\\sumo",
+    "logs":  "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\runtime\\logs"
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -7,9 +8,18 @@ namespace Xiongan.DigitalTwin.Scene
 {
     public sealed class MeshAccumulator
     {
+        private const float DefaultChunkSize = 512f;
         private readonly List<Vector3> vertices = new();
         private readonly List<Vector2> uv = new();
         private readonly List<int> triangles = new();
+
+        private sealed class ChunkMeshData
+        {
+            public readonly List<Vector3> Vertices = new();
+            public readonly List<Vector2> Uv = new();
+            public readonly List<int> Triangles = new();
+            public readonly Dictionary<int, int> SourceToLocal = new();
+        }
 
         public int VertexCount => vertices.Count;
 
@@ -255,60 +265,159 @@ namespace Xiongan.DigitalTwin.Scene
 
         public void AddArrow(Vector3 position, Vector3 forward, string direction, float height)
         {
+            AddArrow(position, forward, direction, height, 1f);
+        }
+
+        public void AddArrow(Vector3 position, Vector3 forward, string direction, float height, float scale)
+        {
             forward.y = 0f;
             if (forward.sqrMagnitude < 0.001f || string.IsNullOrEmpty(direction)) return;
             forward.Normalize();
+            scale = Mathf.Clamp(scale, 0.5f, 2.4f);
             // SUMO Y is mirrored into Unity Z, so preserve SUMO left/right semantics explicitly.
             var side = Vector3.Cross(forward, Vector3.up).normalized;
             Vector3 Ground(Vector3 point) => new(point.x, height, point.z);
-            var shaftBack = position - forward * 1.7f;
-            var shaftFront = position + forward * 0.55f;
-            AddQuad(
-                Ground(shaftBack - side * 0.16f), Ground(shaftFront - side * 0.16f),
-                Ground(shaftFront + side * 0.16f), Ground(shaftBack + side * 0.16f));
+            void AddUpwardQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+            {
+                if (Vector3.Dot(Vector3.Cross(b - a, c - a), Vector3.up) >= 0f)
+                    AddQuad(a, b, c, d);
+                else
+                    AddQuad(a, d, c, b);
+            }
+            void AddUpwardTriangle(Vector3 a, Vector3 b, Vector3 c)
+            {
+                if (Vector3.Dot(Vector3.Cross(b - a, c - a), Vector3.up) >= 0f)
+                    AddTriangle(a, b, c);
+                else
+                    AddTriangle(a, c, b);
+            }
+            var shaftBack = position - forward * (1.7f * scale);
+            var shaftFront = position + forward * (0.55f * scale);
+            AddUpwardQuad(
+                Ground(shaftBack - side * (0.16f * scale)), Ground(shaftFront - side * (0.16f * scale)),
+                Ground(shaftFront + side * (0.16f * scale)), Ground(shaftBack + side * (0.16f * scale)));
 
             if (direction.Contains("s"))
             {
-                var headBase = position + forward * 0.25f;
-                AddTriangle(Ground(headBase - side * 0.64f), Ground(position + forward * 2.2f), Ground(headBase + side * 0.64f));
+                var headBase = position + forward * (0.25f * scale);
+                AddUpwardTriangle(
+                    Ground(headBase - side * (0.64f * scale)),
+                    Ground(position + forward * (2.2f * scale)),
+                    Ground(headBase + side * (0.64f * scale)));
             }
 
             void AddTurnHead(Vector3 turn)
             {
-                var elbow = position + forward * 0.48f;
-                var neck = elbow + turn * 0.78f;
-                AddQuad(
-                    Ground(elbow - forward * 0.16f), Ground(neck - forward * 0.16f),
-                    Ground(neck + forward * 0.16f), Ground(elbow + forward * 0.16f));
-                AddTriangle(
-                    Ground(neck - forward * 0.62f), Ground(elbow + turn * 1.95f), Ground(neck + forward * 0.62f));
+                var elbow = position + forward * (0.48f * scale);
+                var neck = elbow + turn * (0.78f * scale);
+                AddUpwardQuad(
+                    Ground(elbow - forward * (0.16f * scale)), Ground(neck - forward * (0.16f * scale)),
+                    Ground(neck + forward * (0.16f * scale)), Ground(elbow + forward * (0.16f * scale)));
+                AddUpwardTriangle(
+                    Ground(neck - forward * (0.62f * scale)),
+                    Ground(elbow + turn * (1.95f * scale)),
+                    Ground(neck + forward * (0.62f * scale)));
             }
 
             if (direction.Contains("l")) AddTurnHead(-side);
             if (direction.Contains("r")) AddTurnHead(side);
         }
 
-        public GameObject Build(string name, Material material, Transform parent, bool receiveShadows = true)
+        public GameObject Build(
+            string name,
+            Material material,
+            Transform parent,
+            bool receiveShadows = true,
+            SceneDetailClass detailClass = SceneDetailClass.Essential,
+            float chunkSize = DefaultChunkSize)
         {
-            var gameObject = new GameObject(name);
-            gameObject.transform.SetParent(parent, false);
+            var root = new GameObject(name);
+            root.transform.SetParent(parent, false);
+            if (triangles.Count == 0) return root;
+
+            var chunks = Partition(Mathf.Max(32f, chunkSize));
+            if (chunks.Count == 1)
+            {
+                BuildMeshObject(root, $"{name}-mesh", chunks.Values.First(), material, receiveShadows, detailClass);
+                return root;
+            }
+
+            foreach (var entry in chunks.OrderBy(item => item.Key.x).ThenBy(item => item.Key.y))
+            {
+                var child = new GameObject($"{name}-块-{entry.Key.x}-{entry.Key.y}");
+                child.transform.SetParent(root.transform, false);
+                BuildMeshObject(
+                    child,
+                    $"{name}-mesh-{entry.Key.x}-{entry.Key.y}",
+                    entry.Value,
+                    material,
+                    receiveShadows,
+                    detailClass);
+            }
+            return root;
+        }
+
+        private Dictionary<Vector2Int, ChunkMeshData> Partition(float chunkSize)
+        {
+            var chunks = new Dictionary<Vector2Int, ChunkMeshData>();
+            for (var triangle = 0; triangle + 2 < triangles.Count; triangle += 3)
+            {
+                var a = triangles[triangle];
+                var b = triangles[triangle + 1];
+                var c = triangles[triangle + 2];
+                var center = (vertices[a] + vertices[b] + vertices[c]) / 3f;
+                var key = new Vector2Int(
+                    Mathf.FloorToInt(center.x / chunkSize),
+                    Mathf.FloorToInt(center.z / chunkSize));
+                if (!chunks.TryGetValue(key, out var chunk))
+                {
+                    chunk = new ChunkMeshData();
+                    chunks.Add(key, chunk);
+                }
+                chunk.Triangles.Add(MapVertex(chunk, a));
+                chunk.Triangles.Add(MapVertex(chunk, b));
+                chunk.Triangles.Add(MapVertex(chunk, c));
+            }
+            return chunks;
+        }
+
+        private int MapVertex(ChunkMeshData chunk, int sourceIndex)
+        {
+            if (chunk.SourceToLocal.TryGetValue(sourceIndex, out var localIndex)) return localIndex;
+            localIndex = chunk.Vertices.Count;
+            chunk.SourceToLocal.Add(sourceIndex, localIndex);
+            chunk.Vertices.Add(vertices[sourceIndex]);
+            chunk.Uv.Add(sourceIndex < uv.Count ? uv[sourceIndex] : Vector2.zero);
+            return localIndex;
+        }
+
+        private static void BuildMeshObject(
+            GameObject gameObject,
+            string meshName,
+            ChunkMeshData chunk,
+            Material material,
+            bool receiveShadows,
+            SceneDetailClass detailClass)
+        {
             var mesh = new Mesh
             {
-                name = $"{name}-mesh",
-                indexFormat = vertices.Count > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16,
+                name = meshName,
+                indexFormat = chunk.Vertices.Count > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16,
             };
-            mesh.SetVertices(vertices);
-            mesh.SetUVs(0, uv);
-            mesh.SetTriangles(triangles, 0, true);
+            mesh.SetVertices(chunk.Vertices);
+            mesh.SetUVs(0, chunk.Uv);
+            mesh.SetTriangles(chunk.Triangles, 0, true);
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
             mesh.RecalculateBounds();
+            mesh.UploadMeshData(true);
             gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
             var renderer = gameObject.AddComponent<MeshRenderer>();
             renderer.sharedMaterial = material;
             renderer.shadowCastingMode = receiveShadows ? ShadowCastingMode.On : ShadowCastingMode.Off;
             renderer.receiveShadows = receiveShadows;
-            return gameObject;
+            renderer.allowOcclusionWhenDynamic = true;
+            gameObject.AddComponent<SceneChunk>().Configure(detailClass);
         }
 
         private static List<Vector3> Sanitise(IReadOnlyList<Vector3> source, float height)

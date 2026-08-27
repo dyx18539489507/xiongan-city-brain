@@ -1,5 +1,6 @@
 """Algorithm registration, discovery and isolated timed execution."""
 
+import gc
 import time
 from collections.abc import Callable
 
@@ -31,10 +32,7 @@ class AlgorithmRegistry:
     def discover(self) -> list[dict[str, str]]:
         """List registered plugins in stable name order."""
 
-        return [
-            {"name": name, "version": self._versions[name]}
-            for name in sorted(self._factories)
-        ]
+        return [{"name": name, "version": self._versions[name]} for name in sorted(self._factories)]
 
     def create(self, name: str) -> TrafficControlAlgorithm:
         """Instantiate a named plugin."""
@@ -56,6 +54,9 @@ class AlgorithmRegistry:
         """Run a synchronous decision and reject wall-clock timeout overruns."""
 
         started = time.perf_counter()
+        gc_was_enabled = gc.isenabled()
+        if gc_was_enabled:
+            gc.disable()
         try:
             decision = algorithm.decide(observation)
         except Exception as exc:
@@ -63,6 +64,9 @@ class AlgorithmRegistry:
                 ErrorCode.ALGORITHM_FAILURE,
                 f"{algorithm.name} decision failed: {exc}",
             ) from exc
+        finally:
+            if gc_was_enabled:
+                gc.enable()
         elapsed_ms = (time.perf_counter() - started) * 1000
         CONTROL_DECISION_SECONDS.labels(algorithm=algorithm.name).observe(elapsed_ms / 1000)
         if elapsed_ms > timeout_ms:

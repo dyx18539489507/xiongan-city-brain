@@ -35,11 +35,14 @@ function normalizeRadians(value: number): number {
  * A floating origin keeps the two-kilometre scene numerically stable.
  */
 export class CoordinateService {
+  private readonly localCartesian: boolean;
+
   constructor(readonly definition: SceneCoordinateSystem) {
     if (definition.units !== "m") {
       throw new Error(`Unsupported scene unit: ${definition.units}`);
     }
-    if (definition.utmZone < 1 || definition.utmZone > 60) {
+    this.localCartesian = definition.projection.trim() === "!";
+    if (!this.localCartesian && (definition.utmZone < 1 || definition.utmZone > 60)) {
       throw new Error(`Invalid UTM zone: ${definition.utmZone}`);
     }
   }
@@ -68,17 +71,25 @@ export class CoordinateService {
   }
 
   sumoToLonLat(x: number, y: number): LonLat {
+    this.requireGeographicProjection();
     const easting = x - this.definition.netOffset.x;
     const northing = y - this.definition.netOffset.y;
     return this.utmToLonLat(easting, northing);
   }
 
   lonLatToSumo(lon: number, lat: number): Point2 {
+    this.requireGeographicProjection();
     const projected = this.lonLatToUtm(lon, lat);
     return {
       x: projected.x + this.definition.netOffset.x,
       y: projected.y + this.definition.netOffset.y,
     };
+  }
+
+  private requireGeographicProjection(): void {
+    if (this.localCartesian) {
+      throw new Error("Geographic conversion is unavailable for local Cartesian scenes");
+    }
   }
 
   private lonLatToUtm(lon: number, lat: number): Point2 {

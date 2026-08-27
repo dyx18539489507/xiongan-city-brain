@@ -1,0 +1,57 @@
+雄安城市大脑 Docker 联网交付包
+================================
+
+一、接收方电脑只需准备
+
+1. Windows 10/11 64 位。
+2. Docker Desktop，安装时使用 WSL2 后端。
+3. 至少 16 GB 内存，建议预留 15 GB 以上磁盘空间。
+4. 首次启动时可访问互联网，以下载基础镜像和软件依赖。
+
+不需要单独安装 Python、Node.js、SUMO、PostgreSQL、Redis、Mosquitto 或
+Prometheus。这些环境均由 Docker 镜像提供，不会安装进 Windows 系统目录。
+
+二、首次启动
+
+1. 完整解压 ZIP 到纯英文短路径，例如 D:\xiongan-city-brain。不要使用中文路径，
+   也不要直接在压缩软件中运行脚本；部分 Docker BuildKit 版本无法正确处理中文构建路径。
+2. 双击 CHECK_DOCKER.cmd，确认显示 [OK]。
+3. 双击 START.cmd。
+4. 首次构建通常需要 10 至 40 分钟，取决于网络、CPU 和磁盘速度。
+5. 构建完成后会自动打开二维仿真指挥页面。
+
+访问地址：
+
+- 二维仿真指挥页面：http://127.0.0.1:5173/?view=2d
+- 三维页面：http://127.0.0.1:5173/?view=3d
+- API 文档：http://127.0.0.1:5173/docs
+- Prometheus：http://127.0.0.1:9090
+
+三、日常使用
+
+- 再次启动：双击 START.cmd。已有镜像会复用，通常比首次快。
+- 停止系统：双击 STOP.cmd。
+- 查看错误：双击 LOGS.cmd。
+- START.cmd 可以重复运行，不会重复创建同名服务。
+- STOP.cmd 会保留数据库和 Redis 数据。
+
+四、常见问题
+
+1. CHECK_DOCKER.cmd 提示 Docker Engine 未运行：打开 Docker Desktop，等待左下角
+   显示引擎已启动，然后重新检查。
+2. 下载镜像失败：检查网络、代理或 Docker Desktop 镜像源设置后，再次运行
+   START.cmd；Docker 会复用已经下载完成的部分。
+   包内默认使用国内 Debian、PyPI 和 npm 镜像。若这些镜像在当前网络不可用，
+   可编辑 .env.example，将 DEBIAN_MIRROR、DEBIAN_SECURITY_MIRROR、
+   PIP_INDEX_URL、PYPI_FILES_BASE_URL 和 NPM_REGISTRY 改回各行对应的官方地址。
+3. 端口占用：默认占用 5173、8000、1883 和 9090。关闭占用这些端口的软件，
+   或在 .env.example 中调整 WEB_PORT、API_PORT、MQTT_PORT、PROMETHEUS_PORT。
+4. 页面打不开：运行 LOGS.cmd，重点查看 web-dashboard 和 experiment-service。
+5. Docker Desktop 分配内存过低：建议至少分配 8 GB，运行多算法并行仿真时建议
+   12 GB 或更多。
+
+五、数据说明
+
+数据库、Redis、Mosquitto 和 Prometheus 数据保存在 Docker 命名卷中。
+STOP.cmd 不删除数据。不要执行 docker compose down -v，除非确定要清空全部容器数据。
+.env.example 只适合本机演示，若部署到局域网或服务器，必须修改默认密码和密钥。

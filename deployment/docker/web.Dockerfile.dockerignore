@@ -1,0 +1,13 @@
+*
+!apps/
+!apps/web-dashboard/
+!apps/web-dashboard/**
+!deployment/
+!deployment/docker/
+!deployment/docker/nginx.conf
+apps/web-dashboard/node_modules/
+apps/web-dashboard/dist/
+apps/web-dashboard/coverage/
+apps/web-dashboard/playwright-report/
+apps/web-dashboard/test-results/
+**/*.log

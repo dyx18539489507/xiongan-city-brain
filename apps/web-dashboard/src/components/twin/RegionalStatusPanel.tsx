@@ -52,7 +52,7 @@ export function RegionalStatusPanel(props: Props) {
     {label: "完成出行", value: metric(props.snapshot.completed_trips, 0), unit: "辆", delta: throughputDelta, tone: "cloud"},
   ];
   return <aside className="status-panel floating-panel">
-    <header className="floating-panel-header"><div><span>REAL-TIME TRAFFIC</span><h2>区域运行态势</h2></div><button aria-label="收起运行态势" className="icon-button" onClick={props.onCollapsed}><TwinIcon name="chevron" /></button></header>
+    <header className="floating-panel-header"><div><h2>区域运行态势</h2></div><button aria-label="收起运行态势" className="icon-button" onClick={props.onCollapsed}><TwinIcon name="chevron" /></button></header>
     <div className="status-scroll">
       <section className="stage-card"><span>当前阶段</span><strong>{deriveOperationalStage(props.snapshot, props.state.events)}</strong><i className={props.snapshot.status.includes("running") || props.snapshot.status.includes("replay") ? "active" : ""} /></section>
       <section className="regional-kpis">{kpis.map((item, index) => <article className={`${item.tone} ${index === 0 ? "hero" : ""}`} key={item.label}><span>{item.label}</span><div><strong>{item.value}</strong><small>{item.unit}</small></div>{item.delta && <em className={item.delta.better ? "better" : "worse"}>{item.delta.better ? "改善" : "变化"} {item.delta.label}</em>}</article>)}</section>

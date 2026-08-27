@@ -1,4 +1,5 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {describeRequestError} from "../api";
 import {loadStaticScene} from "../3d/network/SceneLoader";
 import type {StaticSceneDocument} from "../3d/scene/types";
 import type {SceneLoadState} from "./model";
@@ -10,16 +11,42 @@ const initialLoadState: SceneLoadState = {
   totalBytes: null,
 };
 
+const sceneDocuments = new Map<string, StaticSceneDocument>();
+const sceneRequests = new Map<string, Promise<StaticSceneDocument>>();
+
+function cachedSceneRequest(
+  scenarioId: string,
+  _signal: AbortSignal,
+  progress: Parameters<typeof loadStaticScene>[2],
+): Promise<StaticSceneDocument> {
+  const cached = sceneDocuments.get(scenarioId);
+  if (cached) return Promise.resolve(cached);
+  const pending = sceneRequests.get(scenarioId);
+  if (pending) return pending;
+  // The request is shared across consumers, so a single unmount must not
+  // cancel parsing for the other map or a later remount.
+  const request = loadStaticScene(scenarioId, new AbortController().signal, progress)
+    .then((document) => {
+      sceneDocuments.set(scenarioId, document);
+      return document;
+    })
+    .finally(() => sceneRequests.delete(scenarioId));
+  sceneRequests.set(scenarioId, request);
+  return request;
+}
+
 /** Load the immutable SUMO-derived scene once per selected scenario. */
 export function useStaticScene(scenarioId: string) {
   const [scene, setScene] = useState<StaticSceneDocument | null>(null);
   const [loadState, setLoadState] = useState<SceneLoadState>(initialLoadState);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const reload = useCallback(() => setLoadAttempt((current) => current + 1), []);
 
   useEffect(() => {
     const controller = new AbortController();
     setScene(null);
     setLoadState(initialLoadState);
-    loadStaticScene(scenarioId, controller.signal, (progress) => {
+    cachedSceneRequest(scenarioId, controller.signal, (progress) => {
       const message =
         progress.stage === "download"
           ? "正在下载 SUMO 场景几何"
@@ -38,13 +65,13 @@ export function useStaticScene(scenarioId: string) {
         if (controller.signal.aborted) return;
         setLoadState({
           status: "error",
-          message: reason instanceof Error ? reason.message : String(reason),
+          message: describeRequestError(reason),
           loadedBytes: 0,
           totalBytes: null,
         });
       });
     return () => controller.abort();
-  }, [scenarioId]);
+  }, [loadAttempt, scenarioId]);
 
-  return {scene, loadState};
+  return {scene, loadState, reload};
 }

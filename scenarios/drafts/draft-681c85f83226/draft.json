@@ -1,0 +1,52 @@
+{
+  "id": "draft-681c85f83226",
+  "status": "failed",
+  "progress": 72,
+  "message": "OSM 路网解析失败",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91454078072955,
+      "south": 39.06063965626668,
+      "east": 115.91829446902311,
+      "north": 39.061586265973695
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21"
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "unknown",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": null,
+    "roads": [],
+    "buildings": [],
+    "intersections": [],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [],
+  "manual_edits": [],
+  "validation": null,
+  "artifacts": {},
+  "logs": [
+    {
+      "time": "2026-08-23T07:46:54.134053+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照裁剪框选范围"
+    },
+    {
+      "time": "2026-08-23T07:46:54.165501+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-23T07:46:54.231559+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    }
+  ],
+  "error": "ValueError: selected OSM area contains no drivable roads",
+  "created_at": "2026-08-23T07:46:54.118784+00:00",
+  "updated_at": "2026-08-23T07:46:54.243912+00:00"
+}

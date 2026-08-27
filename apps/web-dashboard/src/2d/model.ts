@@ -22,7 +22,7 @@ export type LayerKey =
 export type LayerVisibility = Record<LayerKey, boolean>;
 
 export const defaultLayerVisibility: LayerVisibility = {
-  baseMap: true,
+  baseMap: false,
   buildings: true,
   roadMarkings: true,
   vehicles: true,
@@ -34,7 +34,7 @@ export const defaultLayerVisibility: LayerVisibility = {
   trafficState: true,
   queues: true,
   trails: false,
-  algorithm: true,
+  algorithm: false,
   events: true,
   corridor: true,
   rsu: false,

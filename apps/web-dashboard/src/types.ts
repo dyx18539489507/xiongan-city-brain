@@ -11,6 +11,8 @@ export type Scenario = {
   display_name: string;
   provenance: string;
   is_real_measured_network: boolean;
+  duration_s?: number;
+  seed?: number;
   runnable: boolean;
   profiles: ScenarioProfile[];
 };
@@ -71,6 +73,15 @@ export type IntersectionRealtime = {
   pedestrian_waiting_count: number;
   pedestrian_crossing_count: number;
   emergency_priority_phase_id?: string | null;
+  decision_action?: string;
+  requested_phase_id?: string | null;
+  decision_status?: string;
+  decision_reason_codes?: string[];
+  decision_explanation?: string;
+  phase_scores?: Record<string, number>;
+  selected_phase_score?: number | null;
+  selected_policy?: string | null;
+  expected_gain_ratio?: number | null;
   lane_states: LaneRealtime[];
 };
 
@@ -87,6 +98,8 @@ export type RealtimeSnapshot = {
   scenario_id?: string;
   scenario_profile?: string;
   algorithm?: string;
+  seed?: number;
+  duration_s?: number;
   simulation_time_s?: number;
   simulation_rate?: number | null;
   mean_speed_m_s?: number;

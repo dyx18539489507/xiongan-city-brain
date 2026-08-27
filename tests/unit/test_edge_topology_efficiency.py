@@ -22,7 +22,7 @@ class TopologyAdapter:
                     SimpleNamespace(
                         state="G",
                         duration=30.0,
-                        minDur=10.0,
+                        minDur=30.0,
                         maxDur=40.0,
                     ),
                     SimpleNamespace(
@@ -72,4 +72,5 @@ def test_build_topology_queries_all_controlled_lanes_once() -> None:
 
     assert adapter.lane_queries == [["tls-a.in", "tls-b.in"]]
     assert topology.speed_limits_m_s == {"tls-a.in": 13.9, "tls-b.in": 13.9}
-
+    assert topology.phases["tls-a"][0].min_green_s == 10.0
+    assert topology.phases["tls-b"][0].min_green_s == 10.0

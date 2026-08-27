@@ -20,6 +20,9 @@ export type SceneJunction = {
   displayId: string | null;
   displayName: string | null;
   role: string | null;
+  lon?: number;
+  lat?: number;
+  provenance?: string;
 };
 
 export type SceneEdge = {
@@ -170,10 +173,16 @@ export type StaticSceneDocument = {
   controlCorridors: ControlCorridor[];
 };
 
-export function assertStaticScene(value: unknown): asserts value is StaticSceneDocument {
+export function assertStaticScene(
+  value: unknown,
+  expectedScenarioId?: string,
+): asserts value is StaticSceneDocument {
   if (!value || typeof value !== "object") throw new Error("scene payload is not an object");
   const scene = value as Partial<StaticSceneDocument>;
-  if (scene.metadata?.sceneId !== "xiongan_rongdong_20") {
+  if (
+    !scene.metadata?.sceneId ||
+    (expectedScenarioId !== undefined && scene.metadata.sceneId !== expectedScenarioId)
+  ) {
     throw new Error("unexpected or missing sceneId");
   }
   if (

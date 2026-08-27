@@ -81,7 +81,7 @@
 | 63 | 拓扑/交通/视觉/交互四类真实性 | 通过（资料边界） | 拓扑和交通来自 SUMO；视觉为轻量 PBR 工程场景；交互事件真实修改 SUMO。建筑和设备位置不是现场实测。 |
 | 64 | 禁止 UE/CARLA/假交通/假 TLS/删路口/盗版资产/伪 benchmark 等 | 通过 | 未安装重型引擎、未改官方场景、未造假实体/指标；保留 SwiftShader、Intel、MX250、失败事故实验和较差 P1。 |
 | 65 | 指定 3D 文档与 README 启动说明 | 通过 | `docs/3d/` 包含所有点名文档，本文件补充总矩阵；README 有 3D 启停和边界。 |
-| 66 | 一键 start/stop、环境检查、日志和精确进程清理 | 通过 | `scripts/start_3d_demo.ps1`、`stop_3d_demo.ps1`，以及 benchmark/stability wrapper；使用记录 PID，不广泛杀进程。 |
+| 66 | 一键 start/stop、环境检查、日志和精确进程清理 | 通过 | `scripts/start_3d.ps1`、`stop_3d.ps1`，以及 benchmark/stability wrapper；使用记录 PID，不广泛杀进程。 |
 | 67 | 最低验收清单 | 通过（性能目标另由第 1/70 节约束） | 清单中的联通路网、20 路口、机非人/TLS 同步、PBR、城市环境、RSU、分析、事件、昼夜天气、交互、LOD/实例/对象池、实际 KTX2、Replay、Demo 和本机运行均有实现或运行证据；性能目标不伪装达标，单列在第 1/70 节。 |
 | 68 | 核心高精、外围积极 LOD、静态烘焙/动态重点 | 通过（轻量实现） | 质量、LOD、阴影、实例和纹理预算按视距与重要性执行，20 路口始终保留。 |
 | 69 | 完成后按 30 项真实路径/命令/测试/问题汇报 | 通过（交付格式） | 最终对话回复和本矩阵按证据汇报，未完成项单列。 |
@@ -141,6 +141,6 @@ Pop-Location
 - Vitest：`23 passed` 测试文件，`37 passed` 测试。
 - 前端生产构建：`tsc -b && vite build` 成功；保留 Three.js 731.74 kB、ECharts 511.34 kB 的分块告警。
 - Playwright：三项真实依赖端到端验收全部通过，覆盖拓扑/实体、Replay 列表与场景下载。
-- 一键启停：默认 8013/5177 冷启动健康检查通过，`stop_3d_demo.ps1` 后进程清单为 `stopped`。
+- 一键启停：默认 8013/5177 冷启动健康检查通过，`stop_3d.ps1` 后进程清单为 `stopped`。
 - 正式 MX250 矩阵：`outputs/3d/benchmarks/matrix-final-mx250-20260810.json`，45/45 组合、0 page errors、平均 15.27 FPS、中位 15.0、最差组合平均 8.1。
 - 长稳：`outputs/3d/benchmarks/stability-20260809T231157Z.json`，1811.2 s 采样窗、0 page errors、0 sampling timeout；高负载平均 19.31 FPS，`terminatedByWallLimit=true` 表示主动到时停止。

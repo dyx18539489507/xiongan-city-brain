@@ -1,0 +1,1062 @@
+{
+  "id": "draft-b5be4d7d260f",
+  "status": "ready",
+  "progress": 100,
+  "message": "河北本地 OSM 框选范围已解析",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91401565592734,
+      "south": 39.05663865439872,
+      "east": 115.91801054346394,
+      "north": 39.059362780536134
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21",
+    "network_context": {
+      "strategy": "intersecting_road_corridors_to_nearest_intersection",
+      "maximum_extension_m": 90.0,
+      "fallback_extension_m": 60.0,
+      "network_bbox": {
+        "west": 115.913370703,
+        "south": 39.0561271,
+        "east": 115.91865517,
+        "north": 39.0598615
+      },
+      "selected_source_way_count": 20,
+      "context_feature_counts": {
+        "ways": 15,
+        "nodes": 464
+      },
+      "corridors": [
+        {
+          "source_way_id": 785419413,
+          "before_selection_m": 14.279,
+          "after_selection_m": 57.19,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 785419416,
+          "before_selection_m": 34.755,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 917242907,
+          "before_selection_m": 0.0,
+          "after_selection_m": 60.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1001665903,
+          "before_selection_m": 60.0,
+          "after_selection_m": 60.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1001665907,
+          "before_selection_m": 28.475,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1001665917,
+          "before_selection_m": 0.0,
+          "after_selection_m": 36.933,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1001665918,
+          "before_selection_m": 48.699,
+          "after_selection_m": 38.823,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1001665933,
+          "before_selection_m": 33.286,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1001665934,
+          "before_selection_m": 0.0,
+          "after_selection_m": 15.012,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1001688828,
+          "before_selection_m": 86.549,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1154819229,
+          "before_selection_m": 0.0,
+          "after_selection_m": 6.277,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1154819230,
+          "before_selection_m": 0.0,
+          "after_selection_m": 0.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1154819231,
+          "before_selection_m": 0.0,
+          "after_selection_m": 61.025,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1154819232,
+          "before_selection_m": 0.0,
+          "after_selection_m": 0.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1415517609,
+          "before_selection_m": 53.014,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1415517616,
+          "before_selection_m": 0.0,
+          "after_selection_m": 41.259,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "nearest_intersection"
+        },
+        {
+          "source_way_id": 1415517617,
+          "before_selection_m": 0.0,
+          "after_selection_m": 0.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1415517618,
+          "before_selection_m": 21.518,
+          "after_selection_m": 0.0,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1415517621,
+          "before_selection_m": 0.0,
+          "after_selection_m": 0.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1416280872,
+          "before_selection_m": 0.0,
+          "after_selection_m": 0.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        }
+      ],
+      "controlled_intersections_limited_to_selection": true
+    }
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "high",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 115.91336374907918,
+      "min_y": 39.05612177843223,
+      "max_x": 115.91866188940597,
+      "max_y": 39.05986148152567
+    },
+    "selection_bounds": {
+      "west": 115.91401565592734,
+      "south": 39.05663865439872,
+      "east": 115.91801054346394,
+      "north": 39.059362780536134
+    },
+    "roads": [
+      {
+        "id": "--11",
+        "coordinates": [
+          [
+            115.91456814308881,
+            39.056637833747146
+          ],
+          [
+            115.91437087996401,
+            39.056991298540794
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--12",
+        "coordinates": [
+          [
+            115.91407828419807,
+            39.05748696884814
+          ],
+          [
+            115.91433565354403,
+            39.05698222998865
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--13#0",
+        "coordinates": [
+          [
+            115.91654073578184,
+            39.05731055164419
+          ],
+          [
+            115.9163767724671,
+            39.05764090079166
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--13#2",
+        "coordinates": [
+          [
+            115.91713243957861,
+            39.05613237135369
+          ],
+          [
+            115.91668768280641,
+            39.05701212308844
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--14",
+        "coordinates": [
+          [
+            115.91637546139336,
+            39.05764350177896
+          ],
+          [
+            115.91610660168513,
+            39.058152193265066
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--19",
+        "coordinates": [
+          [
+            115.91403411276698,
+            39.05775247007823
+          ],
+          [
+            115.91407476879733,
+            39.05749765912018
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--20",
+        "coordinates": [
+          [
+            115.91722807608834,
+            39.05921562912584
+          ],
+          [
+            115.91582705821756,
+            39.058777296069245
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 5.56
+      },
+      {
+        "id": "--4#0",
+        "coordinates": [
+          [
+            115.91798790536072,
+            39.05903957970902
+          ],
+          [
+            115.91866188940597,
+            39.05924785652751
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--4#2",
+        "coordinates": [
+          [
+            115.9160233366358,
+            39.05844274270646
+          ],
+          [
+            115.91768719097814,
+            39.05894776108913
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--4#3",
+        "coordinates": [
+          [
+            115.91412928400109,
+            39.05783950081899
+          ],
+          [
+            115.91586850959067,
+            39.0583945366791
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--4#4",
+        "coordinates": [
+          [
+            115.9133775653006,
+            39.05760731546974
+          ],
+          [
+            115.91354009255322,
+            39.05765811959661
+          ],
+          [
+            115.91396019809235,
+            39.057786744134056
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--5#0",
+        "coordinates": [
+          [
+            115.91578058641103,
+            39.05879308367652
+          ],
+          [
+            115.91558794708837,
+            39.0591842590789
+          ],
+          [
+            115.91544174877043,
+            39.05961443283871
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--5#1",
+        "coordinates": [
+          [
+            115.91592575133382,
+            39.05849824398813
+          ],
+          [
+            115.91581958975699,
+            39.05871396990306
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "--5#2",
+        "coordinates": [
+          [
+            115.91610660168513,
+            39.058152193265066
+          ],
+          [
+            115.91598746813348,
+            39.05837735036487
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-1#0",
+        "coordinates": [
+          [
+            115.91807253578807,
+            39.05869695834034
+          ],
+          [
+            115.917931498782,
+            39.05896800512448
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 13.89
+      },
+      {
+        "id": "-1#1",
+        "coordinates": [
+          [
+            115.91787619282503,
+            39.0590931042975
+          ],
+          [
+            115.91770939816058,
+            39.05954467102489
+          ],
+          [
+            115.91761082738434,
+            39.05986148152567
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 13.89
+      },
+      {
+        "id": "-10",
+        "coordinates": [
+          [
+            115.9135915601144,
+            39.05856816234782
+          ],
+          [
+            115.9136571355802,
+            39.0583993677838
+          ],
+          [
+            115.91399186474744,
+            39.057899946004355
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-11",
+        "coordinates": [
+          [
+            115.91433696329946,
+            39.05697971912135
+          ],
+          [
+            115.91453422517893,
+            39.05662634448283
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-12",
+        "coordinates": [
+          [
+            115.91437004623305,
+            39.05699291274687
+          ],
+          [
+            115.91411267708968,
+            39.05749765168428
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-13#0",
+        "coordinates": [
+          [
+            115.91634225946027,
+            39.05763048783349
+          ],
+          [
+            115.91650622290949,
+            39.05730013873591
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-13#2",
+        "coordinates": [
+          [
+            115.91665328836602,
+            39.057001531105314
+          ],
+          [
+            115.91709792993741,
+            39.05612177843223
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-14",
+        "coordinates": [
+          [
+            115.91607232785537,
+            39.05814124179406
+          ],
+          [
+            115.91634118776437,
+            39.057632550388945
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-15#0",
+        "coordinates": [
+          [
+            115.91744610048497,
+            39.05982553066756
+          ],
+          [
+            115.91752231084453,
+            39.059565281604
+          ],
+          [
+            115.91760804745176,
+            39.059332063581444
+          ],
+          [
+            115.91772576672452,
+            39.05905926894827
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 13.89
+      },
+      {
+        "id": "-15#1",
+        "coordinates": [
+          [
+            115.91778821558879,
+            39.05892432411196
+          ],
+          [
+            115.91793108818094,
+            39.058639057262084
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 13.89
+      },
+      {
+        "id": "-16",
+        "coordinates": [
+          [
+            115.91793239784192,
+            39.058636546353746
+          ],
+          [
+            115.91818568466557,
+            39.05813653688934
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 13.89
+      },
+      {
+        "id": "-17",
+        "coordinates": [
+          [
+            115.91643001301938,
+            39.05713687339466
+          ],
+          [
+            115.91511842520303,
+            39.05673324394209
+          ],
+          [
+            115.91488916132872,
+            39.056678306776796
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-18",
+        "coordinates": [
+          [
+            115.91494121150015,
+            39.05659246636094
+          ],
+          [
+            115.91514513039023,
+            39.05667230814708
+          ],
+          [
+            115.91645913830462,
+            39.057083889406414
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-19",
+        "coordinates": [
+          [
+            115.91411146631195,
+            39.05750124478214
+          ],
+          [
+            115.91407081041088,
+            39.05775605575467
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-2",
+        "coordinates": [
+          [
+            115.91838535433848,
+            39.057737943176015
+          ],
+          [
+            115.91825531299656,
+            39.05770141408727
+          ],
+          [
+            115.9164332348362,
+            39.05713780442478
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-20",
+        "coordinates": [
+          [
+            115.91584087512794,
+            39.05875048184569
+          ],
+          [
+            115.91724189118561,
+            39.0591889048285
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 5.56
+      },
+      {
+        "id": "-3",
+        "coordinates": [
+          [
+            115.91405356123451,
+            39.05790881061615
+          ],
+          [
+            115.91406460444345,
+            39.05798009980352
+          ],
+          [
+            115.9138958143264,
+            39.058730219611576
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-4#0",
+        "coordinates": [
+          [
+            115.91864830594879,
+            39.05927458314343
+          ],
+          [
+            115.91797432169298,
+            39.05906630624433
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-4#2",
+        "coordinates": [
+          [
+            115.91767372002462,
+            39.058974668854106
+          ],
+          [
+            115.91600998209222,
+            39.0584695612516
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-4#3",
+        "coordinates": [
+          [
+            115.91585446440155,
+            39.05842116856699
+          ],
+          [
+            115.9141153524559,
+            39.05786622366468
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-4#4",
+        "coordinates": [
+          [
+            115.91394672734532,
+            39.057813561360334
+          ],
+          [
+            115.91352650749734,
+            39.057684845599965
+          ],
+          [
+            115.91336374907918,
+            39.05763403930008
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-5#0",
+        "coordinates": [
+          [
+            115.91540603247387,
+            39.059607072127235
+          ],
+          [
+            115.91555271528556,
+            39.05917546116956
+          ],
+          [
+            115.91574607156066,
+            39.05878276063368
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-5#1",
+        "coordinates": [
+          [
+            115.91578507493895,
+            39.0587036468721
+          ],
+          [
+            115.91589123660391,
+            39.058487920989485
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-5#2",
+        "coordinates": [
+          [
+            115.9159533097736,
+            39.05836639993224
+          ],
+          [
+            115.91607232785537,
+            39.05814124179406
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-6",
+        "coordinates": [
+          [
+            115.91645913830462,
+            39.057083889406414
+          ],
+          [
+            115.91827960444233,
+            39.05765460234744
+          ],
+          [
+            115.91840850388179,
+            39.05769021972456
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-7#0",
+        "coordinates": [
+          [
+            115.91495302689874,
+            39.05656049737729
+          ],
+          [
+            115.91518621235812,
+            39.05657816563446
+          ],
+          [
+            115.916494135726,
+            39.056979417432345
+          ],
+          [
+            115.91657070230349,
+            39.05702103845188
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-7#1",
+        "coordinates": [
+          [
+            115.91670881896334,
+            39.05709621122412
+          ],
+          [
+            115.9167856141548,
+            39.0571380144453
+          ],
+          [
+            115.91842676156863,
+            39.05765254314245
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-8#0",
+        "coordinates": [
+          [
+            115.91836876528194,
+            39.05777230118269
+          ],
+          [
+            115.91673096651918,
+            39.0572729411421
+          ],
+          [
+            115.91662909632892,
+            39.05726109156126
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-8#1",
+        "coordinates": [
+          [
+            115.91646262034043,
+            39.057241703196866
+          ],
+          [
+            115.91638497725066,
+            39.05723269168069
+          ],
+          [
+            115.91507590673734,
+            39.05683061699878
+          ],
+          [
+            115.91486975642268,
+            39.056707772179095
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      },
+      {
+        "id": "-9",
+        "coordinates": [
+          [
+            115.9147556116189,
+            39.05664471475802
+          ],
+          [
+            115.91465222348386,
+            39.05661131319899
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 11.11
+      }
+    ],
+    "buildings": [],
+    "intersections": [
+      {
+        "intersection_id": "cluster_-26_-31",
+        "display_id": "J01",
+        "display_name": "路口 1",
+        "x": 115.91659660430912,
+        "y": 39.05715626287592,
+        "lon": 115.91659660430912,
+        "lat": 39.05715626287592,
+        "degree": 6,
+        "signalized": false
+      },
+      {
+        "intersection_id": "-8",
+        "display_id": "J02",
+        "display_name": "路口 2",
+        "x": 115.91404083199009,
+        "y": 39.05782687282789,
+        "lon": 115.91404083199009,
+        "lat": 39.05782687282789,
+        "degree": 5,
+        "signalized": false
+      },
+      {
+        "intersection_id": "cluster_-12_-2",
+        "display_id": "J03",
+        "display_name": "路口 3",
+        "x": 115.91782914800473,
+        "y": 39.05900638806429,
+        "lon": 115.91782914800473,
+        "lat": 39.05900638806429,
+        "degree": 6,
+        "signalized": false
+      },
+      {
+        "intersection_id": "-13",
+        "display_id": "J04",
+        "display_name": "路口 4",
+        "x": 115.91593843138052,
+        "y": 39.05843240185256,
+        "lon": 115.91593843138052,
+        "lat": 39.05843240185256,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "-34",
+        "display_id": "J05",
+        "display_name": "路口 5",
+        "x": 115.91477389672957,
+        "y": 39.05665065191928,
+        "lon": 115.91477389672957,
+        "lat": 39.05665065191928,
+        "degree": 3,
+        "signalized": false
+      }
+    ],
+    "topology_edges": [
+      {
+        "source": "-13",
+        "target": "cluster_-12_-2",
+        "road_distance_m": 154.49
+      },
+      {
+        "source": "-13",
+        "target": "-8",
+        "road_distance_m": 162.61
+      },
+      {
+        "source": "-34",
+        "target": "cluster_-26_-31",
+        "road_distance_m": 151.0
+      }
+    ]
+  },
+  "selected_intersection_ids": [
+    "cluster_-26_-31",
+    "-8",
+    "cluster_-12_-2",
+    "-13",
+    "-34"
+  ],
+  "manual_edits": [],
+  "validation": {
+    "valid": true,
+    "selected_intersection_count": 5,
+    "selected_intersection_ids": [
+      "cluster_-26_-31",
+      "-8",
+      "cluster_-12_-2",
+      "-13",
+      "-34"
+    ],
+    "errors": [],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "osm_bbox",
+    "confidence": "high",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.osm.xml",
+    "processed_source": "source.clipped.osm.xml",
+    "network": "network.net.xml"
+  },
+  "logs": [
+    {
+      "time": "2026-08-26T15:42:15.806753+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照提取路网范围"
+    },
+    {
+      "time": "2026-08-26T15:42:16.925703+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-26T15:42:17.416321+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    },
+    {
+      "time": "2026-08-26T15:42:17.585618+00:00",
+      "progress": 100,
+      "message": "河北本地 OSM 框选范围已解析"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-26T15:42:15.771623+00:00",
+  "updated_at": "2026-08-26T15:42:45.045804+00:00"
+}

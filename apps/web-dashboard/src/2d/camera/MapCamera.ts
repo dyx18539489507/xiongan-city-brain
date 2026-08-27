@@ -8,8 +8,11 @@ function easeInOutCubic(value: number): number {
   return value < 0.5 ? 4 * value ** 3 : 1 - ((-2 * value + 2) ** 3) / 2;
 }
 
-type CameraPose = {centerX: number; centerY: number; scale: number};
+export type CameraPose = {centerX: number; centerY: number; scale: number};
 type Flight = {from: CameraPose; to: CameraPose; startedAt: number; durationMs: number};
+export type MapViewportInsets = {top: number; right: number; bottom: number; left: number};
+
+const DEFAULT_SCENE_PADDING = 36;
 
 export class MapCamera {
   width = 1;
@@ -19,31 +22,45 @@ export class MapCamera {
   centerY = 0;
   scale = 1;
   revision = 0;
+  private insets: MapViewportInsets = {top: 0, right: 0, bottom: 0, left: 0};
   private sceneBounds: SceneBounds | null = null;
   private fittedScale = 0.1;
   private flight: Flight | null = null;
 
   resize(width: number, height: number, dpr: number): void {
-    const changed = width !== this.width || height !== this.height || dpr !== this.dpr;
-    this.width = Math.max(1, width);
-    this.height = Math.max(1, height);
+    const nextWidth = Math.max(1, width);
+    const nextHeight = Math.max(1, height);
+    const changed = nextWidth !== this.width || nextHeight !== this.height || dpr !== this.dpr;
+    if (!changed) return;
+    const wasOverview = this.scale <= this.fittedScale * 1.02;
+    this.width = nextWidth;
+    this.height = nextHeight;
     this.dpr = dpr;
-    if (changed && this.sceneBounds) this.fitBounds(this.sceneBounds, 76, false);
+    this.refreshSceneFit(wasOverview);
+    this.revision += 1;
+  }
+
+  setViewportInsets(insets: MapViewportInsets): void {
+    const next = {
+      top: Math.max(0, insets.top),
+      right: Math.max(0, insets.right),
+      bottom: Math.max(0, insets.bottom),
+      left: Math.max(0, insets.left),
+    };
+    if (Object.keys(next).every((key) => next[key as keyof MapViewportInsets] === this.insets[key as keyof MapViewportInsets])) return;
+    const wasOverview = this.scale <= this.fittedScale * 1.02;
+    this.insets = next;
+    this.refreshSceneFit(wasOverview);
+    this.revision += 1;
   }
 
   setSceneBounds(bounds: SceneBounds): void {
     this.sceneBounds = bounds;
-    this.fitBounds(bounds, 158, false);
+    this.fitBounds(bounds, DEFAULT_SCENE_PADDING, false);
   }
 
   fitBounds(bounds: SceneBounds, padding = 76, animate = true): void {
-    const width = Math.max(1, bounds.maxX - bounds.minX);
-    const height = Math.max(1, bounds.maxY - bounds.minY);
-    const pose = {
-      centerX: (bounds.minX + bounds.maxX) / 2,
-      centerY: (bounds.minY + bounds.maxY) / 2,
-      scale: Math.min((this.width - padding * 2) / width, (this.height - padding * 2) / height),
-    };
+    const pose = this.fitPose(bounds, padding);
     if (bounds === this.sceneBounds || !this.sceneBounds) this.fittedScale = pose.scale;
     this.moveTo(pose, animate);
   }
@@ -66,6 +83,7 @@ export class MapCamera {
     this.flight = null;
     this.centerX -= deltaX / this.scale;
     this.centerY += deltaY / this.scale;
+    this.constrainCenter();
     this.revision += 1;
   }
 
@@ -76,6 +94,7 @@ export class MapCamera {
     const after = this.screenToWorld(screenX, screenY);
     this.centerX += before.x - after.x;
     this.centerY += before.y - after.y;
+    this.constrainCenter();
     this.revision += 1;
   }
 
@@ -86,6 +105,7 @@ export class MapCamera {
     this.centerX = this.flight.from.centerX + (this.flight.to.centerX - this.flight.from.centerX) * eased;
     this.centerY = this.flight.from.centerY + (this.flight.to.centerY - this.flight.from.centerY) * eased;
     this.scale = this.flight.from.scale + (this.flight.to.scale - this.flight.from.scale) * eased;
+    this.constrainCenter();
     this.revision += 1;
     if (ratio >= 1) this.flight = null;
     return true;
@@ -93,16 +113,47 @@ export class MapCamera {
 
   worldToScreen(point: Point2): Point2 {
     return {
-      x: (point.x - this.centerX) * this.scale + this.width / 2,
-      y: (this.centerY - point.y) * this.scale + this.height / 2,
+      x: (point.x - this.centerX) * this.scale + this.viewportCenterX,
+      y: (this.centerY - point.y) * this.scale + this.viewportCenterY,
     };
   }
 
   screenToWorld(x: number, y: number): Point2 {
     return {
-      x: (x - this.width / 2) / this.scale + this.centerX,
-      y: this.centerY - (y - this.height / 2) / this.scale,
+      x: (x - this.viewportCenterX) / this.scale + this.centerX,
+      y: this.centerY - (y - this.viewportCenterY) / this.scale,
     };
+  }
+
+  viewportBounds(padding = 0): {left: number; top: number; right: number; bottom: number} {
+    return {
+      left: this.insets.left + padding,
+      top: this.insets.top + padding,
+      right: this.width - this.insets.right - padding,
+      bottom: this.height - this.insets.bottom - padding,
+    };
+  }
+
+  getZoomRatio(): number {
+    return this.scale / Math.max(.0001, this.fittedScale);
+  }
+
+  getPose(): CameraPose {
+    return {centerX: this.centerX, centerY: this.centerY, scale: this.scale};
+  }
+
+  setPose(pose: CameraPose, animate = false): void {
+    const next = {
+      centerX: pose.centerX,
+      centerY: pose.centerY,
+      scale: clamp(pose.scale, this.fittedScale * 0.72, 5),
+    };
+    this.constrainPose(next);
+    if (!animate
+      && Math.abs(next.centerX - this.centerX) < .0001
+      && Math.abs(next.centerY - this.centerY) < .0001
+      && Math.abs(next.scale - this.scale) < .000001) return;
+    this.moveTo(next, animate);
   }
 
   visibleBounds(marginPx = 60): SceneBounds {
@@ -112,19 +163,67 @@ export class MapCamera {
   }
 
   private moveTo(pose: CameraPose, animate: boolean): void {
+    const target = {...pose};
+    this.constrainPose(target);
     if (!animate || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      this.centerX = pose.centerX;
-      this.centerY = pose.centerY;
-      this.scale = pose.scale;
+      this.centerX = target.centerX;
+      this.centerY = target.centerY;
+      this.scale = target.scale;
       this.flight = null;
       this.revision += 1;
       return;
     }
     this.flight = {
       from: {centerX: this.centerX, centerY: this.centerY, scale: this.scale},
-      to: pose,
+      to: target,
       startedAt: performance.now(),
       durationMs: 620,
     };
   }
+
+  private fitPose(bounds: SceneBounds, padding: number): CameraPose {
+    const width = Math.max(1, bounds.maxX - bounds.minX);
+    const height = Math.max(1, bounds.maxY - bounds.minY);
+    return {
+      centerX: (bounds.minX + bounds.maxX) / 2,
+      centerY: (bounds.minY + bounds.maxY) / 2,
+      scale: Math.max(.0001, Math.min(
+        (this.viewportWidth - padding * 2) / width,
+        (this.viewportHeight - padding * 2) / height,
+      )),
+    };
+  }
+
+  private refreshSceneFit(useOverview: boolean): void {
+    if (!this.sceneBounds) return;
+    const overview = this.fitPose(this.sceneBounds, DEFAULT_SCENE_PADDING);
+    this.fittedScale = overview.scale;
+    if (useOverview) {
+      this.centerX = overview.centerX;
+      this.centerY = overview.centerY;
+      this.scale = overview.scale;
+      this.flight = null;
+      return;
+    }
+    this.scale = clamp(this.scale, this.fittedScale * .72, 5);
+    this.constrainCenter();
+  }
+
+  private constrainPose(pose: CameraPose): void {
+    if (!this.sceneBounds) return;
+    pose.centerX = clamp(pose.centerX, this.sceneBounds.minX, this.sceneBounds.maxX);
+    pose.centerY = clamp(pose.centerY, this.sceneBounds.minY, this.sceneBounds.maxY);
+  }
+
+  private constrainCenter(): void {
+    const pose = {centerX: this.centerX, centerY: this.centerY, scale: this.scale};
+    this.constrainPose(pose);
+    this.centerX = pose.centerX;
+    this.centerY = pose.centerY;
+  }
+
+  private get viewportWidth(): number { return Math.max(1, this.width - this.insets.left - this.insets.right); }
+  private get viewportHeight(): number { return Math.max(1, this.height - this.insets.top - this.insets.bottom); }
+  private get viewportCenterX(): number { return this.insets.left + this.viewportWidth / 2; }
+  private get viewportCenterY(): number { return this.insets.top + this.viewportHeight / 2; }
 }

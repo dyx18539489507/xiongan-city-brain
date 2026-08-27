@@ -6,6 +6,7 @@ from traffic_platform.algorithm_sdk.types import (
     ControlObservation,
     DecisionStatus,
 )
+from traffic_platform.algorithms.max_pressure import active_green_bounds
 
 
 class ActuatedController(BaseTrafficController):
@@ -27,26 +28,36 @@ class ActuatedController(BaseTrafficController):
             for phase in phases
         }
         current_demand = phase_demand.get(intersection.current_phase_id, 0.0)
+        min_green_s, max_green_s = active_green_bounds(
+            intersection.intersection_id,
+            intersection.current_phase_id,
+            config,
+            topology,
+        )
         best_phase = (
             max(phase_demand, key=lambda phase_id: phase_demand[phase_id])
             if phase_demand
             else None
         )
-        if current_demand > 0 and intersection.phase_elapsed < config.max_green_s:
+        if current_demand > 0 and intersection.phase_elapsed < max_green_s:
             action = "extend_green"
             target = intersection.current_phase_id
             duration = config.extension_s
             reason = "CURRENT_GREEN_HAS_DEMAND"
-        elif best_phase is not None and best_phase != intersection.current_phase_id:
+        elif (
+            best_phase is not None
+            and best_phase != intersection.current_phase_id
+            and intersection.phase_elapsed >= min_green_s
+        ):
             action = "request_next_phase"
             target = best_phase
-            duration = config.min_green_s
+            duration = min_green_s
             reason = "QUEUED_PHASE_REQUESTED"
         else:
             action = "hold_phase"
             target = intersection.current_phase_id
             duration = None
-            reason = "NO_COMPETING_DEMAND"
+            reason = "MIN_GREEN_OR_NO_COMPETING_DEMAND"
         self.decisions += 1
         return ControlDecision(
             status=DecisionStatus.OK,
@@ -55,6 +66,7 @@ class ActuatedController(BaseTrafficController):
             action_type=action,
             requested_duration_s=duration,
             scores=phase_demand,
+            selected_policy="B1",
             reason_codes=[reason],
             explanation="B1 compares detected queue presence by compatible phase.",
         )

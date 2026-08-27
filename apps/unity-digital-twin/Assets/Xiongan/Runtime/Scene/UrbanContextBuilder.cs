@@ -8,15 +8,20 @@ namespace Xiongan.DigitalTwin.Scene
 {
     public sealed class UrbanContextBuilder : MonoBehaviour
     {
-        private const string ShowcaseJunctionId = "cluster_11122023464_11122023574";
+        private const string ShowcaseJunctionId = ReferenceShowcaseLayout.JunctionId;
         private const string ShowcaseVisualAnchorJunctionId = ShowcaseJunctionId;
 
-        public IEnumerator Build(SceneBuilder scene, System.Action<float, string> onProgress)
+        public IEnumerator Build(
+            SceneBuilder scene,
+            System.Action<float, string> onProgress,
+            bool includeModeledInfill = true)
         {
             var showcaseJunction = scene.Document.Junctions.FirstOrDefault(item => item.SumoJunctionId == ShowcaseJunctionId);
             var showcaseAnchor = scene.Document.Junctions.FirstOrDefault(item => item.SumoJunctionId == ShowcaseVisualAnchorJunctionId)
                                  ?? showcaseJunction;
-            var showcaseCenter = showcaseAnchor == null ? Vector3.zero : scene.Coordinates.ToWorld(showcaseAnchor.Position);
+            Vector3? showcaseCenter = showcaseAnchor == null
+                ? null
+                : scene.Coordinates.ToWorld(showcaseAnchor.Position);
             var facades = Enumerable.Range(0, scene.Materials.Facades.Count).Select(_ => new MeshAccumulator()).ToArray();
             var roofs = new MeshAccumulator();
             var parapets = new MeshAccumulator();
@@ -24,21 +29,25 @@ namespace Xiongan.DigitalTwin.Scene
             var osmGlazing = new MeshAccumulator();
             var osmWarmGlazing = new MeshAccumulator();
             var osmWindowFrames = new MeshAccumulator();
+            var osmArchitecturalBases = new MeshAccumulator();
+            var osmRoofTiles = new MeshAccumulator();
             for (var index = 0; index < scene.Document.Buildings.Count; index++)
             {
                 var building = scene.Document.Buildings[index];
                 var footprint = building.Footprint.Select(point => scene.Coordinates.ToWorld(point)).ToList();
                 if (footprint.Count < 3) continue;
-                if (showcaseJunction != null)
-                {
-                    var footprintCenter = new Vector3(footprint.Average(point => point.x), 0f, footprint.Average(point => point.z));
-                    if (Vector3.Distance(footprintCenter, showcaseCenter) < 175f) continue;
-                }
+                var footprintCenter = new Vector3(
+                    footprint.Average(point => point.x), 0f, footprint.Average(point => point.z));
+                if (IsInsideShowcaseExclusion(footprintCenter, showcaseCenter, 175f)) continue;
                 var height = ResolveHeight(building.SceneId, building.HeightM, building.Levels);
                 var hash = StableHash(building.SceneId);
                 facades[hash % facades.Length].AddFacadeWalls(footprint, 0.08f, height, 10f + hash % 5);
                 roofs.AddPolygon(footprint, height + 0.02f);
                 parapets.AddFacadeWalls(footprint, height, height + 0.72f, 4f);
+                var baseFootprint = ScalePolygonFromCenter(footprint, footprintCenter, 1.008f);
+                var eaveFootprint = ScalePolygonFromCenter(footprint, footprintCenter, 1.04f);
+                osmArchitecturalBases.AddFacadeWalls(baseFootprint, 0.078f, 1.28f, 6f);
+                osmRoofTiles.AddExtrudedPolygon(eaveFootprint, height + 0.04f, height + 0.38f);
                 AddRoofPlant(roofEquipment, footprint, height, hash);
                 AddPolygonFacadeWindows(osmGlazing, osmWarmGlazing, osmWindowFrames, footprint, height, hash);
                 if (index % 12 == 0) yield return null;
@@ -46,15 +55,20 @@ namespace Xiongan.DigitalTwin.Scene
             for (var index = 0; index < facades.Length; index++)
                 facades[index].Build($"雄安现代建筑立面-{index + 1}", scene.Materials.Facades[index], transform);
             roofs.Build("建筑屋面", scene.Materials.BuildingRoof, transform);
-            parapets.Build("建筑女儿墙", scene.Materials.Curb, transform);
-            roofEquipment.Build("建筑屋顶设备", scene.Materials.Metal, transform);
-            osmGlazing.Build("OSM建筑实体窗面", scene.Materials.BuildingGlass, transform, false);
-            osmWarmGlazing.Build("OSM建筑少量暖色窗面", scene.Materials.BuildingGlassWarm, transform, false);
-            osmWindowFrames.Build("OSM建筑实体层间窗框", scene.Materials.FacadeFrame, transform);
-            CreateRepresentativeShowcaseDistrict(scene);
-            var controlledInfill = CreateControlledJunctionInfill(scene, showcaseCenter);
-            CreateCitywideLandUseInfill(scene, showcaseCenter, controlledInfill);
-            CreateIdentifiableOpenSpaces(scene);
+            parapets.Build("建筑女儿墙", scene.Materials.Curb, transform, true, SceneDetailClass.Fine);
+            roofEquipment.Build("建筑屋顶设备", scene.Materials.Metal, transform, true, SceneDetailClass.Fine);
+            osmGlazing.Build("OSM建筑实体窗格", scene.Materials.BuildingGlass, transform, false, SceneDetailClass.Fine);
+            osmWarmGlazing.Build("OSM建筑少量暖色窗格", scene.Materials.BuildingGlassWarm, transform, false, SceneDetailClass.Fine);
+            osmWindowFrames.Build("OSM建筑实体层间窗框", scene.Materials.FacadeFrame, transform, true, SceneDetailClass.Fine);
+            osmArchitecturalBases.Build("OSM建筑统一石材首层", scene.Materials.ArchitecturalStone, transform, true, SceneDetailClass.Context);
+            osmRoofTiles.Build("OSM建筑统一灰色外挑屋面", scene.Materials.GreyRoofTile, transform, true, SceneDetailClass.Context);
+            if (includeModeledInfill)
+            {
+                if (showcaseJunction != null) ReferenceShowcaseBuilder.Build(scene, transform);
+                var controlledInfill = CreateControlledJunctionInfill(scene, showcaseCenter);
+                CreateCitywideLandUseInfill(scene, showcaseCenter, controlledInfill);
+                CreateIdentifiableOpenSpaces(scene);
+            }
 
             var grass = new MeshAccumulator();
             var trunks = new MeshAccumulator();
@@ -63,7 +77,10 @@ namespace Xiongan.DigitalTwin.Scene
             foreach (var area in scene.Document.Vegetation)
             {
                 var polygon = area.Shape.Select(point => scene.Coordinates.ToWorld(point)).ToList();
-                grass.AddPolygon(polygon, 0.086f);
+                // OSM vegetation can overlap road polygons. Keep it above the
+                // city base but below asphalt, cycleways and footways so it can
+                // never visually replace a legal traffic surface.
+                grass.AddPolygon(polygon, 0.008f);
                 ScatterTrees(area.SceneId, polygon, trunks, crowns);
             }
 
@@ -83,16 +100,33 @@ namespace Xiongan.DigitalTwin.Scene
 
             if (showcaseJunction != null)
             {
-                CreateFormalForegroundAssets(scene, showcaseCenter);
-                CreateShowcaseStreetFurniture(scene, showcaseCenter);
+                // The B01 reference showcase owns its foreground assets and
+                // street furniture so generic K08-era objects cannot overlap it.
             }
 
-            grass.Build("OSM绿地与中央绿化", scene.Materials.Grass, transform, false);
-            trunks.Build("真实化树干", scene.Materials.TreeBark, transform);
-            crowns.Build("多层自然树冠", scene.Materials.TreeLeaves, transform);
+            grass.Build("OSM绿地与中央绿化", scene.Materials.Grass, transform, false, SceneDetailClass.Context);
+            trunks.Build("真实化树干", scene.Materials.TreeBark, transform, true, SceneDetailClass.Fine);
+            crowns.Build("多层自然树冠", scene.Materials.TreeLeaves, transform, true, SceneDetailClass.Context);
 
+            ReferenceShowcaseFrame? showcaseFrame = showcaseJunction == null
+                ? null
+                : ReferenceShowcaseLayout.Resolve(scene);
             foreach (var device in scene.Document.RoadsideDevices)
-                CreateRoadsideDevice(device.DeviceId, device.DeviceType, device.Provenance, scene.Coordinates.ToWorld(device.Position), scene);
+            {
+                var position = scene.Coordinates.ToWorld(device.Position);
+                if (showcaseFrame.HasValue && device.ManagedJunctions.Contains(ShowcaseJunctionId))
+                    position = ReferenceShowcaseLayout.ResolveRoadsideDevicePosition(
+                        showcaseFrame.Value, device.DeviceType);
+                var managedJunction = device.ManagedJunctions
+                    .Select(id => scene.Document.Junctions.FirstOrDefault(item => item.SumoJunctionId == id))
+                    .FirstOrDefault(item => item != null);
+                var facingTarget = managedJunction == null
+                    ? position + Vector3.forward
+                    : scene.Coordinates.ToWorld(managedJunction.Position);
+                CreateRoadsideDevice(
+                    device.DeviceId, device.DeviceType, device.Provenance,
+                    position, facingTarget, scene);
+            }
             onProgress(0.82f, "建筑立面、自然绿化与城市家具已生成");
             yield return null;
         }
@@ -112,6 +146,19 @@ namespace Xiongan.DigitalTwin.Scene
                 foreach (var character in value) hash = hash * 31 + character;
                 return Mathf.Abs(hash);
             }
+        }
+
+        private static bool IsInsideShowcaseExclusion(
+            Vector3 point, Vector3? showcaseCenter, float radius)
+        {
+            return showcaseCenter.HasValue &&
+                   Vector3.Distance(point, showcaseCenter.Value) < radius;
+        }
+
+        private static List<Vector3> ScalePolygonFromCenter(
+            IReadOnlyList<Vector3> polygon, Vector3 center, float scale)
+        {
+            return polygon.Select(point => center + (point - center) * scale).ToList();
         }
 
         private static void AddRoofPlant(MeshAccumulator equipment, IReadOnlyList<Vector3> footprint, float height, int hash)
@@ -192,58 +239,66 @@ namespace Xiongan.DigitalTwin.Scene
             var root = new GameObject("代表性视觉环境-非实测建筑");
             root.transform.SetParent(transform, false);
             CreateShowcaseCornerLandscaping(scene, root.transform, center);
+            CreateShowcaseBoulevardMedians(scene, root.transform, center);
             var plots = new[]
             {
-                (new Vector3(-72f, 0f, -88f), new Vector2(44f, 28f), 47f, 0, 4),
-                (new Vector3(-27f, 0f, -105f), new Vector2(30f, 24f), 25f, 3, 5),
-                (new Vector3(28f, 0f, -106f), new Vector2(32f, 24f), 34f, 6, 6),
-                (new Vector3(74f, 0f, -90f), new Vector2(45f, 29f), 51f, 5, 4),
-                (new Vector3(-92f, 0f, -27f), new Vector2(28f, 54f), 24f, 2, 5),
-                (new Vector3(94f, 0f, -25f), new Vector2(29f, 56f), 43f, 7, 6),
-                (new Vector3(-92f, 0f, 32f), new Vector2(29f, 48f), 42f, 4, 4),
-                (new Vector3(94f, 0f, 36f), new Vector2(31f, 50f), 29f, 1, 5),
-                (new Vector3(-72f, 0f, 91f), new Vector2(43f, 29f), 35f, 6, 6),
-                (new Vector3(-25f, 0f, 108f), new Vector2(31f, 25f), 23f, 2, 5),
-                (new Vector3(30f, 0f, 111f), new Vector2(34f, 26f), 46f, 7, 4),
-                (new Vector3(77f, 0f, 93f), new Vector2(45f, 31f), 33f, 3, 6),
+                (new Vector3(-72f, 0f, -88f), new Vector2(42f, 27f), 24.5f, 0, 7, "residential"),
+                (new Vector3(-27f, 0f, -105f), new Vector2(33f, 23f), 19.4f, 2, 8, "school"),
+                (new Vector3(28f, 0f, -106f), new Vector2(35f, 23f), 28.7f, 5, 5, "residential"),
+                (new Vector3(74f, 0f, -90f), new Vector2(44f, 28f), 37.4f, 6, 9, "commercial"),
+                (new Vector3(-92f, 0f, -27f), new Vector2(30f, 47f), 27.2f, 1, 7, "residential"),
+                (new Vector3(94f, 0f, -25f), new Vector2(31f, 49f), 35.8f, 3, 3, "commercial"),
+                (new Vector3(-92f, 0f, 32f), new Vector2(31f, 45f), 32.6f, 4, 5, "residential"),
+                (new Vector3(94f, 0f, 36f), new Vector2(32f, 47f), 25.8f, 7, 6, "commercial"),
+                (new Vector3(-72f, 0f, 91f), new Vector2(42f, 28f), 22.8f, 2, 7, "residential"),
+                (new Vector3(77f, 0f, 93f), new Vector2(45f, 30f), 29.3f, 1, 8, "exhibition_centre"),
             };
             var plotPaving = new MeshAccumulator();
             var plotPlanting = new MeshAccumulator();
             var plotLandscape = new MeshAccumulator();
-            foreach (var (offset, size, height, materialIndex, style) in plots)
+            var facades = Enumerable.Range(0, scene.Materials.Facades.Count).Select(_ => new MeshAccumulator()).ToArray();
+            var roofs = new MeshAccumulator();
+            var parapets = new MeshAccumulator();
+            var glazing = new MeshAccumulator();
+            var frames = new MeshAccumulator();
+            var roofEquipment = new MeshAccumulator();
+            var architecturalBases = new MeshAccumulator();
+            var brickAccents = new MeshAccumulator();
+            var roofTiles = new MeshAccumulator();
+            var timberScreens = new MeshAccumulator();
+            var entranceGlass = new MeshAccumulator();
+            foreach (var (offset, size, height, materialIndex, style, areaType) in plots)
             {
                 var plotCenter = center + offset;
                 var towardRoad = offset.sqrMagnitude > 0.01f ? -offset.normalized : Vector3.forward;
-                var sidePlot = Mathf.Abs(offset.x) > Mathf.Abs(offset.z);
-                plotLandscape.AddPolygon(Rectangle(plotCenter, size.x + 20f, size.y + 18f), 0.086f);
-                var plazaCenter = plotCenter + towardRoad * (sidePlot ? size.x * 0.5f + 3.5f : size.y * 0.5f + 3.5f);
-                plotPaving.AddPolygon(Rectangle(
-                    plazaCenter,
-                    sidePlot ? 7.5f : size.x + 8f,
-                    sidePlot ? size.y + 8f : 7.5f), 0.096f);
-                plotPlanting.AddPolygon(Rectangle(
-                    plotCenter + towardRoad * (sidePlot ? size.x * 0.5f + 8.3f : size.y * 0.5f + 8.3f),
-                    sidePlot ? 4.2f : size.x + 6f,
-                    sidePlot ? size.y + 6f : 4.2f), 0.105f);
-                foreach (var wing in BuildingWings(plotCenter, size, height, style))
-                {
-                    var footprint = Rectangle(wing.Center, wing.Size.x, wing.Size.y);
-                    var wall = new MeshAccumulator();
-                    var roof = new MeshAccumulator();
-                    var parapet = new MeshAccumulator();
-                    wall.AddFacadeWalls(footprint, 0.08f, wing.Height, 8.5f);
-                    roof.AddPolygon(footprint, wing.Height + 0.02f);
-                    parapet.AddFacadeWalls(footprint, wing.Height, wing.Height + 0.8f, 3f);
-                    wall.Build("多体量现代街区立面", scene.Materials.Facades[materialIndex], root.transform);
-                    roof.Build("多体量街区屋面", scene.Materials.BuildingRoof, root.transform);
-                    parapet.Build("多体量街区女儿墙", scene.Materials.Curb, root.transform);
-                    if (style <= 3)
-                        CreateProceduralFacadeModules(scene, root.transform, wing.Center, wing.Size, wing.Height, materialIndex);
-                    else
-                        CreateDistinctFacadeModules(scene, root.transform, wing.Center, wing.Size, wing.Height, materialIndex, style);
-                }
-                CreateBuildingStreetDetail(scene, root.transform, plotCenter, size, height, materialIndex, towardRoad);
+                var roadDirection = Vector3.Cross(Vector3.up, towardRoad).normalized;
+                plotLandscape.AddPolygon(
+                    OrientedRectangle(plotCenter, size.x + 20f, size.y + 18f, roadDirection), 0.086f);
+                var plazaCenter = plotCenter + towardRoad * (size.y * 0.5f + 3.5f);
+                plotPaving.AddPolygon(
+                    OrientedRectangle(plazaCenter, size.x + 8f, 7.5f, roadDirection), 0.096f);
+                plotPlanting.AddPolygon(
+                    OrientedRectangle(plotCenter + towardRoad * (size.y * 0.5f + 8.3f),
+                        size.x + 6f, 4.2f, roadDirection), 0.105f);
+                var groupSeed = StableHash($"showcase-group:{Mathf.Sign(offset.x)}:{Mathf.Sign(offset.z)}");
+                AddCitywideBuilding(
+                    facades[materialIndex], roofs, parapets, glazing, frames, roofEquipment,
+                    architecturalBases, brickAccents, roofTiles, timberScreens, entranceGlass,
+                    plotCenter, size.x, size.y, height, roadDirection, towardRoad,
+                    areaType, style, groupSeed);
             }
+            for (var index = 0; index < facades.Length; index++)
+                facades[index].Build($"代表性组团建筑立面-{index + 1}", scene.Materials.Facades[index], root.transform);
+            roofs.Build("代表性组团实体屋面", scene.Materials.BuildingRoof, root.transform);
+            parapets.Build("代表性组团低女儿墙", scene.Materials.Curb, root.transform, true, SceneDetailClass.Fine);
+            glazing.Build("代表性组团实体窗格", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Fine);
+            frames.Build("代表性组团窗框与层间檐口", scene.Materials.FacadeFrame, root.transform, true, SceneDetailClass.Fine);
+            roofEquipment.Build("代表性组团屋顶设备", scene.Materials.BuildingRoof, root.transform, true, SceneDetailClass.Fine);
+            architecturalBases.Build("代表性组团石材基座与院墙", scene.Materials.ArchitecturalStone, root.transform, true, SceneDetailClass.Context);
+            brickAccents.Build("代表性组团暖灰砖红构件", scene.Materials.BrickAccent, root.transform, true, SceneDetailClass.Context);
+            roofTiles.Build("代表性组团灰色深檐", scene.Materials.GreyRoofTile, root.transform, true, SceneDetailClass.Context);
+            timberScreens.Build("代表性组团入口格栅雨棚", scene.Materials.TimberScreen, root.transform, true, SceneDetailClass.Fine);
+            entranceGlass.Build("代表性组团首层门厅", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Context);
             plotPaving.Build("代表性街区实体硬质铺装", scene.Materials.HeroSidewalk, root.transform, false);
             plotPlanting.Build("代表性街区连续种植带", scene.Materials.HeroGrass, root.transform, false);
             plotLandscape.Build("代表性街区连续草坪", scene.Materials.HeroGrass, root.transform, false);
@@ -287,11 +342,22 @@ namespace Xiongan.DigitalTwin.Scene
                 wings.Add((center + new Vector3(-size.x * 0.24f, 0f, 0f), new Vector2(size.x * 0.36f, size.y * 0.58f), height));
                 wings.Add((center + new Vector3(size.x * 0.24f, 0f, size.y * 0.06f), new Vector2(size.x * 0.34f, size.y * 0.5f), height * 0.78f));
             }
+            else if (style == 7)
+            {
+                // A restrained U-shaped courtyard is the dominant residential
+                // composition in the Xiong'an-inspired generated districts.
+                wings[0] = (center + new Vector3(0f, 0f, -size.y * 0.31f),
+                    new Vector2(size.x, size.y * 0.3f), height);
+                wings.Add((center + new Vector3(-size.x * 0.39f, 0f, size.y * 0.08f),
+                    new Vector2(size.x * 0.22f, size.y * 0.62f), height * 0.96f));
+                wings.Add((center + new Vector3(size.x * 0.39f, 0f, size.y * 0.08f),
+                    new Vector2(size.x * 0.22f, size.y * 0.62f), height * 0.92f));
+            }
             return wings;
         }
 
         private static IReadOnlyList<(Vector3 Center, float Radius)> CreateControlledJunctionInfill(
-            SceneBuilder scene, Vector3 showcaseCenter)
+            SceneBuilder scene, Vector3? showcaseCenter)
         {
             var root = new GameObject("二十路口差异化城市街区填充");
             root.transform.SetParent(scene.transform, false);
@@ -301,10 +367,15 @@ namespace Xiongan.DigitalTwin.Scene
             var roofEquipment = new MeshAccumulator();
             var glazing = new MeshAccumulator();
             var frames = new MeshAccumulator();
-            var facadeAccents = Enumerable.Range(0, scene.Materials.Facades.Count).Select(_ => new MeshAccumulator()).ToArray();
+            var architecturalBases = new MeshAccumulator();
+            var brickAccents = new MeshAccumulator();
+            var roofTiles = new MeshAccumulator();
+            var timberScreens = new MeshAccumulator();
             var entranceGlass = new MeshAccumulator();
-            var entranceFrames = new MeshAccumulator();
             var paving = new MeshAccumulator();
+            var planting = new MeshAccumulator();
+            var districtTreeTrunks = new MeshAccumulator();
+            var districtTreeCrowns = new MeshAccumulator();
             var occupied = scene.Document.Buildings
                 .Where(building => building.Footprint.Count >= 3)
                 .Select(building =>
@@ -335,15 +406,16 @@ namespace Xiongan.DigitalTwin.Scene
                 var hash = StableHash(junction.SumoJunctionId);
                 var candidates = CreateInfillCandidates(hash);
                 var createdForJunction = 0;
-                for (var plotIndex = 0; plotIndex < candidates.Count && createdForJunction < 14; plotIndex++)
+                for (var plotIndex = 0; plotIndex < candidates.Count && createdForJunction < 17; plotIndex++)
                 {
                     var sourceOffset = candidates[plotIndex];
                     var plotCenter = center + sourceOffset;
-                    if (Vector3.Distance(plotCenter, showcaseCenter) < 152f) continue;
+                    if (IsInsideShowcaseExclusion(plotCenter, showcaseCenter, 152f)) continue;
 
                     var innerPlot = sourceOffset.magnitude < 115f;
-                    var width = (innerPlot ? 15f : 21f) + (hash + plotIndex * 7) % (innerPlot ? 11 : 15);
-                    var depth = (innerPlot ? 13f : 17f) + (hash + plotIndex * 13) % (innerPlot ? 9 : 10);
+                    var groupSeed = StableHash($"junction-group:{junction.SumoJunctionId}:{plotIndex / 4}");
+                    var width = (innerPlot ? 19f : 25f) + groupSeed % (innerPlot ? 7 : 9);
+                    var depth = (innerPlot ? 16f : 20f) + groupSeed / 7 % (innerPlot ? 5 : 7);
                     var plotRadius = Mathf.Sqrt(width * width + depth * depth) * 0.5f;
                     var clearance = plotRadius + 3.5f;
                     if (IsNearRoad(plotCenter, clearance, roadSegments)) continue;
@@ -354,37 +426,42 @@ namespace Xiongan.DigitalTwin.Scene
                     // approach clear so dense infill frames the intersection instead of
                     // putting the viewer inside a facade.
                     var cameraPlanarPosition = center + new Vector3(-34.8f, 0f, 95.6f);
-                    if (Vector3.Distance(plotCenter, cameraPlanarPosition) < plotRadius + 42f) continue;
+                    if (Vector3.Distance(plotCenter, cameraPlanarPosition) < plotRadius + 30f) continue;
 
-                    var styleSequence = new[] { 1, 2, 1, 3, 5, 1, 6, 4 };
-                    var style = styleSequence[(hash + plotIndex) % styleSequence.Length];
-                    var materialIndex = XionganFacadeIndex(
-                        style == 4 ? "commercial" : "residential",
-                        hash + plotIndex * 3,
-                        facades.Length);
-                    var distanceBand = Mathf.Clamp01(sourceOffset.magnitude / 160f);
-                    var height = 24f + (hash + plotIndex * 19) % 6 * 3.05f + distanceBand * 2.5f;
-                    if (style == 4) height += 6f;
-                    var size = new Vector2(width, depth);
-                    paving.AddPolygon(Rectangle(plotCenter, width + 9f, depth + 9f), 0.082f);
-                    var wingIndex = 0;
-                    foreach (var wing in BuildingWings(plotCenter, size, height, style))
-                    {
-                        var footprint = Rectangle(wing.Center, wing.Size.x, wing.Size.y);
-                        facades[materialIndex].AddFacadeWalls(footprint, 0.085f, wing.Height, 8f);
-                        roofs.AddPolygon(footprint, wing.Height + 0.025f);
-                        parapets.AddFacadeWalls(footprint, wing.Height, wing.Height + 0.62f, 3f);
-                        var accentIndex = (materialIndex + 2 + style + wingIndex) % facades.Length;
-                        AddInfillFacadeBands(
-                            glazing, frames, facadeAccents[accentIndex],
-                            wing.Center, wing.Size, wing.Height,
-                            hash + plotIndex * 43 + wingIndex * 17, style,
-                            sourceOffset.magnitude > 120f);
-                        wingIndex++;
-                    }
-                    AddInfillBuildingDetail(
-                        roofEquipment, entranceGlass, entranceFrames,
-                        plotCenter, size, height, style, center - plotCenter);
+                    var areaType = groupSeed % 13 == 0 && plotIndex < 4 ? "commercial" : "residential";
+                    ResolveZonePlot(areaType, groupSeed, out _, out _, out var height, out var style);
+                    var memberHeight = height;
+                    var memberWidth = width;
+                    var memberDepth = depth;
+                    ApplyGroupMemberVariation(areaType, hash + plotIndex * 17,
+                        ref memberWidth, ref memberDepth, ref memberHeight);
+                    width = memberWidth;
+                    depth = memberDepth;
+                    height = memberHeight;
+                    plotRadius = Mathf.Sqrt(width * width + depth * depth) * 0.5f;
+                    if (!TryFindNearestRoadSegment(plotCenter, roadSegments,
+                            out var roadFrom, out var roadTo, out _)) continue;
+                    var roadDirection = roadTo - roadFrom;
+                    roadDirection.y = 0f;
+                    if (roadDirection.sqrMagnitude < 0.001f) roadDirection = Vector3.right;
+                    roadDirection.Normalize();
+                    var streetDirection = center - plotCenter;
+                    streetDirection.y = 0f;
+                    if (streetDirection.sqrMagnitude < 0.001f)
+                        streetDirection = Vector3.Cross(Vector3.up, roadDirection);
+                    streetDirection.Normalize();
+                    var materialIndex = XionganFacadeIndex(areaType, groupSeed, facades.Length);
+                    AddCitywideBuilding(
+                        facades[materialIndex], roofs, parapets, glazing, frames, roofEquipment,
+                        architecturalBases, brickAccents, roofTiles, timberScreens, entranceGlass,
+                        plotCenter, width, depth, height, roadDirection, streetDirection,
+                        areaType, style, groupSeed, sourceOffset.magnitude > 120f);
+                    AddPlotGroundTreatment(
+                        paving, planting, plotCenter, width, depth, roadDirection, streetDirection,
+                        areaType, 9f);
+                    AddDistrictPlotTrees(
+                        districtTreeTrunks, districtTreeCrowns, plotCenter, width, depth,
+                        roadDirection, streetDirection, areaType, groupSeed);
                     occupied.Add((plotCenter, plotRadius));
                     generatedOccupancy.Add((plotCenter, plotRadius));
                     created++;
@@ -396,16 +473,21 @@ namespace Xiongan.DigitalTwin.Scene
             for (var index = 0; index < facades.Length; index++)
             {
                 facades[index].Build($"差异化街区建筑立面-{index + 1}", scene.Materials.Facades[index], root.transform);
-                facadeAccents[index].Build($"差异化街区立面构件-{index + 1}", scene.Materials.Facades[index], root.transform);
             }
             roofs.Build("差异化街区屋面与退台", scene.Materials.BuildingRoof, root.transform);
-            parapets.Build("差异化街区女儿墙", scene.Materials.Curb, root.transform);
-            roofEquipment.Build("差异化街区屋顶设备与冠部", scene.Materials.BuildingRoof, root.transform);
-            glazing.Build("差异化街区实体窗带", scene.Materials.BuildingGlass, root.transform, false);
-            frames.Build("差异化街区实体窗框与檐口", scene.Materials.FacadeFrame, root.transform);
-            entranceGlass.Build("差异化街区实体门厅", scene.Materials.BuildingGlass, root.transform, false);
-            entranceFrames.Build("差异化街区入口雨棚与框架", scene.Materials.FacadeFrame, root.transform);
-            paving.Build($"差异化街区硬质场地-{created}", scene.Materials.Sidewalk, root.transform, false);
+            parapets.Build("差异化街区女儿墙", scene.Materials.Curb, root.transform, true, SceneDetailClass.Fine);
+            roofEquipment.Build("差异化街区屋顶设备与冠部", scene.Materials.BuildingRoof, root.transform, true, SceneDetailClass.Fine);
+            glazing.Build("差异化街区实体窗格", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Fine);
+            frames.Build("差异化街区实体窗框与檐口", scene.Materials.FacadeFrame, root.transform, true, SceneDetailClass.Fine);
+            architecturalBases.Build("重点路口组团石材基座与院墙", scene.Materials.ArchitecturalStone, root.transform, true, SceneDetailClass.Context);
+            brickAccents.Build("重点路口组团暖灰砖红构件", scene.Materials.BrickAccent, root.transform, true, SceneDetailClass.Context);
+            roofTiles.Build("重点路口组团灰色深檐", scene.Materials.GreyRoofTile, root.transform, true, SceneDetailClass.Context);
+            timberScreens.Build("重点路口组团入口格栅与雨棚", scene.Materials.TimberScreen, root.transform, true, SceneDetailClass.Fine);
+            entranceGlass.Build("差异化街区实体门厅", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Context);
+            paving.Build($"差异化街区硬质场地-{created}", scene.Materials.Sidewalk, root.transform, false, SceneDetailClass.Context);
+            planting.Build($"差异化街区庭院绿地-{created}", scene.Materials.Grass, root.transform, false, SceneDetailClass.Context);
+            districtTreeTrunks.Build("差异化街区庭院树干", scene.Materials.TreeBark, root.transform, true, SceneDetailClass.Context);
+            districtTreeCrowns.Build("差异化街区庭院树冠", scene.Materials.TreeLeaves, root.transform, true, SceneDetailClass.Context);
             root.name = $"二十路口差异化城市街区填充-{created}栋";
             scene.RegisterGeneratedBuildings(created);
             return generatedOccupancy;
@@ -454,7 +536,7 @@ namespace Xiongan.DigitalTwin.Scene
         }
 
         private static void CreateCitywideLandUseInfill(
-            SceneBuilder scene, Vector3 showcaseCenter,
+            SceneBuilder scene, Vector3? showcaseCenter,
             IReadOnlyList<(Vector3 Center, float Radius)> controlledInfill)
         {
             var supportedTypes = new HashSet<string>
@@ -523,8 +605,15 @@ namespace Xiongan.DigitalTwin.Scene
             var glazing = new MeshAccumulator();
             var frames = new MeshAccumulator();
             var roofEquipment = new MeshAccumulator();
+            var architecturalBases = new MeshAccumulator();
+            var brickAccents = new MeshAccumulator();
+            var roofTiles = new MeshAccumulator();
+            var timberScreens = new MeshAccumulator();
+            var entranceGlass = new MeshAccumulator();
             var paving = new MeshAccumulator();
             var planting = new MeshAccumulator();
+            var districtTreeTrunks = new MeshAccumulator();
+            var districtTreeCrowns = new MeshAccumulator();
             var parkingGround = new MeshAccumulator();
             var parkingMarkings = new MeshAccumulator();
             var constructionGround = new MeshAccumulator();
@@ -537,7 +626,7 @@ namespace Xiongan.DigitalTwin.Scene
             // This is a memory guard, not a distribution strategy. Buildings are
             // allocated in spatial rounds below so reaching the guard cannot leave
             // one end of the city systematically empty.
-            const int citywideSafetyLimit = 740;
+            const int citywideSafetyLimit = 900;
             var created = 0;
             var counts = new Dictionary<string, int>();
             foreach (var zone in zones)
@@ -570,14 +659,16 @@ namespace Xiongan.DigitalTwin.Scene
                         var jitterZ = (((hash / 101) % 101) / 100f - 0.5f) * spacing * 0.3f;
                         var plotCenter = new Vector3(x + jitterX, 0f, z + jitterZ);
                         if (!PointInPolygon(plotCenter, zone.Polygon)) continue;
-                        if (Vector3.Distance(plotCenter, showcaseCenter) < 228f) continue;
+                        if (IsInsideShowcaseExclusion(plotCenter, showcaseCenter, 228f)) continue;
                         if (controlledCenters.Any(center => Vector3.Distance(center, plotCenter) < 118f)) continue;
                         if (preservedLand.Any(polygon => PointInPolygon(plotCenter, polygon))) continue;
                         if (zones.Any(other =>
                                 other.Id != zone.Id && other.Area < zone.Area * 0.94f &&
                                 other.Type != zone.Type && PointInPolygon(plotCenter, other.Polygon))) continue;
 
-                        ResolveZonePlot(zone.Type, hash, out var width, out var depth, out var height, out var style);
+                        var groupSeed = StableHash($"xiongan-group:{zone.Id}:{row / 2}:{column / 2}");
+                        ResolveZonePlot(zone.Type, groupSeed, out var width, out var depth, out var height, out var style);
+                        ApplyGroupMemberVariation(zone.Type, hash, ref width, ref depth, ref height);
                         var plotRadius = Mathf.Sqrt(width * width + depth * depth) * 0.5f;
                         if (!TryFindNearestRoadSegment(plotCenter, roadSegments, out var roadFrom, out var roadTo,
                                 out var roadDistanceSquared)) continue;
@@ -595,19 +686,23 @@ namespace Xiongan.DigitalTwin.Scene
                         if (occupied.Any(existing =>
                                 Vector3.Distance(existing.Center, plotCenter) < existing.Radius + plotRadius + 6f)) continue;
 
-                        var materialIndex = XionganFacadeIndex(zone.Type, hash, facades.Length);
+                        var streetDirection = ClosestPointOnSegment(plotCenter, roadFrom, roadTo) - plotCenter;
+                        streetDirection.y = 0f;
+                        if (streetDirection.sqrMagnitude < 0.001f)
+                            streetDirection = Vector3.Cross(Vector3.up, roadDirection);
+                        streetDirection.Normalize();
+                        var materialIndex = XionganFacadeIndex(zone.Type, groupSeed, facades.Length);
                         AddCitywideBuilding(
                             facades[materialIndex], roofs, parapets, glazing, frames, roofEquipment,
-                            plotCenter, width, depth, height, roadDirection, style, hash);
-                        paving.AddPolygon(
-                            OrientedRectangle(plotCenter, width + 9f, depth + 9f, roadDirection), 0.082f);
-                        if (zone.Type is "residential" or "school" or "kindergarten")
-                        {
-                            var side = Vector3.Cross(Vector3.up, roadDirection).normalized;
-                            var gardenCenter = plotCenter + side * (depth * 0.5f + 3.2f);
-                            planting.AddPolygon(
-                                OrientedRectangle(gardenCenter, width * 0.62f, 3.8f, roadDirection), 0.092f);
-                        }
+                            architecturalBases, brickAccents, roofTiles, timberScreens, entranceGlass,
+                            plotCenter, width, depth, height, roadDirection, streetDirection,
+                            zone.Type, style, groupSeed);
+                        AddPlotGroundTreatment(
+                            paving, planting, plotCenter, width, depth, roadDirection, streetDirection,
+                            zone.Type, 9f);
+                        AddDistrictPlotTrees(
+                            districtTreeTrunks, districtTreeCrowns, plotCenter, width, depth,
+                            roadDirection, streetDirection, zone.Type, groupSeed);
                         if (zone.Type == "parking")
                             AddParkingBayMarkings(parkingMarkings, plotCenter, width, depth, roadDirection);
 
@@ -638,7 +733,7 @@ namespace Xiongan.DigitalTwin.Scene
                         (cellZ + 0.5f) * coverageCellSize);
                     if (!TryFindNearestRoadSegment(center, roadSegments, out _, out _, out var roadDistanceSquared) ||
                         roadDistanceSquared > 122f * 122f) continue;
-                    if (Vector3.Distance(center, showcaseCenter) < 214f) continue;
+                    if (IsInsideShowcaseExclusion(center, showcaseCenter, 214f)) continue;
                     if (controlledCenters.Any(controlled => Vector3.Distance(controlled, center) < 112f)) continue;
                     if (preservedLand.Any(polygon => PointInPolygon(center, polygon))) continue;
 
@@ -676,7 +771,7 @@ namespace Xiongan.DigitalTwin.Scene
 
             var coverageCreated = 0;
             var coveredCells = 0;
-            for (var round = 0; round < 5 && created < citywideSafetyLimit; round++)
+            for (var round = 0; round < 12 && created < citywideSafetyLimit; round++)
             {
                 foreach (var cell in coverageCells)
                 {
@@ -690,7 +785,7 @@ namespace Xiongan.DigitalTwin.Scene
                             ((hash % 1009) / 1008f - 0.5f) * coverageCellSize * 0.82f,
                             0f,
                             (((hash / 1009) % 1009) / 1008f - 0.5f) * coverageCellSize * 0.82f);
-                        if (Vector3.Distance(plotCenter, showcaseCenter) < 220f) continue;
+                        if (IsInsideShowcaseExclusion(plotCenter, showcaseCenter, 220f)) continue;
                         if (controlledCenters.Any(controlled => Vector3.Distance(controlled, plotCenter) < 118f)) continue;
                         if (preservedLand.Any(polygon => PointInPolygon(plotCenter, polygon))) continue;
 
@@ -703,9 +798,11 @@ namespace Xiongan.DigitalTwin.Scene
                             : containingZone.Type;
                         if (areaType is "parking" or "construction") continue;
 
-                        ResolveZonePlot(areaType, hash, out var width, out var depth, out var height, out var style);
-                        width *= 0.86f;
-                        depth *= 0.86f;
+                        var groupSeed = StableHash($"coverage-group:{cell.X}:{cell.Z}:{areaType}");
+                        ResolveZonePlot(areaType, groupSeed, out var width, out var depth, out var height, out var style);
+                        ApplyGroupMemberVariation(areaType, hash, ref width, ref depth, ref height);
+                        width *= 0.74f;
+                        depth *= 0.74f;
                         height *= 0.94f;
                         var plotRadius = Mathf.Sqrt(width * width + depth * depth) * 0.5f;
                         if (!TryFindNearestRoadSegment(plotCenter, roadSegments, out var roadFrom, out var roadTo,
@@ -721,23 +818,25 @@ namespace Xiongan.DigitalTwin.Scene
                         if (preservedLand.Any(polygon =>
                                 footprint.Any(corner => PointInPolygon(corner, polygon)))) continue;
                         if (occupied.Any(existing =>
-                                Vector3.Distance(existing.Center, plotCenter) < existing.Radius + plotRadius + 4.5f)) continue;
+                                Vector3.Distance(existing.Center, plotCenter) < existing.Radius + plotRadius + 3f)) continue;
 
-                        var materialIndex = XionganFacadeIndex(areaType, hash, facades.Length);
+                        var streetDirection = ClosestPointOnSegment(plotCenter, roadFrom, roadTo) - plotCenter;
+                        streetDirection.y = 0f;
+                        if (streetDirection.sqrMagnitude < 0.001f)
+                            streetDirection = Vector3.Cross(Vector3.up, roadDirection);
+                        streetDirection.Normalize();
+                        var materialIndex = XionganFacadeIndex(areaType, groupSeed, facades.Length);
                         AddCitywideBuilding(
                             facades[materialIndex], roofs, parapets, glazing, frames, roofEquipment,
-                            plotCenter, width, depth, height, roadDirection, style, hash, true);
-                        paving.AddPolygon(
-                            OrientedRectangle(plotCenter, width + 8f, depth + 8f, roadDirection), 0.082f);
-                        if (areaType is "residential" or "school" or "kindergarten")
-                        {
-                            var side = Vector3.Cross(Vector3.up, roadDirection).normalized;
-                            planting.AddPolygon(
-                                OrientedRectangle(
-                                    plotCenter + side * (depth * 0.5f + 2.8f),
-                                    width * 0.6f, 3.4f, roadDirection),
-                                0.092f);
-                        }
+                            architecturalBases, brickAccents, roofTiles, timberScreens, entranceGlass,
+                            plotCenter, width, depth, height, roadDirection, streetDirection,
+                            areaType, style, groupSeed, true);
+                        AddPlotGroundTreatment(
+                            paving, planting, plotCenter, width, depth, roadDirection, streetDirection,
+                            areaType, 8f);
+                        AddDistrictPlotTrees(
+                            districtTreeTrunks, districtTreeCrowns, plotCenter, width, depth,
+                            roadDirection, streetDirection, areaType, groupSeed);
                         occupied.Add((plotCenter, plotRadius));
                         counts[areaType] = counts.TryGetValue(areaType, out var count) ? count + 1 : 1;
                         coverageCreated++;
@@ -752,7 +851,7 @@ namespace Xiongan.DigitalTwin.Scene
             // cells a predictable street frontage while retaining all collision,
             // park and controlled-junction exclusions.
             var roadEdgeCreated = 0;
-            for (var sweep = 0; sweep < 5 && created < citywideSafetyLimit; sweep++)
+            for (var sweep = 0; sweep < 10 && created < citywideSafetyLimit; sweep++)
             {
                 foreach (var cell in coverageCells)
                 {
@@ -778,9 +877,11 @@ namespace Xiongan.DigitalTwin.Scene
                             ? (hash % 7 == 0 ? "commercial" : "residential")
                             : initialZone.Type;
                         if (areaType is "parking" or "construction") continue;
-                        ResolveZonePlot(areaType, hash, out var width, out var depth, out var height, out var style);
-                        width *= 0.78f;
-                        depth *= 0.8f;
+                        var groupSeed = StableHash($"road-edge-group:{cell.X}:{cell.Z}:{areaType}");
+                        ResolveZonePlot(areaType, groupSeed, out var width, out var depth, out var height, out var style);
+                        ApplyGroupMemberVariation(areaType, hash, ref width, ref depth, ref height);
+                        width *= 0.7f;
+                        depth *= 0.72f;
                         height *= 0.9f;
                         var plotRadius = Mathf.Sqrt(width * width + depth * depth) * 0.5f;
                         var sideSign = (attempt & 1) == 0 ? -1f : 1f;
@@ -790,7 +891,7 @@ namespace Xiongan.DigitalTwin.Scene
                                          roadNormal * sideSign * (plotRadius + 11f + ring * 7f);
                         if (Mathf.Abs(plotCenter.x - cell.Center.x) > coverageCellSize * 0.68f ||
                             Mathf.Abs(plotCenter.z - cell.Center.z) > coverageCellSize * 0.68f) continue;
-                        if (Vector3.Distance(plotCenter, showcaseCenter) < 220f) continue;
+                        if (IsInsideShowcaseExclusion(plotCenter, showcaseCenter, 220f)) continue;
                         if (controlledCenters.Any(controlled => Vector3.Distance(controlled, plotCenter) < 118f)) continue;
                         if (preservedLand.Any(polygon => PointInPolygon(plotCenter, polygon))) continue;
                         var containingZone = zones
@@ -808,22 +909,24 @@ namespace Xiongan.DigitalTwin.Scene
                         if (preservedLand.Any(polygon =>
                                 footprint.Any(corner => PointInPolygon(corner, polygon)))) continue;
                         if (occupied.Any(existing =>
-                                Vector3.Distance(existing.Center, plotCenter) < existing.Radius + plotRadius + 3.2f)) continue;
+                                Vector3.Distance(existing.Center, plotCenter) < existing.Radius + plotRadius + 2.2f)) continue;
 
-                        var materialIndex = XionganFacadeIndex(areaType, hash, facades.Length);
+                        var streetDirection = roadAnchor - plotCenter;
+                        streetDirection.y = 0f;
+                        if (streetDirection.sqrMagnitude < 0.001f) streetDirection = -roadNormal * sideSign;
+                        streetDirection.Normalize();
+                        var materialIndex = XionganFacadeIndex(areaType, groupSeed, facades.Length);
                         AddCitywideBuilding(
                             facades[materialIndex], roofs, parapets, glazing, frames, roofEquipment,
-                            plotCenter, width, depth, height, roadDirection, style, hash, true);
-                        paving.AddPolygon(
-                            OrientedRectangle(plotCenter, width + 7f, depth + 7f, roadDirection), 0.082f);
-                        if (areaType is "residential" or "school" or "kindergarten")
-                        {
-                            planting.AddPolygon(
-                                OrientedRectangle(
-                                    plotCenter + roadNormal * (depth * 0.5f + 2.5f),
-                                    width * 0.56f, 3.1f, roadDirection),
-                                0.092f);
-                        }
+                            architecturalBases, brickAccents, roofTiles, timberScreens, entranceGlass,
+                            plotCenter, width, depth, height, roadDirection, streetDirection,
+                            areaType, style, groupSeed, true);
+                        AddPlotGroundTreatment(
+                            paving, planting, plotCenter, width, depth, roadDirection, streetDirection,
+                            areaType, 7f);
+                        AddDistrictPlotTrees(
+                            districtTreeTrunks, districtTreeCrowns, plotCenter, width, depth,
+                            roadDirection, streetDirection, areaType, groupSeed);
                         occupied.Add((plotCenter, plotRadius));
                         counts[areaType] = counts.TryGetValue(areaType, out var count) ? count + 1 : 1;
                         roadEdgeCreated++;
@@ -835,17 +938,26 @@ namespace Xiongan.DigitalTwin.Scene
             coveredCells = coverageCells.Count(cell => CellOccupancy(cell) >= cell.Target);
 
             for (var index = 0; index < facades.Length; index++)
-                facades[index].Build($"全城背景建筑立面-{index + 1}", scene.Materials.Facades[index], root.transform);
-            roofs.Build("全城背景建筑屋面", scene.Materials.BuildingRoof, root.transform);
-            parapets.Build("全城背景建筑女儿墙", scene.Materials.Curb, root.transform);
-            glazing.Build("全城背景建筑实体窗带", scene.Materials.BuildingGlass, root.transform, false);
-            frames.Build("全城背景建筑实体窗框", scene.Materials.FacadeFrame, root.transform);
-            roofEquipment.Build("全城背景建筑屋顶机房", scene.Materials.BuildingRoof, root.transform);
-            paving.Build("全城建筑前场硬质铺装", scene.Materials.Sidewalk, root.transform, false);
-            planting.Build("住宅学校庭院绿地", scene.Materials.Grass, root.transform, false);
-            parkingGround.Build("停车功能区实体铺装", scene.Materials.ParkingGround, root.transform, false);
-            parkingMarkings.Build("停车功能区实体标线", scene.Materials.Marking, root.transform, false);
-            constructionGround.Build("施工功能区实体场地", scene.Materials.ConstructionGround, root.transform, false);
+                facades[index].Build($"全城背景建筑立面-{index + 1}", scene.Materials.Facades[index],
+                    root.transform, true, SceneDetailClass.Essential, 768f);
+            roofs.Build("全城背景建筑屋面", scene.Materials.BuildingRoof, root.transform,
+                true, SceneDetailClass.Essential, 768f);
+            parapets.Build("全城背景建筑女儿墙", scene.Materials.Curb, root.transform, true, SceneDetailClass.Fine);
+            glazing.Build("全城背景建筑实体窗格", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Fine);
+            frames.Build("全城背景建筑实体窗框", scene.Materials.FacadeFrame, root.transform, true, SceneDetailClass.Fine);
+            roofEquipment.Build("全城背景建筑屋顶机房", scene.Materials.BuildingRoof, root.transform, true, SceneDetailClass.Fine);
+            architecturalBases.Build("雄安组团统一石材基座与院墙", scene.Materials.ArchitecturalStone, root.transform, true, SceneDetailClass.Context);
+            brickAccents.Build("雄安组团暖灰砖红识别构件", scene.Materials.BrickAccent, root.transform, true, SceneDetailClass.Context);
+            roofTiles.Build("雄安组团灰色深檐与屋面", scene.Materials.GreyRoofTile, root.transform, true, SceneDetailClass.Context);
+            timberScreens.Build("雄安组团入口格栅与雨棚", scene.Materials.TimberScreen, root.transform, true, SceneDetailClass.Fine);
+            entranceGlass.Build("雄安组团首层门廊与商业界面", scene.Materials.BuildingGlass, root.transform, false, SceneDetailClass.Context);
+            paving.Build("全城建筑前场硬质铺装", scene.Materials.Sidewalk, root.transform, false, SceneDetailClass.Context);
+            planting.Build("住宅学校庭院绿地", scene.Materials.Grass, root.transform, false, SceneDetailClass.Context);
+            districtTreeTrunks.Build("全城规划地块树干", scene.Materials.TreeBark, root.transform, true, SceneDetailClass.Context);
+            districtTreeCrowns.Build("全城规划地块树冠", scene.Materials.TreeLeaves, root.transform, true, SceneDetailClass.Context);
+            parkingGround.Build("停车功能区实体铺装", scene.Materials.ParkingGround, root.transform, false, SceneDetailClass.Context);
+            parkingMarkings.Build("停车功能区实体标线", scene.Materials.Marking, root.transform, false, SceneDetailClass.Fine);
+            constructionGround.Build("施工功能区实体场地", scene.Materials.ConstructionGround, root.transform, false, SceneDetailClass.Context);
             root.name = $"全城功能区连续街区-{created}栋";
             scene.RegisterGeneratedBuildings(created);
             Debug.Log($"Citywide land-use infill complete: {created} buildings; " +
@@ -944,11 +1056,11 @@ namespace Xiongan.DigitalTwin.Scene
                 created++;
             }
 
-            paths.Build("公园十字慢行步道", scene.Materials.Sidewalk, root.transform, false);
-            plazas.Build("公园廊亭前场铺装", scene.Materials.HeroSidewalk, root.transform, false);
+            paths.Build("公园十字慢行步道", scene.Materials.Sidewalk, root.transform, false, SceneDetailClass.Context);
+            plazas.Build("公园廊亭前场铺装", scene.Materials.HeroSidewalk, root.transform, false, SceneDetailClass.Context);
             pavilionWalls.Build("公园公共廊亭浅色实体墙", scene.Materials.Facades[0], root.transform);
             pavilionRoofs.Build("公园公共廊亭平屋盖", scene.Materials.BuildingRoof, root.transform);
-            pavilionFrames.Build("公园公共廊亭细柱", scene.Materials.FacadeFrame, root.transform);
+            pavilionFrames.Build("公园公共廊亭细柱", scene.Materials.FacadeFrame, root.transform, true, SceneDetailClass.Fine);
             root.name = $"可识别公园广场与公共廊亭-{created}处";
             Debug.Log($"Identifiable open spaces complete: {created}/{openSpaces.Count}");
         }
@@ -956,9 +1068,21 @@ namespace Xiongan.DigitalTwin.Scene
         private static void AddCitywideBuilding(
             MeshAccumulator facade, MeshAccumulator roofs, MeshAccumulator parapets,
             MeshAccumulator glazing, MeshAccumulator frames, MeshAccumulator roofEquipment,
+            MeshAccumulator architecturalBases, MeshAccumulator brickAccents,
+            MeshAccumulator roofTiles, MeshAccumulator timberScreens, MeshAccumulator entranceGlass,
             Vector3 center, float width, float depth, float height,
-            Vector3 roadDirection, int style, int seed, bool simplified = false)
+            Vector3 roadDirection, Vector3 streetDirection,
+            string areaType, int style, int seed, bool simplified = false)
         {
+            roadDirection.y = 0f;
+            if (roadDirection.sqrMagnitude < 0.001f) roadDirection = Vector3.right;
+            roadDirection.Normalize();
+            streetDirection.y = 0f;
+            streetDirection -= roadDirection * Vector3.Dot(streetDirection, roadDirection);
+            if (streetDirection.sqrMagnitude < 0.001f)
+                streetDirection = Vector3.Cross(Vector3.up, roadDirection);
+            streetDirection.Normalize();
+
             var volumes = new List<(Vector3 Center, float Width, float Depth, float Height, Vector3 Direction)>();
             var normal = Vector3.Cross(Vector3.up, roadDirection).normalized;
             if (style == 4)
@@ -985,6 +1109,33 @@ namespace Xiongan.DigitalTwin.Scene
                 volumes.Add((center + normal * depth * 0.35f, width * 0.58f, depth * 0.24f,
                     height * 0.56f, roadDirection));
             }
+            else if (style == 7 && width > 27f && depth > 17f)
+            {
+                volumes.Add((center - streetDirection * depth * 0.31f,
+                    width, depth * 0.3f, height, roadDirection));
+                volumes.Add((center - roadDirection * width * 0.39f + streetDirection * depth * 0.08f,
+                    width * 0.22f, depth * 0.62f, height * 0.96f, roadDirection));
+                volumes.Add((center + roadDirection * width * 0.39f + streetDirection * depth * 0.08f,
+                    width * 0.22f, depth * 0.62f, height * 0.92f, roadDirection));
+            }
+            else if (style == 8 && width > 31f && depth > 18f)
+            {
+                // Campus/civic prototype: two calm bars and a lower glazed link.
+                volumes.Add((center - streetDirection * depth * 0.23f,
+                    width, depth * 0.36f, height, roadDirection));
+                volumes.Add((center + streetDirection * depth * 0.25f,
+                    width * 0.82f, depth * 0.3f, height * 0.82f, roadDirection));
+                volumes.Add((center,
+                    depth * 0.45f, width * 0.18f, height * 0.42f, normal));
+            }
+            else if (style == 9 && width > 29f && depth > 18f)
+            {
+                // Stepped office/residential prototype with a readable skyline.
+                volumes.Add((center + streetDirection * depth * 0.08f,
+                    width, depth * 0.78f, height * 0.62f, roadDirection));
+                volumes.Add((center - streetDirection * depth * 0.12f - roadDirection * width * 0.11f,
+                    width * 0.68f, depth * 0.58f, height, roadDirection));
+            }
             else
             {
                 volumes.Add((center, width, depth, height, roadDirection));
@@ -997,18 +1148,113 @@ namespace Xiongan.DigitalTwin.Scene
                     volume.Center, volume.Width, volume.Depth, volume.Direction);
                 facade.AddFacadeWalls(footprint, 0.084f, volume.Height, 8.5f);
                 roofs.AddPolygon(footprint, volume.Height + 0.024f);
-                parapets.AddFacadeWalls(footprint, volume.Height, volume.Height + 0.58f, 4f);
+                var baseFootprint = OrientedRectangle(
+                    volume.Center, volume.Width + 0.24f, volume.Depth + 0.24f, volume.Direction);
+                architecturalBases.AddFacadeWalls(baseFootprint, 0.078f, 1.32f, 6f);
+                var eaveOverhang = style switch
+                {
+                    7 => 1.15f,
+                    8 => 1.85f,
+                    5 => 0.9f,
+                    4 or 9 => 0.7f,
+                    _ => 0.55f + seed % 4 * 0.12f,
+                };
+                var eaveThickness = style is 7 or 8 ? 0.3f : 0.2f;
+                var eaveFootprint = OrientedRectangle(
+                    volume.Center,
+                    volume.Width + eaveOverhang * 2f,
+                    volume.Depth + eaveOverhang * 2f,
+                    volume.Direction);
+                roofTiles.AddExtrudedPolygon(
+                    eaveFootprint,
+                    volume.Height + 0.05f,
+                    volume.Height + 0.05f + eaveThickness);
+                if (style is 3 or 4 or 6 or 9)
+                    parapets.AddFacadeWalls(footprint, volume.Height + 0.43f, volume.Height + 0.8f, 4f);
                 AddCitywideFacadeBands(
                     glazing, frames, footprint, volume.Height, seed + index * 31, style, simplified);
             }
 
-            var equipmentCenter = center + roadDirection * width * 0.12f - normal * depth * 0.08f;
-            var equipment = OrientedRectangle(
-                equipmentCenter,
-                Mathf.Clamp(width * 0.22f, 3.2f, 8f),
-                Mathf.Clamp(depth * 0.2f, 2.8f, 6.5f),
-                roadDirection);
-            roofEquipment.AddExtrudedPolygon(equipment, height + 0.08f, height + 1.25f + style * 0.08f);
+            var frontEdge = center + streetDirection * (depth * 0.5f + 0.13f);
+            var entranceWidth = Mathf.Clamp(width * 0.2f, 4.8f, 7.4f);
+            var civicFrontage = areaType is "commercial" or "exhibition_centre" or "industrial";
+            AddFacadeStrip(entranceGlass, frontEdge, roadDirection, streetDirection,
+                civicFrontage ? width * 0.72f : entranceWidth, 0.28f, 3.72f, 0.08f);
+
+            if (civicFrontage && !simplified)
+            {
+                const int columnCount = 6;
+                for (var column = 0; column < columnCount; column++)
+                {
+                    var along = Mathf.Lerp(-width * 0.38f, width * 0.38f,
+                        column / (float)(columnCount - 1));
+                    architecturalBases.AddExtrudedPolygon(
+                        OrientedRectangle(
+                            frontEdge + roadDirection * along + streetDirection * 0.72f,
+                            0.36f, 0.36f, roadDirection),
+                        0.08f, 4.08f);
+                }
+            }
+
+            var canopy = OrientedRectangle(
+                frontEdge + streetDirection * 1.05f,
+                entranceWidth + 1.4f, 2.35f, roadDirection);
+            timberScreens.AddExtrudedPolygon(canopy, 3.76f, 4.04f);
+            var slatCount = simplified ? 4 : 6;
+            for (var slat = 0; slat < slatCount; slat++)
+            {
+                var along = Mathf.Lerp(-entranceWidth * 0.42f, entranceWidth * 0.42f,
+                    slatCount == 1 ? 0.5f : slat / (float)(slatCount - 1));
+                var slatFootprint = OrientedRectangle(
+                    frontEdge + roadDirection * along + streetDirection * 0.22f,
+                    0.16f, 0.2f, roadDirection);
+                timberScreens.AddExtrudedPolygon(slatFootprint, 0.34f, 3.78f);
+            }
+
+            var useBrickAccent = areaType is "residential" or "school" or "kindergarten" or "exhibition_centre"
+                                 && seed % 5 == 0;
+            if (useBrickAccent)
+            {
+                var accentHeight = Mathf.Max(4.2f, height - 0.75f);
+                var offset = width * 0.38f;
+                AddFacadeStrip(brickAccents, frontEdge + roadDirection * offset,
+                    roadDirection, streetDirection, 0.95f, 1.32f, accentHeight, 0.12f);
+                AddFacadeStrip(brickAccents, frontEdge - roadDirection * offset,
+                    roadDirection, streetDirection, 0.95f, 1.32f, accentHeight, 0.12f);
+            }
+
+            if (style == 7)
+            {
+                var entranceGap = Mathf.Clamp(width * 0.2f, 5.2f, 7.5f);
+                var wallWidth = Mathf.Max(2.5f, (width - entranceGap) * 0.5f);
+                var wallOffset = entranceGap * 0.5f + wallWidth * 0.5f;
+                foreach (var sign in new[] { -1f, 1f })
+                {
+                    var wallCenter = center + streetDirection * (depth * 0.49f) +
+                                     roadDirection * wallOffset * sign;
+                    architecturalBases.AddExtrudedPolygon(
+                        OrientedRectangle(wallCenter, wallWidth, 0.34f, roadDirection),
+                        0.09f, 1.48f);
+                }
+            }
+
+            AddFacadeIdentityFeatures(
+                frames, brickAccents, roofTiles, timberScreens, glazing,
+                center, width, depth, height, roadDirection, streetDirection,
+                areaType, style, seed, simplified);
+
+            if (style is 3 or 4 or 6 || seed % 5 == 0)
+            {
+                var tallest = volumes.Max(volume => volume.Height);
+                var equipmentCenter = center + roadDirection * width * 0.12f - normal * depth * 0.08f;
+                var equipment = OrientedRectangle(
+                    equipmentCenter,
+                    Mathf.Clamp(width * 0.22f, 3.2f, 8f),
+                    Mathf.Clamp(depth * 0.2f, 2.8f, 6.5f),
+                    roadDirection);
+                roofEquipment.AddExtrudedPolygon(
+                    equipment, tallest + 0.3f, tallest + 1.35f + style * 0.06f);
+            }
         }
 
         private static void AddCitywideFacadeBands(
@@ -1017,7 +1263,7 @@ namespace Xiongan.DigitalTwin.Scene
         {
             if (footprint.Count < 3 || height < 7f) return;
             var center = footprint.Aggregate(Vector3.zero, (sum, point) => sum + point) / footprint.Count;
-            var floorHeight = 3.25f + seed % 3 * 0.12f;
+            var floorHeight = 3.18f + seed % 4 * 0.08f;
             for (var edgeIndex = 0; edgeIndex < footprint.Count; edgeIndex++)
             {
                 if (simplified && edgeIndex % 2 == 1) continue;
@@ -1031,14 +1277,6 @@ namespace Xiongan.DigitalTwin.Scene
                 var edgeCenter = (from + to) * 0.5f;
                 var outward = Vector3.ProjectOnPlane(edgeCenter - center, Vector3.up).normalized;
                 if (outward.sqrMagnitude < 0.2f) continue;
-
-                var groundCenter = edgeCenter + Vector3.up * 2.05f + outward * 0.075f;
-                AddOutwardQuad(frames,
-                    groundCenter - direction * length * 0.46f - Vector3.up * 1.72f,
-                    groundCenter + direction * length * 0.46f - Vector3.up * 1.72f,
-                    groundCenter + direction * length * 0.46f + Vector3.up * 1.72f,
-                    groundCenter - direction * length * 0.46f + Vector3.up * 1.72f,
-                    outward);
 
                 if (style == 4)
                 {
@@ -1056,22 +1294,254 @@ namespace Xiongan.DigitalTwin.Scene
                 }
                 else
                 {
-                    var floor = 0;
-                    for (var y = 5.15f; y + 0.85f < height; y += floorHeight * (simplified ? 3f : 2f), floor++)
+                    var targetBayWidth = style switch
                     {
-                        var bandWidth = length * (style is 3 or 6 ? 0.86f : 0.78f);
-                        AddFacadeStrip(glazing, edgeCenter, direction, outward, bandWidth,
-                            y - 0.72f, y + 0.72f, 0.09f);
-                        AddFacadeStrip(frames, edgeCenter, direction, outward, length * 0.9f,
-                            y - 1.08f, y - 0.94f, 0.12f);
-                        if ((floor + edgeIndex + seed) % 3 == 0)
+                        3 or 6 => 4.7f,
+                        5 => 3.1f,
+                        7 => 4.15f,
+                        8 => 3.3f,
+                        9 => 3.8f,
+                        _ => 3.55f,
+                    };
+                    var bayCount = Mathf.Clamp(
+                        Mathf.FloorToInt(length / (simplified ? 5.8f : targetBayWidth)),
+                        3,
+                        simplified ? 8 : 14);
+                    var usableWidth = length * (style is 3 or 6 or 8 ? 0.88f : 0.82f);
+                    var bayPitch = usableWidth / bayCount;
+                    var windowRatio = style switch
+                    {
+                        3 or 6 => 0.76f,
+                        5 => 0.68f,
+                        7 => 0.48f,
+                        8 => 0.7f,
+                        _ => 0.62f,
+                    };
+                    var windowWidth = Mathf.Clamp(bayPitch * windowRatio, 1.05f, 2.65f);
+                    var rowStep = simplified ? 2 : 1;
+                    var floorCount = Mathf.Max(1, Mathf.FloorToInt((height - 1.4f) / floorHeight));
+                    for (var floor = 1; floor < floorCount; floor += rowStep)
+                    {
+                        var windowCenterY = 1.3f + floor * floorHeight + floorHeight * 0.5f;
+                        if (windowCenterY + 0.92f >= height) continue;
+                        var windowHeight = simplified
+                            ? 1.35f
+                            : style switch
+                            {
+                                3 or 6 => 2.08f,
+                                5 => 1.78f,
+                                7 => 1.48f,
+                                8 => 1.92f,
+                                _ => 1.62f,
+                            };
+                        for (var bay = 0; bay < bayCount; bay++)
                         {
-                            var dividerOffset = ((floor + seed) % 2 == 0 ? -1f : 1f) * bandWidth * 0.22f;
-                            AddFacadeStrip(frames, edgeCenter + direction * dividerOffset, direction, outward,
-                                0.13f, y - 0.86f, y + 0.86f, 0.13f);
+                            if (!simplified && (bay * 7 + floor * 5 + edgeIndex + seed) % 29 == 0) continue;
+                            var along = -usableWidth * 0.5f + bayPitch * (bay + 0.5f);
+                            var windowCenter = edgeCenter + direction * along;
+                            var bottom = windowCenterY - windowHeight * 0.5f;
+                            var top = windowCenterY + windowHeight * 0.5f;
+                            AddFacadeStrip(glazing, windowCenter, direction, outward,
+                                windowWidth, bottom, top, 0.085f);
+                            AddFacadeStrip(frames, windowCenter, direction, outward,
+                                windowWidth + 0.18f, bottom - 0.09f, bottom + 0.025f, 0.13f);
+                            if (!simplified)
+                            {
+                                // Real window openings read as four-sided frames instead of
+                                // flat dark stickers. Keep the extra geometry on foreground
+                                // buildings only so the city-wide WebGL budget stays bounded.
+                                AddFacadeStrip(frames, windowCenter, direction, outward,
+                                    windowWidth + 0.18f, top - 0.025f, top + 0.09f, 0.13f);
+                                AddFacadeStrip(frames,
+                                    windowCenter - direction * (windowWidth * 0.5f + 0.06f),
+                                    direction, outward, 0.12f, bottom, top, 0.13f);
+                                AddFacadeStrip(frames,
+                                    windowCenter + direction * (windowWidth * 0.5f + 0.06f),
+                                    direction, outward, 0.12f, bottom, top, 0.13f);
+                            }
+                            if (!simplified && (bay + floor + seed) % 4 == 0)
+                                AddFacadeStrip(frames, windowCenter, direction, outward,
+                                    0.075f, bottom, top, 0.135f);
+                        }
+
+                        if (!simplified && style is 3 or 6 && floor == 1)
+                        {
+                            for (var bay = 0; bay <= bayCount; bay += 2)
+                            {
+                                var along = -usableWidth * 0.5f + bayPitch * bay;
+                                AddFacadeStrip(frames, edgeCenter + direction * along,
+                                    direction, outward, 0.16f, 1.45f, height - 0.75f, 0.18f);
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        private static void AddFacadeIdentityFeatures(
+            MeshAccumulator frames,
+            MeshAccumulator brickAccents,
+            MeshAccumulator roofTiles,
+            MeshAccumulator timberScreens,
+            MeshAccumulator glazing,
+            Vector3 center,
+            float width,
+            float depth,
+            float height,
+            Vector3 roadDirection,
+            Vector3 streetDirection,
+            string areaType,
+            int style,
+            int seed,
+            bool simplified)
+        {
+            if (simplified || height < 9f) return;
+            roadDirection = Vector3.ProjectOnPlane(roadDirection, Vector3.up).normalized;
+            streetDirection = Vector3.ProjectOnPlane(streetDirection, Vector3.up).normalized;
+            if (roadDirection.sqrMagnitude < 0.5f || streetDirection.sqrMagnitude < 0.5f) return;
+
+            var front = center + streetDirection * (depth * 0.5f + 0.14f);
+
+            void AddSlab(MeshAccumulator target, float y, float span, float projection, float thickness)
+            {
+                var slabCenter = front + streetDirection * (projection * 0.5f);
+                target.AddExtrudedPolygon(
+                    OrientedRectangle(slabCenter, span, projection, roadDirection),
+                    y, y + thickness);
+            }
+
+            void AddFin(MeshAccumulator target, float along, float bottom, float top, float finWidth, float projection)
+            {
+                var finCenter = front + roadDirection * along + streetDirection * (projection * 0.5f);
+                target.AddExtrudedPolygon(
+                    OrientedRectangle(finCenter, finWidth, projection, roadDirection),
+                    bottom, top);
+            }
+
+            if (style is 5 or 7)
+            {
+                var span = width * (style == 7 ? 0.78f : 0.86f);
+                var projection = style == 7 ? 1.35f : 1.05f;
+                var floors = Mathf.Max(2, Mathf.FloorToInt((height - 3.7f) / 3.22f));
+                for (var floor = 1; floor < floors; floor += 2)
+                {
+                    var slabY = 3.72f + floor * 3.22f;
+                    if (slabY + 1.3f >= height) break;
+                    AddSlab(roofTiles, slabY, span, projection, 0.16f);
+                    AddFacadeStrip(
+                        glazing,
+                        front,
+                        roadDirection,
+                        streetDirection,
+                        span * 0.94f,
+                        slabY + 0.2f,
+                        slabY + 1.12f,
+                        projection + 0.08f);
+                }
+                AddFin(timberScreens, -span * 0.51f, 1.25f, height - 0.5f, 0.22f, 0.74f);
+                AddFin(timberScreens, span * 0.51f, 1.25f, height - 0.5f, 0.22f, 0.74f);
+            }
+            else if (style is 3 or 6 or 9)
+            {
+                var finCount = style == 9 ? 4 : 5;
+                var span = width * 0.78f;
+                for (var index = 0; index < finCount; index++)
+                {
+                    var along = Mathf.Lerp(-span * 0.5f, span * 0.5f,
+                        finCount == 1 ? 0.5f : index / (float)(finCount - 1));
+                    AddFin(index % 2 == 0 ? brickAccents : frames,
+                        along, 1.35f, height - 0.62f, index % 2 == 0 ? 0.28f : 0.16f, 0.82f);
+                }
+                AddSlab(frames, Mathf.Min(height * 0.58f, height - 4.2f), width * 0.88f, 0.66f, 0.2f);
+            }
+            else if (style == 8)
+            {
+                var span = width * 0.9f;
+                for (var y = 4.25f; y < height - 1.25f; y += 3.35f)
+                    AddSlab(roofTiles, y, span, 0.78f, 0.14f);
+                foreach (var along in new[] { -span * 0.38f, 0f, span * 0.38f })
+                    AddFin(frames, along, 0.16f, Mathf.Min(height - 0.45f, 6.2f), 0.28f, 1.15f);
+            }
+            else
+            {
+                var accent = (seed & 1) == 0 ? brickAccents : timberScreens;
+                var span = width * 0.72f;
+                AddFin(accent, -span * 0.5f, 1.3f, height - 0.58f, 0.32f, 0.68f);
+                AddFin(accent, span * 0.5f, 1.3f, height - 0.58f, 0.32f, 0.68f);
+                AddSlab(frames, height - 0.92f, width * 0.86f, 0.62f, 0.22f);
+            }
+
+            if (areaType is "commercial" or "exhibition_centre")
+                AddSlab(timberScreens, 4.18f, width * 0.78f, 2.15f, 0.26f);
+        }
+
+        private static void AddPlotGroundTreatment(
+            MeshAccumulator paving,
+            MeshAccumulator planting,
+            Vector3 center,
+            float width,
+            float depth,
+            Vector3 roadDirection,
+            Vector3 streetDirection,
+            string areaType,
+            float margin)
+        {
+            var landscaped = areaType is "residential" or "school" or "kindergarten";
+            if (!landscaped)
+            {
+                paving.AddPolygon(
+                    OrientedRectangle(center, width + margin, depth + margin, roadDirection), 0.082f);
+                return;
+            }
+
+            // New-area residential and education plots read as planted courtyards,
+            // with a compact entrance walk instead of a building-sized grey slab.
+            planting.AddPolygon(
+                OrientedRectangle(center, width + margin, depth + margin, roadDirection), 0.083f);
+            var walkCenter = center + streetDirection * (depth * 0.5f + margin * 0.24f);
+            paving.AddPolygon(
+                OrientedRectangle(
+                    walkCenter,
+                    Mathf.Clamp(width * 0.18f, 4.2f, 7f),
+                    margin * 0.9f,
+                    roadDirection),
+                0.093f);
+        }
+
+        private static void AddDistrictPlotTrees(
+            MeshAccumulator trunks,
+            MeshAccumulator crowns,
+            Vector3 center,
+            float width,
+            float depth,
+            Vector3 roadDirection,
+            Vector3 streetDirection,
+            string areaType,
+            int seed)
+        {
+            var count = areaType is "residential" or "school" or "kindergarten"
+                ? 1
+                : (areaType is "commercial" or "exhibition_centre") && seed % 3 == 0 ? 1 : 0;
+            for (var index = 0; index < count; index++)
+            {
+                var treeSeed = StableHash($"plot-tree:{seed}:{index}");
+                var sideSign = (treeSeed & 1) == 0 ? -1f : 1f;
+                var point = center +
+                            streetDirection * (depth * 0.5f + 2.1f) +
+                            roadDirection * (width * 0.31f * sideSign);
+                var height = 5.8f + treeSeed % 13 * 0.16f;
+                trunks.AddCylinder(
+                    point + Vector3.up * height * 0.27f,
+                    height * 0.042f,
+                    height * 0.54f,
+                    5);
+                var crownCenter = point + Vector3.up * height * 0.7f;
+                var crownWidth = height * (0.23f + treeSeed / 17 % 5 * 0.012f);
+                crowns.AddEllipsoid(
+                    crownCenter,
+                    new Vector3(crownWidth, height * 0.25f, crownWidth * 0.84f),
+                    5,
+                    7);
             }
         }
 
@@ -1157,6 +1627,22 @@ namespace Xiongan.DigitalTwin.Scene
             };
         }
 
+        private static void ApplyGroupMemberVariation(
+            string areaType, int memberSeed,
+            ref float width, ref float depth, ref float height)
+        {
+            // Members of a planning group share the same base style and floor
+            // band. Small dimensional changes prevent repetition without turning
+            // the district back into a collection of unrelated random boxes.
+            var widthFactor = 0.96f + memberSeed % 9 / 100f;
+            var depthFactor = 0.96f + memberSeed / 11 % 9 / 100f;
+            var heightStep = memberSeed / 101 % 3 - 1;
+            width *= widthFactor;
+            depth *= depthFactor;
+            height += heightStep * (areaType is "kindergarten" or "industrial" ? 0.35f : 0.52f);
+            height = Mathf.Max(8.5f, height);
+        }
+
         private static void ResolveZonePlot(
             string areaType, int seed,
             out float width, out float depth, out float height, out int style)
@@ -1168,35 +1654,37 @@ namespace Xiongan.DigitalTwin.Scene
             switch (areaType)
             {
                 case "commercial":
-                    width = 31f + seed % 18;
-                    depth = 19f + seed / 7 % 10;
-                    height = 24f + seed / 13 % 8 * 3.3f;
-                    style = seed % 5 == 0 ? 4 : seed % 3 == 0 ? 6 : 3;
-                    if (style == 4) height += 7f;
+                    width = 32f + seed % 17;
+                    depth = 20f + seed / 7 % 9;
+                    style = seed % 13 == 0 ? 4 : seed % 5 == 0 ? 9 : seed % 3 == 0 ? 6 : 3;
+                    var commercialFloors = style == 4
+                        ? 12 + seed / 13 % 4
+                        : 7 + seed / 13 % 5;
+                    height = commercialFloors * 3.28f;
                     break;
                 case "school":
                     width = 40f + seed % 18;
-                    depth = 15f + seed / 7 % 7;
-                    height = 14f + seed / 13 % 3 * 2.8f;
-                    style = seed % 3 == 0 ? 6 : 5;
+                    depth = 18f + seed / 7 % 7;
+                    height = (4 + seed / 13 % 3) * 3.25f;
+                    style = seed % 3 == 0 ? 8 : seed % 4 == 0 ? 6 : seed % 5 == 0 ? 7 : 5;
                     break;
                 case "kindergarten":
                     width = 25f + seed % 13;
-                    depth = 15f + seed / 7 % 6;
-                    height = 10.5f + seed / 13 % 3 * 2.1f;
-                    style = seed % 2 == 0 ? 5 : 6;
+                    depth = 17f + seed / 7 % 6;
+                    height = (3 + seed / 13 % 2) * 3.18f;
+                    style = seed % 3 == 0 ? 8 : seed % 2 == 0 ? 7 : 5;
                     break;
                 case "industrial":
                     width = 42f + seed % 19;
                     depth = 23f + seed / 7 % 11;
-                    height = 12f + seed / 13 % 3 * 2.6f;
+                    height = (3 + seed / 13 % 3) * 3.2f;
                     style = 3;
                     break;
                 case "exhibition_centre":
                     width = 46f + seed % 15;
                     depth = 24f + seed / 7 % 9;
-                    height = 17f + seed / 13 % 4 * 2.7f;
-                    style = 6;
+                    height = (4 + seed / 13 % 4) * 3.35f;
+                    style = seed % 2 == 0 ? 8 : 6;
                     break;
                 case "construction":
                     width = 24f + seed % 15;
@@ -1211,10 +1699,11 @@ namespace Xiongan.DigitalTwin.Scene
                     style = 3;
                     break;
                 default:
-                    width = 29f + seed % 18;
-                    depth = 15f + seed / 7 % 7;
-                    height = 27f + seed / 13 % 5 * 3.15f;
-                    style = seed % 7 == 0 ? 5 : seed % 4 == 0 ? 2 : 1;
+                    width = 34f + seed % 14;
+                    depth = 20f + seed / 7 % 7;
+                    height = (6 + seed / 13 % 6) * 3.18f;
+                    var residentialVariant = seed % 10;
+                    style = residentialVariant < 3 ? 7 : residentialVariant < 5 ? 9 : residentialVariant < 8 ? 5 : 1;
                     break;
             }
         }
@@ -1786,24 +2275,24 @@ namespace Xiongan.DigitalTwin.Scene
             var shrubMasses = new MeshAccumulator();
             foreach (var offset in new[]
                      {
-                         new Vector3(-43f, 0f, -44f), new Vector3(43f, 0f, -44f),
-                         new Vector3(-43f, 0f, 44f), new Vector3(43f, 0f, 44f),
+                         new Vector3(-57f, 0f, -57f), new Vector3(57f, 0f, -57f),
+                         new Vector3(-57f, 0f, 57f), new Vector3(57f, 0f, 57f),
                      })
             {
-                paving.AddPolygon(Rectangle(center + offset, 57f, 58f), 0.082f);
-                pocketGreen.AddPolygon(Rectangle(center + offset, 51f, 51f), 0.094f);
+                paving.AddPolygon(Rectangle(center + offset, 86f, 86f), 0.082f);
+                pocketGreen.AddPolygon(Rectangle(center + offset, 80f, 80f), 0.094f);
                 var signX = Mathf.Sign(offset.x);
                 var signZ = Mathf.Sign(offset.z);
-                planterEdges.AddBox(center + offset + new Vector3(-signX * 21f, 0.17f, 0f), new Vector3(0.44f, 0.34f, 34f));
-                planterEdges.AddBox(center + offset + new Vector3(0f, 0.17f, -signZ * 21f), new Vector3(34f, 0.34f, 0.44f));
-                for (var segment = -3; segment <= 3; segment++)
+                planterEdges.AddBox(center + offset + new Vector3(-signX * 35f, 0.17f, 0f), new Vector3(0.44f, 0.34f, 58f));
+                planterEdges.AddBox(center + offset + new Vector3(0f, 0.17f, -signZ * 35f), new Vector3(58f, 0.34f, 0.44f));
+                for (var segment = -5; segment <= 5; segment++)
                 {
-                    var heightVariation = 0.68f + (segment + 3) % 3 * 0.08f;
+                    var heightVariation = 0.68f + (segment + 6) % 3 * 0.08f;
                     shrubMasses.AddEllipsoid(
-                        center + offset + new Vector3(-signX * 19.5f, heightVariation, segment * 5.15f),
+                        center + offset + new Vector3(-signX * 33.5f, heightVariation, segment * 5.15f),
                         new Vector3(1.05f, heightVariation, 1.35f), 12, 18);
                     shrubMasses.AddEllipsoid(
-                        center + offset + new Vector3(segment * 5.15f, heightVariation, -signZ * 19.5f),
+                        center + offset + new Vector3(segment * 5.15f, heightVariation, -signZ * 33.5f),
                         new Vector3(1.35f, heightVariation, 1.05f), 12, 18);
                 }
             }
@@ -1811,6 +2300,82 @@ namespace Xiongan.DigitalTwin.Scene
             pocketGreen.Build("Showcase corner planting", scene.Materials.HeroGrass, parent, false);
             planterEdges.Build("Showcase stone planter edges", scene.Materials.Curb, parent);
             shrubMasses.Build("Showcase clipped evergreen hedge masses", scene.Materials.ShrubLeaves, parent);
+        }
+
+        private static void CreateShowcaseBoulevardMedians(
+            SceneBuilder scene, Transform parent, Vector3 center)
+        {
+            // The screenshot junction gets complete physical median islands.
+            // Every curb, planting bed, shrub and tree is mesh geometry.
+            var planting = new MeshAccumulator();
+            var curb = new MeshAccumulator();
+            var shrubs = new MeshAccumulator();
+            var trunks = new MeshAccumulator();
+            var crowns = new MeshAccumulator();
+            foreach (var direction in new[]
+                     {
+                         Vector3.forward, Vector3.back, Vector3.right, Vector3.left,
+                     })
+            {
+                const float islandLength = 66f;
+                const float islandWidth = 5.8f;
+                var islandCenter = center + direction * 57f;
+                var alongZ = Mathf.Abs(direction.z) > 0.5f;
+                var width = alongZ ? islandWidth : islandLength;
+                var depth = alongZ ? islandLength : islandWidth;
+                planting.AddPolygon(
+                    Rectangle(islandCenter, width - 0.8f, depth - 0.8f), 0.112f);
+
+                if (alongZ)
+                {
+                    curb.AddBox(islandCenter + Vector3.right * (islandWidth * 0.5f),
+                        new Vector3(0.42f, 0.34f, islandLength));
+                    curb.AddBox(islandCenter - Vector3.right * (islandWidth * 0.5f),
+                        new Vector3(0.42f, 0.34f, islandLength));
+                    curb.AddBox(islandCenter + Vector3.forward * (islandLength * 0.5f),
+                        new Vector3(islandWidth, 0.34f, 0.42f));
+                    curb.AddBox(islandCenter - Vector3.forward * (islandLength * 0.5f),
+                        new Vector3(islandWidth, 0.34f, 0.42f));
+                }
+                else
+                {
+                    curb.AddBox(islandCenter + Vector3.forward * (islandWidth * 0.5f),
+                        new Vector3(islandLength, 0.34f, 0.42f));
+                    curb.AddBox(islandCenter - Vector3.forward * (islandWidth * 0.5f),
+                        new Vector3(islandLength, 0.34f, 0.42f));
+                    curb.AddBox(islandCenter + Vector3.right * (islandLength * 0.5f),
+                        new Vector3(0.42f, 0.34f, islandWidth));
+                    curb.AddBox(islandCenter - Vector3.right * (islandLength * 0.5f),
+                        new Vector3(0.42f, 0.34f, islandWidth));
+                }
+
+                for (var index = -3; index <= 3; index++)
+                {
+                    var point = islandCenter + direction * index * 8.1f;
+                    var radius = index % 2 == 0
+                        ? new Vector3(1.15f, 0.72f, 1f)
+                        : new Vector3(0.95f, 0.64f, 1.15f);
+                    shrubs.AddEllipsoid(point + Vector3.up * radius.y, radius, 6, 10);
+                }
+
+                foreach (var offset in new[] { -21f, 0f, 21f })
+                {
+                    var point = islandCenter + direction * offset;
+                    var height = 5.6f + Mathf.Abs(offset) * 0.018f;
+                    trunks.AddCylinder(point + Vector3.up * height * 0.3f,
+                        0.16f, height * 0.6f, 10);
+                    crowns.AddEllipsoid(point + Vector3.up * height * 0.76f,
+                        new Vector3(1.75f, height * 0.28f, 1.55f), 8, 12);
+                    crowns.AddEllipsoid(
+                        point + Vector3.up * height * 0.9f + direction * 0.25f,
+                        new Vector3(1.32f, height * 0.22f, 1.42f), 7, 11);
+                }
+            }
+            planting.Build("K08 四向实体中央绿化岛", scene.Materials.HeroGrass, parent, false);
+            curb.Build("K08 四向花岗岩中央分隔缘石", scene.Materials.Curb, parent, true);
+            shrubs.Build("K08 中央分隔带常绿灌木", scene.Materials.ShrubLeaves, parent, true);
+            trunks.Build("K08 中央分隔带乔木树干", scene.Materials.FormalTreeBranches, parent, true);
+            crowns.Build("K08 中央分隔带多层乔木树冠", scene.Materials.FormalTreeLeaves, parent, true);
         }
 
         private static List<Vector3> Rectangle(Vector3 center, float width, float depth)
@@ -1845,19 +2410,21 @@ namespace Xiongan.DigitalTwin.Scene
                 new Vector3(-47f, 0f, -51f), new Vector3(-36f, 0f, -55f),
                 new Vector3(47f, 0f, -51f), new Vector3(36f, 0f, -55f),
                 new Vector3(-49f, 0f, 48f), new Vector3(-37f, 0f, 54f),
+                new Vector3(49f, 0f, 48f), new Vector3(37f, 0f, 54f),
+                new Vector3(-64f, 0f, -63f), new Vector3(64f, 0f, -63f),
+                new Vector3(-64f, 0f, 63f), new Vector3(64f, 0f, 63f),
             });
-            offsets = offsets.Where(offset => !(offset.x > 0f && offset.z > 0f)).ToList();
-            var treeIndex = 0;
             foreach (var offset in offsets.Distinct())
             {
                 var seed = StableHash(offset.ToString());
                 var height = 10.6f + seed % 17 * 0.15f;
-                CreateBoulevardTree(scene, center + offset, height, seed);
-                if (treeSource != null && treeIndex++ % 3 == 0)
+                if (treeSource != null)
                     CreatePbrBoulevardTree(
                         scene, treeSource,
-                        center + offset + new Vector3(0.85f, 0f, -0.55f),
-                        height * 0.92f, seed);
+                        center + offset,
+                        height, seed);
+                else
+                    CreateBoulevardTree(scene, center + offset, height, seed);
             }
             if (lampSource != null)
             {
@@ -2070,6 +2637,7 @@ namespace Xiongan.DigitalTwin.Scene
                         : scene.Materials.PbrStreetLamp;
                 }
                 renderer.sharedMaterials = materials;
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
         }
 
@@ -2175,19 +2743,41 @@ namespace Xiongan.DigitalTwin.Scene
             var fixture = CreatePrimitive(PrimitiveType.Cube, "LED灯具", root.transform, new Vector3(2.28f, 9.08f, 0f), new Vector3(0.85f, 0.12f, 0.34f), scene.Materials.Headlight);
             fixture.transform.localRotation = Quaternion.Euler(0f, 0f, -6f);
             CreatePrimitive(PrimitiveType.Sphere, "环境感知相机", root.transform, new Vector3(0f, 7.8f, 0.18f), Vector3.one * 0.22f, scene.Materials.BuildingGlass);
+            foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
 
-        private static void CreateRoadsideDevice(string id, string type, string provenance, Vector3 position, SceneBuilder scene)
+        private static void CreateRoadsideDevice(
+            string id, string type, string provenance,
+            Vector3 position, Vector3 facingTarget, SceneBuilder scene)
         {
             var root = new GameObject(id);
             root.transform.SetParent(scene.transform, false);
-            root.transform.position = position;
+            var forward = Vector3.ProjectOnPlane(facingTarget - position, Vector3.up).normalized;
+            if (forward.sqrMagnitude < 0.5f) forward = Vector3.forward;
+            root.transform.SetPositionAndRotation(position, Quaternion.LookRotation(forward, Vector3.up));
             var selectable = root.AddComponent<SelectableObject>();
             selectable.Identifier = id;
             selectable.Kind = type;
             selectable.Provenance = provenance;
-            CreatePrimitive(PrimitiveType.Cylinder, "设备杆", root.transform, new Vector3(0f, 2.8f, 0f), new Vector3(0.13f, 2.8f, 0.13f), scene.Materials.Metal);
-            CreatePrimitive(PrimitiveType.Cube, type == "camera" ? "道路摄像机" : "C-V2X RSU", root.transform, new Vector3(0f, 5.65f, 0f), type == "camera" ? new Vector3(1.15f, 0.45f, 0.45f) : new Vector3(0.75f, 0.9f, 0.38f), scene.Materials.BuildingGlass);
+            CreatePrimitive(PrimitiveType.Cylinder, "设备杆", root.transform,
+                new Vector3(0f, 2.55f, 0f), new Vector3(0.1f, 2.55f, 0.1f), scene.Materials.Metal);
+            CreatePrimitive(PrimitiveType.Cube, "设备安装臂", root.transform,
+                new Vector3(0f, 5.02f, 0.22f), new Vector3(0.08f, 0.08f, 0.52f), scene.Materials.Metal);
+            if (type == "camera")
+            {
+                CreatePrimitive(PrimitiveType.Cube, "道路摄像机", root.transform,
+                    new Vector3(0f, 5.12f, 0.53f), new Vector3(0.42f, 0.28f, 0.72f), scene.Materials.Metal);
+                CreatePrimitive(PrimitiveType.Sphere, "摄像机镜头", root.transform,
+                    new Vector3(0f, 5.12f, 0.91f), new Vector3(0.13f, 0.13f, 0.08f), scene.Materials.BuildingGlass);
+            }
+            else
+            {
+                CreatePrimitive(PrimitiveType.Cube, "C-V2X RSU", root.transform,
+                    new Vector3(0f, 5.18f, 0.43f), new Vector3(0.54f, 0.68f, 0.28f), scene.Materials.Metal);
+                CreatePrimitive(PrimitiveType.Sphere, "RSU状态灯", root.transform,
+                    new Vector3(0f, 5.18f, 0.59f), Vector3.one * 0.075f, scene.Materials.BuildingGlass);
+            }
         }
 
         private static GameObject CreatePrimitive(PrimitiveType primitive, string name, Transform parent, Vector3 localPosition, Vector3 localScale, Material material)

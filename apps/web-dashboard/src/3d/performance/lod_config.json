@@ -2,9 +2,11 @@
   "schemaVersion": "1.0",
   "nearHeightM": 260,
   "farHeightM": 720,
-  "updateIntervalFrames": 15,
+  "nearHysteresisM": 36,
+  "farHysteresisM": 90,
+  "settleDelayMs": 360,
+  "updateIntervalFrames": 3,
   "nearOnlyNames": [
-    "BuildingWindows",
     "TreeTrunks",
     "StreetLightHeads",
     "TrafficSignalRedLenses",

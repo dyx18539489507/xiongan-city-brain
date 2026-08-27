@@ -2,7 +2,8 @@
   "name": "Xiongan.DigitalTwin.Tests.EditMode",
   "rootNamespace": "Xiongan.DigitalTwin.Tests",
   "references": [
-    "Xiongan.DigitalTwin.Runtime"
+    "Xiongan.DigitalTwin.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "optionalUnityReferences": ["TestAssemblies"],
   "includePlatforms": ["Editor"],

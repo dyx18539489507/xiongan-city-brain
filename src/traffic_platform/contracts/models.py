@@ -301,6 +301,29 @@ class RegionalState(TrafficMessage):
         return value
 
 
+class TrafficForecast(StrictModel):
+    """One auditable multi-phase forecast produced from observed regional state."""
+
+    horizon_s: int = Field(gt=0)
+    phase_arrivals: dict[str, float] = Field(default_factory=dict)
+    phase_queues: dict[str, float] = Field(default_factory=dict)
+    spillback_risk: float = Field(ge=0, le=1)
+    confidence: float = Field(ge=0, le=1)
+    model_id: str = Field(min_length=1)
+    sample_count: int = Field(ge=0)
+    generated_at_sim_time: float = Field(ge=0)
+
+    @model_validator(mode="after")
+    def validate_nonnegative_predictions(self) -> Self:
+        """Reject model outputs that cannot represent physical traffic quantities."""
+
+        if any(value < 0 for value in self.phase_arrivals.values()):
+            raise ValueError("predicted phase arrivals must be non-negative")
+        if any(value < 0 for value in self.phase_queues.values()):
+            raise ValueError("predicted phase queues must be non-negative")
+        return self
+
+
 class CloudStrategy(TrafficMessage):
     """Slow-timescale regional target sent from cloud to an edge controller."""
 
@@ -318,6 +341,8 @@ class CloudStrategy(TrafficMessage):
     recommended_phase_plan: list[str]
     speed_guidance_parameters: dict[str, float]
     confidence: float = Field(ge=0, le=1)
+    forecasts: list[TrafficForecast] = Field(default_factory=list)
+    prediction_status: str = "warming_up"
     cloud_decision_latency_ms: float | None = Field(default=None, ge=0)
     reason_codes: list[str]
     fallback_policy: str

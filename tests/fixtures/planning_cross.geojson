@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "name": "planning-cross-browser-proof",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"kind": "planned_road"},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[0, 500], [1000, 500]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {"kind": "planned_road"},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[500, 0], [500, 1000]]
+      }
+    }
+  ]
+}

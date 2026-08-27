@@ -1,0 +1,23 @@
+﻿Experiment,Scenario,Demand,Controller,Seed,Disturbance,Network Profile,Duration,Warmup,Status,Raw Path
+pilot-medium-b0-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\pilot-medium-b0-s42-none-n0-d60-w10-a01
+pilot-medium-b3-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\pilot-medium-b3-s42-none-n0-d60-w10-a01
+rapid-medium-b0-s123-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,123,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b0-s123-none-n0-d60-w10-a01
+rapid-medium-b0-s2026-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,2026,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b0-s2026-none-n0-d60-w10-a01
+rapid-medium-b0-s3407-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,3407,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b0-s3407-none-n0-d60-w10-a01
+rapid-medium-b0-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b0-s42-none-n0-d60-w10-a01
+rapid-medium-b0-s9001-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B0,9001,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b0-s9001-none-n0-d60-w10-a01
+rapid-medium-b1-s123-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B1,123,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b1-s123-none-n0-d60-w10-a01
+rapid-medium-b1-s2026-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B1,2026,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b1-s2026-none-n0-d60-w10-a01
+rapid-medium-b1-s3407-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B1,3407,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b1-s3407-none-n0-d60-w10-a01
+rapid-medium-b1-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B1,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b1-s42-none-n0-d60-w10-a01
+rapid-medium-b1-s9001-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B1,9001,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b1-s9001-none-n0-d60-w10-a01
+rapid-medium-b2-s123-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B2,123,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b2-s123-none-n0-d60-w10-a01
+rapid-medium-b2-s2026-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B2,2026,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b2-s2026-none-n0-d60-w10-a01
+rapid-medium-b2-s3407-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B2,3407,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b2-s3407-none-n0-d60-w10-a01
+rapid-medium-b2-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B2,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b2-s42-none-n0-d60-w10-a01
+rapid-medium-b2-s9001-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B2,9001,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b2-s9001-none-n0-d60-w10-a01
+rapid-medium-b3-s123-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,123,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b3-s123-none-n0-d60-w10-a01
+rapid-medium-b3-s2026-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,2026,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b3-s2026-none-n0-d60-w10-a01
+rapid-medium-b3-s3407-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,3407,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b3-s3407-none-n0-d60-w10-a01
+rapid-medium-b3-s42-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,42,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b3-s42-none-n0-d60-w10-a01
+rapid-medium-b3-s9001-none-n0-d60-w10-a01,xiongan_rongdong_20,Medium,B3,9001,none,N0,60.0,10.0,completed,D:\程序项目\面向雄安新区的城市大脑\experiments\formal_2026\raw\rapid-medium-b3-s9001-none-n0-d60-w10-a01

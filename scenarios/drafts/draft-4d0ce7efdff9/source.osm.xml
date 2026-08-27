@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.916201609" minlat="39.0589848" maxlon="115.918690123" maxlat="39.060750027" />
+  <node id="-1" lon="115.9179003" lat="39.059028" version="1" />
+  <node id="-2" lon="115.9177095" lat="39.0595447" version="1" />
+  <node id="-3" lon="115.9176109" lat="39.0598615" version="1" />
+  <node id="-4" lon="115.9175672" lat="39.0601042" version="1" />
+  <node id="-5" lon="115.9175343" lat="39.0603998" version="1" />
+  <node id="-6" lon="115.917530417" lat="39.060750027" version="1" />
+  <node id="-7" lon="115.916201609" lat="39.059693413" version="1" />
+  <node id="-8" lon="115.9174461" lat="39.0598256" version="1" />
+  <node id="-9" lon="115.918690123" lat="39.060187911" version="1" />
+  <node id="-10" lon="115.917370448" lat="39.060749989" version="1" />
+  <node id="-11" lon="115.9173685" lat="39.0605137" version="1" />
+  <node id="-12" lon="115.9173757" lat="39.060286" version="1" />
+  <node id="-13" lon="115.9175223" lat="39.0595653" version="1" />
+  <node id="-14" lon="115.9176081" lat="39.0593321" version="1" />
+  <node id="-15" lon="115.917758" lat="39.0589848" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="785419413" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <nd ref="-3" />
+    <nd ref="-9" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="悦容北街" />
+    <tag k="source_way_id" v="1001665914" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-10" />
+    <nd ref="-11" />
+    <nd ref="-12" />
+    <nd ref="-8" />
+    <nd ref="-13" />
+    <nd ref="-14" />
+    <nd ref="-15" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517609" />
+  </way>
+</osm>

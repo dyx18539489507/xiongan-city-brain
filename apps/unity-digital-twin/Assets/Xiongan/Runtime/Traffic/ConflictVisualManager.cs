@@ -8,6 +8,7 @@ namespace Xiongan.DigitalTwin.Traffic
     public sealed class ConflictVisualManager : MonoBehaviour
     {
         private readonly Dictionary<string, GameObject> visuals = new();
+        public bool ShowWorldMarkers { get; set; }
         private CoordinateService coordinates = null!;
         private MaterialLibrary materials = null!;
 
@@ -19,6 +20,11 @@ namespace Xiongan.DigitalTwin.Traffic
 
         public void Apply(IEnumerable<ConflictEntity> conflicts)
         {
+            if (!ShowWorldMarkers)
+            {
+                ClearVisuals();
+                return;
+            }
             var active = new HashSet<string>();
             foreach (var conflict in conflicts)
             {
@@ -42,6 +48,13 @@ namespace Xiongan.DigitalTwin.Traffic
                 Destroy(visuals[id]);
                 visuals.Remove(id);
             }
+        }
+
+        private void ClearVisuals()
+        {
+            if (visuals.Count == 0) return;
+            foreach (var visual in visuals.Values) Destroy(visual);
+            visuals.Clear();
         }
 
     }

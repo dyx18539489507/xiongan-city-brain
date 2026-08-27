@@ -1,0 +1,46 @@
+schema_version: "1.0"
+base_scenario_id: xiongan_rongdong_20
+profiles:
+  - code: S01
+    name: 正式基准低负荷
+    flow_multiplier: 0.75
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S02
+    name: 正式基准超饱和负荷
+    flow_multiplier: 1.6
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S03
+    name: 正式基准中负荷
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S04
+    name: 正式基准高负荷
+    flow_multiplier: 1.2
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S05
+    name: 正式基准保留档位 S05
+    flow_multiplier: 1.2
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S06
+    name: 正式基准保留档位 S06
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+  - code: S07
+    name: 正式基准保留档位 S07
+    flow_multiplier: 1.0
+    connected_vehicle_penetration: 0.5
+    communication_profile: N0
+    disturbances: []
+

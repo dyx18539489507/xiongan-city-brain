@@ -19,13 +19,11 @@ class TrafficControlAlgorithm(Protocol):
 统计和输入输出结构化日志。算法只能返回候选 `ControlDecision`，不得直接调用
 TraCI、数据库、MQTT 或其他算法内部对象。
 
-Phase 1 注册：
+当前注册表严格包含四个算法：
 
 - `fixed-time` 1.0.0
 - `actuated-control` 1.0.0
 - `max-pressure` 1.0.0
-- `coordinated-max-pressure` 1.0.0
-- `predictive-controller-placeholder` 1.0.0
+- `coordinated-max-pressure` 2.0.0
 
-预测占位器在没有模型时返回 `MODEL_NOT_AVAILABLE`，绝不生成随机预测。
-
+B3 通过 `CloudStrategy.forecasts` 接收带模型版本、预测时距、置信度和生成时刻的真实在线预测。预测未就绪或置信度不足时在 B3 内部回退到当前状态协调，不注册额外算法。

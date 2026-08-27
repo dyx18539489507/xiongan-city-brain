@@ -1,6 +1,6 @@
 import type {ReactNode, SVGProps} from "react";
 
-export type TwinIconName = "play" | "pause" | "stop" | "reset" | "layers" | "chevron" | "map" | "route" | "focus" | "plus" | "minus" | "warning" | "activity" | "cloud" | "signal" | "timeline" | "expand" | "close" | "car" | "settings";
+export type TwinIconName = "play" | "pause" | "stop" | "reset" | "layers" | "chevron" | "map" | "route" | "focus" | "plus" | "minus" | "warning" | "activity" | "cloud" | "signal" | "timeline" | "expand" | "close" | "car" | "settings" | "lock";
 
 const paths: Record<TwinIconName, ReactNode> = {
   play: <path d="m8 5 11 7-11 7Z" />,
@@ -23,6 +23,7 @@ const paths: Record<TwinIconName, ReactNode> = {
   close: <><path d="m6 6 12 12" /><path d="m18 6-12 12" /></>,
   car: <><path d="m5 11 2-5h10l2 5" /><rect x="3" y="11" width="18" height="7" rx="2" /><path d="M7 18v2M17 18v2" /></>,
   settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z" /></>,
+  lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
 };
 
 export function TwinIcon({name, ...props}: {name: TwinIconName} & SVGProps<SVGSVGElement>) {

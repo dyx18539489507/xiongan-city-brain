@@ -45,19 +45,33 @@ export function geometryIntersectsBounds(
 export function strokePolyline(ctx: CanvasRenderingContext2D, camera: MapCamera, points: readonly Point2[]): void {
   if (points.length < 2) return;
   ctx.beginPath();
-  ctx.moveTo((points[0].x - camera.centerX) * camera.scale + camera.width / 2, (camera.centerY - points[0].y) * camera.scale + camera.height / 2);
-  for (let index = 1; index < points.length; index += 1) {
-    ctx.lineTo((points[index].x - camera.centerX) * camera.scale + camera.width / 2, (camera.centerY - points[index].y) * camera.scale + camera.height / 2);
-  }
+  appendPolyline(ctx, camera, points);
   ctx.stroke();
+}
+
+export function appendPolyline(ctx: CanvasRenderingContext2D, camera: MapCamera, points: readonly Point2[]): void {
+  if (points.length < 2) return;
+  const first = camera.worldToScreen(points[0]);
+  ctx.moveTo(first.x, first.y);
+  for (let index = 1; index < points.length; index += 1) {
+    const point = camera.worldToScreen(points[index]);
+    ctx.lineTo(point.x, point.y);
+  }
 }
 
 export function tracePolygon(ctx: CanvasRenderingContext2D, camera: MapCamera, points: readonly Point2[]): void {
   if (points.length < 3) return;
   ctx.beginPath();
-  ctx.moveTo((points[0].x - camera.centerX) * camera.scale + camera.width / 2, (camera.centerY - points[0].y) * camera.scale + camera.height / 2);
+  appendPolygon(ctx, camera, points);
+}
+
+export function appendPolygon(ctx: CanvasRenderingContext2D, camera: MapCamera, points: readonly Point2[]): void {
+  if (points.length < 3) return;
+  const first = camera.worldToScreen(points[0]);
+  ctx.moveTo(first.x, first.y);
   for (let index = 1; index < points.length; index += 1) {
-    ctx.lineTo((points[index].x - camera.centerX) * camera.scale + camera.width / 2, (camera.centerY - points[index].y) * camera.scale + camera.height / 2);
+    const point = camera.worldToScreen(points[index]);
+    ctx.lineTo(point.x, point.y);
   }
   ctx.closePath();
 }

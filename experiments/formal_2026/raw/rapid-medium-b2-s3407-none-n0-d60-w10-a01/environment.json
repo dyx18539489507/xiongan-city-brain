@@ -1,0 +1,28 @@
+{
+  "captured_at": "2026-08-20T07:08:24.558039+00:00",
+  "os": "Windows-11-10.0.26200-SP0",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 142 Stepping 12, GenuineIntel",
+  "logical_cpu_count": 8,
+  "physical_cpu_count": 4,
+  "ram_total_bytes": 8428179456,
+  "python": "3.12.13",
+  "python_executable": "D:\\程序项目\\面向雄安新区的城市大脑\\.venv\\Scripts\\python.exe",
+  "sumo_home": "D:\\程序项目\\面向雄安新区的城市大脑\\exports\\xiongan_3d_portable_v4\\xiongan_3d_portable_v4\\runtime\\sumo",
+  "sumo_version": "Eclipse SUMO sumo 1.27.1",
+  "packages": {
+    "pydantic": "2.13.4",
+    "numpy": "2.5.1",
+    "pandas": "2.3.3",
+    "scipy": "1.18.0",
+    "traci": "1.27.1",
+    "sumolib": "1.27.1"
+  },
+  "git": {
+    "commit": "5e6e30750b499fb33837bff9f4cb18fa6e8a5e0d",
+    "branch": "main",
+    "dirty": true
+  },
+  "docker_engine_used": false,
+  "mqtt_mode": "deterministic software emulation"
+}

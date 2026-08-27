@@ -1,0 +1,11 @@
+{
+  "experiment_id": "pilot-medium-b0-s42-none-n0-d60-w10-a01",
+  "run_key": "pilot-medium-b0-s42-none-n0-d60-w10",
+  "status": "completed",
+  "exit_status": 0,
+  "started_at": "2026-08-20T07:01:03.671592+00:00",
+  "ended_at": "2026-08-20T07:01:59.592614+00:00",
+  "wall_duration_s": 55.92090250000001,
+  "simulation_realtime_factor": 1.1562713863834955,
+  "raw_data_path": "D:\\程序项目\\面向雄安新区的城市大脑\\experiments\\formal_2026\\raw\\pilot-medium-b0-s42-none-n0-d60-w10-a01"
+}

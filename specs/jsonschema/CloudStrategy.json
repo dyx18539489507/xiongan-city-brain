@@ -13,6 +13,68 @@
       ],
       "title": "SourceType",
       "type": "string"
+    },
+    "TrafficForecast": {
+      "additionalProperties": false,
+      "description": "One auditable multi-phase forecast produced from observed regional state.",
+      "properties": {
+        "horizon_s": {
+          "exclusiveMinimum": 0,
+          "title": "Horizon S",
+          "type": "integer"
+        },
+        "phase_arrivals": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Phase Arrivals",
+          "type": "object"
+        },
+        "phase_queues": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Phase Queues",
+          "type": "object"
+        },
+        "spillback_risk": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Spillback Risk",
+          "type": "number"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "model_id": {
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "generated_at_sim_time": {
+          "minimum": 0,
+          "title": "Generated At Sim Time",
+          "type": "number"
+        }
+      },
+      "required": [
+        "horizon_s",
+        "spillback_risk",
+        "confidence",
+        "model_id",
+        "sample_count",
+        "generated_at_sim_time"
+      ],
+      "title": "TrafficForecast",
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -169,6 +231,18 @@
       "title": "Confidence",
       "type": "number"
     },
+    "forecasts": {
+      "items": {
+        "$ref": "#/$defs/TrafficForecast"
+      },
+      "title": "Forecasts",
+      "type": "array"
+    },
+    "prediction_status": {
+      "default": "warming_up",
+      "title": "Prediction Status",
+      "type": "string"
+    },
     "cloud_decision_latency_ms": {
       "anyOf": [
         {
@@ -247,6 +321,7 @@
       "recommended_phase_plan": [],
       "speed_guidance_parameters": {},
       "confidence": 0.0,
+      "prediction_status": "warming_up",
       "cloud_decision_latency_ms": null,
       "reason_codes": [],
       "fallback_policy": "example-fallback_policy"

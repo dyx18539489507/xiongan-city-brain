@@ -13,6 +13,7 @@ from traffic_platform.sumo_adapter import (
     IntersectionSnapshot,
     LaneSnapshot,
     NetworkSnapshot,
+    PedestrianSnapshot,
     TraciSumoAdapter,
     VehicleSnapshot,
 )
@@ -34,6 +35,7 @@ class EdgeStateAggregator:
         self.intersection_ids = intersection_ids
         self.edge_id = edge_id
         self._previous_counts: dict[str, int] = {}
+        self._previous_vehicle_ids: dict[str, set[str]] = {}
         self._phase_started_at: dict[str, tuple[int, float]] = {}
         self._lane_movements: dict[str, dict[str, str]] = {}
         self._downstream_lanes: dict[str, dict[str, str]] = {}
@@ -42,6 +44,7 @@ class EdgeStateAggregator:
         self._cycle_lanes: dict[str, LaneSnapshot] = {}
         self._cycle_vehicles: list[VehicleSnapshot] | None = None
         self.last_vehicle_states: list[VehicleSnapshot] = []
+        self.last_pedestrian_states: list[PedestrianSnapshot] = []
         self.last_intersection_snapshots: dict[str, IntersectionSnapshot] = {}
 
     def build_topology(self) -> NetworkTopology:
@@ -53,6 +56,9 @@ class EdgeStateAggregator:
         conflicting_phases: dict[str, set[tuple[str, str]]] = {}
         pedestrian_phases: dict[str, set[str]] = {}
         clearance_phases: dict[str, set[str]] = {}
+        phase_order: dict[str, list[str]] = {}
+        phase_durations: dict[str, dict[str, float]] = {}
+        clearance_paths: dict[str, dict[str, dict[str, list[str]]]] = {}
         topology_lane_ids: set[str] = set()
         for intersection_id in self.intersection_ids:
             links = self.adapter.get_controlled_links(intersection_id)
@@ -60,6 +66,18 @@ class EdgeStateAggregator:
             if not programs:
                 raise RuntimeError(f"no signal program for {intersection_id}")
             program = programs[0]
+            is_static_program = int(getattr(program, "type", 0)) == 0
+            ordered_phase_ids = [str(index) for index, _phase in enumerate(program.phases)]
+            green_phase_ids = {
+                str(index)
+                for index, phase in enumerate(program.phases)
+                if any(signal in {"G", "g"} for signal in phase.state)
+            }
+            phase_order[intersection_id] = ordered_phase_ids
+            phase_durations[intersection_id] = {
+                str(index): float(phase.duration)
+                for index, phase in enumerate(program.phases)
+            }
             definitions: list[PhaseDefinition] = []
             movement_by_lane: dict[str, str] = {}
             downstream_by_lane: dict[str, str] = {}
@@ -78,11 +96,17 @@ class EdgeStateAggregator:
                         movement_by_lane.setdefault(incoming, str(phase_index))
                         downstream_by_lane.setdefault(incoming, outgoing)
                 if movements:
+                    phase_duration_s = float(phase.duration)
+                    min_green_s = (
+                        min(10.0, phase_duration_s)
+                        if is_static_program
+                        else max(5.0, float(getattr(phase, "minDur", 10.0)))
+                    )
                     definitions.append(
                         PhaseDefinition(
                             phase_id=str(phase_index),
                             movements=movements,
-                            min_green_s=max(5.0, float(getattr(phase, "minDur", 10.0))),
+                            min_green_s=min_green_s,
                             max_green_s=max(
                                 float(phase.duration),
                                 float(getattr(phase, "maxDur", phase.duration)),
@@ -98,15 +122,40 @@ class EdgeStateAggregator:
             conflicting_phases[intersection_id] = {
                 (left, right) for left in phase_ids for right in phase_ids if left != right
             }
-            # The generated motor-vehicle network deliberately excludes walking
-            # edges. The field is still explicit so a later OSM import with
-            # pedestrian links can populate it without changing the controller.
-            pedestrian_phases[intersection_id] = set()
+            pedestrian_phases[intersection_id] = {
+                str(phase_index)
+                for phase_index, phase in enumerate(program.phases)
+                if any(
+                    signal in {"G", "g"}
+                    and link_index < len(links)
+                    and any(
+                        "_c" in incoming
+                        or "walkingarea" in incoming.lower()
+                        or "_c" in outgoing
+                        or "walkingarea" in outgoing.lower()
+                        for incoming, outgoing, _via in links[link_index]
+                    )
+                    for link_index, signal in enumerate(phase.state)
+                )
+            }
             clearance_phases[intersection_id] = {
                 str(index)
                 for index, phase in enumerate(program.phases)
                 if not any(signal in {"G", "g"} for signal in phase.state)
             }
+            paths: dict[str, dict[str, list[str]]] = {}
+            for source in green_phase_ids:
+                source_index = int(source)
+                paths[source] = {}
+                for target in green_phase_ids - {source}:
+                    path: list[str] = []
+                    for offset in range(1, len(program.phases) + 1):
+                        candidate = str((source_index + offset) % len(program.phases))
+                        if candidate == target:
+                            break
+                        path.append(candidate)
+                    paths[source][target] = path
+            clearance_paths[intersection_id] = paths
             self._lane_movements[intersection_id] = movement_by_lane
             self._downstream_lanes[intersection_id] = downstream_by_lane
             topology_lane_ids.update(movement_by_lane)
@@ -123,6 +172,9 @@ class EdgeStateAggregator:
             conflicting_phase_pairs=conflicting_phases,
             pedestrian_phase_ids=pedestrian_phases,
             clearance_phase_ids=clearance_phases,
+            phase_order=phase_order,
+            phase_durations_s=phase_durations,
+            clearance_paths=clearance_paths,
         )
 
     def collect_intersection(
@@ -194,9 +246,18 @@ class EdgeStateAggregator:
         lane_messages: list[LaneState] = []
         for lane_id, snapshot in lane_snapshots.items():
             previous = self._previous_counts.get(lane_id, snapshot.vehicle_count)
-            arrival_rate = max(0, snapshot.vehicle_count - previous) * 3600.0
-            discharge_rate = max(0, previous - snapshot.vehicle_count) * 3600.0
+            current_vehicle_ids = set(vehicles_by_lane.get(lane_id, []))
+            previous_vehicle_ids = self._previous_vehicle_ids.get(lane_id)
+            if previous_vehicle_ids is None:
+                arrival_count = max(0, snapshot.vehicle_count - previous)
+                discharge_count = max(0, previous - snapshot.vehicle_count)
+            else:
+                arrival_count = len(current_vehicle_ids - previous_vehicle_ids)
+                discharge_count = len(previous_vehicle_ids - current_vehicle_ids)
+            arrival_rate = arrival_count * 3600.0
+            discharge_rate = discharge_count * 3600.0
             self._previous_counts[lane_id] = snapshot.vehicle_count
+            self._previous_vehicle_ids[lane_id] = current_vehicle_ids
             downstream_id = downstream_ids.get(lane_id)
             downstream_snapshot = (
                 downstream_snapshots.get(downstream_id) if downstream_id is not None else None
@@ -306,13 +367,14 @@ class EdgeStateAggregator:
         *,
         control_mode: str,
         active_disturbances: list[str] | None = None,
+        network: NetworkSnapshot | None = None,
     ) -> RegionalState:
         """Collect a regional aggregation for the cloud service."""
 
-        network = self.adapter.get_network_state()
+        network = network if network is not None else self.adapter.get_network_state()
         signals = {
-            intersection_id: self.adapter.get_intersection_state(intersection_id)
-            for intersection_id in self.intersection_ids
+            signal.intersection_id: signal
+            for signal in self.adapter.get_intersection_states(self.intersection_ids)
         }
         self.last_intersection_snapshots = signals
         lane_ids = {
@@ -325,11 +387,18 @@ class EdgeStateAggregator:
         )
         self._cycle_network = network
         self._cycle_signals = signals
+        self._cycle_vehicles = self.adapter.get_step_vehicle_states()
+        pedestrians = self.adapter.get_step_pedestrian_states()
         self._cycle_lanes = {
-            lane.lane_id: lane for lane in self.adapter.get_lane_states(sorted(lane_ids))
+            lane.lane_id: lane
+            for lane in self.adapter.get_lane_states(
+                sorted(lane_ids),
+                vehicle_states=self._cycle_vehicles,
+                pedestrian_states=pedestrians,
+            )
         }
-        self._cycle_vehicles = self.adapter.get_vehicle_states()
         self.last_vehicle_states = self._cycle_vehicles
+        self.last_pedestrian_states = pedestrians
         try:
             states = [
                 self.collect_intersection(

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.1",
+  "sceneId": "codex-ui-image-smoke",
+  "sceneFile": "codex-ui-image-smoke.scene.json",
+  "sceneSha256": "c5e133d08f1f665bcc25c7c8f6f69de4b7b76fea15887a1a76fe6eaa46e46f11",
+  "sceneBytes": 690211,
+  "counts": {
+    "junctions": 120,
+    "roads": 100,
+    "edges": 460,
+    "lanes": 640,
+    "connections": 920,
+    "crossings": 0,
+    "trafficLights": 20,
+    "busStops": 0,
+    "pedestrianAreas": 40,
+    "bicycleAreas": 0,
+    "buildings": 0,
+    "vegetation": 0,
+    "roadsideDevices": 40,
+    "zones": 0,
+    "controlCorridors": 1,
+    "edgeRegions": 100
+  },
+  "sourceFiles": [
+    {
+      "path": "scenarios/generated/codex-ui-image-smoke/rongdong.multimodal.net.xml",
+      "role": "sumo_network_truth",
+      "sha256": "c086dded442078d7901008a822eb0ec9b60ed4352924c27d2957a938502ff189"
+    },
+    {
+      "path": "scenarios/generated/codex-ui-image-smoke/controlled_intersections.json",
+      "role": "controlled_intersection_registry",
+      "sha256": "01619008675e763bb68ffd1329dfecd07deb393fc64dfe0e74e47c65b18513bf"
+    },
+    {
+      "path": "scenarios/generated/codex-ui-image-smoke/functional_zones.json",
+      "role": "functional_zone_inventory",
+      "sha256": "34add6f406e6e4525f368a351607c821c7648812d835c3c951d50c1ba45cde15"
+    },
+    {
+      "path": "scenarios/generated/codex-ui-image-smoke/vtypes.add.xml",
+      "role": "sumo_participant_types",
+      "sha256": "c93acd7cb4d62d45b53009350ddb4aa02f96863a2df35ea710ca3ce1d067f37f"
+    },
+    {
+      "path": "scenarios/configs/codex-ui-image-smoke.yaml",
+      "role": "scenario_configuration",
+      "sha256": "4aac735aa1fbce0516768c08a7903817d9163bbb862c33daf1d32bef517c5a58"
+    }
+  ]
+}

@@ -77,7 +77,7 @@ export class QueueLayer implements TrafficMapLayer {
       if (camera.scale > .46) {
         const labelAt = camera.worldToScreen(queueShape[0]);
         ctx.globalAlpha = 1;
-        ctx.fillStyle = "rgba(7, 12, 14, .9)";
+        ctx.fillStyle = "rgba(255, 255, 255, .94)";
         ctx.fillRect(labelAt.x - 3, labelAt.y - 20, 74, 18);
         ctx.fillStyle = mapTheme.text;
         ctx.font = '600 11px "Microsoft YaHei", sans-serif';

@@ -9,9 +9,9 @@ namespace Xiongan.DigitalTwin.Scene
 {
     public sealed class SceneLoader : MonoBehaviour
     {
-        public IEnumerator Load(string url, Action<float, string> onProgress, Action<SceneDocument> onLoaded, Action<string> onError)
+        public IEnumerator Load(string url, string expectedScenarioId, Action<float, string> onProgress, Action<SceneDocument> onLoaded, Action<string> onError)
         {
-            onProgress(0.02f, "正在读取20路口场景");
+            onProgress(0.02f, "正在读取当前 SUMO 场景");
             using var request = UnityWebRequest.Get(url);
             request.SetRequestHeader("Accept", "application/json");
             var operation = request.SendWebRequest();
@@ -30,24 +30,34 @@ namespace Xiongan.DigitalTwin.Scene
             try
             {
                 onProgress(0.36f, "正在解析SUMO场景数据");
-                document = JsonConvert.DeserializeObject<SceneDocument>(request.downloadHandler.text);
+                document = Deserialize(request.downloadHandler.text);
             }
             catch (Exception error)
             {
                 onError($"场景解析失败：{error.Message}");
                 yield break;
             }
-            if (document == null || document.Metadata.SceneId != "xiongan_rongdong_20")
+            var validationError = Validate(document, expectedScenarioId);
+            if (validationError != null)
             {
-                onError("场景身份校验失败");
+                onError(validationError);
                 yield break;
             }
-            if (document.TrafficLights.Count != 20)
-            {
-                onError($"受控信号路口数量错误：{document.TrafficLights.Count}/20");
-                yield break;
-            }
-            onLoaded(document);
+            onLoaded(document!);
         }
+
+        public static string? Validate(SceneDocument? document, string expectedScenarioId)
+        {
+            if (document == null ||
+                document.Metadata.SceneId != expectedScenarioId ||
+                document.Metadata.ScenarioId != expectedScenarioId)
+                return "场景身份校验失败";
+            if (document.Junctions.Count == 0 || document.Lanes.Count == 0)
+                return "场景不包含可构建的 SUMO 路口和车道";
+            return null;
+        }
+
+        public static SceneDocument? Deserialize(string json) =>
+            JsonConvert.DeserializeObject<SceneDocument>(json);
     }
 }

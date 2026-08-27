@@ -80,17 +80,11 @@ def _intersects(points: list[Point2], bounds: Bounds2) -> bool:
 
 
 def _inside(point: Point2, bounds: Bounds2) -> bool:
-    return (
-        bounds.min_x <= point.x <= bounds.max_x
-        and bounds.min_y <= point.y <= bounds.max_y
-    )
+    return bounds.min_x <= point.x <= bounds.max_x and bounds.min_y <= point.y <= bounds.max_y
 
 
 def _length(points: list[Point2]) -> float:
-    return sum(
-        math.hypot(right.x - left.x, right.y - left.y)
-        for left, right in pairwise(points)
-    )
+    return sum(math.hypot(right.x - left.x, right.y - left.y) for left, right in pairwise(points))
 
 
 def _road_source_id(edge_id: str) -> str:
@@ -250,7 +244,14 @@ def _load_osm(
                     provenance="openstreetmap",
                 )
             )
-        zone_type = tags.get("landuse") or tags.get("leisure") or tags.get("amenity")
+        zone_type = (
+            tags.get("landuse")
+            or tags.get("leisure")
+            or tags.get("amenity")
+            or tags.get("natural")
+            or tags.get("water")
+            or tags.get("waterway")
+        )
         if zone_type:
             zones.append(
                 AreaRecord(
@@ -301,7 +302,8 @@ def _shortest_edge_path(
 def _parse_network(
     path: Path,
     scene_bounds: Bounds2,
-    controlled: dict[str, dict[str, Any]],
+    controlled_tls: dict[str, dict[str, Any]],
+    controlled_junctions: dict[str, dict[str, Any]],
 ) -> tuple[
     dict[str, str],
     Bounds2,
@@ -382,11 +384,7 @@ def _parse_network(
                             provenance="sumo_lane_permissions",
                         )
                     )
-            road_id = (
-                f"road:osm-way:{_road_source_id(edge_id)}"
-                if function == "ordinary"
-                else None
-            )
+            road_id = f"road:osm-way:{_road_source_id(edge_id)}" if function == "ordinary" else None
             edges.append(
                 EdgeRecord(
                     scene_id=f"edge:{edge_id}",
@@ -434,8 +432,8 @@ def _parse_network(
                 y=float(element.get("y", "0")),
             )
             junction_id = element.get("id", "")
-            if _inside(position, scene_bounds) or junction_id in controlled:
-                item = controlled.get(junction_id, {})
+            if _inside(position, scene_bounds) or junction_id in controlled_junctions:
+                item = controlled_junctions.get(junction_id, {})
                 junctions.append(
                     JunctionRecord(
                         scene_id=f"junction:{junction_id}",
@@ -445,13 +443,13 @@ def _parse_network(
                         lon=float(item.get("lon", 0.0)),
                         lat=float(item.get("lat", 0.0)),
                         shape=_points(element.get("shape")),
-                        controlled=junction_id in controlled,
+                        controlled=junction_id in controlled_junctions,
                         display_id=item.get("display_id"),
                         display_name=item.get("display_name"),
                         role=item.get("role"),
                         provenance=(
                             str(item.get("parameter_provenance"))
-                            if junction_id in controlled
+                            if junction_id in controlled_junctions
                             else "sumo_osm_derived"
                         ),
                     )
@@ -459,7 +457,7 @@ def _parse_network(
             element.clear()
         elif element.tag == "tlLogic":
             tls_id = element.get("id", "")
-            if tls_id in controlled:
+            if tls_id in controlled_tls:
                 tls_programs[tls_id].append(
                     {
                         "program_id": element.get("programID", "0"),
@@ -498,7 +496,7 @@ def _parse_network(
                 link_index=link_index,
             )
         )
-        if connection_tls_id in controlled and link_index is not None:
+        if connection_tls_id in controlled_tls and link_index is not None:
             links_by_tls[connection_tls_id].append(
                 TrafficLightLinkRecord(
                     link_index=link_index,
@@ -509,7 +507,7 @@ def _parse_network(
             )
 
     traffic_lights: list[TrafficLightRecord] = []
-    for tls_id in sorted(controlled):
+    for tls_id in sorted(controlled_tls):
         programs = tls_programs.get(tls_id, [])
         for program in programs:
             phases = [
@@ -534,13 +532,15 @@ def _parse_network(
                 TrafficLightRecord(
                     scene_id=f"tls:{tls_id}:{program['program_id']}",
                     sumo_tls_id=tls_id,
-                    controlled_junction_id=tls_id,
+                    controlled_junction_id=str(
+                        controlled_tls[tls_id].get("intersection_id", tls_id)
+                    ),
                     program_id=str(program["program_id"]),
                     program_type=str(program["type"]),
                     offset_s=float(program["offset"]),
                     phases=phases,
                     links=links,
-                    display_id=controlled[tls_id].get("display_id"),
+                    display_id=controlled_tls[tls_id].get("display_id"),
                 )
             )
 
@@ -582,33 +582,42 @@ def generate_scene_document(
 ) -> dict[str, Any]:
     """Generate and validate one deterministic static scene artifact."""
 
-    if scenario_id != "xiongan_rongdong_20":
-        raise ValueError("only the connected xiongan_rongdong_20 scene is supported")
     if padding_m < 0:
         raise ValueError("padding_m must be non-negative")
     generated = workspace / "scenarios" / "generated" / scenario_id
-    source = workspace / "scenarios" / "source" / scenario_id
     network_file = generated / "rongdong.multimodal.net.xml"
     selection_file = generated / "controlled_intersections.json"
     zones_file = generated / "functional_zones.json"
-    osm_file = source / "rongdong_bbox.osm.xml"
+    osm_file = generated / "source.osm.xml"
+    if scenario_id == "xiongan_rongdong_20" and not osm_file.is_file():
+        osm_file = workspace / "scenarios" / "source" / scenario_id / "rongdong_bbox.osm.xml"
     vtypes_file = generated / "vtypes.add.xml"
     config_file = workspace / "scenarios" / "configs" / f"{scenario_id}.yaml"
     source_files = [
         (network_file, "sumo_network_truth"),
         (selection_file, "controlled_intersection_registry"),
-        (zones_file, "osm_functional_zone_inventory"),
-        (osm_file, "osm_geographic_context"),
+        (zones_file, "functional_zone_inventory"),
         (vtypes_file, "sumo_participant_types"),
         (config_file, "scenario_configuration"),
     ]
+    if osm_file.is_file():
+        source_files.append((osm_file, "osm_geographic_context"))
     missing = [path for path, _role in source_files if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"scene inputs are missing: {missing}")
 
     selection = json.loads(selection_file.read_text(encoding="utf-8"))
     selected_items = selection["intersections"]
-    controlled = {item["intersection_id"]: item for item in selected_items}
+    controlled_tls = {
+        str(item.get("sumo_tls_id", item["intersection_id"])): item for item in selected_items
+    }
+    controlled_junctions: dict[str, dict[str, Any]] = {}
+    for item in selected_items:
+        members = item.get(
+            "member_sumo_junction_ids", [item.get("sumo_node_id", item["intersection_id"])]
+        )
+        for junction_id in members:
+            controlled_junctions[str(junction_id)] = item
     xs = [float(item["x"]) for item in selected_items]
     ys = [float(item["y"]) for item in selected_items]
     controlled_bounds = Bounds2(
@@ -641,28 +650,36 @@ def generate_scene_document(
         pedestrian_areas,
         bicycle_areas,
         traffic_lights,
-    ) = _parse_network(network_file, scene_bounds, controlled)
-    coordinates = CoordinateService(
-        CoordinateDefinition(
-            projection=location["projParameter"],
-            net_offset_x=net_offset.x,
-            net_offset_y=net_offset.y,
-            world_origin_sumo_x=origin.x,
-            world_origin_sumo_y=origin.y,
+    ) = _parse_network(network_file, scene_bounds, controlled_tls, controlled_junctions)
+    projection = location.get("projParameter", "-")
+    coordinates = (
+        CoordinateService(
+            CoordinateDefinition(
+                projection=projection,
+                net_offset_x=net_offset.x,
+                net_offset_y=net_offset.y,
+                world_origin_sumo_x=origin.x,
+                world_origin_sumo_y=origin.y,
+            )
         )
+        if projection not in {"", "-", "!"}
+        else None
     )
     for junction in junctions:
-        if not junction.lon and not junction.lat:
+        if coordinates is not None and not junction.lon and not junction.lat:
             junction.lon, junction.lat = coordinates.sumo_to_lon_lat(
                 junction.position.x,
                 junction.position.y,
             )
 
-    road_names, buildings, vegetation, zones, bus_stops, devices = _load_osm(
-        osm_file,
-        coordinates,
-        scene_bounds,
-    )
+    if coordinates is not None and osm_file.is_file():
+        road_names, buildings, vegetation, zones, bus_stops, devices = _load_osm(
+            osm_file,
+            coordinates,
+            scene_bounds,
+        )
+    else:
+        road_names, buildings, vegetation, zones, bus_stops, devices = ({}, [], [], [], [], [])
     # The source OSM extract does not inventory RSUs/cameras. Add an explicitly
     # authored, reproducible engineering layout at each controlled junction,
     # anchored to a real incoming SUMO lane rather than arbitrary map offsets.
@@ -737,7 +754,7 @@ def generate_scene_document(
                 "unknown",
             ),
             edge_ids=sorted(edge.sumo_edge_id for edge in group),
-            provenance="sumo_osm_derived",
+            provenance=("sumo_osm_derived" if osm_file.is_file() else "sumo_source_derived"),
         )
         for road_id, group in sorted(road_groups.items())
     ]
@@ -781,9 +798,7 @@ def generate_scene_document(
                 ),
             )
         )
-    display_by_id = {
-        item["intersection_id"]: item["display_id"] for item in selected_items
-    }
+    display_by_id = {item["intersection_id"]: item["display_id"] for item in selected_items}
     corridors = [
         ControlCorridorRecord(
             corridor_id="core-k01-k08",
@@ -820,7 +835,9 @@ def generate_scene_document(
             EdgeRegionRecord(
                 edge_id=edge.sumo_edge_id,
                 nearest_controlled_junction_id=nearest_id,
-                region_role=("core_corridor" if edge.sumo_edge_id in corridor_edge_set else "context"),
+                region_role=(
+                    "core_corridor" if edge.sumo_edge_id in corridor_edge_set else "context"
+                ),
                 distance_m=distance,
             )
         )
@@ -843,14 +860,15 @@ def generate_scene_document(
         "controlCorridors": corridors,
         "edgeRegions": edge_regions,
     }
+    zone_match = re.search(r"(?:\+zone=|zone=)(\d+)", projection)
     metadata = SceneMetadata(
         scene_id=scenario_id,
         scenario_id=scenario_id,
         generator="traffic_platform.scene.generator",
         generator_version=GENERATOR_VERSION,
         claim_boundary=(
-            "SUMO and OSM provide topology/geography; traffic demand, transferred parameters "
-            "and later authored visual context are engineering models, not field calibration."
+            "SUMO is the topology and traffic truth. OSM geography is retained when available; "
+            "planning-file geometry and authored visual context remain reviewed engineering models."
         ),
         source_files=[
             SourceFile(
@@ -865,10 +883,14 @@ def generate_scene_document(
     document = SceneDocument(
         metadata=metadata,
         coordinate_system=CoordinateSystem(
-            source_crs="WGS84 / UTM zone 50N",
-            projection=location["projParameter"],
-            utm_zone=50,
-            northern_hemisphere=True,
+            source_crs=(
+                f"WGS84 / projected zone {zone_match.group(1)}"
+                if zone_match
+                else "SUMO local Cartesian"
+            ),
+            projection=projection,
+            utm_zone=int(zone_match.group(1)) if zone_match else 0,
+            northern_hemisphere="+south" not in projection,
             net_offset=net_offset,
             sumo_bounds=sumo_bounds,
             geo_bounds=geo_bounds,
@@ -929,9 +951,7 @@ def generate_scene_document(
         },
     )
 
-    destination = output_path or (
-        workspace / "generated" / "scenes" / f"{scenario_id}.scene.json"
-    )
+    destination = output_path or (workspace / "generated" / "scenes" / f"{scenario_id}.scene.json")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(document.model_dump_json(by_alias=True), encoding="utf-8")
     scene_sha256 = _sha256(destination)
@@ -974,6 +994,9 @@ def generate_scene_document(
                         "sceneId": controller.scene_id,
                         "sumoTlsId": controller.sumo_tls_id,
                         "controlledJunctionId": controller.controlled_junction_id,
+                        "memberSumoJunctionIds": controlled_tls[controller.sumo_tls_id].get(
+                            "member_sumo_junction_ids", [controller.controlled_junction_id]
+                        ),
                         "displayId": controller.display_id,
                         "programId": controller.program_id,
                         "links": [link.model_dump(by_alias=True) for link in controller.links],

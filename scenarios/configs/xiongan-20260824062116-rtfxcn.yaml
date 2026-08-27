@@ -1,0 +1,57 @@
+schema_version: '1.0'
+scenario_id: xiongan-20260824062116-rtfxcn
+display_name: 雄安自定义路网场景
+provenance: openstreetmap_plus_modeled_parameters
+is_real_measured_network: false
+network_file: scenarios/generated/xiongan-20260824062116-rtfxcn/rongdong.multimodal.net.xml
+simulation:
+  duration_s: 1800.0
+  step_length_s: 1.0
+  seed: 2032893199
+  gui: false
+demand:
+- origin_zone: synthetic_boundary_exchange_origins
+  destination_zone: synthetic_boundary_exchange_destinations
+  flow_veh_h: 1200.0
+  begin_s: 0.0
+  end_s: 1800.0
+  route_alternatives: true
+  route_scope: complete_network
+vehicle_type_ratios:
+  passenger: 1.0
+connected_vehicle_penetration: 0.0
+flow_multiplier: 1.0
+signal_plan: user_reviewed_source_draft_v1
+disturbances: []
+communication:
+  profile: N0
+  cloud_edge:
+    base_latency_ms: 0.0
+    packet_loss_rate: 0.0
+  edge_vehicle:
+    base_latency_ms: 0.0
+    packet_loss_rate: 0.0
+algorithm:
+  name: coordinated-max-pressure
+  parameters:
+    cloud_weight: 0.35
+    downstream_saturation_threshold: 0.9
+sampling:
+  control_hz: 1.0
+  intersection_hz: 1.0
+  dashboard_hz: 1.0
+  vehicle_trajectory_hz: 0.2
+  experiment_summary_hz: 0.2
+multimodal:
+  enabled: true
+  network_scope: complete_osm_network
+  infrastructure_source: osm_plus_traceable_engineering_inference
+  pedestrian_signal_mode: conditional_parallel
+  sidewalk_width_m: 2.5
+  bicycle_lane_width_m: 2.0
+  sidewalk_max_road_speed_m_s: 22.3
+  bicycle_lane_max_road_speed_m_s: 19.5
+  crossing_speed_threshold_m_s: 22.3
+  pedestrian_min_green_s: 10.0
+  pedestrian_clearance_s: 5.0
+  demands: []

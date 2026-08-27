@@ -27,7 +27,7 @@ class FixedTimeController(BaseTrafficController):
             action_type="hold_phase",
             requested_duration_s=None,
             scores={},
+            selected_policy="B0",
             reason_codes=["FIXED_PLAN_ACTIVE"],
             explanation="B0 preserves the scenario's validated fixed-time plan.",
         )
-

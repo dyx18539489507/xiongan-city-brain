@@ -1,0 +1,330 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "codex-osm-small-range-acceptance",
+  "sourceSceneFile": "codex-osm-small-range-acceptance.scene.json",
+  "sourceSceneSha256": "5d3332ef3b90a69218ef42fe073609c83dcf8a9b52d5436288f6c4d997b4868a",
+  "controllers": [
+    {
+      "sceneId": "tls:-2:0",
+      "sumoTlsId": "-2",
+      "controlledJunctionId": "-2",
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "--1#0_1",
+          "viaLaneId": ":-2_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-2_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--2#0_1",
+          "viaLaneId": ":-2_6_1"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-1#1_1",
+          "viaLaneId": ":-2_8_1"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_10_1"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-2_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_14_0"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "--2#1_1",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_15_0"
+        },
+        {
+          "linkIndex": 16,
+          "fromLaneId": "--2#1_1",
+          "toLaneId": "--2#0_1",
+          "viaLaneId": ":-2_16_0"
+        },
+        {
+          "linkIndex": 17,
+          "fromLaneId": "--2#1_1",
+          "toLaneId": "-1#1_1",
+          "viaLaneId": ":-2_17_0"
+        },
+        {
+          "linkIndex": 18,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_18_0"
+        },
+        {
+          "linkIndex": 19,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_18_1"
+        },
+        {
+          "linkIndex": 20,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_20_0"
+        },
+        {
+          "linkIndex": 21,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--1#0_1",
+          "viaLaneId": ":-2_20_1"
+        },
+        {
+          "linkIndex": 22,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-2_22_0"
+        },
+        {
+          "linkIndex": 23,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--2#0_1",
+          "viaLaneId": ":-2_22_1"
+        }
+      ],
+      "phaseStateLengths": [
+        24,
+        24,
+        24,
+        24
+      ]
+    },
+    {
+      "sceneId": "tls:-6:0",
+      "sumoTlsId": "-6",
+      "controlledJunctionId": "-6",
+      "displayId": "J02",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-2#1_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-2#1_0",
+          "toLaneId": "-2#2_0",
+          "viaLaneId": ":-6_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-2#1_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-2#1_1",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-2#1_1",
+          "toLaneId": "-2#2_1",
+          "viaLaneId": ":-6_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-2#1_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-6_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_6_1"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-6_8_1"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "-2#2_0",
+          "viaLaneId": ":-6_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "-2#2_1",
+          "viaLaneId": ":-6_10_1"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_14_0"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_15_0"
+        },
+        {
+          "linkIndex": 16,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_16_0"
+        },
+        {
+          "linkIndex": 17,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-6_17_0"
+        },
+        {
+          "linkIndex": 18,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-2#2_0",
+          "viaLaneId": ":-6_18_0"
+        },
+        {
+          "linkIndex": 19,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-2#2_1",
+          "viaLaneId": ":-6_18_1"
+        },
+        {
+          "linkIndex": 20,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_20_0"
+        },
+        {
+          "linkIndex": 21,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-6_20_1"
+        },
+        {
+          "linkIndex": 22,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_22_0"
+        },
+        {
+          "linkIndex": 23,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_22_1"
+        }
+      ],
+      "phaseStateLengths": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 2,
+    "links": 48
+  }
+}

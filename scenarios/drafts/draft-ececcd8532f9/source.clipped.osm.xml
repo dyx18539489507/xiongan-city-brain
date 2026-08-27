@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganTrafficScenarioFactory/1.0">
+  <bounds minlon="115.91690038263408" minlat="39.06084552081818" maxlon="115.9177958222296" maxlat="39.06136939238022" />
+  <node id="-8" lon="115.916900383" lat="39.061206175" version="1" />
+  <node id="-7" lon="115.917795822" lat="39.061205027" version="1" />
+  <node id="-6" lon="115.917371236" lat="39.060845521" version="1" />
+  <node id="-5" lon="115.9173742" lat="39.0612051" version="1" />
+  <node id="-4" lon="115.917373701" lat="39.061369392" version="1" />
+  <node id="-3" lon="115.917523621" lat="39.061369392" version="1" />
+  <node id="-2" lon="115.9175254" lat="39.0612026" version="1" />
+  <node id="-1" lon="115.917529359" lat="39.060845521" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="785419413" />
+    <tag k="source_way_id" v="-1" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517609" />
+    <tag k="source_way_id" v="-2" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-7" />
+    <nd ref="-2" />
+    <nd ref="-5" />
+    <nd ref="-8" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖北街" />
+    <tag k="source_way_id" v="1457051468" />
+    <tag k="source_way_id" v="-3" />
+  </way>
+</osm>

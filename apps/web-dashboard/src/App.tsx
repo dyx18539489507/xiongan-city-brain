@@ -1,17 +1,33 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {
   clearFaults,
+  clearLiveComparisonFaults,
+  createAndStartLiveComparison,
   createAndStartExperiment,
+  describeRequestError,
   injectFault,
+  injectLiveComparisonFault,
   lifecycle,
+  liveComparisonLifecycle,
+  loadExperimentState,
   loadInventory,
   setSimulationRate,
+  setLiveComparisonRate,
 } from "./api";
-import {SimulationCommandCenter} from "./components/SimulationCommandCenter";
+import {algorithmLabel} from "./algorithmLabels";
+import {SimulationCommandCenter, startupPhaseLabel, type TransportCommand} from "./components/SimulationCommandCenter";
+import {PlatformWorkspaceNav, type PlatformWorkspace} from "./components/PlatformWorkspaceNav";
+import {ScenarioFactoryWorkspace} from "./components/ScenarioFactoryWorkspace";
+import {TwinIcon} from "./components/twin/TwinIcon";
 import {AlgorithmComparisonChart} from "./components/AlgorithmComparisonChart";
 import {Timeline} from "./components/Timeline";
 import {TrendChart} from "./components/TrendChart";
 import {useDigitalTwinPlayback} from "./3d/replay/useDigitalTwinPlayback";
+import {usePairedDigitalTwinStream} from "./3d/network/ComparisonDigitalTwinSocket";
+import {selectOperationalTimelineEvents} from "./2d/timeline";
+import {resolveScenarioRuntimeParameters} from "./scenarioRuntime";
+import {isActiveRealtimeSnapshot} from "./realtimeSnapshot";
+import {canReuseExperiment} from "./experimentReuse";
 import type {
   Algorithm,
   IntersectionNode,
@@ -20,9 +36,38 @@ import type {
   RuntimeEvent,
   Scenario,
   TimelineEvent,
+  TopologyEdge,
 } from "./types";
 
 const dash = "—";
+const minimumCommandFeedbackMs = 320;
+const pairedFirstFrameTimeoutMs = 120_000;
+const terminalRuntimeStatuses = new Set(["completed", "failed", "invalid", "stopped"]);
+
+async function loadLiveComparisonState(pairId: string): Promise<{status: string}> {
+  const response = await fetch(`/api/v1/live-comparisons/${pairId}`, {cache: "no-store"});
+  if (!response.ok) throw new Error(`${response.status} ${await response.text()}`);
+  return response.json() as Promise<{status: string}>;
+}
+
+async function waitForRuntimeTerminal(
+  runtimeId: string,
+  loadState: (id: string) => Promise<{status: string}>,
+  timeoutMs = 20_000,
+): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const state = await loadState(runtimeId);
+    if (terminalRuntimeStatuses.has(state.status)) return;
+    await new Promise((resolve) => window.setTimeout(resolve, 160));
+  }
+  throw new Error(`等待运行实例 ${runtimeId} 停止超时`);
+}
+const AlgorithmEvaluationWorkspace = lazy(() =>
+  import("./components/AlgorithmEvaluationWorkspace").then((module) => ({
+    default: module.AlgorithmEvaluationWorkspace,
+  })),
+);
 
 function formatMetric(value: number | null | undefined, digits = 1): string {
   return value === undefined || value === null ? dash : value.toFixed(digits);
@@ -68,29 +113,40 @@ function classifyEvent(event: RuntimeEvent): TimelineEvent {
 
 export function App() {
   const playback = useDigitalTwinPlayback();
+  const pairedDigitalTwin = usePairedDigitalTwinStream();
   const digitalTwin = playback.stream;
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
   const [nodes, setNodes] = useState<IntersectionNode[]>([]);
+  const [topologyEdges, setTopologyEdges] = useState<TopologyEdge[]>([]);
+  const [workspace, setWorkspace] = useState<PlatformWorkspace>(() => {
+    const value = new URLSearchParams(window.location.search).get("workspace");
+    return value === "algorithms" || value === "scenarios" ? value : "simulation";
+  });
   const [scenarioId, setScenarioId] = useState("xiongan_rongdong_20");
   const [scenarioProfile, setScenarioProfile] = useState("BASE");
-  const [algorithm, setAlgorithm] = useState("coordinated-max-pressure");
+  const [algorithm, setAlgorithm] = useState("fixed-time");
+  const [candidateAlgorithm, setCandidateAlgorithm] = useState("coordinated-max-pressure");
   const [seed, setSeed] = useState(42);
   const [durationS, setDurationS] = useState(1800);
-  const [simulationRate, setSimulationRateState] = useState<number | null>(null);
+  const [simulationRate, setSimulationRateState] = useState<number | null>(1);
   const [experimentId, setExperimentId] = useState<string | null>(null);
+  const [comparisonId, setComparisonId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<RealtimeSnapshot>({
     status: "idle",
     message: "尚未运行",
   });
   const [history, setHistory] = useState<RealtimeSnapshot[]>([]);
+  const [comparisonHistory, setComparisonHistory] = useState<RealtimeSnapshot[]>([]);
   const [localEvents, setLocalEvents] = useState<TimelineEvent[]>([]);
   const [connection, setConnection] = useState<
     "connecting" | "online" | "offline"
   >("connecting");
   const [commandBusy, setCommandBusy] = useState(false);
   const [commandLabel, setCommandLabel] = useState<string | null>(null);
+  const [activeTransportCommand, setActiveTransportCommand] = useState<TransportCommand | null>(null);
+  const [startupStage, setStartupStage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [replayChoice, setReplayChoice] = useState("");
   const [replayHistory, setReplayHistory] = useState<RealtimeSnapshot[]>([]);
@@ -99,22 +155,76 @@ export function App() {
   const previousRef = useRef<RealtimeSnapshot | null>(null);
   const replayExperimentRef = useRef<string | null>(null);
   const activeExperimentRef = useRef<string | null>(null);
-  const simulationRateRef = useRef<number | null>(null);
+  const pendingStartRef = useRef(false);
+  const simulationRateRef = useRef<number | null>(1);
+  const pairedDigitalTwinRef = useRef(pairedDigitalTwin);
+  pairedDigitalTwinRef.current = pairedDigitalTwin;
+
+  const refreshInventory = useCallback(async () => {
+    const inventory = await loadInventory();
+    setScenarios(inventory.scenarios);
+    setAlgorithms(inventory.algorithms);
+    setNodes(inventory.intersections);
+    setTopologyEdges(inventory.topologyEdges);
+    setSelectedId((current) => current ?? inventory.intersections.find((item) => item.display_id === "B01")
+      ?.intersection_id ?? inventory.intersections[0]?.intersection_id ?? null);
+    return inventory;
+  }, []);
 
   useEffect(() => {
-    loadInventory()
-      .then((inventory) => {
-        setScenarios(inventory.scenarios);
-        setAlgorithms(inventory.algorithms);
-        setNodes(inventory.intersections);
-        setAlgorithm(inventory.activeAlgorithm);
-        setSelectedId(
-          inventory.intersections.find((item) => item.display_id === "K08")
-            ?.intersection_id ?? inventory.intersections[0]?.intersection_id ?? null,
-        );
-      })
-      .catch((reason: unknown) => setError(String(reason)));
+    refreshInventory().catch((reason: unknown) => setError(describeRequestError(reason)));
+  }, [refreshInventory]);
+
+  const changeWorkspace = useCallback((next: PlatformWorkspace) => {
+    setError(null);
+    setWorkspace(next);
+    const url = new URL(window.location.href);
+    if (next === "simulation") url.searchParams.delete("workspace");
+    else url.searchParams.set("workspace", next);
+    window.history.replaceState(null, "", url);
   }, []);
+
+  useEffect(() => {
+    const pair = pairedDigitalTwin.state;
+    if (pairedDigitalTwin.connection === "online" && !pair.pairId) {
+      setComparisonId(null);
+      return;
+    }
+    if (!pair.pairId || !pair.initialized) return;
+    setComparisonId(pair.pairId);
+    if (pair.candidateAlgorithm) setCandidateAlgorithm(pair.candidateAlgorithm);
+    const manifest = pair.fairnessManifest;
+    if (typeof manifest.scenario_id === "string") setScenarioId(manifest.scenario_id);
+    if (typeof manifest.scenario_profile === "string") setScenarioProfile(manifest.scenario_profile);
+    if (typeof manifest.seed === "number") setSeed(manifest.seed);
+    if (typeof manifest.duration_s === "number") setDurationS(manifest.duration_s);
+    const candidate = pair.candidate;
+    const metrics = candidate.metrics as Partial<RealtimeSnapshot>;
+    const next: RealtimeSnapshot = {
+      ...metrics,
+      status: pair.status,
+      experiment_id: candidate.experimentId ?? undefined,
+      scenario_id: candidate.scenarioId ?? undefined,
+      scenario_profile: String(manifest.scenario_profile ?? scenarioProfile),
+      algorithm: pair.candidateAlgorithm,
+      seed: Number(manifest.seed ?? seed),
+      duration_s: Number(manifest.duration_s ?? durationS),
+      simulation_time_s: pair.simulationTimeS,
+      intersections: candidate.intersectionMetrics.map((item) => ({
+        ...item,
+        lane_states: Array.isArray(item.approaches) ? item.approaches : [],
+      })) as unknown as IntersectionRealtime[],
+    };
+    setComparisonHistory((current) => {
+      const sameRun = current.filter((item) => item.experiment_id === next.experiment_id);
+      const withoutCurrentTime = sameRun.filter(
+        (item) => item.simulation_time_s !== next.simulation_time_s,
+      );
+      return [...withoutCurrentTime, next]
+        .sort((left, right) => (left.simulation_time_s ?? 0) - (right.simulation_time_s ?? 0))
+        .slice(-180);
+    });
+  }, [durationS, pairedDigitalTwin.connection, pairedDigitalTwin.state, scenarioProfile, seed]);
 
   useEffect(() => {
     if (!replayChoice && playback.selectedReplayId) {
@@ -130,6 +240,7 @@ export function App() {
 
   const replaySnapshot = useMemo<RealtimeSnapshot>(() => {
     const metrics = digitalTwin.state.metrics as unknown as Partial<RealtimeSnapshot>;
+    const replayItem = playback.replays.find((item) => item.experimentId === playback.selectedReplayId);
     const intersections = digitalTwin.state.intersectionMetrics.map((item) => ({
       ...item,
       lane_states: [],
@@ -140,10 +251,13 @@ export function App() {
       message: "真实 SUMO 实验数据回放",
       experiment_id: digitalTwin.state.experimentId ?? undefined,
       scenario_id: digitalTwin.state.scenarioId ?? undefined,
+      scenario_profile: replayItem?.profile ?? undefined,
+      seed: replayItem?.seed ?? undefined,
+      duration_s: playback.replay.durationS,
       simulation_time_s: digitalTwin.state.simulationTimeS,
       intersections,
     };
-  }, [digitalTwin.state, playback.replay.playing]);
+  }, [digitalTwin.state, playback.replay.durationS, playback.replay.playing, playback.replays, playback.selectedReplayId]);
 
   const viewSnapshot = playback.mode === "replay" ? replaySnapshot : snapshot;
 
@@ -193,8 +307,17 @@ export function App() {
       socket.onerror = () => setConnection("offline");
       socket.onmessage = (message) => {
         const next = JSON.parse(message.data as string) as RealtimeSnapshot;
+        const activeExperimentId = activeExperimentRef.current;
+        if (!isActiveRealtimeSnapshot(activeExperimentId, next.experiment_id)) return;
+        if (pendingStartRef.current) pendingStartRef.current = false;
         setSnapshot(next);
-        if (next.experiment_id) setExperimentId(next.experiment_id);
+        if (next.experiment_id) {
+          setExperimentId(next.experiment_id);
+          if (["starting", "running", "paused"].includes(next.status)) {
+            activeExperimentRef.current = next.experiment_id;
+          }
+        }
+        if (next.algorithm) setAlgorithm(next.algorithm);
         if (next.simulation_time_s !== undefined) {
           setHistory((current) => [...current, next].slice(-180));
         }
@@ -261,7 +384,7 @@ export function App() {
   ).map(classifyEvent).reverse();
   const eventMap = new Map<string, TimelineEvent>();
   for (const event of [...backendEvents, ...localEvents]) eventMap.set(event.id, event);
-  const timelineEvents = [...eventMap.values()].slice(0, 60);
+  const timelineEvents = selectOperationalTimelineEvents([...eventMap.values()]);
   const baselineReplay = playback.replays.find((item) => item.experimentId === baselineChoice);
   const candidateReplay = playback.replays.find((item) => item.experimentId === candidateChoice);
   const comparisonMetrics: Array<[string, string, boolean]> = [
@@ -276,34 +399,62 @@ export function App() {
   const runCommand = async (
     label: string,
     operation: () => Promise<unknown>,
-  ) => {
+    transportCommand: TransportCommand | null = null,
+  ): Promise<string | null> => {
+    const feedbackStartedAt = Date.now();
     setCommandBusy(true);
     setCommandLabel(label);
+    setActiveTransportCommand(transportCommand);
     setError(null);
     try {
       await operation();
+      return null;
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : String(reason));
+      const message = describeRequestError(reason);
+      setError(message);
+      return message;
     } finally {
+      const feedbackRemainingMs = minimumCommandFeedbackMs - (Date.now() - feedbackStartedAt);
+      if (feedbackRemainingMs > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, feedbackRemainingMs));
+      }
       setCommandBusy(false);
       setCommandLabel(null);
+      setActiveTransportCommand(null);
     }
   };
 
-  const start = () =>
-    runCommand("正在启动 SUMO 与协同链路", async () => {
-      activeExperimentRef.current = null;
+  const launchExperiment = async (
+    targetScenarioId: string,
+    targetAlgorithm: string,
+    fallbackSnapshot: RealtimeSnapshot,
+    options: {profile?: string; seed?: number; durationS?: number} = {},
+  ) => {
+    const targetProfile = options.profile ?? scenarioProfile;
+    const targetSeed = options.seed ?? seed;
+    const targetDurationS = options.durationS ?? durationS;
+    pendingStartRef.current = true;
+    activeExperimentRef.current = null;
+    setSnapshot({
+      status: "starting",
+      message: "正在启动 SUMO 与 TraCI",
+      scenario_id: targetScenarioId,
+      scenario_profile: targetProfile,
+      algorithm: targetAlgorithm,
+      seed: targetSeed,
+      duration_s: targetDurationS,
+      simulation_time_s: 0,
+    });
+    try {
       const id = await createAndStartExperiment({
-        scenario_id: scenarioId,
-        profile: scenarioProfile,
-        algorithm,
-        seed,
-        duration_s: durationS,
-      });
+        scenario_id: targetScenarioId,
+        profile: targetProfile,
+        algorithm: targetAlgorithm,
+        seed: targetSeed,
+        duration_s: targetDurationS,
+      }, simulationRateRef.current);
       activeExperimentRef.current = id;
-      if (simulationRateRef.current !== null) {
-        await setSimulationRate(id, simulationRateRef.current);
-      }
+      setSnapshot((current) => ({...current, experiment_id: id}));
       setExperimentId(id);
       setHistory([]);
       setLocalEvents([
@@ -312,23 +463,278 @@ export function App() {
           simulationTime: 0,
           type: "state",
           title: "实验启动",
-          detail: `${scenarioProfile} · ${algorithm} · seed ${seed} · ${durationS}s`,
+          detail: `${targetProfile} · ${algorithmLabel(targetAlgorithm)} · seed ${targetSeed} · ${targetDurationS}s`,
         },
       ]);
+    } catch (reason) {
+      pendingStartRef.current = false;
+      activeExperimentRef.current = null;
+      setSnapshot(fallbackSnapshot);
+      throw reason;
+    }
+  };
+
+  const stopSingleRuntimeBeforeComparison = async () => {
+    const activeId = experimentId ?? snapshot.experiment_id ?? digitalTwin.state.experimentId;
+    if (!activeId) return;
+    const state = await loadExperimentState(activeId);
+    if (!terminalRuntimeStatuses.has(state.status)) {
+      if (!["stopping", "finalizing"].includes(state.status)) {
+        await lifecycle(activeId, "stop");
+      }
+      await waitForRuntimeTerminal(activeId, loadExperimentState);
+    }
+    activeExperimentRef.current = null;
+    pendingStartRef.current = false;
+    setExperimentId(null);
+    setSnapshot({status: "idle", message: "单路仿真已停止"});
+  };
+
+  const stopComparisonRuntimeBeforeExperiment = async () => {
+    const activeId = comparisonId ?? pairedDigitalTwin.state.pairId;
+    if (!activeId) return;
+    if (!terminalRuntimeStatuses.has(pairedDigitalTwin.state.status)) {
+      const state = await loadLiveComparisonState(activeId);
+      if (state.status !== "stopping") {
+        await liveComparisonLifecycle(activeId, "stop");
+      }
+      await waitForRuntimeTerminal(activeId, loadLiveComparisonState);
+    }
+    setComparisonId(null);
+    setComparisonHistory([]);
+    pairedDigitalTwin.reset?.();
+  };
+
+  const clearRuntimePresentation = (message = "已重置，等待启动") => {
+    activeExperimentRef.current = null;
+    pendingStartRef.current = false;
+    previousRef.current = null;
+    replayExperimentRef.current = null;
+    setExperimentId(null);
+    setComparisonId(null);
+    setHistory([]);
+    setComparisonHistory([]);
+    setReplayHistory([]);
+    setLocalEvents([]);
+    setSelectedId(null);
+    setStartupStage(null);
+    setSnapshot({status: "idle", message, simulation_time_s: 0});
+    simulationRateRef.current = 1;
+    setSimulationRateState(1);
+    playback.goLive();
+    playback.resetLive();
+    pairedDigitalTwin.reset?.();
+  };
+
+  const changeSimulationView = (next: "2d" | "3d") =>
+    runCommand(`正在重置并切换到 ${next.toUpperCase()}`, async () => {
+      await stopSingleRuntimeBeforeComparison();
+      await stopComparisonRuntimeBeforeExperiment();
+      clearRuntimePresentation(`已切换到 ${next.toUpperCase()}，等待启动`);
+    }, "reset");
+
+  const start = (
+    targetScenarioId = scenarioId,
+    options: {profile?: string; seed?: number; durationS?: number} = {},
+  ) => {
+    const runtime = resolveScenarioRuntimeParameters(
+      scenarios,
+      targetScenarioId,
+      {seed, durationS},
+      options,
+    );
+    return runCommand("正在启动 SUMO 与协同链路", async () => {
+      await stopComparisonRuntimeBeforeExperiment();
+      await launchExperiment(targetScenarioId, algorithm, snapshot, {...options, ...runtime});
+    }, "start");
+  };
+
+  const enterGeneratedScenario = async (targetScenarioId: string, view: "2d" | "3d") => {
+    const inventory = await refreshInventory();
+    const targetScenario = inventory.scenarios.find((item) => item.scenario_id === targetScenarioId);
+    if (!targetScenario?.runnable) throw new Error("生成场景尚未通过 SUMO 可运行校验");
+    const targetSeed = targetScenario.seed ?? seed;
+    const targetDurationS = targetScenario.duration_s ?? 180;
+    setScenarioId(targetScenarioId);
+    setScenarioProfile("BASE");
+    setSeed(targetSeed);
+    setDurationS(targetDurationS);
+    simulationRateRef.current = 1;
+    setSimulationRateState(1);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", view);
+    url.searchParams.set("run", "single");
+    window.history.replaceState(null, "", url);
+    const activeId = experimentId ?? snapshot.experiment_id ?? digitalTwin.state.experimentId;
+    if (activeId) {
+      const activeState = await loadExperimentState(activeId);
+      if (canReuseExperiment(activeState, targetScenarioId)) {
+        activeExperimentRef.current = activeId;
+        pendingStartRef.current = false;
+        setExperimentId(activeId);
+        setSnapshot((current) => ({
+          ...current,
+          status: activeState.status,
+          experiment_id: activeId,
+          scenario_id: targetScenarioId,
+          scenario_profile: activeState.request.profile,
+          algorithm: activeState.request.algorithm,
+          seed: activeState.request.seed,
+          duration_s: activeState.request.duration_s,
+        }));
+        changeWorkspace("simulation");
+        return;
+      }
+    }
+    await stopSingleRuntimeBeforeComparison();
+    await start(targetScenarioId, {profile: "BASE", seed: targetSeed, durationS: targetDurationS});
+    changeWorkspace("simulation");
+  };
+
+  const waitForPairedFirstFrame = async (pairId: string): Promise<void> => {
+    const deadline = Date.now() + pairedFirstFrameTimeoutMs;
+    while (Date.now() < deadline) {
+      const stream = pairedDigitalTwinRef.current;
+      const state = stream.state;
+      if (state.pairId === pairId && state.simulationTimeS > 0 && state.initialized) return;
+      if (state.pairId === pairId && ["failed", "invalid"].includes(state.status)) {
+        throw new Error(stream.issue || "双路 SUMO 启动失败");
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 120));
+    }
+    throw new Error("双路仿真等待超时：120 秒内未收到基准与候选路的首帧数据。请重新启动；若再次出现，请检查后端与 TraCI 连接");
+  };
+
+  const startComparison = () =>
+    runCommand("正在启动同条件双 SUMO 实时对照", async () => {
+      try {
+      if (candidateAlgorithm === "fixed-time") {
+        throw new Error("候选算法必须与基准 fixed-time 不同");
+      }
+      const runtime = resolveScenarioRuntimeParameters(
+        scenarios,
+        scenarioId,
+        {seed, durationS},
+      );
+      setStartupStage("准备运行环境");
+      await stopSingleRuntimeBeforeComparison();
+      if (
+        comparisonId
+        && ["created", "configured"].includes(pairedDigitalTwin.state.status)
+      ) {
+        setStartupStage("启动双路 SUMO");
+        await liveComparisonLifecycle(comparisonId, "start");
+        setStartupStage("等待 TraCI 首帧");
+        await waitForPairedFirstFrame(comparisonId);
+        setComparisonHistory([]);
+        setLocalEvents((current) => [{
+          id: `${comparisonId}-start`,
+          simulationTime: 0,
+          type: "state" as const,
+          title: "实时对照启动",
+          detail: `fixed-time ↔ ${algorithmLabel(candidateAlgorithm)} · ${scenarioProfile} · seed ${runtime.seed}`,
+        }, ...current].slice(0, 20));
+        return;
+      }
+      const stageLabels = {
+        creating: "创建对照任务",
+        configuring: "配置运行倍速",
+        starting: "启动双路 SUMO",
+      } as const;
+      const created = await createAndStartLiveComparison({
+        scenario_id: scenarioId,
+        profile: scenarioProfile,
+        baseline_algorithm: "fixed-time",
+        candidate_algorithm: candidateAlgorithm,
+        seed: runtime.seed,
+        duration_s: runtime.durationS,
+      }, simulationRateRef.current, (stage) => setStartupStage(stageLabels[stage]));
+      setComparisonId(created.id);
+      setStartupStage("等待 TraCI 首帧");
+      await waitForPairedFirstFrame(created.id);
+      setComparisonHistory([]);
+      setLocalEvents((current) => [{
+        id: `${created.id}-start`,
+        simulationTime: 0,
+        type: "state" as const,
+        title: "实时对照启动",
+        detail: `fixed-time ↔ ${algorithmLabel(candidateAlgorithm)} · ${scenarioProfile} · seed ${runtime.seed}`,
+      }, ...current].slice(0, 20));
+      } finally {
+        setStartupStage(null);
+      }
+    }, "start");
+
+  const changeAlgorithm = (targetAlgorithm: string) => {
+    if (targetAlgorithm === algorithm) return;
+    const shouldRestart = playback.mode === "live"
+      && Boolean(experimentId)
+      && ["starting", "running", "paused"].includes(snapshot.status);
+    if (!shouldRestart) {
+      setAlgorithm(targetAlgorithm);
+      return;
+    }
+    void runCommand(`正在切换到${algorithmLabel(targetAlgorithm)}`, async () => {
+      if (experimentId) await lifecycle(experimentId, "stop");
+      activeExperimentRef.current = null;
+      pendingStartRef.current = false;
+      setExperimentId(null);
+      setAlgorithm(targetAlgorithm);
+      await launchExperiment(
+        scenarioId,
+        targetAlgorithm,
+        {...snapshot, status: "stopped", message: "原实验已停止，新算法启动失败"},
+      );
     });
+  };
 
   const reset = () =>
-    runCommand("正在安全停止并重置", async () => {
-      if (experimentId && ["running", "paused"].includes(snapshot.status)) {
-        await lifecycle(experimentId, "stop");
-      }
-      activeExperimentRef.current = null;
-      setExperimentId(null);
-      setHistory([]);
-      setLocalEvents([]);
-      setSnapshot({status: "idle", message: "已重置，等待启动"});
-      previousRef.current = null;
-    });
+    runCommand("正在重置中", async () => {
+      await stopSingleRuntimeBeforeComparison();
+      clearRuntimePresentation();
+    }, "reset");
+
+  const resetComparison = () =>
+    runCommand("正在重置实时对照", async () => {
+      await stopComparisonRuntimeBeforeExperiment();
+      clearRuntimePresentation();
+    }, "reset");
+
+  const changeSingleSimulationRate = async (value: number | null): Promise<string | null> => {
+    const activeId = activeExperimentRef.current ?? experimentId;
+    if (!activeId) {
+      simulationRateRef.current = value;
+      setSimulationRateState(value);
+      return null;
+    }
+    const issue = await runCommand(
+      "正在调整 SUMO 运行倍速",
+      () => setSimulationRate(activeId, value),
+    );
+    if (issue === null) {
+      simulationRateRef.current = value;
+      setSimulationRateState(value);
+    }
+    return issue;
+  };
+
+  const changeComparisonSimulationRate = async (value: number | null): Promise<string | null> => {
+    const activeId = comparisonId ?? pairedDigitalTwin.state.pairId;
+    if (!activeId) {
+      simulationRateRef.current = value;
+      setSimulationRateState(value);
+      return null;
+    }
+    const issue = await runCommand(
+      "正在调整双路 SUMO 倍速",
+      () => setLiveComparisonRate(activeId, value),
+    );
+    if (issue === null) {
+      simulationRateRef.current = value;
+      setSimulationRateState(value);
+    }
+    return issue;
+  };
 
   const fault = (
     faultType: string,
@@ -338,11 +744,17 @@ export function App() {
     injectedDurationS = 30,
   ) =>
     runCommand(`正在注入：${detail}`, async () => {
-      await injectFault(faultType, target, parameters, injectedDurationS);
+      const comparisonActive = new URLSearchParams(window.location.search).get("run") !== "single";
+      const activePairId = comparisonActive ? comparisonId : null;
+      if (activePairId) {
+        await injectLiveComparisonFault(activePairId, faultType, target, parameters, injectedDurationS);
+      } else {
+        await injectFault(faultType, target, parameters, injectedDurationS);
+      }
       setLocalEvents((current) => [
         {
           id: `fault-${Date.now()}`,
-          simulationTime: snapshot.simulation_time_s ?? null,
+          simulationTime: activePairId ? pairedDigitalTwin.state.simulationTimeS : snapshot.simulation_time_s ?? null,
           type: "fault",
           title: "故障注入",
           detail,
@@ -350,6 +762,16 @@ export function App() {
         ...current,
       ]);
     });
+
+  const clearActiveFaults = () => {
+    const activePairId = new URLSearchParams(window.location.search).get("run") !== "single"
+      ? comparisonId
+      : null;
+    return runCommand(
+      "正在清除故障",
+      () => activePairId ? clearLiveComparisonFaults(activePairId) : clearFaults(),
+    );
+  };
 
   const kpis = useMemo<Array<[string, string, string]>>(
     () => [
@@ -382,57 +804,67 @@ export function App() {
         candidate: candidateReplay.summaryMetrics,
       }
     : null;
+  const commandFeedbackLabel = startupStage ? startupPhaseLabel(startupStage) : commandLabel;
 
   return (
-    <main className="app-shell">
-      {commandLabel && (
-        <div className="command-banner" role="status">
+    <main className={`app-shell has-platform-nav workspace-${workspace}`}>
+      <PlatformWorkspaceNav active={workspace} onChange={changeWorkspace} />
+      {commandFeedbackLabel && (
+        <div className={`command-banner ${startupStage ? "pending" : ""}`} role="status">
           <span />
-          {commandLabel}
+          {commandFeedbackLabel}
         </div>
       )}
-      {error && (
+      {error && workspace === "simulation" && (
         <div className="error-banner" role="alert">
-          {error}
+          <TwinIcon name="warning" />
+          <span>{error}</span>
+          <button aria-label="关闭错误提示" onClick={() => setError(null)}><TwinIcon name="close" /></button>
         </div>
       )}
 
-      <SimulationCommandCenter
+      {workspace === "simulation" && <SimulationCommandCenter
+        activeTransportCommand={activeTransportCommand}
         algorithm={algorithm}
         algorithms={algorithms}
+        candidateAlgorithm={candidateAlgorithm}
         commandBusy={commandBusy}
+        comparisonHistory={comparisonHistory}
+        comparisonId={comparisonId}
         digitalTwin={digitalTwin}
         durationS={durationS}
         experimentId={experimentId}
         comparison={cockpitComparison}
         history={cockpitHistory}
         nodes={nodes}
-        onAlgorithmChange={setAlgorithm}
-        onClearFaults={() => runCommand("正在清除故障", clearFaults)}
+        onAlgorithmChange={changeAlgorithm}
+        onCandidateAlgorithmChange={setCandidateAlgorithm}
+        onClearFaults={clearActiveFaults}
+        onComparisonPause={() => comparisonId && runCommand("正在暂停双路仿真", () => liveComparisonLifecycle(comparisonId, "pause"), "pause")}
+        onComparisonReset={resetComparison}
+        onComparisonResume={() => comparisonId && runCommand("正在继续双路仿真", () => liveComparisonLifecycle(comparisonId, "resume"), "start")}
+        onComparisonSimulationRate={changeComparisonSimulationRate}
+        onComparisonStart={startComparison}
+        onComparisonStop={() => comparisonId && runCommand("正在停止双路仿真", () => liveComparisonLifecycle(comparisonId, "stop"), "stop")}
         onDurationChange={setDurationS}
         onFault={fault}
         onIntersectionSelect={setSelectedId}
         onGoLive={playback.goLive}
         onLoadReplay={(id) => runCommand("正在载入真实仿真回放", () => playback.loadReplay(id))}
-        onPause={() => experimentId && runCommand("正在暂停", () => lifecycle(experimentId, "pause"))}
+        onPause={() => experimentId && runCommand("正在暂停", () => lifecycle(experimentId, "pause"), "pause")}
         onProfileChange={setScenarioProfile}
         onReplaySpeed={playback.setReplaySpeed}
         onSeekReplay={playback.seekReplay}
         onReset={reset}
-        onResume={() => experimentId && runCommand("正在继续", () => lifecycle(experimentId, "resume"))}
+        onResume={() => experimentId && runCommand("正在继续", () => lifecycle(experimentId, "resume"), "start")}
         onScenarioChange={(value) => { setScenarioId(value); setScenarioProfile("BASE"); }}
         onSeedChange={setSeed}
-        onSimulationRate={(value) => {
-          simulationRateRef.current = value;
-          setSimulationRateState(value);
-          const activeExperimentId = activeExperimentRef.current;
-          if (activeExperimentId) {
-            void runCommand("正在调整 SUMO 运行倍速", () => setSimulationRate(activeExperimentId, value));
-          }
-        }}
+        onSimulationRate={changeSingleSimulationRate}
         onStart={start}
-        onStop={() => experimentId && runCommand("正在停止", () => lifecycle(experimentId, "stop"))}
+        onStop={() => experimentId && runCommand("正在停止", () => lifecycle(experimentId, "stop"), "stop")}
         onToggleReplay={playback.toggleReplay}
+        onViewModeChange={changeSimulationView}
+        pairedDigitalTwin={pairedDigitalTwin}
         replayPlaying={playback.replay.playing}
         replayBusy={playback.replayBusy}
         replayCurrentTimeS={playback.replay.currentTimeS}
@@ -449,15 +881,37 @@ export function App() {
         selectedReplayId={playback.selectedReplayId}
         snapshot={viewSnapshot}
         sourceMode={playback.mode}
+        startupStage={startupStage}
         timelineEvents={timelineEvents}
         websocketOnline={connection === "online"}
-      />
+      />}
+
+      {workspace === "algorithms" && <Suspense fallback={<div aria-live="polite" className="workspace-loading" role="status"><i className="factory-spinner" aria-hidden="true" /><div><strong>正在载入算法评估</strong><span>准备实验矩阵、配对证据与指标视图</span></div><div aria-hidden="true" className="workspace-loading-skeleton"><b /><b /><b /></div></div>}><AlgorithmEvaluationWorkspace
+        algorithms={algorithms}
+        baselineId={baselineChoice}
+        candidateId={candidateChoice}
+        onBaselineChange={setBaselineChoice}
+        onCandidateChange={setCandidateChoice}
+        onRefresh={playback.refreshReplays}
+        replays={playback.replays}
+      /></Suspense>}
+
+      {workspace === "scenarios" && <ScenarioFactoryWorkspace
+        nodes={nodes}
+        onBuilt={async (id) => {
+          await refreshInventory();
+          setScenarioId(id);
+          setScenarioProfile("BASE");
+        }}
+        onEnter2D={(id) => enterGeneratedScenario(id, "2d")}
+        onEnter3D={(id) => enterGeneratedScenario(id, "3d")}
+        topologyEdges={topologyEdges}
+      />}
 
       {false && <><div className="analysis-grid">
         <section className="trend-section" aria-labelledby="trend-title">
           <div className="section-heading compact">
             <div>
-              <p className="eyebrow">LIVE METRICS</p>
               <h2 id="trend-title">真实采样趋势</h2>
             </div>
             <span className="count-label">
@@ -477,7 +931,6 @@ export function App() {
 
       <section className="replay-deck" aria-labelledby="replay-title">
         <div className="replay-heading">
-          <p className="eyebrow">TRUTHFUL PLAYBACK</p>
           <h2 id="replay-title">实时 / 回放</h2>
           <span className={`replay-mode ${playback.mode}`}>{playback.mode.toUpperCase()}</span>
         </div>
@@ -508,7 +961,7 @@ export function App() {
             className={playback.mode === "live" ? "primary-action" : ""}
             onClick={playback.goLive}
           >
-            LIVE
+            实时
           </button>
           <button
             disabled={playback.mode !== "replay" || !playback.replay.loaded}
@@ -562,9 +1015,8 @@ export function App() {
         {playback.replayIssue && <p className="replay-issue">{playback.replayIssue}</p>}
         <div className="experiment-comparison">
           <div>
-            <p className="eyebrow">ACTUAL RUN COMPARISON</p>
             <strong>同一画布切换 + 真实结果指标对比</strong>
-            <small>仅显示 result.json 中 actual_run=true 的实验汇总，不推断控制收益</small>
+            <small>仅显示 result.json 中标记为实际运行的实验汇总，不推断控制收益</small>
           </div>
           <label>
             Baseline
@@ -616,7 +1068,6 @@ export function App() {
 
       <section className="control-deck" aria-labelledby="control-title">
         <div>
-          <p className="eyebrow">EXPERIMENT CONTROL</p>
           <h2 id="control-title">实验与故障控制</h2>
         </div>
         <div className="selectors">
@@ -661,12 +1112,7 @@ export function App() {
               value={algorithm}
               onChange={(event) => setAlgorithm(event.target.value)}
             >
-              {algorithms
-                .filter(
-                  (item) =>
-                    item.name !== "predictive-controller-placeholder",
-                )
-                .map((item) => (
+              {algorithms.map((item) => (
                   <option key={item.name} value={item.name}>
                     {item.name}
                   </option>
@@ -705,7 +1151,7 @@ export function App() {
           <button
             className="primary-action"
             disabled={commandBusy || playback.mode === "replay" || !currentScenario?.runnable}
-            onClick={start}
+            onClick={() => void start()}
           >
             启动
           </button>
@@ -751,7 +1197,7 @@ export function App() {
           <button
             disabled={commandBusy || playback.mode === "replay" || !experimentId}
             onClick={() =>
-              fault("incident", "downstream_bottleneck", "事故车辆占道 60s", {}, 60)
+              fault("incident", "downstream_bottleneck", "事故车辆占道 60 秒", {}, 60)
             }
           >
             注入事故

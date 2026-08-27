@@ -1,0 +1,46 @@
+{
+  "id": "draft-36055c5bb837",
+  "status": "failed",
+  "progress": 38,
+  "message": "OSM 路网解析失败",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.88705062866212,
+      "south": 39.03778632499611,
+      "east": 115.9449863433838,
+      "north": 39.07824180871982
+    },
+    "provider": "OpenStreetMap / Overpass"
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "unknown",
+  "requires_manual_review": false,
+  "review_confirmed": false,
+  "preview": {
+    "bounds": null,
+    "roads": [],
+    "buildings": [],
+    "intersections": [],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [],
+  "manual_edits": [],
+  "validation": null,
+  "artifacts": {},
+  "logs": [
+    {
+      "time": "2026-08-21T10:00:45.142237+00:00",
+      "progress": 8,
+      "message": "正在从 OpenStreetMap 获取框选范围"
+    },
+    {
+      "time": "2026-08-21T10:00:49.711505+00:00",
+      "progress": 38,
+      "message": "OSM 原始数据已保存, 正在转换 SUMO 路网"
+    }
+  ],
+  "error": "RuntimeError: Quitting (on unknown error).\n",
+  "created_at": "2026-08-21T10:00:45.037896+00:00",
+  "updated_at": "2026-08-21T10:00:50.343433+00:00"
+}

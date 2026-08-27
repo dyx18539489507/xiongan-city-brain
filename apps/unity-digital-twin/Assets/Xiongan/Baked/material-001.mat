@@ -25,13 +25,13 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _DetailScale: 13.5
-    - _DetailStrength: 0.2
+    - _DetailScale: 15.5
+    - _DetailStrength: 0.24
     - _Metallic: 0
     - _Mode: 0
-    - _Smoothness: 0.23
+    - _Smoothness: 0.2
     m_Colors:
-    - _BaseColor: {r: 0.158, g: 0.164, b: 0.17, a: 1}
-    - _SecondaryColor: {r: 0.108, g: 0.114, b: 0.12, a: 1}
+    - _BaseColor: {r: 0.132, g: 0.142, b: 0.151, a: 1}
+    - _SecondaryColor: {r: 0.072, g: 0.078, b: 0.084, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganTrafficScenarioFactory/1.0">
+  <bounds minlon="115.9149616956711" minlat="39.06095066268776" maxlon="115.91590046882631" maxlat="39.06134636908413" />
+  <node id="-5" lon="115.914961696" lat="39.061207627" version="1" />
+  <node id="-3" lon="115.915262981" lat="39.060950663" version="1" />
+  <node id="-2" lon="115.9152584" lat="39.0612099" version="1" />
+  <node id="-1" lon="115.915258943" lat="39.061346369" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+    <tag k="source_way_id" v="-1" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-2" />
+    <nd ref="-5" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖北街" />
+    <tag k="source_way_id" v="1457051468" />
+    <tag k="source_way_id" v="-2" />
+  </way>
+</osm>

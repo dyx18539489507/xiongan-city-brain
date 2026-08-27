@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>车路云实验报告</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#071521;color:#d9efff;margin:0;padding:32px}
+main{max-width:1080px;margin:auto}h1{font-size:30px}p{color:#9bb7c8}
+table{border-collapse:collapse;width:100%;background:#0c2231}
+th,td{padding:10px;border-bottom:1px solid #244253;text-align:left}
+img{max-width:100%;margin-top:24px}pre{white-space:pre-wrap;background:#0c2231;padding:16px}
+</style></head><body><main>
+<h1>车路云协同实验报告</h1>
+<p>实验 rapid-medium-b3-s2026-none-n0-d60-w10-a01
+ · 算法 coordinated-max-pressure
+ · 本页只展示本次实际运行输出。</p>
+<table><tr><th>acceleration_variance</th><td>1.9115932119773902</td></tr><tr><th>algorithm_failure_count</th><td>0</td></tr><tr><th>algorithm_timeout_count</th><td>0</td></tr><tr><th>bicycle_completed_trips</th><td>0</td></tr><tr><th>bicycle_pedestrian_conflict_count</th><td>0</td></tr><tr><th>cloud_decision_latency_ms</th><td>89.66374615374662</td></tr><tr><th>co2_mg</th><td>1828287.3454304687</td></tr><tr><th>communication_drop_count</th><td>0</td></tr><tr><th>completed_trips</th><td>0</td></tr><tr><th>congested_intersection_count</th><td>0.0</td></tr><tr><th>congestion_propagation_time</th><td>not_triggered</td></tr><tr><th>cpu_percent_mean</th><td>60.22833333333333</td></tr><tr><th>data_write_latency_ms</th><td>not_applicable_no_persistence_sink</td></tr><tr><th>edge_decision_latency_ms</th><td>1.7880056667187698</td></tr><tr><th>emergency_braking_count</th><td>0</td></tr><tr><th>emergency_priority_detection_count</th><td>0</td></tr><tr><th>end_to_end_control_latency_ms</th><td>91.45175182046539</td></tr><tr><th>fallback_activation_time_s</th><td>1.0</td></tr><tr><th>fallback_duration_s</th><td>5.0</td></tr><tr><th>fuel_consumption_mg</th><td>591268.3962842373</td></tr><tr><th>gridlock_duration</th><td>0.0</td></tr><tr><th>max_congested_intersection_count</th><td>0</td></tr><tr><th>max_queue</th><td>7</td></tr><tr><th>mean_bicycle_queue_count</th><td>0.0</td></tr><tr><th>mean_bicycle_waiting_time_s</th><td>0.0</td></tr><tr><th>mean_pedestrian_waiting_time_s</th><td>0.0</td></tr><tr><th>mean_queue_meters</th><td>10.389999999999999</td></tr><tr><th>mean_queue_vehicles</th><td>2.7666666666666666</td></tr><tr><th>mean_speed</th><td>9.28614723001714</td></tr><tr><th>mean_speed_m_s</th><td>9.28614723001714</td></tr><tr><th>mean_time_loss</th><td>0.0</td></tr><tr><th>mean_travel_time</th><td>not_available_no_completed_trip</td></tr><tr><th>mean_waiting_time</th><td>2.5110544126788743</td></tr><tr><th>memory_mb_peak</th><td>49.53125</td></tr><tr><th>minimum_pet_s</th><td>not_observed</td></tr><tr><th>minimum_ttc_s</th><td>1.814572205951859</td></tr><tr><th>motor_bicycle_conflict_count</th><td>0</td></tr><tr><th>motor_motor_conflict_count</th><td>1</td></tr><tr><th>motor_pedestrian_conflict_count</th><td>0</td></tr><tr><th>mqtt_round_trip_latency_ms</th><td>0.0</td></tr><tr><th>network_recovery_time</th><td>not_triggered</td></tr><tr><th>nox_mg</th><td>751.4603437504229</td></tr><tr><th>pedestrian_completed_trips</th><td>0</td></tr><tr><th>pedestrian_crossing_count</th><td>4</td></tr><tr><th>performance_retention_under_delay</th><td>not_applicable_no_paired_baseline</td></tr><tr><th>performance_retention_under_packet_loss</th><td>not_applicable_no_paired_baseline</td></tr><tr><th>recovery_time_s</th><td>5.0</td></tr><tr><th>remote_edge_action_count</th><td>0</td></tr><tr><th>remote_edge_action_rejection_count</th><td>0</td></tr><tr><th>simulation_realtime_factor</th><td>0.8996907573931787</td></tr><tr><th>spillback_count</th><td>0</td></tr><tr><th>spillback_duration</th><td>0.0</td></tr><tr><th>spillback_sample_count</th><td>0</td></tr><tr><th>status</th><td>completed</td></tr><tr><th>stop_count</th><td>7</td></tr><tr><th>throughput</th><td>0</td></tr><tr><th>unsafe_command_rejection_count</th><td>626</td></tr></table>
+<img src="mean_speed.svg" alt="平均速度曲线">
+<img src="total_queue.svg" alt="排队曲线">
+<h2>可追溯清单</h2><pre>{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;scenario_id&quot;: &quot;xiongan_rongdong_20&quot;,
+  &quot;scenario_hash&quot;: &quot;9fdb293151c2c39a83b06dbeaa886c4ca1195d22ef95f06c36d05cb9472e503f&quot;,
+  &quot;files&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/formal_2026/configs/profiles_no_disturbance.yaml&quot;,
+      &quot;sha256&quot;: &quot;fb6e79dd462b985cb6805b12dc6f8bd9dc18e69fe68385cc02e7a297a8a288f5&quot;,
+      &quot;size_bytes&quot;: 1226
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/configs/xiongan_rongdong_20.yaml&quot;,
+      &quot;sha256&quot;: &quot;cd513041aa42795a6eb8933fd0502e2ecf30491e3a921c2e11e71e4b97eef145&quot;,
+      &quot;size_bytes&quot;: 3941
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/controlled_intersections.json&quot;,
+      &quot;sha256&quot;: &quot;ed7968e1df419235d8a9e31d5f1323c766613d01837caa5783ca27b737265672&quot;,
+      &quot;size_bytes&quot;: 17642
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/functional_zones.add.xml&quot;,
+      &quot;sha256&quot;: &quot;4e263e003bff8cbc6cca09e8437cd107293c6a5eb0384a20f019100d354d4501&quot;,
+      &quot;size_bytes&quot;: 158648
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/multimodal.rou.xml&quot;,
+      &quot;sha256&quot;: &quot;41d720ffcf327b6f6d17989d23cd263b43d765bdbe7c7f38e3bd3a5f9085a1da&quot;,
+      &quot;size_bytes&quot;: 297235
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/rongdong.multimodal.net.xml&quot;,
+      &quot;sha256&quot;: &quot;ddbdb55d0efbe494bf7e1f41ff0510de935f5bf3e68479b4a68da29d0150c2e8&quot;,
+      &quot;size_bytes&quot;: 16032174
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/routes.S03.rou.xml&quot;,
+      &quot;sha256&quot;: &quot;215db54cda1275a37e715bc322b0dcacb1730221c16612513c6829f93158ecb5&quot;,
+      &quot;size_bytes&quot;: 751441
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/vtypes.add.xml&quot;,
+      &quot;sha256&quot;: &quot;6c0e82b5968e907585873534a26667f5ecd49ac862870a9d253b8f043f0ce217&quot;,
+      &quot;size_bytes&quot;: 4791
+    },
+    {
+      &quot;path&quot;: &quot;scenarios/generated/xiongan_rongdong_20/xiongan_rongdong_20.S03.sumocfg&quot;,
+      &quot;sha256&quot;: &quot;45899040c7f987a46afa6b6109e6bbf0fc47438c61351cd2144602e280f15e51&quot;,
+      &quot;size_bytes&quot;: 1077
+    }
+  ],
+  &quot;provenance&quot;: {
+    &quot;algorithm&quot;: &quot;coordinated-max-pressure&quot;,
+    &quot;algorithm_version&quot;: &quot;1.0.0&quot;,
+    &quot;scenario_profile&quot;: &quot;S03&quot;,
+    &quot;seed&quot;: 2026,
+    &quot;duration_s&quot;: 60.0,
+    &quot;isolate_algorithms&quot;: false,
+    &quot;publish_feedback_to_bus&quot;: false,
+    &quot;publish_runtime_telemetry_to_bus&quot;: false,
+    &quot;include_communication_events&quot;: false,
+    &quot;surrogate_safety_interval_s&quot;: 5.0,
+    &quot;python&quot;: &quot;3.12.13&quot;,
+    &quot;sumo_home&quot;: &quot;D:\\程序项目\\面向雄安新区的城市大脑\\exports\\xiongan_3d_portable_v4\\xiongan_3d_portable_v4\\runtime\\sumo&quot;
+  },
+  &quot;git_revision&quot;: &quot;5e6e30750b499fb33837bff9f4cb18fa6e8a5e0d&quot;
+}</pre>
+</main></body></html>

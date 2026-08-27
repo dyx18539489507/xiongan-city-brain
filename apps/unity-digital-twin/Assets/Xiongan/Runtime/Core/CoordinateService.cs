@@ -24,7 +24,9 @@ namespace Xiongan.DigitalTwin.Core
 
         public Quaternion ToWorldRotation(float sumoAngle)
         {
-            return Quaternion.Euler(0f, -sumoAngle, 0f);
+            // SUMO headings are clockwise from geographic north. Geographic north
+            // maps to Unity -Z, while authored mobility models face local +Z.
+            return Quaternion.Euler(0f, 180f - sumoAngle, 0f);
         }
     }
 }

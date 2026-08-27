@@ -1,9 +1,15 @@
 name: xiongan-traffic-platform
 
+x-backend-build: &backend-build
+  context: .
+  dockerfile: deployment/docker/backend.Dockerfile
+  args:
+    DEBIAN_MIRROR: ${DEBIAN_MIRROR:-http://deb.debian.org/debian}
+    DEBIAN_SECURITY_MIRROR: ${DEBIAN_SECURITY_MIRROR:-http://deb.debian.org/debian-security}
+    PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    PYPI_FILES_BASE_URL: ${PYPI_FILES_BASE_URL:-https://files.pythonhosted.org/packages}
+
 x-backend: &backend
-  build:
-    context: .
-    dockerfile: deployment/docker/backend.Dockerfile
   image: xiongan-traffic-platform-backend:phase1
   env_file: ${ENV_FILE:-.env.example}
   environment:
@@ -21,6 +27,7 @@ x-backend: &backend
 services:
   database-migration:
     <<: *backend
+    build: *backend-build
     entrypoint: ["alembic"]
     command: ["upgrade", "head"]
     depends_on:
@@ -43,11 +50,12 @@ services:
           "CMD",
           "python",
           "-c",
-          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=3).read()",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=10).read()",
         ]
       interval: 15s
-      timeout: 5s
+      timeout: 15s
       retries: 10
+      start_period: 5m
 
   cloud-service:
     <<: *backend
@@ -179,6 +187,8 @@ services:
     build:
       context: .
       dockerfile: deployment/docker/web.Dockerfile
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org}
     ports:
       - "127.0.0.1:${WEB_PORT:-5173}:80"
     depends_on:
@@ -195,7 +205,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 10

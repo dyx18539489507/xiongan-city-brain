@@ -1,7 +1,8 @@
 import type {DigitalTwinState, PedestrianEntity, VehicleEntity} from "../3d/network/digitalTwinTypes";
+import type {LiveComparisonSummary} from "../3d/network/comparisonDigitalTwinTypes";
 import type {Point2, StaticSceneDocument} from "../3d/scene/types";
 import type {RealtimeSnapshot} from "../types";
-import {MapCamera} from "./camera/MapCamera";
+import {MapCamera, type CameraPose, type MapViewportInsets} from "./camera/MapCamera";
 import {BicycleLayer, PedestrianLayer, TrailLayer, VehicleLayer} from "./layers/ActorLayers";
 import type {LayerRenderContext, RenderEntities, TrafficMapLayer} from "./layers/LayerTypes";
 import {AlgorithmLayer, EventLayer, LabelLayer, resolveEventMarkers, RoadsideDeviceLayer, SelectionLayer} from "./layers/OperationalLayers";
@@ -12,6 +13,8 @@ import {BackgroundLayer, BuildingLayer} from "./layers/UrbanContextLayers";
 import type {LayerVisibility, MapSelection} from "./model";
 import {EntityInterpolator} from "./motion/EntityInterpolator";
 import {TrafficWorldStateAdapter, type TrafficWorldState} from "./world/TrafficWorldState";
+import {mapTheme} from "./theme";
+import {sceneGeometryBounds} from "./sceneBounds";
 
 function clamp(value: number, minimum: number, maximum: number): number {
   return Math.min(maximum, Math.max(minimum, value));
@@ -37,6 +40,7 @@ function countVisibleEntities(
 }
 
 export type RendererStats = {fps: number; targetFps: number; drawMs: number; visibleEntities: number; totalEntities: number};
+export type GeographicMapPose = {centerX: number; centerY: number; scale: number};
 
 const MAX_CANVAS_PIXELS = 6_000_000;
 
@@ -48,6 +52,8 @@ export class TrafficCanvasRenderer {
   private readonly camera = new MapCamera();
   private readonly dynamicContext: CanvasRenderingContext2D | null;
   private readonly staticContext: CanvasRenderingContext2D | null;
+  private readonly staticBuffer: HTMLCanvasElement;
+  private readonly staticBufferContext: CanvasRenderingContext2D | null;
   private readonly adapter = new TrafficWorldStateAdapter();
   private readonly vehicles = new EntityInterpolator<VehicleEntity>();
   private readonly bicycles = new EntityInterpolator<VehicleEntity>();
@@ -62,6 +68,9 @@ export class TrafficCanvasRenderer {
   private entities: RenderEntities = {vehicles: [], bicycles: [], pedestrians: []};
   private selection: MapSelection | null = null;
   private hover: MapSelection | null = null;
+  private comparison: LiveComparisonSummary | null = null;
+  private activeSceneBounds: ReturnType<typeof sceneGeometryBounds> | null = null;
+  private geographicBaseMapVisible = false;
   private staticDirty = true;
   private lastCameraRevision = -1;
   private stats: RendererStats = {fps: 0, targetFps: 60, drawMs: 0, visibleEntities: 0, totalEntities: 0};
@@ -78,7 +87,9 @@ export class TrafficCanvasRenderer {
     layers: LayerVisibility,
   ) {
     this.dynamicContext = canvas.getContext("2d", {alpha: true});
-    this.staticContext = staticCanvas.getContext("2d", {alpha: false});
+    this.staticContext = staticCanvas.getContext("2d", {alpha: true});
+    this.staticBuffer = document.createElement("canvas");
+    this.staticBufferContext = this.staticBuffer.getContext("2d", {alpha: true});
     this.layerVisibility = layers;
     this.layers = [
       new BackgroundLayer(),
@@ -99,13 +110,15 @@ export class TrafficCanvasRenderer {
       new LabelLayer(),
       new SelectionLayer(),
     ];
+    this.paintStaticFallback();
   }
 
   setScene(scene: StaticSceneDocument): void {
     this.adapter.setScene(scene);
-    this.camera.setSceneBounds(scene.coordinateSystem.sceneBounds);
+    this.activeSceneBounds = sceneGeometryBounds(scene);
+    this.camera.setSceneBounds(this.activeSceneBounds);
     if (this.lastDigitalTwin) this.world = this.adapter.compose(this.lastDigitalTwin, this.lastSnapshot);
-    this.staticDirty = true;
+    this.invalidateStatic();
   }
 
   setData(digitalTwin: DigitalTwinState, snapshot: RealtimeSnapshot, now: number): void {
@@ -132,11 +145,23 @@ export class TrafficCanvasRenderer {
   setLayers(layers: LayerVisibility): void {
     const staticChanged = this.layers.some((layer) => layer.isStatic && layer.id !== "selection" && layers[layer.id] !== this.layerVisibility[layer.id]);
     this.layerVisibility = layers;
-    if (staticChanged) this.staticDirty = true;
+    if (staticChanged) this.invalidateStatic();
   }
 
   setSelection(selection: MapSelection | null): void { this.selection = selection; }
   setHover(selection: MapSelection | null): void { this.hover = selection; }
+  setComparison(comparison: LiveComparisonSummary | null): void { this.comparison = comparison; }
+  setGeographicBaseMapVisible(visible: boolean): void {
+    if (this.geographicBaseMapVisible === visible) return;
+    this.geographicBaseMapVisible = visible;
+    this.paintStaticFallback();
+    this.invalidateStatic();
+  }
+  setViewportInsets(insets: MapViewportInsets): void {
+    const revision = this.camera.revision;
+    this.camera.setViewportInsets(insets);
+    if (this.camera.revision !== revision) this.invalidateStaticForCameraMotion();
+  }
 
   resize(width: number, height: number): void {
     const cssWidth = Math.max(1, Math.round(width));
@@ -145,18 +170,34 @@ export class TrafficCanvasRenderer {
     const deviceDpr = window.devicePixelRatio || 1;
     const pixelBudgetDpr = Math.sqrt(MAX_CANVAS_PIXELS / cssPixels);
     const dpr = Math.min(deviceDpr, 1.75, Math.max(.85, pixelBudgetDpr));
+    const pixelWidth = Math.round(cssWidth * dpr);
+    const pixelHeight = Math.round(cssHeight * dpr);
+    const cameraChanged = cssWidth !== this.camera.width
+      || cssHeight !== this.camera.height
+      || dpr !== this.camera.dpr;
+    const backingStoreChanged = pixelWidth !== this.canvas.width
+      || pixelHeight !== this.canvas.height
+      || pixelWidth !== this.staticCanvas.width
+      || pixelHeight !== this.staticCanvas.height;
+    if (!cameraChanged && !backingStoreChanged) return;
+
     this.camera.resize(cssWidth, cssHeight, dpr);
-    this.canvas.width = Math.round(cssWidth * dpr);
-    this.canvas.height = Math.round(cssHeight * dpr);
-    this.staticCanvas.width = this.canvas.width;
-    this.staticCanvas.height = this.canvas.height;
-    this.staticDirty = true;
+    if (backingStoreChanged) {
+      this.canvas.width = pixelWidth;
+      this.canvas.height = pixelHeight;
+      this.staticCanvas.width = pixelWidth;
+      this.staticCanvas.height = pixelHeight;
+      this.paintStaticFallback();
+      this.invalidateStatic();
+      return;
+    }
+    this.invalidateStaticForCameraMotion();
   }
 
   fitScene(): void {
-    if (!this.world) return;
-    this.camera.fitBounds(this.world.scene.coordinateSystem.sceneBounds, 158, true);
-    this.staticDirty = true;
+    if (!this.world || !this.activeSceneBounds) return;
+    this.camera.fitBounds(this.activeSceneBounds, 36, true);
+    this.invalidateStaticForCameraMotion();
   }
 
   focusCorridor(): void {
@@ -164,7 +205,7 @@ export class TrafficCanvasRenderer {
     const points = [...this.world.corridorJunctionIds]
       .map((id) => this.world?.junctionById.get(id)?.position)
       .filter((point): point is Point2 => Boolean(point));
-    if (points.length) this.camera.fitPoints(points, 190, true);
+    if (points.length) this.camera.fitPoints(points, 44, true);
   }
 
   focusSelection(selection: MapSelection | null): void {
@@ -174,7 +215,7 @@ export class TrafficCanvasRenderer {
       if (point) this.camera.focusPoint(point, Math.max(.82, this.camera.scale * 1.7));
     } else if (selection.kind === "edge") {
       const shape = this.world.edgeById.get(selection.id)?.shape;
-      if (shape) this.camera.fitPoints(shape, 240, true);
+      if (shape) this.camera.fitPoints(shape, 52, true);
     } else {
       const entity = [...this.entities.vehicles, ...this.entities.bicycles, ...this.entities.pedestrians].find((item) => item.id === selection.id);
       if (entity) this.camera.focusPoint({x: entity.renderX, y: entity.renderY}, Math.max(1, this.camera.scale * 1.5));
@@ -182,9 +223,19 @@ export class TrafficCanvasRenderer {
   }
 
   focusJunction(id: string): void { this.focusSelection({kind: "junction", id}); }
-  pan(deltaX: number, deltaY: number): void { this.camera.pan(deltaX, deltaY); this.staticDirty = true; }
-  zoomAt(screenX: number, screenY: number, factor: number): void { this.camera.zoomAt(screenX, screenY, factor); this.staticDirty = true; }
+  pan(deltaX: number, deltaY: number): void { this.camera.pan(deltaX, deltaY); this.invalidateStaticForCameraMotion(); }
+  zoomAt(screenX: number, screenY: number, factor: number): void { this.camera.zoomAt(screenX, screenY, factor); this.invalidateStaticForCameraMotion(); }
   getScale(): number { return this.camera.scale; }
+  getCameraPose(): CameraPose { return this.camera.getPose(); }
+  getGeographicMapPose(): GeographicMapPose {
+    const center = this.camera.screenToWorld(this.camera.width / 2, this.camera.height / 2);
+    return {centerX: center.x, centerY: center.y, scale: this.camera.scale};
+  }
+  setCameraPose(pose: CameraPose): void {
+    const revision = this.camera.revision;
+    this.camera.setPose(pose, false);
+    if (this.camera.revision !== revision) this.invalidateStaticForCameraMotion();
+  }
   getStats(): RendererStats { return {...this.stats}; }
 
   render(now: number): void {
@@ -196,7 +247,7 @@ export class TrafficCanvasRenderer {
     const started = performance.now();
     const ctx = this.dynamicContext;
     if (!ctx) return;
-    if (this.camera.update(now)) this.staticDirty = true;
+    if (this.camera.update(now)) this.invalidateStaticForCameraMotion(now);
     if (!this.world) {
       ctx.setTransform(this.camera.dpr, 0, 0, this.camera.dpr, 0, 0);
       ctx.clearRect(0, 0, this.camera.width, this.camera.height);
@@ -206,13 +257,15 @@ export class TrafficCanvasRenderer {
     this.entities.bicycles = this.bicycles.sample(now);
     this.entities.pedestrians = this.pedestrians.sample(now);
     const context = this.renderContext(ctx, now);
-    if (this.staticDirty || this.lastCameraRevision !== this.camera.revision) this.rebuildStatic(context);
+    const staticNeedsRebuild = this.staticDirty || this.lastCameraRevision !== this.camera.revision;
+    if (staticNeedsRebuild) this.rebuildStatic(context);
     ctx.setTransform(this.camera.dpr, 0, 0, this.camera.dpr, 0, 0);
     ctx.clearRect(0, 0, this.camera.width, this.camera.height);
     for (const layer of this.layers) {
       if (layer.isStatic || (layer.id !== "selection" && !this.layerVisibility[layer.id])) continue;
       layer.render(context);
     }
+    this.renderComparisonDelta(context);
     this.updateStats(started, context.visibleBounds);
   }
 
@@ -227,9 +280,8 @@ export class TrafficCanvasRenderer {
       ] as const;
       for (const [kind, entities] of groups) {
         for (const entity of entities) {
-          const entityScreenX = (entity.renderX - this.camera.centerX) * this.camera.scale + this.camera.width / 2;
-          const entityScreenY = (this.camera.centerY - entity.renderY) * this.camera.scale + this.camera.height / 2;
-          const distance = Math.hypot(entityScreenX - screenX, entityScreenY - screenY);
+          const entityScreen = this.camera.worldToScreen({x: entity.renderX, y: entity.renderY});
+          const distance = Math.hypot(entityScreen.x - screenX, entityScreen.y - screenY);
           if (distance <= 12 && (!nearest || distance < nearest.distance)) nearest = {kind, id: entity.id, distance};
         }
       }
@@ -267,20 +319,68 @@ export class TrafficCanvasRenderer {
     return edgePick ? {kind: "edge", id: edgePick.id} : null;
   }
 
-  destroy(): void { for (const layer of this.layers) layer.destroy(); }
+  destroy(): void {
+    for (const layer of this.layers) layer.destroy();
+  }
 
   private rebuildStatic(dynamicContext: LayerRenderContext): void {
-    const ctx = this.staticContext;
-    if (!ctx) return;
-    ctx.setTransform(this.camera.dpr, 0, 0, this.camera.dpr, 0, 0);
-    ctx.clearRect(0, 0, this.camera.width, this.camera.height);
-    const context = {...dynamicContext, ctx};
-    for (const layer of this.layers) {
-      if (!layer.isStatic || layer.id === "selection" || !this.layerVisibility[layer.id]) continue;
-      layer.render(context);
+    const bufferContext = this.staticBufferContext;
+    const visibleContext = this.staticContext;
+    if (!bufferContext || !visibleContext) return;
+    if (this.staticBuffer.width !== this.staticCanvas.width || this.staticBuffer.height !== this.staticCanvas.height) {
+      this.staticBuffer.width = this.staticCanvas.width;
+      this.staticBuffer.height = this.staticCanvas.height;
     }
+
+    bufferContext.setTransform(1, 0, 0, 1, 0, 0);
+    bufferContext.clearRect(0, 0, this.staticBuffer.width, this.staticBuffer.height);
+    if (!this.geographicBaseMapVisible) {
+      bufferContext.fillStyle = mapTheme.background;
+      bufferContext.fillRect(0, 0, this.staticBuffer.width, this.staticBuffer.height);
+    }
+    bufferContext.setTransform(this.camera.dpr, 0, 0, this.camera.dpr, 0, 0);
+    const context = {...dynamicContext, ctx: bufferContext};
+    try {
+      for (const layer of this.layers) {
+        if (!layer.isStatic || layer.id === "selection" || !this.layerVisibility[layer.id]) continue;
+        if (layer.id === "baseMap" && this.geographicBaseMapVisible) continue;
+        layer.render(context);
+      }
+    } catch (reason) {
+      console.error("Static 2D map rendering failed; preserving the previous frame.", reason);
+      this.staticBuffer.width = this.staticBuffer.width;
+      this.staticDirty = true;
+      return;
+    }
+
+    visibleContext.setTransform(1, 0, 0, 1, 0, 0);
+    visibleContext.clearRect(0, 0, this.staticCanvas.width, this.staticCanvas.height);
+    if (!this.geographicBaseMapVisible) {
+      visibleContext.fillStyle = mapTheme.background;
+      visibleContext.fillRect(0, 0, this.staticCanvas.width, this.staticCanvas.height);
+    }
+    visibleContext.drawImage(this.staticBuffer, 0, 0);
     this.staticDirty = false;
     this.lastCameraRevision = this.camera.revision;
+  }
+
+  private paintStaticFallback(): void {
+    const ctx = this.staticContext;
+    if (!ctx) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, this.staticCanvas.width, this.staticCanvas.height);
+    if (!this.geographicBaseMapVisible) {
+      ctx.fillStyle = mapTheme.background;
+      ctx.fillRect(0, 0, this.staticCanvas.width, this.staticCanvas.height);
+    }
+  }
+
+  private invalidateStatic(): void {
+    this.staticDirty = true;
+  }
+
+  private invalidateStaticForCameraMotion(_now = performance.now()): void {
+    this.staticDirty = true;
   }
 
   private renderContext(ctx: CanvasRenderingContext2D, now: number): LayerRenderContext {
@@ -320,5 +420,84 @@ export class TrafficCanvasRenderer {
     this.stats.drawMs = drawMs;
     this.stats.visibleEntities = visible;
     this.stats.totalEntities = total;
+  }
+
+  private renderComparisonDelta(context: LayerRenderContext): void {
+    if (!this.comparison || !this.world) return;
+    const ctx = context.ctx;
+    const warmup = this.comparison.verdict === "warming_up";
+    const invalid = !this.comparison.valid || this.comparison.verdict === "invalid";
+    const color = (verdict: "improved" | "stable" | "worse") => invalid || warmup
+      ? "#75878d"
+      : verdict === "improved" ? "#078f84" : verdict === "worse" ? "#d76537" : "#70838a";
+
+    ctx.save();
+    ctx.lineCap = "round";
+    for (const intersection of this.comparison.intersections) {
+      for (const approach of intersection.approaches) {
+        if (approach.verdict === "stable" && intersection.intersection_id !== this.selection?.id) {
+          continue;
+        }
+        const lane = this.world.laneById.get(approach.lane_id);
+        if (!lane || lane.shape.length < 2) continue;
+        const shape = lane.shape.slice(Math.max(0, lane.shape.length - 4));
+        ctx.beginPath();
+        const first = context.camera.worldToScreen(shape[0]);
+        ctx.moveTo(first.x, first.y);
+        for (const point of shape.slice(1)) {
+          const screen = context.camera.worldToScreen(point);
+          ctx.lineTo(screen.x, screen.y);
+        }
+        ctx.strokeStyle = color(approach.verdict);
+        ctx.globalAlpha = .72;
+        ctx.lineWidth = approach.verdict === "stable" ? 3 : 5;
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    const occupied: Array<{left: number; top: number; right: number; bottom: number}> = [];
+    const ordered = [...this.comparison.intersections].sort((left, right) => {
+      const priority = (value: typeof left) =>
+        value.intersection_id === this.selection?.id ? 0 : value.verdict === "worse" ? 1 : value.verdict === "improved" ? 2 : 3;
+      return priority(left) - priority(right);
+    });
+    for (const intersection of ordered) {
+      const junction = this.world.junctionById.get(intersection.intersection_id);
+      if (!junction) continue;
+      const point = context.camera.worldToScreen(junction.position);
+      if (point.x < -30 || point.x > context.camera.width + 30 || point.y < -30 || point.y > context.camera.height + 30) continue;
+      const markerColor = color(intersection.verdict);
+      const stableOverview = intersection.verdict === "stable"
+        && intersection.intersection_id !== this.selection?.id
+        && context.camera.getZoomRatio() < 1.3;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, stableOverview ? 4 : intersection.verdict === "stable" ? 7 : 10, 0, Math.PI * 2);
+      ctx.fillStyle = stableOverview ? "rgba(255,255,255,.76)" : `${markerColor}2a`;
+      ctx.fill();
+      ctx.lineWidth = stableOverview ? 1.4 : 3;
+      ctx.strokeStyle = markerColor;
+      ctx.stroke();
+
+      const selected = intersection.intersection_id === this.selection?.id;
+      if (!selected && context.camera.getZoomRatio() < 1.3 && intersection.verdict === "stable") continue;
+      const label = invalid ? "对照无效" : warmup ? "≈ 建立基线" : intersection.label;
+      ctx.font = "600 12px 'Microsoft YaHei', sans-serif";
+      const width = Math.ceil(ctx.measureText(label).width) + 18;
+      const box = {left: point.x + 13, top: point.y - 15, right: point.x + 13 + width, bottom: point.y + 9};
+      if (!selected && occupied.some((item) => box.left < item.right && box.right > item.left && box.top < item.bottom && box.bottom > item.top)) continue;
+      occupied.push(box);
+      ctx.fillStyle = "rgba(255,255,255,.96)";
+      ctx.strokeStyle = markerColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(box.left, box.top, width, 24, 6);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = markerColor;
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, box.left + 9, box.top + 12);
+    }
+    ctx.restore();
   }
 }

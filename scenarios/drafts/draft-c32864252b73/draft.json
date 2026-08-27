@@ -1,0 +1,810 @@
+{
+  "id": "draft-c32864252b73",
+  "status": "ready",
+  "progress": 100,
+  "message": "规划资料已自动生成可运行路网草稿",
+  "source_type": "planning_file",
+  "source": {
+    "original_name": "demo_3.png",
+    "size_bytes": 4466560
+  },
+  "coordinate_mode": "local",
+  "confidence": "medium",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 0.0,
+      "min_y": 0.0,
+      "max_x": 1942.0,
+      "max_y": 1359.0
+    },
+    "roads": [
+      {
+        "id": "road-1",
+        "coordinates": [
+          [
+            103.57333333333334,
+            81.53999999999999
+          ],
+          [
+            103.57333333333334,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-2",
+        "coordinates": [
+          [
+            322.04833333333335,
+            81.53999999999999
+          ],
+          [
+            322.04833333333335,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-3",
+        "coordinates": [
+          [
+            543.76,
+            81.53999999999999
+          ],
+          [
+            543.76,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-4",
+        "coordinates": [
+          [
+            780.0366666666667,
+            81.53999999999999
+          ],
+          [
+            780.0366666666667,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-5",
+        "coordinates": [
+          [
+            1149.0166666666667,
+            81.53999999999999
+          ],
+          [
+            1149.0166666666667,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-6",
+        "coordinates": [
+          [
+            1309.2316666666668,
+            81.53999999999999
+          ],
+          [
+            1309.2316666666668,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-7",
+        "coordinates": [
+          [
+            1485.63,
+            81.53999999999999
+          ],
+          [
+            1485.63,
+            1277.46
+          ]
+        ]
+      },
+      {
+        "id": "road-8",
+        "coordinates": [
+          [
+            116.52,
+            1223.1
+          ],
+          [
+            1825.48,
+            1223.1
+          ]
+        ]
+      },
+      {
+        "id": "road-9",
+        "coordinates": [
+          [
+            116.52,
+            1051.607142857143
+          ],
+          [
+            1825.48,
+            1051.607142857143
+          ]
+        ]
+      },
+      {
+        "id": "road-10",
+        "coordinates": [
+          [
+            116.52,
+            957.7714285714285
+          ],
+          [
+            1825.48,
+            957.7714285714285
+          ]
+        ]
+      },
+      {
+        "id": "road-11",
+        "coordinates": [
+          [
+            116.52,
+            692.4428571428572
+          ],
+          [
+            1825.48,
+            692.4428571428572
+          ]
+        ]
+      },
+      {
+        "id": "road-12",
+        "coordinates": [
+          [
+            116.52,
+            530.6571428571428
+          ],
+          [
+            1825.48,
+            530.6571428571428
+          ]
+        ]
+      },
+      {
+        "id": "road-13",
+        "coordinates": [
+          [
+            116.52,
+            333.27857142857147
+          ],
+          [
+            1825.48,
+            333.27857142857147
+          ]
+        ]
+      },
+      {
+        "id": "road-14",
+        "coordinates": [
+          [
+            116.52,
+            161.78571428571422
+          ],
+          [
+            1825.48,
+            161.78571428571422
+          ]
+        ]
+      },
+      {
+        "id": "road-15",
+        "coordinates": [
+          [
+            116.52,
+            69.56785714285706
+          ],
+          [
+            1825.48,
+            69.56785714285706
+          ]
+        ]
+      }
+    ],
+    "buildings": [],
+    "intersections": [
+      {
+        "intersection_id": "J001",
+        "display_id": "J01",
+        "display_name": "候选路口 1",
+        "x": 322.048,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J002",
+        "display_id": "J02",
+        "display_name": "候选路口 2",
+        "x": 322.048,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J003",
+        "display_id": "J03",
+        "display_name": "候选路口 3",
+        "x": 322.048,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J004",
+        "display_id": "J04",
+        "display_name": "候选路口 4",
+        "x": 322.048,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J005",
+        "display_id": "J05",
+        "display_name": "候选路口 5",
+        "x": 322.048,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J006",
+        "display_id": "J06",
+        "display_name": "候选路口 6",
+        "x": 322.048,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J007",
+        "display_id": "J07",
+        "display_name": "候选路口 7",
+        "x": 322.048,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J008",
+        "display_id": "J08",
+        "display_name": "候选路口 8",
+        "x": 543.76,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J009",
+        "display_id": "J09",
+        "display_name": "候选路口 9",
+        "x": 543.76,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J010",
+        "display_id": "J10",
+        "display_name": "候选路口 10",
+        "x": 543.76,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J011",
+        "display_id": "J11",
+        "display_name": "候选路口 11",
+        "x": 543.76,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J012",
+        "display_id": "J12",
+        "display_name": "候选路口 12",
+        "x": 543.76,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J013",
+        "display_id": "J13",
+        "display_name": "候选路口 13",
+        "x": 543.76,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J014",
+        "display_id": "J14",
+        "display_name": "候选路口 14",
+        "x": 543.76,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J015",
+        "display_id": "J15",
+        "display_name": "候选路口 15",
+        "x": 780.037,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J016",
+        "display_id": "J16",
+        "display_name": "候选路口 16",
+        "x": 780.037,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J017",
+        "display_id": "J17",
+        "display_name": "候选路口 17",
+        "x": 780.037,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J018",
+        "display_id": "J18",
+        "display_name": "候选路口 18",
+        "x": 780.037,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J019",
+        "display_id": "J19",
+        "display_name": "候选路口 19",
+        "x": 780.037,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J020",
+        "display_id": "J20",
+        "display_name": "候选路口 20",
+        "x": 780.037,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J021",
+        "display_id": "J21",
+        "display_name": "候选路口 21",
+        "x": 780.037,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J022",
+        "display_id": "J22",
+        "display_name": "候选路口 22",
+        "x": 1149.017,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J023",
+        "display_id": "J23",
+        "display_name": "候选路口 23",
+        "x": 1149.017,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J024",
+        "display_id": "J24",
+        "display_name": "候选路口 24",
+        "x": 1149.017,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J025",
+        "display_id": "J25",
+        "display_name": "候选路口 25",
+        "x": 1149.017,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J026",
+        "display_id": "J26",
+        "display_name": "候选路口 26",
+        "x": 1149.017,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J027",
+        "display_id": "J27",
+        "display_name": "候选路口 27",
+        "x": 1149.017,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J028",
+        "display_id": "J28",
+        "display_name": "候选路口 28",
+        "x": 1149.017,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J029",
+        "display_id": "J29",
+        "display_name": "候选路口 29",
+        "x": 1309.232,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J030",
+        "display_id": "J30",
+        "display_name": "候选路口 30",
+        "x": 1309.232,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J031",
+        "display_id": "J31",
+        "display_name": "候选路口 31",
+        "x": 1309.232,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J032",
+        "display_id": "J32",
+        "display_name": "候选路口 32",
+        "x": 1309.232,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J033",
+        "display_id": "J33",
+        "display_name": "候选路口 33",
+        "x": 1309.232,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J034",
+        "display_id": "J34",
+        "display_name": "候选路口 34",
+        "x": 1309.232,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J035",
+        "display_id": "J35",
+        "display_name": "候选路口 35",
+        "x": 1309.232,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J036",
+        "display_id": "J36",
+        "display_name": "候选路口 36",
+        "x": 1485.63,
+        "y": 161.786,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J037",
+        "display_id": "J37",
+        "display_name": "候选路口 37",
+        "x": 1485.63,
+        "y": 333.279,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J038",
+        "display_id": "J38",
+        "display_name": "候选路口 38",
+        "x": 1485.63,
+        "y": 530.657,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J039",
+        "display_id": "J39",
+        "display_name": "候选路口 39",
+        "x": 1485.63,
+        "y": 692.443,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J040",
+        "display_id": "J40",
+        "display_name": "候选路口 40",
+        "x": 1485.63,
+        "y": 957.771,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J041",
+        "display_id": "J41",
+        "display_name": "候选路口 41",
+        "x": 1485.63,
+        "y": 1051.607,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      },
+      {
+        "intersection_id": "J042",
+        "display_id": "J42",
+        "display_name": "候选路口 42",
+        "x": 1485.63,
+        "y": 1223.1,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      }
+    ],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [
+    "J001",
+    "J002",
+    "J003",
+    "J004",
+    "J005",
+    "J006",
+    "J007",
+    "J008",
+    "J009",
+    "J010",
+    "J011",
+    "J012",
+    "J013",
+    "J014",
+    "J015",
+    "J016",
+    "J017",
+    "J018",
+    "J019",
+    "J020",
+    "J021",
+    "J022",
+    "J023",
+    "J024",
+    "J025",
+    "J026",
+    "J027",
+    "J028",
+    "J029",
+    "J030",
+    "J031",
+    "J032",
+    "J033",
+    "J034",
+    "J035",
+    "J036",
+    "J037",
+    "J038",
+    "J039",
+    "J040",
+    "J041",
+    "J042"
+  ],
+  "manual_edits": [],
+  "validation": {
+    "valid": true,
+    "selected_intersection_count": 42,
+    "selected_intersection_ids": [
+      "J001",
+      "J002",
+      "J003",
+      "J004",
+      "J005",
+      "J006",
+      "J007",
+      "J008",
+      "J009",
+      "J010",
+      "J011",
+      "J012",
+      "J013",
+      "J014",
+      "J015",
+      "J016",
+      "J017",
+      "J018",
+      "J019",
+      "J020",
+      "J021",
+      "J022",
+      "J023",
+      "J024",
+      "J025",
+      "J026",
+      "J027",
+      "J028",
+      "J029",
+      "J030",
+      "J031",
+      "J032",
+      "J033",
+      "J034",
+      "J035",
+      "J036",
+      "J037",
+      "J038",
+      "J039",
+      "J040",
+      "J041",
+      "J042"
+    ],
+    "errors": [],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "planning_file",
+    "confidence": "medium",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.png",
+    "preview": "source.png"
+  },
+  "logs": [
+    {
+      "time": "2026-08-25T05:21:05.663060+00:00",
+      "progress": 12,
+      "message": "规划资料已保存, 正在识别文件结构"
+    },
+    {
+      "time": "2026-08-25T05:21:09.022428+00:00",
+      "progress": 58,
+      "message": "正在生成可编辑道路与候选路口"
+    },
+    {
+      "time": "2026-08-25T05:21:09.152227+00:00",
+      "progress": 100,
+      "message": "规划资料已自动生成可运行路网草稿"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-25T05:21:05.598897+00:00",
+  "updated_at": "2026-08-25T05:21:09.152227+00:00",
+  "extraction_method": "projection_lines"
+}

@@ -17,7 +17,6 @@ export function Inspector({
     <aside className="inspector" aria-labelledby="inspector-title">
       <div className="section-heading compact">
         <div>
-          <p className="eyebrow">INTERSECTION INSPECTOR</p>
           <h2 id="inspector-title">路口检查器</h2>
         </div>
       </div>

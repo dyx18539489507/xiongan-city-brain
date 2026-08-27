@@ -67,8 +67,7 @@ export class VehicleLayer implements TrafficMapLayer {
         const kind = vehicleKind(entity);
         if ((kind === "bus" && !layers.buses) || (kind === "truck" && !layers.trucks)) continue;
         if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 20)) continue;
-        const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-        const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+        const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
         const yaw = sumoAngleToCanvasRadians(entity.renderAngle);
         const selected = selection?.id === entity.id || hover?.id === entity.id;
         const halfLength = selected ? 3 : 2.2;
@@ -90,8 +89,7 @@ export class VehicleLayer implements TrafficMapLayer {
       const kind = vehicleKind(entity);
       if ((kind === "bus" && !layers.buses) || (kind === "truck" && !layers.trucks)) continue;
       if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 20)) continue;
-      const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-      const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+      const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
       const selected = selection?.id === entity.id || hover?.id === entity.id;
       const yaw = sumoAngleToCanvasRadians(entity.renderAngle);
       ctx.save();
@@ -111,7 +109,7 @@ export class VehicleLayer implements TrafficMapLayer {
       ctx.fill();
       ctx.shadowBlur = 0;
       if (camera.scale > .45) {
-        ctx.fillStyle = "rgba(10, 25, 29, .74)";
+        ctx.fillStyle = "rgba(31, 58, 72, .76)";
         ctx.fillRect(length * .08, -width * .36, length * .22, width * .72);
         ctx.fillStyle = entity.brake ? mapTheme.signalRed : "rgba(238, 245, 242, .65)";
         ctx.fillRect(-length / 2, -width * .31, 1.1, width * .62);
@@ -140,8 +138,7 @@ export class BicycleLayer implements TrafficMapLayer {
       const batches = new Map<string, StrokeBatch>();
       for (const entity of entities.bicycles) {
         if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 16)) continue;
-        const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-        const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+        const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
         const yaw = sumoAngleToCanvasRadians(entity.renderAngle);
         const selected = selection?.id === entity.id || hover?.id === entity.id;
         const halfLength = selected ? 3.4 : 2.5;
@@ -156,8 +153,7 @@ export class BicycleLayer implements TrafficMapLayer {
     }
     for (const entity of entities.bicycles) {
       if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 16)) continue;
-      const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-      const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+      const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
       const selected = selection?.id === entity.id || hover?.id === entity.id;
       const yaw = sumoAngleToCanvasRadians(entity.renderAngle);
       ctx.save(); ctx.translate(screenX, screenY); ctx.rotate(yaw);
@@ -186,8 +182,7 @@ export class PedestrianLayer implements TrafficMapLayer {
       const selectedPath = new Path2D();
       for (const entity of entities.pedestrians) {
         if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 12)) continue;
-        const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-        const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+        const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
         const selected = selection?.id === entity.id || hover?.id === entity.id;
         const path = selected ? selectedPath : entity.status === "waiting" ? waiting : moving;
         path.moveTo(screenX + (selected ? 2.8 : 1.6), screenY);
@@ -200,8 +195,7 @@ export class PedestrianLayer implements TrafficMapLayer {
     }
     for (const entity of entities.pedestrians) {
       if (!visibleCoordinate(entity.renderX, entity.renderY, visibleBounds, 12)) continue;
-      const screenX = (entity.renderX - camera.centerX) * camera.scale + camera.width / 2;
-      const screenY = (camera.centerY - entity.renderY) * camera.scale + camera.height / 2;
+      const {x: screenX, y: screenY} = camera.worldToScreen({x: entity.renderX, y: entity.renderY});
       const selected = selection?.id === entity.id || hover?.id === entity.id;
       ctx.save(); ctx.translate(screenX, screenY);
       ctx.fillStyle = entity.status === "waiting" ? mapTheme.warning : mapTheme.pedestrian;

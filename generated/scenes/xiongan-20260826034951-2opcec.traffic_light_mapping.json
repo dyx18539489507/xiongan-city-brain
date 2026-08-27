@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "xiongan-20260826034951-2opcec",
+  "sourceSceneFile": "xiongan-20260826034951-2opcec.scene.json",
+  "sourceSceneSha256": "dad155e2cb3bbcd8142a8f64d9c3796f869c47cb8d4527421535a7dc0f83e091",
+  "controllers": [
+    {
+      "sceneId": "tls:-3:0",
+      "sumoTlsId": "-3",
+      "controlledJunctionId": "-3",
+      "memberSumoJunctionIds": [
+        "-3"
+      ],
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-3_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-3_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "--2#1_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-3_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-3_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-3_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-3_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-3_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-3_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-3_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-3_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-3_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-3_11_0"
+        }
+      ],
+      "phaseStateLengths": [
+        12,
+        12,
+        12,
+        12
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 1,
+    "links": 12
+  }
+}

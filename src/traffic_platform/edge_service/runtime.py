@@ -60,7 +60,11 @@ class EdgeRuntime:
 
     async def _handle_strategy(self, _topic: str, payload: bytes) -> None:
         strategy = CloudStrategy.model_validate_json(payload)
-        self.guard.accept(strategy)
+        validation_time = getattr(self.bus, "validation_time", None)
+        self.guard.accept(
+            strategy,
+            checked_at=validation_time(strategy) if callable(validation_time) else None,
+        )
         started = self._published_state_wall_times.get(strategy.correlation_id)
         if started is not None:
             self.round_trip_latencies_ms.append(

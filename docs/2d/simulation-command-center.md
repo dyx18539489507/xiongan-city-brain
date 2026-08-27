@@ -49,13 +49,13 @@ npm run dev -- --host 127.0.0.1 --port 5173
 也可使用现有一键脚本。脚本名为历史兼容名称，但同一页面默认进入 2D：
 
 ```powershell
-.\scripts\start_3d_demo.ps1 -BackendPort 8013 -FrontendPort 5177 -NoBrowser
+.\scripts\start_3d.ps1 -BackendPort 8013 -FrontendPort 5177 -NoBrowser
 ```
 
 打开 `http://127.0.0.1:5177/?view=2d`。如只启动服务而不创建新实验，加 `-SkipExperiment`；页面仍可载入已有真实 SUMO 回放。停止服务使用：
 
 ```powershell
-.\scripts\stop_3d_demo.ps1
+.\scripts\stop_3d.ps1
 ```
 
 ## 控制语义

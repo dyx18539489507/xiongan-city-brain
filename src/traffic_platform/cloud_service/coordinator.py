@@ -6,11 +6,13 @@ from itertools import pairwise
 from typing import Any
 from uuid import UUID
 
+from traffic_platform.cloud_service.predictor import LightweightGraphTemporalPredictor
 from traffic_platform.contracts.factory import MessageFactory
 from traffic_platform.contracts.models import (
     CloudStrategy,
     IntersectionState,
     RegionalState,
+    TrafficForecast,
 )
 
 
@@ -27,6 +29,9 @@ class CoordinatorConfig:
     maximum_cycle_s: float = 120.0
     progression_speed_m_s: float = 11.0
     offset_smoothing: float = 0.35
+    guidance_activation_risk: float = 0.65
+    minimum_speed_factor: float = 0.82
+    speed_reduction_gain: float = 0.18
     corridor_intersection_ids: tuple[str, ...] = ()
     corridor_segment_distances_m: tuple[float, ...] = ()
 
@@ -43,6 +48,12 @@ class CoordinatorConfig:
             raise ValueError("progression_speed_m_s must be positive")
         if not 0 < self.offset_smoothing <= 1:
             raise ValueError("offset_smoothing must be a ratio")
+        if not 0 <= self.guidance_activation_risk <= 1:
+            raise ValueError("guidance_activation_risk must be a ratio")
+        if not 0 < self.minimum_speed_factor <= 1:
+            raise ValueError("minimum_speed_factor must be a ratio")
+        if not 0 <= self.speed_reduction_gain <= 1:
+            raise ValueError("speed_reduction_gain must be a ratio")
         if (
             self.corridor_intersection_ids
             and len(self.corridor_segment_distances_m) != len(self.corridor_intersection_ids) - 1
@@ -81,6 +92,9 @@ class RegionalCoordinator:
         self.acknowledged_strategy_ids: set[UUID] = set()
         self.last_decision_ms: float | None = None
         self._last_offset_by_intersection: dict[str, float] = {}
+        self.predictor = LightweightGraphTemporalPredictor(
+            corridor_intersection_ids=self.config.corridor_intersection_ids,
+        )
 
     def strategies(self, state: RegionalState) -> list[CloudStrategy]:
         """Create one explainable, versioned target per intersection."""
@@ -88,8 +102,15 @@ class RegionalCoordinator:
         started = time.perf_counter()
         cycle = self._adaptive_cycle(state)
         offsets = self._dynamic_offsets(state, cycle)
+        forecasts_by_intersection = self.predictor.forecasts(state)
         result = [
-            self._strategy_for(intersection, state, cycle, offsets)
+            self._strategy_for(
+                intersection,
+                state,
+                cycle,
+                offsets,
+                forecasts_by_intersection.get(intersection.intersection_id, []),
+            )
             for intersection in state.intersection_states
         ]
         self.last_decision_ms = (time.perf_counter() - started) * 1000
@@ -101,6 +122,7 @@ class RegionalCoordinator:
         regional: RegionalState,
         target_cycle_s: float,
         offsets: dict[str, float],
+        forecasts: list[TrafficForecast],
     ) -> CloudStrategy:
         downstream_occupancies = [lane.downstream_occupancy for lane in intersection.lane_states]
         max_downstream = max(downstream_occupancies, default=0.0)
@@ -146,8 +168,23 @@ class RegionalCoordinator:
             reasons.append("SPILLBACK_RISK_HIGH")
         if intersection.intersection_id in offsets:
             reasons.extend(["DYNAMIC_CYCLE_ADAPTED", "GREEN_WAVE_OFFSET_UPDATED"])
+        prediction_ready = bool(
+            forecasts
+            and max(getattr(item, "sample_count", 0) for item in forecasts) >= 3
+        )
+        reasons.append(
+            "PREDICTION_MODEL_READY" if prediction_ready else "PREDICTION_MODEL_WARMING_UP"
+        )
         self._version_by_intersection[intersection.intersection_id] = (
             self._version_by_intersection.get(intersection.intersection_id, 0) + 1
+        )
+        target_speed_factor = (
+            max(
+                self.config.minimum_speed_factor,
+                1.0 - self.config.speed_reduction_gain * propagation_risk,
+            )
+            if propagation_risk >= self.config.guidance_activation_risk
+            else 1.0
         )
         return self.message_factory.build(
             CloudStrategy,
@@ -162,17 +199,22 @@ class RegionalCoordinator:
             target_intersection_id=intersection.intersection_id,
             target_cycle_length=target_cycle_s,
             target_green_ratios=green_ratios,
-            target_offsets={
-                intersection.intersection_id: offsets.get(intersection.intersection_id, 0.0)
-            },
+            target_offsets=(
+                {intersection.intersection_id: offsets[intersection.intersection_id]}
+                if intersection.intersection_id in offsets
+                else {}
+            ),
             upstream_release_limit=release_limit,
             downstream_priority=priority,
             recommended_phase_plan=phases,
             speed_guidance_parameters={
-                "target_speed_factor": max(0.4, 1.0 - 0.5 * propagation_risk),
+                "target_speed_factor": target_speed_factor,
                 "horizon_s": 10.0,
+                "activation_risk": self.config.guidance_activation_risk,
             },
             confidence=max(0.4, 1.0 - 0.3 * propagation_risk),
+            forecasts=forecasts,
+            prediction_status="ready" if prediction_ready else "warming_up",
             reason_codes=reasons,
             fallback_policy="edge_max_pressure",
         )

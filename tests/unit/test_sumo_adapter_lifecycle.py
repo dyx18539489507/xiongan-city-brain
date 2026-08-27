@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from traffic_platform.common.errors import ErrorCode, PlatformError
+from traffic_platform.experiment_service.engine import _traci_label
 from traffic_platform.sumo_adapter import TraciSumoAdapter
 
 
@@ -38,3 +39,10 @@ def test_parallel_adapter_instances_have_independent_labels(tmp_path: Path) -> N
     second = TraciSumoAdapter(sumo_home=tmp_path, label="second")
     assert first.label != second.label
     assert first.startup_timeout_s == second.startup_timeout_s
+
+
+def test_paired_child_identifiers_remain_distinguishable() -> None:
+    baseline = "pair-123456789abc-baseline"
+    candidate = "pair-123456789abc-candidate"
+
+    assert _traci_label(baseline) != _traci_label(candidate)

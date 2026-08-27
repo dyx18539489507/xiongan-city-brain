@@ -2,12 +2,36 @@
 
 from traffic_platform.algorithm_sdk.base import BaseTrafficController
 from traffic_platform.algorithm_sdk.types import (
+    AlgorithmConfig,
     ControlDecision,
     ControlObservation,
     DecisionStatus,
+    NetworkTopology,
     PhaseDefinition,
 )
 from traffic_platform.contracts.models import LaneState
+
+
+def active_green_bounds(
+    intersection_id: str,
+    phase_id: str,
+    config: AlgorithmConfig,
+    topology: NetworkTopology,
+) -> tuple[float, float]:
+    """Return the active phase's declared green bounds with config fallback."""
+
+    active = next(
+        (
+            phase
+            for phase in topology.phases.get(intersection_id, [])
+            if phase.phase_id == phase_id
+        ),
+        None,
+    )
+    return (
+        active.min_green_s if active is not None else config.min_green_s,
+        active.max_green_s if active is not None else config.max_green_s,
+    )
 
 
 def phase_pressure(
@@ -58,35 +82,45 @@ class MaxPressureController(BaseTrafficController):
     def decide(self, state: ControlObservation) -> ControlDecision:
         """Select the maximum-pressure phase without bypassing safety validation."""
 
-        config, _ = self.require_initialized()
+        config, topology = self.require_initialized()
         self.observe(state)
         scores = self.score_phases(state)
         current = state.intersection.current_phase_id
+        min_green_s, max_green_s = active_green_bounds(
+            state.intersection.intersection_id,
+            current,
+            config,
+            topology,
+        )
         best = max(scores, key=lambda phase_id: scores[phase_id]) if scores else current
-        if best != current and state.intersection.phase_elapsed >= config.min_green_s:
+        if best != current and state.intersection.phase_elapsed >= min_green_s:
             action = "request_next_phase"
-            duration = config.min_green_s
+            target = best
+            duration = min_green_s
             reason = "MAX_PRESSURE_SWITCH"
         elif (
             best == current
-            and state.intersection.phase_elapsed < config.max_green_s
+            and state.intersection.phase_elapsed < max_green_s
             and scores.get(current, 0.0) > 0
         ):
             action = "extend_green"
+            target = current
             duration = config.extension_s
             reason = "MAX_PRESSURE_EXTEND"
         else:
             action = "hold_phase"
+            target = current
             duration = None
             reason = "MIN_MAX_GREEN_OR_NO_POSITIVE_PRESSURE"
         self.decisions += 1
         return ControlDecision(
             status=DecisionStatus.OK,
             intersection_id=state.intersection.intersection_id,
-            requested_phase_id=best,
+            requested_phase_id=target,
             action_type=action,
             requested_duration_s=duration,
             scores=scores,
+            selected_policy="B2",
             reason_codes=[reason],
             explanation="B2 scores incoming queue minus usable downstream capacity.",
         )

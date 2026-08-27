@@ -1,8 +1,11 @@
 """Tests for simulation-time transport impairment."""
 
 import json
+from datetime import UTC, datetime, timedelta
 
 from traffic_platform.communication_emulator.channel import ChannelConfig
+from traffic_platform.contracts.factory import MessageFactory
+from traffic_platform.contracts.models import ServiceHeartbeat, SourceType
 from traffic_platform.messaging.emulated import EmulatedMessageBus
 
 
@@ -23,6 +26,36 @@ async def test_latency_is_advanced_by_simulation_time_without_sleep() -> None:
     await bus.advance(10.5)
     assert received == ["traffic/edge/state:m-1"]
     assert bus.records[0].actual_latency_ms == 500
+
+
+async def test_validation_clock_uses_simulated_delivery_delay() -> None:
+    bus = EmulatedMessageBus(ChannelConfig(base_latency_ms=500), seed=3)
+    now = datetime.now(UTC)
+    message = MessageFactory(
+        source_id="edge-1",
+        source_type=SourceType.EDGE,
+        scenario_id="scene-1",
+        experiment_id="exp-1",
+    ).build(
+        ServiceHeartbeat,
+        simulation_time=10.0,
+        ttl_s=3.0,
+        service_role="edge",
+        instance_id="edge-1",
+        status="healthy",
+        dependencies={},
+    ).model_copy(
+        update={
+            "timestamp_utc": now - timedelta(seconds=10),
+            "created_at": now - timedelta(seconds=10),
+            "expires_at": now - timedelta(seconds=7),
+        }
+    )
+
+    await bus.connect()
+    await bus.advance(10.5)
+
+    assert bus.validation_time(message) == message.created_at + timedelta(seconds=0.5)
 
 
 async def test_live_config_can_drop_messages_deterministically() -> None:

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {
   applyDigitalTwinMessage,
   DigitalTwinProtocolError,
@@ -45,6 +45,12 @@ export class DigitalTwinSocket {
     this.reconnectTimer = null;
     this.socket?.close(1000, "digital-twin client stopped");
     this.socket = null;
+  }
+
+  reset(): void {
+    this.state = emptyDigitalTwinState;
+    this.callbacks.onState(emptyDigitalTwinState);
+    this.callbacks.onIssue(null);
   }
 
   private connect(): void {
@@ -99,6 +105,7 @@ export function useDigitalTwinStream(enabled = true): DigitalTwinStream {
   const [connection, setConnection] = useState<DigitalTwinConnection>("connecting");
   const [state, setState] = useState<DigitalTwinState>(emptyDigitalTwinState);
   const [issue, setIssue] = useState<string | null>(null);
+  const clientRef = useRef<DigitalTwinSocket | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
@@ -109,9 +116,19 @@ export function useDigitalTwinStream(enabled = true): DigitalTwinStream {
       onState: setState,
       onIssue: setIssue,
     });
+    clientRef.current = client;
     client.start();
-    return () => client.stop();
+    return () => {
+      if (clientRef.current === client) clientRef.current = null;
+      client.stop();
+    };
   }, [enabled]);
 
-  return {connection, state, issue};
+  const reset = useCallback(() => {
+    clientRef.current?.reset();
+    setState(emptyDigitalTwinState);
+    setIssue(null);
+  }, []);
+
+  return {connection, state, issue, reset};
 }

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.9137394" minlat="39.058748" maxlon="115.916880828" maxlat="39.0604742" />
+  <node id="-1" lon="115.9152714" lat="39.0604742" version="1" />
+  <node id="-2" lon="115.9153098" lat="39.0602222" version="1" />
+  <node id="-3" lon="115.9154239" lat="39.0596108" version="1" />
+  <node id="-4" lon="115.9155704" lat="39.0591799" version="1" />
+  <node id="-5" lon="115.9157831" lat="39.058748" version="1" />
+  <node id="-6" lon="115.9137394" lat="39.0594261" version="1" />
+  <node id="-7" lon="115.916880828" lat="39.05976556" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-6" />
+    <nd ref="-3" />
+    <nd ref="-7" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="悦容北街" />
+    <tag k="source_way_id" v="1001665914" />
+  </way>
+</osm>

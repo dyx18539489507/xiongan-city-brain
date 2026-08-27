@@ -1,6 +1,7 @@
 """Bounded idempotency and message-order guards."""
 
 from collections import OrderedDict
+from datetime import datetime
 from uuid import UUID
 
 from traffic_platform.common.errors import ErrorCode, PlatformError
@@ -17,10 +18,16 @@ class IdempotencyGuard:
         self._seen: OrderedDict[UUID, None] = OrderedDict()
         self._last_sequence: dict[tuple[str, str], int] = {}
 
-    def accept(self, message: TrafficMessage, *, check_order: bool = True) -> None:
+    def accept(
+        self,
+        message: TrafficMessage,
+        *,
+        check_order: bool = True,
+        checked_at: datetime | None = None,
+    ) -> None:
         """Validate expiry, duplicate identity and optional per-source ordering."""
 
-        message.ensure_not_expired()
+        message.ensure_not_expired(at=checked_at)
         if message.message_id in self._seen:
             raise PlatformError(
                 ErrorCode.DUPLICATE_MESSAGE,

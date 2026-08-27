@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "codex-osm-ui-smoke-0823",
+  "version": "v0001",
+  "source_draft_id": "draft-97b33818b4a8",
+  "source_type": "osm_bbox",
+  "source_metadata": {
+    "bbox": {
+      "west": 115.90876997780164,
+      "south": 39.05295244605716,
+      "east": 115.92324807214115,
+      "north": 39.06305064580453
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21"
+  },
+  "manual_edits": [],
+  "generated_at": "2026-08-23T07:29:28.837217+00:00",
+  "files": [
+    {
+      "name": "rongdong.multimodal.net.xml",
+      "size_bytes": 1561181,
+      "sha256": "d74537802130ebc29089b8a44732343b6c4cf84765cb3d264a5750763cdc4247"
+    },
+    {
+      "name": "routes.rou.xml",
+      "size_bytes": 101717,
+      "sha256": "b1dee3efe8552ccdc47cf044f9d2356cac891c5dce129b919f5bb743a6230cc8"
+    },
+    {
+      "name": "multimodal.rou.xml",
+      "size_bytes": 51,
+      "sha256": "bf87af7a54e3d1c58b93c2ee732379284d79f1fd0063dc00afc3893d4fe32f10"
+    },
+    {
+      "name": "vtypes.add.xml",
+      "size_bytes": 200,
+      "sha256": "c93acd7cb4d62d45b53009350ddb4aa02f96863a2df35ea710ca3ce1d067f37f"
+    },
+    {
+      "name": "functional_zones.add.xml",
+      "size_bytes": 55,
+      "sha256": "ead97e294c05f680bbf891ea6ccf474b82ffe63c9e3e2015c36fab30dfa32fd6"
+    },
+    {
+      "name": "functional_zones.json",
+      "size_bytes": 47,
+      "sha256": "34add6f406e6e4525f368a351607c821c7648812d835c3c951d50c1ba45cde15"
+    },
+    {
+      "name": "simple-shapes.view.xml",
+      "size_bytes": 57,
+      "sha256": "34b05ea0f6981474731a73133ff17fd7bda2e9b1035a3d421f4d7601b6d7e490"
+    },
+    {
+      "name": "controlled_intersections.json",
+      "size_bytes": 1060,
+      "sha256": "58df5862e1ce8b4a8ea1fc55ebc93d9ed1c55c878235566a18aced6e3271ea99"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.sumocfg",
+      "size_bytes": 620,
+      "sha256": "69295b8f0c6c7b3c8e868f92a256e87d174c4d812ad80c788369f886631fedd2"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.yaml",
+      "size_bytes": 2099,
+      "sha256": "d1aa9aba88c763ce7a1cf6fa311996846c2bb77475e1d5829cbc2d936b60cbdf"
+    },
+    {
+      "name": "source-preview.json",
+      "size_bytes": 165791,
+      "sha256": "7885f2657727182632a5a148763a173c89782ac630b04142d23efa07e1b901dd"
+    },
+    {
+      "name": "source.osm.xml",
+      "size_bytes": 38607,
+      "sha256": "d3eeef545e38cae9a433a61f0f97b7f2088d5965051f5c703cdd7223d11c1029"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.scene.json",
+      "size_bytes": 3397499,
+      "sha256": "9f127ad740a9f0583ca904924a7c3629d528eec5b7c5b53a1f0c8988c50d7469"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.scene.schema.json",
+      "size_bytes": 29782,
+      "sha256": "0eaa86c71cd6affb7b71313f2bc62708294b60509f68725cf52d593efcde37ef"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.scene.manifest.json",
+      "size_bytes": 1986,
+      "sha256": "eb1acbfb852bea14481e837329ec43785139afbfd603fc5dbcb37368c1724ad9"
+    },
+    {
+      "name": "codex-osm-ui-smoke-0823.traffic_light_mapping.json",
+      "size_bytes": 4937,
+      "sha256": "d6da1fd63db2aba7cdef6de407a649ffe7c676bca01f78c8e33436b81d0bcf9b"
+    },
+    {
+      "name": "validation-report.json",
+      "size_bytes": 869,
+      "sha256": "5bfa3b1f6ad1b2ca1feb18eb1165141dbf828ee100ed715dcaa86e5548861bda"
+    }
+  ]
+}

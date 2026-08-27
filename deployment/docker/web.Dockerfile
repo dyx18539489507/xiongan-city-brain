@@ -1,7 +1,8 @@
 FROM node:22-alpine AS build
+ARG NPM_REGISTRY=https://registry.npmjs.org
 WORKDIR /web
 COPY apps/web-dashboard/package.json apps/web-dashboard/package-lock.json ./
-RUN npm ci
+RUN npm ci --registry="${NPM_REGISTRY}"
 COPY apps/web-dashboard ./
 RUN npm run build
 

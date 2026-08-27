@@ -13,6 +13,7 @@ export type ReplayItem = {
   status: string;
   frameCount: number;
   bytes: number;
+  createdAt?: string | null;
   url: string;
   algorithm?: string | null;
   profile?: string | null;
@@ -32,6 +33,7 @@ export type DigitalTwinPlayback = {
   refreshReplays: () => Promise<void>;
   loadReplay: (experimentId: string) => Promise<void>;
   goLive: () => void;
+  resetLive: () => void;
   toggleReplay: () => void;
   setReplaySpeed: (speed: number) => void;
   seekReplay: (simulationTimeS: number) => void;
@@ -127,6 +129,10 @@ export function useDigitalTwinPlayback(): DigitalTwinPlayback {
     setMode("live");
   }, []);
 
+  const resetLive = useCallback(() => {
+    live.reset?.();
+  }, [live.reset]);
+
   const toggleReplay = useCallback(() => {
     const manager = managerRef.current;
     const current = manager.snapshot();
@@ -175,6 +181,7 @@ export function useDigitalTwinPlayback(): DigitalTwinPlayback {
     refreshReplays,
     loadReplay,
     goLive,
+    resetLive,
     toggleReplay,
     setReplaySpeed,
     seekReplay,

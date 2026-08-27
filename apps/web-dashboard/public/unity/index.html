@@ -18,6 +18,14 @@
   <script>
     const canvas = document.querySelector('#unity-canvas');
     const loading = document.querySelector('#loading');
+    function resolveUnityPixelRatio() {
+      const width = Math.max(1, document.documentElement.clientWidth);
+      const height = Math.max(1, document.documentElement.clientHeight);
+      const nativeRatio = window.devicePixelRatio || 1;
+      // Preserve high-DPI street markings while keeping the WebGL backbuffer
+      // below a 1440p desktop budget.
+      return Math.max(0.75, Math.min(nativeRatio, 2, 2560 / width, 1440 / height));
+    }
     const config = {
       dataUrl: 'Build/unity.data',
       frameworkUrl: 'Build/unity.framework.js',
@@ -25,7 +33,8 @@
       streamingAssetsUrl: 'StreamingAssets',
       companyName: 'Xiongan Traffic Brain',
       productName: '雄安交通协同控制数字孪生',
-      productVersion: '1.0'
+      productVersion: '1.0',
+      devicePixelRatio: resolveUnityPixelRatio()
     };
     function send(method, payload) {
       if (!window.unityInstance) return;

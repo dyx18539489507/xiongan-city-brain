@@ -34,7 +34,7 @@ if (-not $Headless -and $playwrightChrome -and (Test-Path -LiteralPath $playwrig
     Set-ItemProperty -Path $gpuPreferenceRegistry -Name $playwrightChrome -Value 'GpuPreference=2;'
 }
 try {
-    & (Join-Path $PSScriptRoot 'start_3d_demo.ps1') `
+    & (Join-Path $PSScriptRoot 'start_3d.ps1') `
         -BackendPort $BackendPort `
         -FrontendPort $FrontendPort `
         -SkipExperiment `
@@ -56,7 +56,7 @@ try {
     Write-Host "Benchmark report: $output"
 } finally {
     if ($started) {
-        & (Join-Path $PSScriptRoot 'stop_3d_demo.ps1')
+        & (Join-Path $PSScriptRoot 'stop_3d.ps1')
     }
     if (-not $Headless -and $playwrightChrome -and (Test-Path -LiteralPath $gpuPreferenceRegistry)) {
         if ($gpuPreferenceExisted) {

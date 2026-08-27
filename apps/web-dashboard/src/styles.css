@@ -1244,9 +1244,8 @@ button.fault-action { border-color: rgba(255, 139, 92, .55); color: #ffb495; }
 
 @media (max-width: 820px) {
   .unity-stage { height: 660px; min-height: 660px; }
-  .unity-title { top: 28px; left: 22px; right: 22px; }
-  .unity-title h1 { font-size: 27px; }
-  .unity-source { top: 132px; right: auto; left: 22px; }
+  .unity-title { display: none; }
+  .unity-source { top: 20px; right: auto; left: 12px; }
   .unity-view-controls { right: 22px; bottom: 24px; left: 22px; }
   .unity-junction-select { display: none; }
   .unity-view-controls button { flex: 1; min-width: 0; padding-inline: 5px; }

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganTrafficScenarioFactory/1.0">
+  <bounds minlon="115.91485718779131" minlat="39.06077521537934" maxlon="115.91694857031014" maxlat="39.061473213353054" />
+  <node id="-9" lon="115.914857188" lat="39.061206827" version="1" />
+  <node id="-8" lon="115.91694857" lat="39.061206066" version="1" />
+  <node id="-6" lon="115.9165466" lat="39.0608643" version="1" />
+  <node id="-5" lon="115.915885" lat="39.0608588" version="1" />
+  <node id="-2" lon="115.9152584" lat="39.0612099" version="1" />
+  <node id="-1" lon="115.915259448" lat="39.061473213" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+    <tag k="source_way_id" v="-1" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <tag k="highway" v="service" />
+    <tag k="source_way_id" v="1416280871" />
+    <tag k="source_way_id" v="-2" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-8" />
+    <nd ref="-2" />
+    <nd ref="-9" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖北街" />
+    <tag k="source_way_id" v="1457051468" />
+    <tag k="source_way_id" v="-3" />
+  </way>
+</osm>

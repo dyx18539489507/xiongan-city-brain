@@ -47,6 +47,14 @@ namespace Xiongan.DigitalTwin.Editor
         public static void BuildWebGL()
         {
             ConfigureProject();
+            BuildConfiguredWebGL();
+        }
+
+        [MenuItem("Xiongan/Build configured WebGL")]
+        public static void BuildConfiguredWebGL()
+        {
+            if (!File.Exists(Path.GetFullPath(Path.Combine(Application.dataPath, "..", ScenePath))))
+                throw new BuildFailedException("Configured scene is missing. Run Xiongan/Configure project first.");
             var dashboard = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "web-dashboard"));
             var output = Path.Combine(dashboard, "public", "unity");
             Directory.CreateDirectory(output);
@@ -68,10 +76,17 @@ namespace Xiongan.DigitalTwin.Editor
             BuildWebGL();
         }
 
+        public static void ConfigureAndCapture()
+        {
+            ConfigureProject();
+            CaptureHeroPreview();
+        }
+
         [MenuItem("Xiongan/Capture hero preview")]
         public static void CaptureHeroPreview()
         {
-            ConfigureProject();
+            if (!File.Exists(Path.GetFullPath(Path.Combine(Application.dataPath, "..", ScenePath))))
+                throw new BuildFailedException("Configured scene is missing. Run Xiongan/Configure project first.");
             EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
             var sceneBuilder = UnityEngine.Object.FindFirstObjectByType<SceneBuilder>();
             if (sceneBuilder == null) throw new BuildFailedException("Baked SceneBuilder is missing.");
@@ -80,13 +95,13 @@ namespace Xiongan.DigitalTwin.Editor
             var previewRoot = new GameObject("固定镜头三维验收环境");
             previewRoot.AddComponent<EnvironmentController>().Initialise(sceneBuilder.Materials);
             var entities = new GameObject("固定镜头实体管理器").AddComponent<EntityManager>();
-            entities.Initialise(sceneBuilder.Coordinates, sceneBuilder.Materials);
+            entities.Initialise(sceneBuilder);
             PopulateHeroPreviewTraffic(sceneBuilder, entities);
             PopulateHeroPreviewSignals(sceneBuilder);
             var bridge = new GameObject("固定镜头浏览器桥").AddComponent<BrowserBridge>();
             var director = previewRoot.AddComponent<CameraDirector>();
             director.Initialise(sceneBuilder, entities, bridge);
-            director.SetView("monitor", "cluster_11122023464_11122023574");
+            director.SetView("hero", ReferenceShowcaseLayout.JunctionId);
             director.SnapToCurrentView();
 
             var camera = UnityEngine.Camera.main;
@@ -123,8 +138,11 @@ namespace Xiongan.DigitalTwin.Editor
             File.WriteAllBytes(overviewOutput, pixels.EncodeToPNG());
             foreach (var auditView in new[]
                      {
+                         (Id: ReferenceShowcaseLayout.JunctionId, File: "latest-b01-monitor.png"),
                          (Id: "B03", File: "latest-b03-monitor.png"),
                          (Id: "K06", File: "latest-k06-monitor.png"),
+                         (Id: "K08", File: "latest-k08-monitor.png"),
+                         (Id: "B12", File: "latest-b12-monitor.png"),
                      })
             {
                 director.SetView("monitor", auditView.Id);
@@ -138,6 +156,32 @@ namespace Xiongan.DigitalTwin.Editor
                 File.WriteAllBytes(auditOutput, pixels.EncodeToPNG());
                 Debug.Log($"Junction audit captured: {auditView.Id} -> {auditOutput}");
             }
+
+            var showcaseFrame = ReferenceShowcaseLayout.Resolve(sceneBuilder);
+            var showcaseSignals = UnityEngine.Object.FindFirstObjectByType<TrafficLightManager>()
+                ?.GetComponentsInChildren<Transform>(true)
+                .Where(item => item.name.StartsWith("B01四角信号悬臂-", StringComparison.Ordinal))
+                .OrderBy(item => ReferenceShowcaseLayout.ToLocal(showcaseFrame, item.position).x)
+                .ThenBy(item => ReferenceShowcaseLayout.ToLocal(showcaseFrame, item.position).y)
+                .ToArray() ?? Array.Empty<Transform>();
+            for (var index = 0; index < showcaseSignals.Length; index++)
+            {
+                var pole = showcaseSignals[index];
+                var towardJunction = Vector3.ProjectOnPlane(
+                    showcaseFrame.Center - pole.position, Vector3.up).normalized;
+                CaptureAuditCamera(
+                    camera, target, pixels,
+                    $"latest-b01-pedestrian-signal-{index + 1}.png",
+                    pole.position + towardJunction * 8.5f + Vector3.up * 3.2f,
+                    pole.position + Vector3.up * 3.15f,
+                    33f);
+            }
+            CaptureAuditCamera(
+                camera, target, pixels,
+                "latest-b01-civic-building.png",
+                showcaseFrame.Point(24f, 22f, 42f),
+                showcaseFrame.Point(78f, 8f, 76f),
+                39f);
             camera.targetTexture = null;
             RenderTexture.active = null;
             UnityEngine.Object.DestroyImmediate(target);
@@ -146,9 +190,31 @@ namespace Xiongan.DigitalTwin.Editor
             Debug.Log($"City overview captured: {overviewOutput}");
         }
 
+        private static void CaptureAuditCamera(
+            UnityEngine.Camera camera,
+            RenderTexture target,
+            Texture2D pixels,
+            string fileName,
+            Vector3 position,
+            Vector3 lookAt,
+            float fieldOfView)
+        {
+            camera.fieldOfView = fieldOfView;
+            camera.transform.position = position;
+            camera.transform.LookAt(lookAt);
+            camera.Render();
+            RenderTexture.active = target;
+            pixels.ReadPixels(new Rect(0f, 0f, target.width, target.height), 0, 0);
+            pixels.Apply(false, false);
+            var output = Path.GetFullPath(Path.Combine(
+                Application.dataPath, "..", "..", "..", "outputs", "3d", "audit", fileName));
+            File.WriteAllBytes(output, pixels.EncodeToPNG());
+            Debug.Log($"Close audit captured: {fileName} -> {output}");
+        }
+
         private static void PopulateHeroPreviewTraffic(SceneBuilder scene, EntityManager entities)
         {
-            const string heroId = "cluster_11122023464_11122023574";
+            const string heroId = ReferenceShowcaseLayout.JunctionId;
             var junction = scene.Document.Junctions.First(item => item.SumoJunctionId == heroId);
             var center = junction.Position;
             var candidates = new List<(LaneRecord Lane, Point2 Point, float Angle, float Distance)>();
@@ -393,7 +459,7 @@ namespace Xiongan.DigitalTwin.Editor
 
         private static void PopulateHeroPreviewSignals(SceneBuilder scene)
         {
-            const string heroId = "cluster_11122023464_11122023574";
+            const string heroId = ReferenceShowcaseLayout.JunctionId;
             var manager = UnityEngine.Object.FindFirstObjectByType<TrafficLightManager>();
             var record = scene.Document.TrafficLights.FirstOrDefault(item => item.SumoTlsId == heroId);
             if (manager == null || record == null || record.Links.Count == 0) return;
@@ -422,19 +488,23 @@ namespace Xiongan.DigitalTwin.Editor
             rendererData ??= AssetDatabase.LoadAllAssetsAtPath(PipelineAssetPath).OfType<UniversalRendererData>().FirstOrDefault();
             rendererData ??= AssetDatabase.LoadAssetAtPath<UniversalRendererData>(RendererDataPath);
             asset.renderScale = 1f;
-            asset.msaaSampleCount = 4;
-            asset.supportsHDR = true;
+            // TAA is configured on CameraDirector at runtime and requires a
+            // single-sample target plus depth. Keep the authored pipeline in
+            // the same state so the first rendered frame and rebuilt players
+            // cannot briefly fall back to the old 2x MSAA configuration.
+            asset.msaaSampleCount = 1;
+            asset.supportsHDR = false;
             asset.supportsCameraDepthTexture = true;
-            asset.mainLightShadowmapResolution = 4096;
-            asset.shadowCascadeCount = 4;
-            asset.shadowDistance = 420f;
+            asset.mainLightShadowmapResolution = 2048;
+            asset.shadowCascadeCount = 2;
+            asset.shadowDistance = 96f;
             asset.useSRPBatcher = true;
             QualitySettings.shadows = UnityEngine.ShadowQuality.All;
-            QualitySettings.shadowResolution = UnityEngine.ShadowResolution.VeryHigh;
+            QualitySettings.shadowResolution = UnityEngine.ShadowResolution.Medium;
             QualitySettings.shadowProjection = ShadowProjection.StableFit;
-            QualitySettings.shadowDistance = 420f;
-            QualitySettings.shadowCascades = 4;
-            QualitySettings.softParticles = true;
+            QualitySettings.shadowDistance = 96f;
+            QualitySettings.shadowCascades = 2;
+            QualitySettings.softParticles = false;
             if (rendererData != null)
             {
                 var ambientOcclusion = rendererData.rendererFeatures.OfType<ScreenSpaceAmbientOcclusion>().FirstOrDefault();
@@ -446,11 +516,12 @@ namespace Xiongan.DigitalTwin.Editor
                     rendererData.rendererFeatures.Add(ambientOcclusion);
                     AssetDatabase.AddObjectToAsset(ambientOcclusion, rendererData);
                 }
+                ambientOcclusion.SetActive(false);
                 var serializedOcclusion = new SerializedObject(ambientOcclusion);
-                serializedOcclusion.FindProperty("m_Settings.Intensity").floatValue = 1.45f;
-                serializedOcclusion.FindProperty("m_Settings.DirectLightingStrength").floatValue = 0.38f;
-                serializedOcclusion.FindProperty("m_Settings.Radius").floatValue = 0.055f;
-                serializedOcclusion.FindProperty("m_Settings.Downsample").boolValue = false;
+                serializedOcclusion.FindProperty("m_Settings.Intensity").floatValue = 1.05f;
+                serializedOcclusion.FindProperty("m_Settings.DirectLightingStrength").floatValue = 0.25f;
+                serializedOcclusion.FindProperty("m_Settings.Radius").floatValue = 0.04f;
+                serializedOcclusion.FindProperty("m_Settings.Downsample").boolValue = true;
                 serializedOcclusion.FindProperty("m_Settings.Source").enumValueIndex = 1;
                 serializedOcclusion.FindProperty("m_Settings.NormalSamples").enumValueIndex = 2;
                 serializedOcclusion.FindProperty("m_Settings.Samples").enumValueIndex = 0;
@@ -544,6 +615,8 @@ namespace Xiongan.DigitalTwin.Editor
             signalRoot.transform.SetParent(root.transform, false);
             signalRoot.AddComponent<TrafficLightManager>().Build(sceneBuilder);
 
+            ValidateTrafficLightPlacements(root, sceneBuilder);
+            ValidateShowcaseRoadsideDevicePlacements(root, sceneBuilder);
             ValidatePureThreeDimensionalScene(root, sceneBuilder);
 
             PersistGeneratedAssets(root);
@@ -609,6 +682,268 @@ namespace Xiongan.DigitalTwin.Editor
                     throw new BuildFailedException($"Forbidden runtime image folder still exists: {folder}");
         }
 
+        private static void ValidateTrafficLightPlacements(GameObject root, SceneBuilder sceneBuilder)
+        {
+            var poles = root.GetComponentsInChildren<Transform>(true)
+                .Where(item => item.name == "信号灯立杆")
+                .ToArray();
+            var heads = root.GetComponentsInChildren<Transform>(true)
+                .Count(item => item.name == "灯箱");
+            var pedestrianHeads = root.GetComponentsInChildren<Transform>(true)
+                .Count(item => item.name == "行人灯箱");
+            var legacyCentralSignals = root.GetComponentsInChildren<Transform>(true)
+                .Where(item => item.name.StartsWith("B01中央唯一信号灯-", StringComparison.Ordinal))
+                .ToArray();
+            var legacyCentralHeads = root.GetComponentsInChildren<Transform>(true)
+                .Count(item => item.name == "中央信号灯灯箱");
+            var showcaseSignals = root.GetComponentsInChildren<Transform>(true)
+                .Where(item => item.name.StartsWith("B01四角信号悬臂-", StringComparison.Ordinal))
+                .ToArray();
+            var laneById = sceneBuilder.Document.Lanes.ToDictionary(lane => lane.SumoLaneId);
+            var expectedPoles = sceneBuilder.Document.TrafficLights
+                .Sum(controller =>
+                controller.Links
+                    .Where(link => laneById.TryGetValue(link.FromLaneId, out var lane) &&
+                                   lane.EdgeFunction != "internal" &&
+                                   lane.LaneKind is "motor" or "mixed")
+                    .Select(link => laneById[link.FromLaneId])
+                    .GroupBy(lane => string.IsNullOrWhiteSpace(lane.SumoEdgeId)
+                        ? lane.SumoLaneId
+                        : lane.SumoEdgeId)
+                    .Count());
+            var expectedHeads = expectedPoles;
+            if (poles.Length != expectedPoles)
+                throw new BuildFailedException(
+                    $"Traffic signal pole count mismatch: {poles.Length}/{expectedPoles}.");
+            if (heads != expectedHeads)
+                throw new BuildFailedException(
+                    $"Traffic signal head count mismatch: {heads}/{expectedHeads}.");
+            if (pedestrianHeads != 8)
+                throw new BuildFailedException(
+                    $"B01 pedestrian signal head count mismatch: {pedestrianHeads}/8.");
+            if (legacyCentralSignals.Length != 0 || legacyCentralHeads != 0)
+                throw new BuildFailedException(
+                    $"B01 central signal must be fully removed: " +
+                    $"roots={legacyCentralSignals.Length}, heads={legacyCentralHeads}.");
+            if (showcaseSignals.Length != 4)
+                throw new BuildFailedException(
+                    $"B01 must contain exactly four corner signals: {showcaseSignals.Length}/4.");
+
+            var showcaseFrame = ReferenceShowcaseLayout.Resolve(sceneBuilder);
+            var expectedShowcaseAnchors = new[]
+            {
+                new Vector2(27.35f, 36.5f),
+                new Vector2(-27.35f, -36.5f),
+                new Vector2(37.5f, -26.35f),
+                new Vector2(-37.5f, 26.35f),
+            };
+            var unmatchedAnchors = expectedShowcaseAnchors.ToList();
+            var showcaseController = sceneBuilder.Document.TrafficLights
+                .Single(controller => controller.SumoTlsId == ReferenceShowcaseLayout.JunctionId);
+            var expectedApproaches = showcaseController.Links
+                .GroupBy(link => link.FromLaneId)
+                .Select(group => group.OrderBy(link => link.LinkIndex).First())
+                .Where(link => laneById.TryGetValue(link.FromLaneId, out var lane) &&
+                               lane.Shape.Count >= 2 &&
+                               lane.EdgeFunction != "internal" &&
+                               lane.LaneKind is "motor" or "mixed")
+                .Select(link => laneById[link.FromLaneId])
+                .GroupBy(lane => string.IsNullOrWhiteSpace(lane.SumoEdgeId)
+                    ? lane.SumoLaneId
+                    : lane.SumoEdgeId)
+                .Select(group =>
+                {
+                    var lanes = group.Select(lane =>
+                    {
+                        var stopPoint = sceneBuilder.Coordinates.ToWorld(lane.Shape[^1]);
+                        var previous = sceneBuilder.Coordinates.ToWorld(lane.Shape[^2]);
+                        return new SignalApproachLane(
+                            lane.SumoLaneId,
+                            showcaseController.Links
+                                .Where(link => link.FromLaneId == lane.SumoLaneId)
+                                .Min(link => link.LinkIndex),
+                            stopPoint,
+                            Vector3.ProjectOnPlane(stopPoint - previous, Vector3.up).normalized,
+                            lane.WidthM);
+                    }).ToList();
+                    return new
+                    {
+                        Lanes = lanes,
+                        Placement = TrafficLightPlacementRules.ResolveShowcase(showcaseFrame, lanes),
+                    };
+                })
+                .ToList();
+            foreach (var signal in showcaseSignals)
+            {
+                var local = ReferenceShowcaseLayout.ToLocal(showcaseFrame, signal.position);
+                var nearest = unmatchedAnchors
+                    .OrderBy(anchor => Vector2.Distance(anchor, local))
+                    .FirstOrDefault();
+                if (Vector2.Distance(nearest, local) > 0.15f)
+                    throw new BuildFailedException(
+                        $"B01 corner signal left its protected footway anchor: {local}.");
+                unmatchedAnchors.Remove(nearest);
+                if (ReferenceShowcaseLayout.CoversMotorCarriageway(showcaseFrame, signal.position, 0.35f))
+                    throw new BuildFailedException(
+                        $"B01 corner signal entered the motor carriageway: {local}.");
+                if (!ReferenceShowcaseLayout.IsSignalPoleOnInnerFootwayEdge(
+                        showcaseFrame, signal.position))
+                    throw new BuildFailedException(
+                        $"B01 corner signal left the carriageway-side footway edge: {local}.");
+
+                var expected = expectedApproaches
+                    .OrderBy(approach => Vector3.Distance(
+                        approach.Placement.PolePosition, signal.position))
+                    .First();
+                if (Vector3.Distance(expected.Placement.PolePosition, signal.position) > 0.15f)
+                    throw new BuildFailedException(
+                        $"B01 corner signal cannot be matched to an incoming approach: {local}.");
+                if (!ReferenceShowcaseLayout.IsSignalPoleOnFarSide(
+                        showcaseFrame, signal.position, expected.Placement.Forward))
+                    throw new BuildFailedException(
+                        $"B01 corner signal is not across the junction from arriving traffic: {local}.");
+                if (Vector3.Dot(signal.forward, expected.Placement.Forward) < 0.995f)
+                    throw new BuildFailedException(
+                        $"B01 signal root is not aligned with incoming traffic: {signal.name}.");
+                var head = signal.GetComponentsInChildren<Transform>(true)
+                    .Single(item => item.name == "灯箱");
+                var laneCenter = expected.Lanes
+                    .Aggregate(Vector3.zero, (sum, lane) => sum + lane.StopPoint) /
+                    expected.Lanes.Count;
+                var poleLateralDistance = Mathf.Abs(Vector3.Dot(
+                    signal.position - laneCenter, expected.Placement.TrafficRight));
+                var headLateralDistance = Mathf.Abs(Vector3.Dot(
+                    head.position - laneCenter, expected.Placement.TrafficRight));
+                if (headLateralDistance > poleLateralDistance - 4.5f)
+                    throw new BuildFailedException(
+                        $"B01 signal head extends away from its carriageway: {signal.name}, " +
+                        $"pole={poleLateralDistance:F2}m, head={headLateralDistance:F2}m.");
+                if (!ReferenceShowcaseLayout.CoversMotorCarriageway(showcaseFrame, head.position, 0.5f))
+                    throw new BuildFailedException(
+                        $"B01 signal head is not suspended over the motor carriageway: {signal.name}.");
+                if (Vector3.Dot(-head.forward, -expected.Placement.Forward) < 0.995f)
+                    throw new BuildFailedException(
+                        $"B01 signal face does not look toward arriving traffic: {signal.name}.");
+                var pedestrianSignalHeads = signal.GetComponentsInChildren<Transform>(true)
+                    .Where(item => item.name == "行人灯箱")
+                    .ToArray();
+                if (pedestrianSignalHeads.Length != 2)
+                    throw new BuildFailedException(
+                        $"B01 pole must carry two pedestrian signal faces: {signal.name}.");
+                foreach (var faceDirection in new[]
+                         {
+                             -expected.Placement.TrafficRight,
+                             -expected.Placement.Forward,
+                         })
+                {
+                    if (!pedestrianSignalHeads.Any(item =>
+                            Vector3.Dot(-item.forward, faceDirection) > 0.995f))
+                        throw new BuildFailedException(
+                            $"B01 pedestrian signal misses an adjacent crossing face: {signal.name}.");
+                }
+                foreach (var pedestrianHead in pedestrianSignalHeads)
+                    if (pedestrianHead.position.y < signal.position.y + 2.4f ||
+                        pedestrianHead.position.y > signal.position.y + 3.8f)
+                        throw new BuildFailedException(
+                            $"B01 pedestrian signal is outside the visible walking height: {signal.name}.");
+            }
+            if (unmatchedAnchors.Count != 0)
+                throw new BuildFailedException(
+                    $"B01 corner signals do not occupy four unique anchors: missing={unmatchedAnchors.Count}.");
+
+            var roadLanes = sceneBuilder.Document.Lanes
+                .Where(lane => lane.Shape.Count >= 2 &&
+                               lane.LaneKind is "motor" or "mixed" or "bicycle")
+                .Select(lane => new
+                {
+                    lane.SumoLaneId,
+                    Points = lane.Shape.Select(point => sceneBuilder.Coordinates.ToWorld(point)).ToArray(),
+                    Clearance = Mathf.Max(1.1f, lane.WidthM * 0.5f) + 0.15f,
+                })
+                .ToArray();
+            var junctionShapes = sceneBuilder.Document.Junctions
+                .Where(junction => junction.Controlled && junction.Shape.Count >= 3)
+                .Select(junction => new
+                {
+                    junction.SumoJunctionId,
+                    Points = junction.Shape.Select(point => sceneBuilder.Coordinates.ToWorld(point)).ToArray(),
+                })
+                .ToArray();
+            var crossings = sceneBuilder.Document.Crossings
+                .Where(crossing => crossing.Shape.Count >= 2)
+                .Select(crossing => new
+                {
+                    crossing.SceneId,
+                    Points = crossing.Shape.Select(point => sceneBuilder.Coordinates.ToWorld(point)).ToArray(),
+                    Clearance = crossing.WidthM * 0.5f + 0.2f,
+                })
+                .ToArray();
+
+            foreach (var pole in poles)
+            {
+                var position = pole.position;
+                position.y = 0f;
+                foreach (var lane in roadLanes)
+                {
+                    for (var segment = 0; segment < lane.Points.Length - 1; segment++)
+                    {
+                        if (TrafficLightPlacementRules.DistanceToSegmentXZ(
+                                position,
+                                lane.Points[segment],
+                                lane.Points[segment + 1]) > lane.Clearance)
+                            continue;
+                        throw new BuildFailedException(
+                            $"Traffic signal pole {pole.parent.name} overlaps driveable lane {lane.SumoLaneId}.");
+                    }
+                }
+                foreach (var junction in junctionShapes)
+                {
+                    if (TrafficLightPlacementRules.PointInPolygonXZ(position, junction.Points))
+                        throw new BuildFailedException(
+                            $"Traffic signal pole {pole.parent.name} is inside junction {junction.SumoJunctionId}.");
+                }
+                foreach (var crossing in crossings)
+                {
+                    for (var segment = 0; segment < crossing.Points.Length - 1; segment++)
+                    {
+                        if (TrafficLightPlacementRules.DistanceToSegmentXZ(
+                                position,
+                                crossing.Points[segment],
+                                crossing.Points[segment + 1]) > crossing.Clearance)
+                            continue;
+                        throw new BuildFailedException(
+                            $"Traffic signal pole {pole.parent.name} overlaps crossing {crossing.SceneId}.");
+                    }
+                }
+            }
+            Debug.Log($"Traffic signal placement validated: {poles.Length} roadside poles, " +
+                      $"{heads} heads, four B01 corner signals, zero road/crossing/junction overlaps.");
+        }
+
+        private static void ValidateShowcaseRoadsideDevicePlacements(
+            GameObject root, SceneBuilder sceneBuilder)
+        {
+            var records = sceneBuilder.Document.RoadsideDevices
+                .Where(device => device.ManagedJunctions.Contains(ReferenceShowcaseLayout.JunctionId))
+                .ToArray();
+            if (records.Length != 2)
+                throw new BuildFailedException(
+                    $"B01 roadside-device source count mismatch: {records.Length}/2.");
+
+            var frame = ReferenceShowcaseLayout.Resolve(sceneBuilder);
+            var transforms = root.GetComponentsInChildren<Transform>(true);
+            foreach (var record in records)
+            {
+                var device = transforms.FirstOrDefault(item => item.name == record.DeviceId);
+                if (device == null)
+                    throw new BuildFailedException($"B01 roadside device was not built: {record.DeviceId}.");
+                if (!ReferenceShowcaseLayout.IsRoadsideDeviceOnOuterFootway(frame, device.position))
+                    throw new BuildFailedException(
+                        $"B01 roadside device entered asphalt, crossing, or hero sightline: {record.DeviceId}.");
+            }
+            Debug.Log("B01 roadside-device placement validated: two devices on far outer footways.");
+        }
+
         private static void Exhaust(IEnumerator routine)
         {
             while (routine.MoveNext()) { }
@@ -618,32 +953,40 @@ namespace Xiongan.DigitalTwin.Editor
         {
             var materialPaths = new Dictionary<Material, string>();
             var materialIndex = 0;
-            foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
+            AssetDatabase.StartAssetEditing();
+            try
             {
-                var materials = renderer.sharedMaterials;
-                for (var index = 0; index < materials.Length; index++)
+                foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
                 {
-                    var material = materials[index];
-                    if (material == null || AssetDatabase.Contains(material)) continue;
-                    if (!materialPaths.TryGetValue(material, out var path))
+                    var materials = renderer.sharedMaterials;
+                    for (var index = 0; index < materials.Length; index++)
                     {
-                        path = $"{BakedAssetFolder}/material-{materialIndex++:D3}.mat";
-                        AssetDatabase.CreateAsset(material, path);
-                        materialPaths[material] = path;
+                        var material = materials[index];
+                        if (material == null || AssetDatabase.Contains(material)) continue;
+                        if (!materialPaths.TryGetValue(material, out var path))
+                        {
+                            path = $"{BakedAssetFolder}/material-{materialIndex++:D3}.mat";
+                            AssetDatabase.CreateAsset(material, path);
+                            materialPaths[material] = path;
+                        }
+                        materials[index] = material;
                     }
-                    materials[index] = AssetDatabase.LoadAssetAtPath<Material>(path);
+                    renderer.sharedMaterials = materials;
                 }
-                renderer.sharedMaterials = materials;
-            }
 
-            var meshIndex = 0;
-            foreach (var filter in root.GetComponentsInChildren<MeshFilter>(true))
+                var meshIndex = 0;
+                foreach (var filter in root.GetComponentsInChildren<MeshFilter>(true))
+                {
+                    var mesh = filter.sharedMesh;
+                    if (mesh == null || AssetDatabase.Contains(mesh)) continue;
+                    var path = $"{BakedAssetFolder}/mesh-{meshIndex++:D3}.asset";
+                    AssetDatabase.CreateAsset(mesh, path);
+                    filter.sharedMesh = mesh;
+                }
+            }
+            finally
             {
-                var mesh = filter.sharedMesh;
-                if (mesh == null || AssetDatabase.Contains(mesh)) continue;
-                var path = $"{BakedAssetFolder}/mesh-{meshIndex++:D3}.asset";
-                AssetDatabase.CreateAsset(mesh, path);
-                filter.sharedMesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+                AssetDatabase.StopAssetEditing();
             }
             AssetDatabase.SaveAssets();
         }

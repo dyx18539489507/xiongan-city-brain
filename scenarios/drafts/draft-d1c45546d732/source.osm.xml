@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.91454078072955" minlat="39.06063965626668" maxlon="115.91829446902311" maxlat="39.061586265973695" />
+  <node id="-1" lon="115.917531641" lat="39.060639656" version="1" />
+  <node id="-2" lon="115.9175254" lat="39.0612026" version="1" />
+  <node id="-3" lon="115.917521308" lat="39.061586266" version="1" />
+  <node id="-4" lon="115.915259898" lat="39.061586266" version="1" />
+  <node id="-5" lon="115.9152584" lat="39.0612099" version="1" />
+  <node id="-6" lon="115.915268476" lat="39.060639656" version="1" />
+  <node id="-7" lon="115.917373041" lat="39.061586266" version="1" />
+  <node id="-8" lon="115.9173742" lat="39.0612051" version="1" />
+  <node id="-9" lon="115.917369538" lat="39.060639656" version="1" />
+  <node id="-10" lon="115.915874864" lat="39.060639656" version="1" />
+  <node id="-11" lon="115.915885" lat="39.0608588" version="1" />
+  <node id="-12" lon="115.9165466" lat="39.0608643" version="1" />
+  <node id="-13" lon="115.9165466" lat="39.060639656" version="1" />
+  <node id="-14" lon="115.918294469" lat="39.061209502" version="1" />
+  <node id="-15" lon="115.914540781" lat="39.061204403" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="785419413" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <nd ref="-9" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517609" />
+  </way>
+  <way id="-4" visible="true" version="1">
+    <nd ref="-10" />
+    <nd ref="-11" />
+    <nd ref="-12" />
+    <nd ref="-13" />
+    <tag k="highway" v="service" />
+    <tag k="source_way_id" v="1416280871" />
+  </way>
+  <way id="-5" visible="true" version="1">
+    <nd ref="-14" />
+    <nd ref="-2" />
+    <nd ref="-8" />
+    <nd ref="-5" />
+    <nd ref="-15" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖北街" />
+    <tag k="source_way_id" v="1457051468" />
+  </way>
+</osm>

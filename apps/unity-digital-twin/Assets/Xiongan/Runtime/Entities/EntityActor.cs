@@ -18,11 +18,15 @@ namespace Xiongan.DigitalTwin.Entities
         private Quaternion targetRotation;
         private float elapsed;
         private float duration = 1f;
+        private bool hasTarget;
         private readonly List<Transform> wheels = new();
         private Renderer? brakeLeft;
         private Renderer? brakeRight;
         private Material? brakeOn;
         private Material? brakeOff;
+        private Renderer[] detailedRenderers = System.Array.Empty<Renderer>();
+        private Renderer? distantRenderer;
+        private int renderLod;
         private Transform? mobilityModel;
         private Transform? leftHip;
         private Transform? rightHip;
@@ -40,6 +44,7 @@ namespace Xiongan.DigitalTwin.Entities
         private Vector3 mobilityBasePosition;
         private float animationClock;
         private float animationPhase;
+        private int animationFramePhase;
 
         public void Initialise(string identifier, string category, MaterialLibrary materials, Color color)
         {
@@ -51,12 +56,21 @@ namespace Xiongan.DigitalTwin.Entities
             if (category == "pedestrian") BuildPedestrian(materials, color);
             else if (category == "bicycle") BuildBicycle(materials, color);
             else BuildVehicle(materials, color, StableHash(identifier) % 3);
+            CreateDistantProxy(materials);
+            var renderers = GetComponentsInChildren<Renderer>(true);
+            var details = new List<Renderer>(renderers.Length);
+            foreach (var renderer in renderers)
+                if (renderer != distantRenderer) details.Add(renderer);
+            detailedRenderers = details.ToArray();
+            if (distantRenderer != null) distantRenderer.forceRenderingOff = true;
         }
 
         public void Rebind(string identifier)
         {
             Identifier = identifier;
             animationPhase = StableHash(identifier) % 1024 / 1024f * Mathf.PI * 2f;
+            animationFramePhase = StableHash(identifier) & 3;
+            hasTarget = false;
             name = $"{Category}-{identifier}";
             var selectable = GetComponent<SelectableObject>();
             if (selectable != null) selectable.Identifier = identifier;
@@ -64,12 +78,36 @@ namespace Xiongan.DigitalTwin.Entities
 
         public void SetTarget(float x, float y, float angle, float speed, float tickHz, CoordinateService coordinates, bool immediate = false)
         {
+            SetTarget(
+                coordinates.ToWorld(x, y, Category == "pedestrian" ? 0.03f : Category == "bicycle" ? 0.02f : 0.04f),
+                coordinates.ToWorldRotation(angle),
+                speed,
+                tickHz,
+                immediate);
+        }
+
+        public void SetTarget(
+            Vector3 worldPosition,
+            Quaternion worldRotation,
+            float speed,
+            float tickHz,
+            bool immediate = false)
+        {
             Speed = speed;
             fromPosition = transform.position;
             fromRotation = transform.rotation;
-            targetPosition = coordinates.ToWorld(x, y, Category == "pedestrian" ? 0.03f : Category == "bicycle" ? 0.02f : 0.04f);
-            targetRotation = coordinates.ToWorldRotation(angle);
-            duration = Mathf.Clamp(1f / Mathf.Max(0.1f, tickHz), 0.08f, 1.5f);
+            var previousTarget = targetPosition;
+            var targetInterval = 1f / Mathf.Max(0.1f, tickHz);
+            targetPosition = worldPosition;
+            targetRotation = ResolveFacingRotation(
+                previousTarget,
+                worldPosition,
+                worldRotation,
+                speed,
+                hasTarget,
+                Mathf.Max(2.5f, speed * targetInterval * 2.6f + 1f));
+            hasTarget = true;
+            duration = Mathf.Clamp(targetInterval, 0.04f, 1.5f);
             elapsed = 0f;
             if (immediate)
             {
@@ -80,23 +118,97 @@ namespace Xiongan.DigitalTwin.Entities
             }
         }
 
+        public static Quaternion ResolveFacingRotation(
+            Vector3 previousPosition,
+            Vector3 nextPosition,
+            Quaternion reportedRotation,
+            float speed,
+            bool hasPrevious,
+            float maximumTravelDistance)
+        {
+            if (!hasPrevious || speed < 0.08f) return reportedRotation;
+            var travel = Vector3.ProjectOnPlane(nextPosition - previousPosition, Vector3.up);
+            if (travel.sqrMagnitude < 0.0025f || travel.sqrMagnitude > maximumTravelDistance * maximumTravelDistance)
+                return reportedRotation;
+            return Quaternion.LookRotation(travel.normalized, Vector3.up);
+        }
+
         public void SetBrake(bool brake)
         {
             if (brakeLeft != null) brakeLeft.sharedMaterial = brake ? brakeOn : brakeOff;
             if (brakeRight != null) brakeRight.sharedMaterial = brake ? brakeOn : brakeOff;
         }
 
-        private void Update()
+        public void Tick(float deltaTime, int frameCount, Vector3 cameraPosition, bool hasCamera)
         {
-            elapsed = Mathf.Min(duration, elapsed + Time.deltaTime);
-            var progress = duration <= 0f ? 1f : Mathf.SmoothStep(0f, 1f, elapsed / duration);
-            transform.SetPositionAndRotation(Vector3.LerpUnclamped(fromPosition, targetPosition, progress), Quaternion.Slerp(fromRotation, targetRotation, progress));
-            var rotation = Speed * Time.deltaTime * 115f;
+            elapsed = Mathf.Min(duration, elapsed + deltaTime);
+            var distanceSquared = !hasCamera
+                ? 0f
+                : (cameraPosition - transform.position).sqrMagnitude;
+            var movementStride = distanceSquared < 360000f ? 1 : distanceSquared < 2560000f ? 2 : 3;
+            if ((frameCount + animationFramePhase) % movementStride == 0 || elapsed >= duration)
+            {
+                var progress = duration <= 0f ? 1f : Mathf.SmoothStep(0f, 1f, elapsed / duration);
+                transform.SetPositionAndRotation(
+                    Vector3.LerpUnclamped(fromPosition, targetPosition, progress),
+                    Quaternion.Slerp(fromRotation, targetRotation, progress));
+                if (hasCamera) distanceSquared = (cameraPosition - transform.position).sqrMagnitude;
+            }
+            if ((frameCount + animationFramePhase) % 4 == 0)
+                UpdateRenderLod(distanceSquared);
+            var animationStride = distanceSquared < 22500f ? 1 : distanceSquared < 640000f ? 2 : 4;
+            if ((frameCount + animationFramePhase) % animationStride != 0) return;
+            var animationDelta = deltaTime * animationStride;
+            var rotation = Speed * animationDelta * 115f;
             foreach (var wheel in wheels) wheel.Rotate(rotation, 0f, 0f, Space.Self);
             if (bicycleCrank != null) bicycleCrank.Rotate(rotation * 1.82f, 0f, 0f, Space.Self);
-            animationClock += Time.deltaTime * Mathf.Lerp(2.2f, 8.4f, Mathf.Clamp01(Speed / 2.2f));
+            animationClock += animationDelta * Mathf.Lerp(2.2f, 8.4f, Mathf.Clamp01(Speed / 2.2f));
             if (Category == "pedestrian") AnimatePedestrian();
             else if (Category == "bicycle") AnimateBicycleRider();
+        }
+
+        private void CreateDistantProxy(MaterialLibrary materials)
+        {
+            var proxy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            proxy.name = "远距离交通主体轮廓";
+            proxy.transform.SetParent(transform, false);
+            var size = Category switch
+            {
+                "pedestrian" => new Vector3(0.42f, 1.72f, 0.42f),
+                "bicycle" => new Vector3(0.7f, 1.48f, 2.08f),
+                _ => new Vector3(1.88f, 1.34f, 4.42f),
+            };
+            proxy.transform.localPosition = Vector3.up * (size.y * 0.5f);
+            proxy.transform.localScale = size;
+            var collider = proxy.GetComponent<Collider>();
+            if (collider != null) Object.Destroy(collider);
+            distantRenderer = proxy.GetComponent<Renderer>();
+            distantRenderer.sharedMaterial = materials.Metal;
+            distantRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            distantRenderer.receiveShadows = false;
+        }
+
+        private void UpdateRenderLod(float distanceSquared)
+        {
+            // Keep authored traffic models through every junction inspection
+            // zoom. The former 180/220 m boundary crossed the B01 hero camera
+            // and produced a visible full-model disappearance while scrolling.
+            var detailEnter = Category == "vehicle" ? 420f : 260f;
+            var detailExit = Category == "vehicle" ? 520f : 340f;
+            const float proxyEnter = 3500f;
+            const float proxyExit = 3800f;
+            var nextLod = renderLod switch
+            {
+                0 => distanceSquared <= detailExit * detailExit ? 0 : 1,
+                1 when distanceSquared < detailEnter * detailEnter => 0,
+                1 => distanceSquared <= proxyExit * proxyExit ? 1 : 2,
+                _ => distanceSquared < proxyEnter * proxyEnter ? 1 : 2,
+            };
+            if (nextLod == renderLod) return;
+            renderLod = nextLod;
+            foreach (var renderer in detailedRenderers)
+                if (renderer != null) renderer.forceRenderingOff = renderLod != 0;
+            if (distantRenderer != null) distantRenderer.forceRenderingOff = renderLod != 1;
         }
 
         private void BuildVehicle(MaterialLibrary materials, Color color, int variant)
@@ -149,6 +261,9 @@ namespace Xiongan.DigitalTwin.Entities
             if (source == null) return false;
             var model = Object.Instantiate(source, transform, false);
             model.name = "CC0现代轿车实体网格";
+            // This FBX is authored with its visible nose on local -Z. Rotate only
+            // the imported mesh so every mobility actor exposes +Z as its front.
+            model.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             var renderers = model.GetComponentsInChildren<Renderer>(true);
             if (renderers.Length == 0)
             {

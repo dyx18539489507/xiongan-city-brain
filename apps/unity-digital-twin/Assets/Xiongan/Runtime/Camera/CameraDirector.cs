@@ -10,8 +10,10 @@ namespace Xiongan.DigitalTwin.CameraSystem
 {
     public sealed class CameraDirector : MonoBehaviour
     {
-        private const string ShowcaseJunctionId = "cluster_11122023464_11122023574";
-        private const string TrafficShowcaseJunctionId = "cluster_11122023464_11122023574";
+        private const float ZoomWheelSensitivity = 0.095f;
+        private const float MaximumZoomWheelDelta = 2.5f;
+        private const string ShowcaseJunctionId = ReferenceShowcaseLayout.JunctionId;
+        private const string TrafficShowcaseJunctionId = ReferenceShowcaseLayout.JunctionId;
         private const string ShowcaseVisualAnchorJunctionId = ShowcaseJunctionId;
         private Camera cameraComponent = null!;
         private SceneBuilder scene = null!;
@@ -29,7 +31,19 @@ namespace Xiongan.DigitalTwin.CameraSystem
         private Vector3 pointerDown;
         private float lastClickTime = -10f;
         private Vector3 lastClickPosition;
+        private float zoomIdleDeadline = -10f;
         private EntityActor? followActor;
+        private string currentViewMode = "hero";
+        private string? currentViewIdentifier;
+        private string viewBeforeVehicleLocate = "hero";
+        private string? identifierBeforeVehicleLocate;
+        private string currentVehicleId = string.Empty;
+        private bool vehicleLocatorActive;
+
+        public UnityEngine.Camera ViewCamera => cameraComponent;
+        public bool IsZooming => Time.unscaledTime < zoomIdleDeadline ||
+                                 Mathf.Abs(distance - desiredDistance) >
+                                 Mathf.Max(0.5f, desiredDistance * 0.008f);
 
         public void Initialise(SceneBuilder sceneBuilder, EntityManager entityManager, BrowserBridge browserBridge)
         {
@@ -41,19 +55,10 @@ namespace Xiongan.DigitalTwin.CameraSystem
             cameraObject.tag = "MainCamera";
             cameraComponent = cameraObject.AddComponent<Camera>();
             cameraComponent.fieldOfView = 52f;
-            cameraComponent.nearClipPlane = 0.15f;
-            cameraComponent.farClipPlane = 8000f;
-            cameraComponent.allowHDR = true;
-            cameraComponent.depthTextureMode = DepthTextureMode.Depth;
             var cameraData = cameraObject.GetComponent<UniversalAdditionalCameraData>();
             if (cameraData == null) cameraData = cameraObject.AddComponent<UniversalAdditionalCameraData>();
-            cameraData.renderPostProcessing = true;
-            cameraData.renderShadows = true;
-            cameraData.stopNaN = true;
-            cameraData.dithering = true;
-            cameraData.antialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
-            cameraData.antialiasingQuality = AntialiasingQuality.High;
-            SetView("monitor", ShowcaseJunctionId);
+            StableCameraRendering.ConfigureCamera(cameraComponent, cameraData, distance);
+            SetView("hero", HasReferenceShowcase ? ShowcaseJunctionId : ResolvePrimaryJunctionId());
             SnapToCurrentView();
         }
 
@@ -61,8 +66,31 @@ namespace Xiongan.DigitalTwin.CameraSystem
         {
             followActor = null;
             followTrafficCluster = false;
+            vehicleLocatorActive = false;
+            currentViewMode = mode;
+            currentViewIdentifier = identifier;
             switch (mode)
             {
+                case "hero":
+                    if (HasReferenceShowcase)
+                    {
+                        var heroShowcase = ReferenceShowcaseLayout.Resolve(scene);
+                        desiredTarget = heroShowcase.Center + heroShowcase.Forward * 50f - Vector3.up * 1f;
+                        desiredDistance = 160f;
+                        pitch = 7.2f;
+                        yaw = heroShowcase.CameraYaw;
+                        cameraComponent.fieldOfView = 34f;
+                    }
+                    else
+                    {
+                        var bounds = ResolveSceneBounds();
+                        desiredTarget = ResolveTarget(identifier);
+                        desiredDistance = Mathf.Clamp(Mathf.Max(bounds.size.x, bounds.size.z) * 0.24f, 85f, 240f);
+                        pitch = 31f;
+                        yaw = 145f;
+                        cameraComponent.fieldOfView = 46f;
+                    }
+                    break;
                 case "traffic":
                     var trafficTarget = identifier == ShowcaseJunctionId || string.IsNullOrWhiteSpace(identifier)
                         ? ShowcaseVisualAnchorJunctionId
@@ -70,11 +98,12 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     desiredTarget = ResolveTarget(trafficTarget);
                     if (trafficTarget == ShowcaseVisualAnchorJunctionId)
                     {
-                        cameraComponent.fieldOfView = 44f;
-                        desiredDistance = 64f;
-                        pitch = 14.8f;
-                        yaw = 182f;
-                        desiredTarget += new Vector3(0f, 1.1f, -4f);
+                        var trafficShowcase = ReferenceShowcaseLayout.Resolve(scene);
+                        cameraComponent.fieldOfView = 42f;
+                        desiredDistance = 118f;
+                        pitch = 18f;
+                        yaw = trafficShowcase.CameraYaw;
+                        desiredTarget = trafficShowcase.Center + trafficShowcase.Forward * 18f + Vector3.up * 2.5f;
                     }
                     else
                     {
@@ -87,15 +116,25 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     break;
                 case "overview":
                     cameraComponent.fieldOfView = 52f;
-                    desiredTarget = Vector3.zero;
-                    desiredDistance = 2750f;
+                    var sceneBounds = ResolveSceneBounds();
+                    desiredTarget = sceneBounds.center;
+                    desiredDistance = CalculateOverviewDistance(sceneBounds.size);
                     pitch = 58f;
                     yaw = 15f;
                     break;
                 case "corridor":
                     cameraComponent.fieldOfView = 49f;
-                    desiredTarget = new Vector3(155f, 0f, 555f);
-                    desiredDistance = 1180f;
+                    if (HasReferenceShowcase)
+                    {
+                        desiredTarget = new Vector3(155f, 0f, 555f);
+                        desiredDistance = 1180f;
+                    }
+                    else
+                    {
+                        var corridorBounds = ResolveSceneBounds();
+                        desiredTarget = corridorBounds.center;
+                        desiredDistance = CalculateOverviewDistance(corridorBounds.size) * 0.72f;
+                    }
                     pitch = 48f;
                     yaw = 34f;
                     break;
@@ -108,13 +147,14 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     break;
                 case "monitor":
                     desiredTarget = ResolveTarget(identifier);
-                    if (identifier == ShowcaseJunctionId)
+                    if (HasReferenceShowcase && identifier == ShowcaseJunctionId)
                     {
-                        desiredTarget = ResolveTarget(ShowcaseVisualAnchorJunctionId) + new Vector3(0f, 1.4f, -5f);
-                        desiredDistance = 64f;
-                        pitch = 14.8f;
-                        yaw = 182f;
-                        cameraComponent.fieldOfView = 44f;
+                        var monitorShowcase = ReferenceShowcaseLayout.Resolve(scene);
+                        desiredTarget = monitorShowcase.Center + monitorShowcase.Forward * 16f + Vector3.up * 2.5f;
+                        desiredDistance = 116f;
+                        pitch = 20f;
+                        yaw = monitorShowcase.CameraYaw;
+                        cameraComponent.fieldOfView = 42f;
                     }
                     else
                     {
@@ -153,10 +193,89 @@ namespace Xiongan.DigitalTwin.CameraSystem
                 desiredDistance = 42f;
                 pitch = 26f;
                 followActor = actor;
+                currentVehicleId = actor.Identifier;
                 return;
             }
             desiredTarget = ResolveTarget(identifier);
             desiredDistance = 180f;
+        }
+
+        public void SetVehicleLocatorsVisible(bool visible)
+        {
+            entities.SetVehicleLocatorsVisible(visible);
+        }
+
+        public void LocateVehicle(string mode, string? identifier = null)
+        {
+            if (mode == "restore")
+            {
+                followActor = null;
+                followTrafficCluster = false;
+                vehicleLocatorActive = false;
+                entities.SetVehicleLocatorsVisible(false);
+                SetView(viewBeforeVehicleLocate, identifierBeforeVehicleLocate);
+                bridge.Emit("vehicle-locator", new { found = true, mode, count = 0, id = string.Empty });
+                return;
+            }
+
+            if (!vehicleLocatorActive)
+            {
+                viewBeforeVehicleLocate = currentViewMode;
+                identifierBeforeVehicleLocate = currentViewIdentifier;
+                vehicleLocatorActive = true;
+            }
+            entities.SetVehicleLocatorsVisible(true);
+
+            if (mode == "cluster")
+            {
+                followActor = null;
+                if (!entities.TryGetVehicleClusterCenter(out var center, out var count, out var representativeId))
+                {
+                    bridge.Emit("vehicle-locator", new { found = false, mode, count = 0, id = string.Empty });
+                    return;
+                }
+                desiredTarget = center;
+                desiredDistance = Mathf.Clamp(105f + count * 2.5f, 120f, 230f);
+                pitch = 52f;
+                followTrafficCluster = true;
+                currentVehicleId = representativeId;
+                bridge.Emit("vehicle-locator", new { found = true, mode, count, id = representativeId });
+                return;
+            }
+
+            EntityActor actor;
+            var found = mode switch
+            {
+                "nearest" => entities.TryGetNearestVehicle(desiredTarget, out actor),
+                "previous" => entities.TryGetVehicleByOffset(currentVehicleId, -1, out actor),
+                "next" => entities.TryGetVehicleByOffset(currentVehicleId, 1, out actor),
+                "follow" when !string.IsNullOrWhiteSpace(identifier) && entities.Find(identifier) is { } selected => AssignActor(selected, out actor),
+                "follow" => entities.TryGetVehicleByOffset(currentVehicleId, 1, out actor),
+                _ => entities.TryGetNearestVehicle(desiredTarget, out actor),
+            };
+            if (!found)
+            {
+                bridge.Emit("vehicle-locator", new { found = false, mode, count = 0, id = string.Empty });
+                return;
+            }
+            FocusLocatedActor(actor, mode == "follow");
+            bridge.Emit("vehicle-locator", new { found = true, mode, count = 1, id = actor.Identifier });
+        }
+
+        private static bool AssignActor(EntityActor source, out EntityActor actor)
+        {
+            actor = source;
+            return true;
+        }
+
+        private void FocusLocatedActor(EntityActor actor, bool follow)
+        {
+            followTrafficCluster = false;
+            followActor = follow ? actor : null;
+            currentVehicleId = actor.Identifier;
+            desiredTarget = actor.transform.position;
+            desiredDistance = follow ? 8f : 48f;
+            pitch = follow ? 10f : 30f;
         }
 
         private Vector3 ResolveTarget(string? identifier)
@@ -164,20 +283,60 @@ namespace Xiongan.DigitalTwin.CameraSystem
             if (!string.IsNullOrWhiteSpace(identifier) && scene.Junctions.TryGetValue(identifier, out var junction))
                 return scene.Coordinates.ToWorld(junction.Position);
             var display = scene.Document.Junctions.FirstOrDefault(item => item.DisplayId == identifier);
-            return display == null ? Vector3.zero : scene.Coordinates.ToWorld(display.Position);
+            if (display != null) return scene.Coordinates.ToWorld(display.Position);
+            var primary = ResolvePrimaryJunctionId();
+            return scene.Junctions.TryGetValue(primary, out junction)
+                ? scene.Coordinates.ToWorld(junction.Position)
+                : ResolveSceneBounds().center;
+        }
+
+        private bool HasReferenceShowcase => scene.Junctions.ContainsKey(ShowcaseJunctionId);
+
+        private string ResolvePrimaryJunctionId()
+        {
+            var controlled = scene.Document.TrafficLights.FirstOrDefault()?.ControlledJunctionId;
+            if (!string.IsNullOrWhiteSpace(controlled)) return controlled;
+            return scene.Document.Junctions.FirstOrDefault(item => item.Controlled)?.SumoJunctionId
+                   ?? scene.Document.Junctions.FirstOrDefault()?.SumoJunctionId
+                   ?? string.Empty;
+        }
+
+        private Bounds ResolveSceneBounds()
+        {
+            var positions = scene.Document.Lanes
+                .SelectMany(item => item.Shape)
+                .Select(point => scene.Coordinates.ToWorld(point))
+                .ToList();
+            if (positions.Count == 0)
+                positions = scene.Document.Junctions.Select(item => scene.Coordinates.ToWorld(item.Position)).ToList();
+            if (positions.Count == 0) return new Bounds(Vector3.zero, new Vector3(120f, 0f, 120f));
+            var bounds = new Bounds(positions[0], Vector3.zero);
+            foreach (var position in positions.Skip(1)) bounds.Encapsulate(position);
+            bounds.Expand(new Vector3(24f, 0f, 24f));
+            return bounds;
+        }
+
+        public static float CalculateOverviewDistance(Vector3 sceneSize)
+        {
+            var span = Mathf.Max(sceneSize.x, sceneSize.z);
+            return Mathf.Clamp(span * 0.9f + 40f, 140f, 3400f);
         }
 
         private void LateUpdate()
         {
             if (cameraComponent == null) return;
-            HandleInput();
+            // Preserve real-time input response during a slow WebGL frame. The old
+            // 50 ms cap made the camera physically slow down below 20 FPS, which
+            // compounded rendering stutter with sluggish controls.
+            var frameTime = Mathf.Min(Time.unscaledDeltaTime, 0.1f);
+            HandleInput(frameTime);
             if (followActor != null)
             {
                 var forward = Vector3.ProjectOnPlane(followActor.transform.forward, Vector3.up).normalized;
                 if (forward.sqrMagnitude < 0.1f) forward = Vector3.forward;
                 var lookTarget = followActor.transform.position + Vector3.up * 1.25f + forward * 4.2f;
                 var chasePosition = followActor.transform.position - forward * 8.5f + Vector3.up * 3.4f;
-                var smoothing = 1f - Mathf.Exp(-Time.unscaledDeltaTime * 5.5f);
+                var smoothing = 1f - Mathf.Exp(-frameTime * 5.5f);
                 cameraComponent.transform.position = Vector3.Lerp(
                     cameraComponent.transform.position,
                     chasePosition,
@@ -190,18 +349,26 @@ namespace Xiongan.DigitalTwin.CameraSystem
                     lookRotation,
                     smoothing);
                 target = desiredTarget = followActor.transform.position;
+                StableCameraRendering.UpdateClipPlanes(
+                    cameraComponent,
+                    Vector3.Distance(cameraComponent.transform.position, lookTarget));
                 return;
             }
             if (followTrafficCluster && entities.TryGetVehicleClusterCenter(out var clusterCenter))
                 desiredTarget = clusterCenter;
-            target = Vector3.Lerp(target, desiredTarget, 1f - Mathf.Exp(-Time.unscaledDeltaTime * 4.5f));
-            distance = Mathf.Lerp(distance, desiredDistance, 1f - Mathf.Exp(-Time.unscaledDeltaTime * 4.5f));
+            var cameraBlend = StableCameraRendering.CalculateMotionBlend(frameTime);
+            target = Vector3.Lerp(target, desiredTarget, cameraBlend);
+            distance = Mathf.Lerp(distance, desiredDistance, cameraBlend);
+            if (Vector3.SqrMagnitude(target - desiredTarget) < 0.0004f) target = desiredTarget;
+            if (Mathf.Abs(distance - desiredDistance) < Mathf.Max(0.01f, desiredDistance * 0.0001f))
+                distance = desiredDistance;
             var orbit = Quaternion.Euler(pitch, yaw, 0f) * Vector3.back * distance;
             cameraComponent.transform.position = target + orbit;
             cameraComponent.transform.LookAt(target + Vector3.up * 1.5f);
+            StableCameraRendering.UpdateClipPlanes(cameraComponent, distance);
         }
 
-        private void HandleInput()
+        private void HandleInput(float frameTime)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -212,8 +379,10 @@ namespace Xiongan.DigitalTwin.CameraSystem
             {
                 var delta = (Vector3)Input.mousePosition - pointerDown;
                 if (delta.sqrMagnitude > 12f) dragging = true;
-                yaw += Input.GetAxis("Mouse X") * 2.8f;
-                pitch = Mathf.Clamp(pitch - Input.GetAxis("Mouse Y") * 2.2f, 8f, 82f);
+                var mouseX = Mathf.Clamp(Input.GetAxis("Mouse X"), -8f, 8f);
+                var mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y"), -8f, 8f);
+                yaw += mouseX * 2.8f;
+                pitch = Mathf.Clamp(pitch - mouseY * 2.2f, 8f, 82f);
             }
             if (Input.GetMouseButtonUp(0) && !dragging)
             {
@@ -232,7 +401,9 @@ namespace Xiongan.DigitalTwin.CameraSystem
             }
             if (Input.GetMouseButton(1) || Input.GetMouseButton(2))
             {
-                Pan(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                Pan(
+                    Mathf.Clamp(Input.GetAxis("Mouse X"), -8f, 8f),
+                    Mathf.Clamp(Input.GetAxis("Mouse Y"), -8f, 8f));
             }
             if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2)) panning = false;
 
@@ -248,10 +419,27 @@ namespace Xiongan.DigitalTwin.CameraSystem
                 var speed = Mathf.Clamp(desiredDistance * 0.48f, 12f, 420f);
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) speed *= 2.4f;
                 desiredTarget += (flatRight * keyboard.x + flatForward * keyboard.y).normalized *
-                                 speed * Time.unscaledDeltaTime;
-                desiredTarget.y = Mathf.Clamp(desiredTarget.y + vertical * speed * 0.45f * Time.unscaledDeltaTime, 0f, 350f);
+                                 speed * frameTime;
+                desiredTarget.y = Mathf.Clamp(desiredTarget.y + vertical * speed * 0.45f * frameTime, 0f, 350f);
             }
-            desiredDistance = Mathf.Clamp(desiredDistance * Mathf.Exp(-Input.mouseScrollDelta.y * 0.12f), 4f, 3500f);
+            var scroll = Input.mouseScrollDelta.y;
+            if (Mathf.Abs(scroll) > 0.001f)
+            {
+                desiredDistance = CalculateZoomDistance(desiredDistance, scroll);
+                zoomIdleDeadline = Time.unscaledTime + 0.32f;
+            }
+        }
+
+        public static float CalculateZoomDistance(float currentDistance, float wheelDelta)
+        {
+            var stableDelta = Mathf.Clamp(
+                wheelDelta,
+                -MaximumZoomWheelDelta,
+                MaximumZoomWheelDelta);
+            return Mathf.Clamp(
+                currentDistance * Mathf.Exp(-stableDelta * ZoomWheelSensitivity),
+                4f,
+                3500f);
         }
 
         private void Pan(float horizontal, float vertical)
@@ -301,6 +489,7 @@ namespace Xiongan.DigitalTwin.CameraSystem
             var orbit = Quaternion.Euler(pitch, yaw, 0f) * Vector3.back * distance;
             cameraComponent.transform.position = target + orbit;
             cameraComponent.transform.LookAt(target);
+            StableCameraRendering.UpdateClipPlanes(cameraComponent, distance);
         }
     }
 }

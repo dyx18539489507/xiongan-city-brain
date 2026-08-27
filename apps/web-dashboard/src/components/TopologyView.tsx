@@ -80,7 +80,6 @@ export function TopologyView({
     <section className="topology-workspace" aria-labelledby="topology-title">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">REAL GEOGRAPHY / ENGINEERING MODEL</p>
           <h2 id="topology-title">容东 20 路口协同拓扑</h2>
         </div>
         <div className="legend" aria-label="拥堵图例">
@@ -231,7 +230,7 @@ export function TopologyView({
         )}
         {activeDisturbances.length > 0 && (
           <div className="disturbance-rail" aria-label="当前场景扰动">
-            <span>ACTIVE</span>
+            <span>当前生效</span>
             {activeDisturbances.map((item) => (
               <strong key={item}>{disturbanceLabel(item)}</strong>
             ))}

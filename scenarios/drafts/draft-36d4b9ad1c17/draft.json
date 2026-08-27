@@ -1,0 +1,183 @@
+{
+  "id": "draft-36d4b9ad1c17",
+  "status": "ready",
+  "progress": 100,
+  "message": "河北本地 OSM 框选范围已解析",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91485718779131,
+      "south": 39.06077521537934,
+      "east": 115.91694857031014,
+      "north": 39.061473213353054
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21"
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "high",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 115.91485686020941,
+      "min_y": 39.061182191645095,
+      "max_x": 115.91694863502701,
+      "max_y": 39.0614732990367
+    },
+    "roads": [
+      {
+        "id": "--1",
+        "coordinates": [
+          [
+            115.91528932169207,
+            39.0612747201955
+          ],
+          [
+            115.91529009911142,
+            39.06147314801685
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "--3#0",
+        "coordinates": [
+          [
+            115.91534159511106,
+            39.0611858180421
+          ],
+          [
+            115.91694855574033,
+            39.061182191645095
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "--3#1",
+        "coordinates": [
+          [
+            115.91485747571198,
+            39.061182935954086
+          ],
+          [
+            115.91517614971922,
+            39.06118536034111
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-1",
+        "coordinates": [
+          [
+            115.91522883928974,
+            39.0614732990367
+          ],
+          [
+            115.91522806204193,
+            39.061274871217385
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-3#0",
+        "coordinates": [
+          [
+            115.91694863502701,
+            39.061229950295896
+          ],
+          [
+            115.91534173109643,
+            39.06123357721607
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-3#1",
+        "coordinates": [
+          [
+            115.91517553443127,
+            39.06123311252566
+          ],
+          [
+            115.91485686020941,
+            39.06123068813394
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      }
+    ],
+    "buildings": [],
+    "intersections": [
+      {
+        "intersection_id": "-2",
+        "display_id": "J01",
+        "display_name": "路口 1",
+        "x": 115.9152584134498,
+        "y": 39.06120991445232,
+        "lon": 115.9152584134498,
+        "lat": 39.06120991445232,
+        "degree": 3,
+        "signalized": false
+      }
+    ],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [
+    "-2"
+  ],
+  "manual_edits": [],
+  "validation": {
+    "valid": true,
+    "selected_intersection_count": 1,
+    "selected_intersection_ids": [
+      "-2"
+    ],
+    "errors": [],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "osm_bbox",
+    "confidence": "high",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.osm.xml",
+    "processed_source": "source.clipped.osm.xml",
+    "network": "network.net.xml"
+  },
+  "logs": [
+    {
+      "time": "2026-08-23T07:47:00.272806+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照裁剪框选范围"
+    },
+    {
+      "time": "2026-08-23T07:47:00.324804+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-23T07:47:00.441945+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    },
+    {
+      "time": "2026-08-23T07:47:00.460905+00:00",
+      "progress": 100,
+      "message": "河北本地 OSM 框选范围已解析"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-23T07:47:00.259061+00:00",
+  "updated_at": "2026-08-23T07:47:09.105767+00:00"
+}

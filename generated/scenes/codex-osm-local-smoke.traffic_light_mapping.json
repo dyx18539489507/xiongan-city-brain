@@ -1,0 +1,301 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "codex-osm-local-smoke",
+  "sourceSceneFile": "codex-osm-local-smoke.scene.json",
+  "sourceSceneSha256": "ab26755e7b9e5dea69496c14d48eb339aaeeabb153745e55e81e99c3bfb0ce25",
+  "controllers": [
+    {
+      "sceneId": "tls:9245378879:0",
+      "sumoTlsId": "9245378879",
+      "controlledJunctionId": "9245378879",
+      "displayId": "J02",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-7#5_0",
+          "toLaneId": "-7#6_0",
+          "viaLaneId": ":9245378879_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-7#5_0",
+          "toLaneId": "-10#0_0",
+          "viaLaneId": ":9245378879_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-7#5_1",
+          "toLaneId": "-7#6_1",
+          "viaLaneId": ":9245378879_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-7#5_1",
+          "toLaneId": "-10#0_1",
+          "viaLaneId": ":9245378879_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-7#5_1",
+          "toLaneId": "--7#5_1",
+          "viaLaneId": ":9245378879_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "--10#0_0",
+          "toLaneId": "--7#5_0",
+          "viaLaneId": ":9245378879_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "--10#0_0",
+          "toLaneId": "-7#6_0",
+          "viaLaneId": ":9245378879_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "--10#0_1",
+          "toLaneId": "--7#5_1",
+          "viaLaneId": ":9245378879_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "--10#0_1",
+          "toLaneId": "-7#6_1",
+          "viaLaneId": ":9245378879_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "--10#0_1",
+          "toLaneId": "-10#0_1",
+          "viaLaneId": ":9245378879_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "--7#6_0",
+          "toLaneId": "-10#0_0",
+          "viaLaneId": ":9245378879_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "--7#6_0",
+          "toLaneId": "--7#5_0",
+          "viaLaneId": ":9245378879_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "--7#6_1",
+          "toLaneId": "-10#0_1",
+          "viaLaneId": ":9245378879_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "--7#6_1",
+          "toLaneId": "--7#5_1",
+          "viaLaneId": ":9245378879_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--7#6_1",
+          "toLaneId": "-7#6_1",
+          "viaLaneId": ":9245378879_14_0"
+        }
+      ],
+      "phaseStateLengths": [
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "sceneId": "tls:cluster_13015208366_13015208393:0",
+      "sumoTlsId": "cluster_13015208366_13015208393",
+      "controlledJunctionId": "cluster_13015208366_13015208393",
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-10#0_0",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-10#0_0",
+          "toLaneId": "-10#2_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-10#0_0",
+          "toLaneId": "--54#1_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-10#0_1",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-10#0_1",
+          "toLaneId": "-10#2_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-10#0_1",
+          "toLaneId": "--54#1_2",
+          "viaLaneId": ":cluster_13015208366_13015208393_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-10#0_1",
+          "toLaneId": "--10#0_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-54#1_1",
+          "toLaneId": "--10#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-54#1_1",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-54#1_1",
+          "toLaneId": "-10#2_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-54#1_2",
+          "toLaneId": "--10#0_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-54#1_2",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "-54#1_2",
+          "toLaneId": "-10#2_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "-54#1_2",
+          "toLaneId": "--54#1_2",
+          "viaLaneId": ":cluster_13015208366_13015208393_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--10#2_0",
+          "toLaneId": "--54#1_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_14_0"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "--10#2_0",
+          "toLaneId": "--10#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_15_0"
+        },
+        {
+          "linkIndex": 16,
+          "fromLaneId": "--10#2_1",
+          "toLaneId": "--54#1_2",
+          "viaLaneId": ":cluster_13015208366_13015208393_16_0"
+        },
+        {
+          "linkIndex": 17,
+          "fromLaneId": "--10#2_1",
+          "toLaneId": "--10#0_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_17_0"
+        },
+        {
+          "linkIndex": 18,
+          "fromLaneId": "--10#2_1",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_18_0"
+        },
+        {
+          "linkIndex": 19,
+          "fromLaneId": "--10#2_1",
+          "toLaneId": "-10#2_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_19_0"
+        },
+        {
+          "linkIndex": 20,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "-10#2_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_20_0"
+        },
+        {
+          "linkIndex": 21,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "-10#2_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_20_1"
+        },
+        {
+          "linkIndex": 22,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "--54#1_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_22_0"
+        },
+        {
+          "linkIndex": 23,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "--54#1_2",
+          "viaLaneId": ":cluster_13015208366_13015208393_22_1"
+        },
+        {
+          "linkIndex": 24,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "--10#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_24_0"
+        },
+        {
+          "linkIndex": 25,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "--10#0_1",
+          "viaLaneId": ":cluster_13015208366_13015208393_24_1"
+        },
+        {
+          "linkIndex": 26,
+          "fromLaneId": "--52#0_0",
+          "toLaneId": "-52#0_0",
+          "viaLaneId": ":cluster_13015208366_13015208393_26_0"
+        },
+        {
+          "linkIndex": 27,
+          "fromLaneId": ":cluster_13015208366_13015208393_w1_0",
+          "toLaneId": ":cluster_13015208366_13015208393_c0_0",
+          "viaLaneId": null
+        }
+      ],
+      "phaseStateLengths": [
+        28,
+        28,
+        28,
+        28,
+        28
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 2,
+    "links": 43
+  }
+}

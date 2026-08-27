@@ -1,0 +1,1316 @@
+{
+  "$defs": {
+    "AreaRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sourceId": {
+          "title": "Sourceid",
+          "type": "string"
+        },
+        "areaType": {
+          "title": "Areatype",
+          "type": "string"
+        },
+        "shape": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Shape",
+          "type": "array"
+        },
+        "tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "object"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sourceId",
+        "areaType",
+        "shape",
+        "provenance"
+      ],
+      "title": "AreaRecord",
+      "type": "object"
+    },
+    "Bounds2": {
+      "additionalProperties": false,
+      "properties": {
+        "minX": {
+          "title": "Minx",
+          "type": "number"
+        },
+        "minY": {
+          "title": "Miny",
+          "type": "number"
+        },
+        "maxX": {
+          "title": "Maxx",
+          "type": "number"
+        },
+        "maxY": {
+          "title": "Maxy",
+          "type": "number"
+        }
+      },
+      "required": [
+        "minX",
+        "minY",
+        "maxX",
+        "maxY"
+      ],
+      "title": "Bounds2",
+      "type": "object"
+    },
+    "BuildingRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sourceId": {
+          "title": "Sourceid",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "buildingType": {
+          "title": "Buildingtype",
+          "type": "string"
+        },
+        "footprint": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Footprint",
+          "type": "array"
+        },
+        "heightM": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heightm"
+        },
+        "levels": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Levels"
+        },
+        "heightSource": {
+          "title": "Heightsource",
+          "type": "string"
+        },
+        "tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "object"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sourceId",
+        "buildingType",
+        "footprint",
+        "heightSource",
+        "provenance"
+      ],
+      "title": "BuildingRecord",
+      "type": "object"
+    },
+    "ConnectionRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "fromEdgeId": {
+          "title": "Fromedgeid",
+          "type": "string"
+        },
+        "toEdgeId": {
+          "title": "Toedgeid",
+          "type": "string"
+        },
+        "fromLaneId": {
+          "title": "Fromlaneid",
+          "type": "string"
+        },
+        "toLaneId": {
+          "title": "Tolaneid",
+          "type": "string"
+        },
+        "viaLaneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vialaneid"
+        },
+        "direction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "State"
+        },
+        "tlsId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tlsid"
+        },
+        "linkIndex": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Linkindex"
+        }
+      },
+      "required": [
+        "sceneId",
+        "fromEdgeId",
+        "toEdgeId",
+        "fromLaneId",
+        "toLaneId"
+      ],
+      "title": "ConnectionRecord",
+      "type": "object"
+    },
+    "ControlCorridorRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "corridorId": {
+          "title": "Corridorid",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "junctionIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Junctionids",
+          "type": "array"
+        },
+        "edgeIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Edgeids",
+          "type": "array"
+        },
+        "displayIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Displayids",
+          "type": "array"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/ControlCorridorSegmentRecord"
+          },
+          "title": "Segments",
+          "type": "array"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "corridorId",
+        "name",
+        "junctionIds",
+        "edgeIds",
+        "displayIds",
+        "segments",
+        "provenance"
+      ],
+      "title": "ControlCorridorRecord",
+      "type": "object"
+    },
+    "ControlCorridorSegmentRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "fromJunctionId": {
+          "title": "Fromjunctionid",
+          "type": "string"
+        },
+        "toJunctionId": {
+          "title": "Tojunctionid",
+          "type": "string"
+        },
+        "forwardEdgeIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forwardedgeids",
+          "type": "array"
+        },
+        "reverseEdgeIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reverseedgeids",
+          "type": "array"
+        },
+        "forwardLengthM": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Forwardlengthm"
+        },
+        "reverseLengthM": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reverselengthm"
+        }
+      },
+      "required": [
+        "fromJunctionId",
+        "toJunctionId",
+        "forwardEdgeIds",
+        "reverseEdgeIds"
+      ],
+      "title": "ControlCorridorSegmentRecord",
+      "type": "object"
+    },
+    "CoordinateSystem": {
+      "additionalProperties": false,
+      "properties": {
+        "units": {
+          "default": "m",
+          "title": "Units",
+          "type": "string"
+        },
+        "sourceCrs": {
+          "title": "Sourcecrs",
+          "type": "string"
+        },
+        "projection": {
+          "title": "Projection",
+          "type": "string"
+        },
+        "utmZone": {
+          "title": "Utmzone",
+          "type": "integer"
+        },
+        "northernHemisphere": {
+          "title": "Northernhemisphere",
+          "type": "boolean"
+        },
+        "netOffset": {
+          "$ref": "#/$defs/Point2"
+        },
+        "sumoBounds": {
+          "$ref": "#/$defs/Bounds2"
+        },
+        "geoBounds": {
+          "$ref": "#/$defs/Bounds2"
+        },
+        "sceneBounds": {
+          "$ref": "#/$defs/Bounds2"
+        },
+        "worldOriginSumo": {
+          "$ref": "#/$defs/Point2"
+        },
+        "worldAxes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Worldaxes",
+          "type": "object"
+        }
+      },
+      "required": [
+        "sourceCrs",
+        "projection",
+        "utmZone",
+        "northernHemisphere",
+        "netOffset",
+        "sumoBounds",
+        "geoBounds",
+        "sceneBounds",
+        "worldOriginSumo",
+        "worldAxes"
+      ],
+      "title": "CoordinateSystem",
+      "type": "object"
+    },
+    "CrossingRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sumoEdgeId": {
+          "title": "Sumoedgeid",
+          "type": "string"
+        },
+        "junctionId": {
+          "title": "Junctionid",
+          "type": "string"
+        },
+        "laneId": {
+          "title": "Laneid",
+          "type": "string"
+        },
+        "shape": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Shape",
+          "type": "array"
+        },
+        "widthM": {
+          "title": "Widthm",
+          "type": "number"
+        },
+        "crossedEdgeIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Crossededgeids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sumoEdgeId",
+        "junctionId",
+        "laneId",
+        "shape",
+        "widthM",
+        "crossedEdgeIds"
+      ],
+      "title": "CrossingRecord",
+      "type": "object"
+    },
+    "EdgeRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sumoEdgeId": {
+          "title": "Sumoedgeid",
+          "type": "string"
+        },
+        "roadId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Roadid"
+        },
+        "fromJunctionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fromjunctionid"
+        },
+        "toJunctionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tojunctionid"
+        },
+        "function": {
+          "title": "Function",
+          "type": "string"
+        },
+        "roadType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Roadtype"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "integer"
+        },
+        "shape": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Shape",
+          "type": "array"
+        },
+        "laneIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Laneids",
+          "type": "array"
+        },
+        "lengthM": {
+          "title": "Lengthm",
+          "type": "number"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sumoEdgeId",
+        "roadId",
+        "fromJunctionId",
+        "toJunctionId",
+        "function",
+        "roadType",
+        "priority",
+        "shape",
+        "laneIds",
+        "lengthM"
+      ],
+      "title": "EdgeRecord",
+      "type": "object"
+    },
+    "EdgeRegionRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "edgeId": {
+          "title": "Edgeid",
+          "type": "string"
+        },
+        "nearestControlledJunctionId": {
+          "title": "Nearestcontrolledjunctionid",
+          "type": "string"
+        },
+        "regionRole": {
+          "title": "Regionrole",
+          "type": "string"
+        },
+        "distanceM": {
+          "title": "Distancem",
+          "type": "number"
+        }
+      },
+      "required": [
+        "edgeId",
+        "nearestControlledJunctionId",
+        "regionRole",
+        "distanceM"
+      ],
+      "title": "EdgeRegionRecord",
+      "type": "object"
+    },
+    "EnvironmentRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultWeather": {
+          "title": "Defaultweather",
+          "type": "string"
+        },
+        "defaultTimeOfDay": {
+          "title": "Defaulttimeofday",
+          "type": "string"
+        },
+        "groundElevationM": {
+          "title": "Groundelevationm",
+          "type": "number"
+        },
+        "skyMode": {
+          "title": "Skymode",
+          "type": "string"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "defaultWeather",
+        "defaultTimeOfDay",
+        "groundElevationM",
+        "skyMode",
+        "provenance"
+      ],
+      "title": "EnvironmentRecord",
+      "type": "object"
+    },
+    "JunctionRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sumoJunctionId": {
+          "title": "Sumojunctionid",
+          "type": "string"
+        },
+        "junctionType": {
+          "title": "Junctiontype",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Point2"
+        },
+        "lon": {
+          "title": "Lon",
+          "type": "number"
+        },
+        "lat": {
+          "title": "Lat",
+          "type": "number"
+        },
+        "shape": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Shape",
+          "type": "array"
+        },
+        "controlled": {
+          "default": false,
+          "title": "Controlled",
+          "type": "boolean"
+        },
+        "displayId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Displayid"
+        },
+        "displayName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Displayname"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sumoJunctionId",
+        "junctionType",
+        "position",
+        "lon",
+        "lat",
+        "shape",
+        "provenance"
+      ],
+      "title": "JunctionRecord",
+      "type": "object"
+    },
+    "LaneRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sumoLaneId": {
+          "title": "Sumolaneid",
+          "type": "string"
+        },
+        "sumoEdgeId": {
+          "title": "Sumoedgeid",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "edgeFunction": {
+          "title": "Edgefunction",
+          "type": "string"
+        },
+        "laneKind": {
+          "title": "Lanekind",
+          "type": "string"
+        },
+        "shape": {
+          "items": {
+            "$ref": "#/$defs/Point2"
+          },
+          "title": "Shape",
+          "type": "array"
+        },
+        "widthM": {
+          "title": "Widthm",
+          "type": "number"
+        },
+        "widthSource": {
+          "title": "Widthsource",
+          "type": "string"
+        },
+        "speedMS": {
+          "title": "Speedms",
+          "type": "number"
+        },
+        "lengthM": {
+          "title": "Lengthm",
+          "type": "number"
+        },
+        "allow": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allow",
+          "type": "array"
+        },
+        "disallow": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Disallow",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sumoLaneId",
+        "sumoEdgeId",
+        "index",
+        "edgeFunction",
+        "laneKind",
+        "shape",
+        "widthM",
+        "widthSource",
+        "speedMS",
+        "lengthM",
+        "allow",
+        "disallow"
+      ],
+      "title": "LaneRecord",
+      "type": "object"
+    },
+    "Point2": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "title": "Point2",
+      "type": "object"
+    },
+    "RoadRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sourceRoadId": {
+          "title": "Sourceroadid",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "roadClass": {
+          "title": "Roadclass",
+          "type": "string"
+        },
+        "edgeIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Edgeids",
+          "type": "array"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sourceRoadId",
+        "roadClass",
+        "edgeIds",
+        "provenance"
+      ],
+      "title": "RoadRecord",
+      "type": "object"
+    },
+    "RoadsideDeviceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "deviceId": {
+          "title": "Deviceid",
+          "type": "string"
+        },
+        "deviceType": {
+          "title": "Devicetype",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Point2"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "managedJunctions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Managedjunctions",
+          "type": "array"
+        },
+        "communicationStatus": {
+          "title": "Communicationstatus",
+          "type": "string"
+        },
+        "provenance": {
+          "title": "Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "deviceId",
+        "deviceType",
+        "position",
+        "status",
+        "managedJunctions",
+        "communicationStatus",
+        "provenance"
+      ],
+      "title": "RoadsideDeviceRecord",
+      "type": "object"
+    },
+    "SceneMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "default": "1.1",
+          "title": "Schemaversion",
+          "type": "string"
+        },
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "scenarioId": {
+          "title": "Scenarioid",
+          "type": "string"
+        },
+        "generator": {
+          "title": "Generator",
+          "type": "string"
+        },
+        "generatorVersion": {
+          "title": "Generatorversion",
+          "type": "string"
+        },
+        "claimBoundary": {
+          "title": "Claimboundary",
+          "type": "string"
+        },
+        "sourceFiles": {
+          "items": {
+            "$ref": "#/$defs/SourceFile"
+          },
+          "title": "Sourcefiles",
+          "type": "array"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "sceneId",
+        "scenarioId",
+        "generator",
+        "generatorVersion",
+        "claimBoundary",
+        "sourceFiles",
+        "counts"
+      ],
+      "title": "SceneMetadata",
+      "type": "object"
+    },
+    "SourceFile": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "role",
+        "sha256"
+      ],
+      "title": "SourceFile",
+      "type": "object"
+    },
+    "TrafficLightLinkRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "linkIndex": {
+          "title": "Linkindex",
+          "type": "integer"
+        },
+        "fromLaneId": {
+          "title": "Fromlaneid",
+          "type": "string"
+        },
+        "toLaneId": {
+          "title": "Tolaneid",
+          "type": "string"
+        },
+        "viaLaneId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vialaneid"
+        }
+      },
+      "required": [
+        "linkIndex",
+        "fromLaneId",
+        "toLaneId"
+      ],
+      "title": "TrafficLightLinkRecord",
+      "type": "object"
+    },
+    "TrafficLightRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "sceneId": {
+          "title": "Sceneid",
+          "type": "string"
+        },
+        "sumoTlsId": {
+          "title": "Sumotlsid",
+          "type": "string"
+        },
+        "controlledJunctionId": {
+          "title": "Controlledjunctionid",
+          "type": "string"
+        },
+        "programId": {
+          "title": "Programid",
+          "type": "string"
+        },
+        "programType": {
+          "title": "Programtype",
+          "type": "string"
+        },
+        "offsetS": {
+          "title": "Offsets",
+          "type": "number"
+        },
+        "phases": {
+          "items": {
+            "$ref": "#/$defs/TrafficPhaseRecord"
+          },
+          "title": "Phases",
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/TrafficLightLinkRecord"
+          },
+          "title": "Links",
+          "type": "array"
+        },
+        "displayId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Displayid"
+        }
+      },
+      "required": [
+        "sceneId",
+        "sumoTlsId",
+        "controlledJunctionId",
+        "programId",
+        "programType",
+        "offsetS",
+        "phases",
+        "links"
+      ],
+      "title": "TrafficLightRecord",
+      "type": "object"
+    },
+    "TrafficPhaseRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "durationS": {
+          "title": "Durations",
+          "type": "number"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "minDurationS": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mindurations"
+        },
+        "maxDurationS": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maxdurations"
+        }
+      },
+      "required": [
+        "index",
+        "durationS",
+        "state"
+      ],
+      "title": "TrafficPhaseRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete static scene contract; dynamic entities arrive separately.",
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/SceneMetadata"
+    },
+    "coordinateSystem": {
+      "$ref": "#/$defs/CoordinateSystem"
+    },
+    "junctions": {
+      "items": {
+        "$ref": "#/$defs/JunctionRecord"
+      },
+      "title": "Junctions",
+      "type": "array"
+    },
+    "roads": {
+      "items": {
+        "$ref": "#/$defs/RoadRecord"
+      },
+      "title": "Roads",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/EdgeRecord"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "lanes": {
+      "items": {
+        "$ref": "#/$defs/LaneRecord"
+      },
+      "title": "Lanes",
+      "type": "array"
+    },
+    "connections": {
+      "items": {
+        "$ref": "#/$defs/ConnectionRecord"
+      },
+      "title": "Connections",
+      "type": "array"
+    },
+    "crossings": {
+      "items": {
+        "$ref": "#/$defs/CrossingRecord"
+      },
+      "title": "Crossings",
+      "type": "array"
+    },
+    "trafficLights": {
+      "items": {
+        "$ref": "#/$defs/TrafficLightRecord"
+      },
+      "title": "Trafficlights",
+      "type": "array"
+    },
+    "busStops": {
+      "items": {
+        "$ref": "#/$defs/AreaRecord"
+      },
+      "title": "Busstops",
+      "type": "array"
+    },
+    "pedestrianAreas": {
+      "items": {
+        "$ref": "#/$defs/AreaRecord"
+      },
+      "title": "Pedestrianareas",
+      "type": "array"
+    },
+    "bicycleAreas": {
+      "items": {
+        "$ref": "#/$defs/AreaRecord"
+      },
+      "title": "Bicycleareas",
+      "type": "array"
+    },
+    "buildings": {
+      "items": {
+        "$ref": "#/$defs/BuildingRecord"
+      },
+      "title": "Buildings",
+      "type": "array"
+    },
+    "vegetation": {
+      "items": {
+        "$ref": "#/$defs/AreaRecord"
+      },
+      "title": "Vegetation",
+      "type": "array"
+    },
+    "roadsideDevices": {
+      "items": {
+        "$ref": "#/$defs/RoadsideDeviceRecord"
+      },
+      "title": "Roadsidedevices",
+      "type": "array"
+    },
+    "environment": {
+      "$ref": "#/$defs/EnvironmentRecord"
+    },
+    "zones": {
+      "items": {
+        "$ref": "#/$defs/AreaRecord"
+      },
+      "title": "Zones",
+      "type": "array"
+    },
+    "controlCorridors": {
+      "items": {
+        "$ref": "#/$defs/ControlCorridorRecord"
+      },
+      "title": "Controlcorridors",
+      "type": "array"
+    },
+    "edgeRegions": {
+      "items": {
+        "$ref": "#/$defs/EdgeRegionRecord"
+      },
+      "title": "Edgeregions",
+      "type": "array"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "title": "Extensions",
+      "type": "object"
+    }
+  },
+  "required": [
+    "metadata",
+    "coordinateSystem",
+    "junctions",
+    "roads",
+    "edges",
+    "lanes",
+    "connections",
+    "crossings",
+    "trafficLights",
+    "busStops",
+    "pedestrianAreas",
+    "bicycleAreas",
+    "buildings",
+    "vegetation",
+    "roadsideDevices",
+    "environment",
+    "zones",
+    "controlCorridors",
+    "edgeRegions"
+  ],
+  "title": "SceneDocument",
+  "type": "object"
+}

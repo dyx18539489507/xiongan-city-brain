@@ -1,0 +1,2037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.62.11 87bfad18">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2026-08-21T10:29:36Z"/>
+
+  <node id="7341081958" lat="39.0494015" lon="115.9098170"/>
+  <node id="7341081960" lat="39.0513370" lon="115.9097847"/>
+  <node id="7341081961" lat="39.0464079" lon="115.9098705"/>
+  <node id="7341134023" lat="39.0525529" lon="115.9231143"/>
+  <node id="7341134026" lat="39.0513725" lon="115.9130555">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134030" lat="39.0667514" lon="115.9174945">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134031" lat="39.0603998" lon="115.9175343"/>
+  <node id="7341134032" lat="39.0595447" lon="115.9177095"/>
+  <node id="7341134033" lat="39.0581854" lon="115.9183561"/>
+  <node id="7341134034" lat="39.0532636" lon="115.9208496"/>
+  <node id="7341134035" lat="39.0525252" lon="115.9211540">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134036" lat="39.0506001" lon="115.9214733"/>
+  <node id="7341134038" lat="39.0643931" lon="115.9077618">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134039" lat="39.0661469" lon="115.9133327">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134040" lat="39.0664297" lon="115.9152093">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134041" lat="39.0674063" lon="115.9222737">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134047" lat="39.0578238" lon="115.9185171">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7341134049" lat="39.0588018" lon="115.9260890"/>
+  <node id="7341134050" lat="39.0590758" lon="115.9293394"/>
+  <node id="7341134063" lat="39.0551134" lon="115.9016331"/>
+  <node id="7341134067" lat="39.0551247" lon="115.9084628"/>
+  <node id="7341134068" lat="39.0554345" lon="115.9107878"/>
+  <node id="7341134069" lat="39.0584560" lon="115.9218142"/>
+  <node id="7341134071" lat="39.0558300" lon="115.9121291"/>
+  <node id="7341134074" lat="39.0629131" lon="115.9223428">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="7389734978" lat="39.0513686" lon="115.9131826">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8011664244" lat="39.0551163" lon="115.9044907"/>
+  <node id="8515847042" lat="39.0514998" lon="115.9131755">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515847043" lat="39.0515063" lon="115.9130597">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515847045" lat="39.0582057" lon="115.9200492"/>
+  <node id="8515847046" lat="39.0598615" lon="115.9176109">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515847047" lat="39.0671833" lon="115.9174061"/>
+  <node id="8515847048" lat="39.0644550" lon="115.9078564">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515847050" lat="39.0675387" lon="115.9173095"/>
+  <node id="8515847056" lat="39.0681078" lon="115.9124732">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515870098" lat="39.0545655" lon="115.9127866"/>
+  <node id="8515870099" lat="39.0541910" lon="115.9129766"/>
+  <node id="8515870100" lat="39.0539354" lon="115.9130740"/>
+  <node id="8515870101" lat="39.0537490" lon="115.9131098"/>
+  <node id="8515870102" lat="39.0535169" lon="115.9131416"/>
+  <node id="8515870103" lat="39.0533027" lon="115.9131490"/>
+  <node id="8515870104" lat="39.0472692" lon="115.9128271"/>
+  <node id="8515870109" lat="39.0545991" lon="115.9128959"/>
+  <node id="8515870110" lat="39.0472654" lon="115.9129445"/>
+  <node id="8515870111" lat="39.0542207" lon="115.9130878"/>
+  <node id="8515870112" lat="39.0537606" lon="115.9132264"/>
+  <node id="8515870113" lat="39.0539552" lon="115.9131890"/>
+  <node id="8515870114" lat="39.0535230" lon="115.9132589"/>
+  <node id="8515870115" lat="39.0533020" lon="115.9132666"/>
+  <node id="8515870116" lat="39.0515781" lon="115.9171164">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8515870117" lat="39.0516213" lon="115.9213829"/>
+  <node id="8519468902" lat="39.0478913" lon="115.9214808">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8519468914" lat="39.0480281" lon="115.9214761">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8519484451" lat="39.0697177" lon="115.9116165"/>
+  <node id="8519484452" lat="39.0664827" lon="115.9132479"/>
+  <node id="8519484468" lat="39.0628453" lon="115.9104948">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8519484469" lat="39.0628683" lon="115.9133306">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8519484477" lat="39.0578269" lon="115.9140409"/>
+  <node id="8519484671" lat="39.0524240" lon="115.9211911">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8519484674" lat="39.0514836" lon="115.9171650">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="8889878249" lat="39.0515061" lon="115.9097876"/>
+  <node id="9197849962" lat="39.0703200" lon="115.9135329"/>
+  <node id="9197849963" lat="39.0709373" lon="115.9158416">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9197849970" lat="39.0558638" lon="115.9122584"/>
+  <node id="9197849983" lat="39.0594261" lon="115.9137394"/>
+  <node id="9213164736" lat="39.0468773" lon="115.9128062"/>
+  <node id="9213164737" lat="39.0468965" lon="115.9129248"/>
+  <node id="9213164738" lat="39.0468099" lon="115.9128026"/>
+  <node id="9213164739" lat="39.0468271" lon="115.9129211"/>
+  <node id="9213164759" lat="39.0628759" lon="115.9175168">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9215428050" lat="39.0552542" lon="115.9098221"/>
+  <node id="9215428070" lat="39.0624272" lon="115.9089274">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9215428082" lat="39.0678650" lon="115.9171770">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378832" lat="39.0649234" lon="115.9175094">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378834" lat="39.0690527" lon="115.9216093">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378835" lat="39.0649191" lon="115.9223204">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378836" lat="39.0599820" lon="115.9207166"/>
+  <node id="9245378837" lat="39.0590280" lon="115.9179003">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378838" lat="39.0570884" lon="115.9116685">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378841" lat="39.0565868" lon="115.9145765"/>
+  <node id="9245378843" lat="39.0611284" lon="115.9215147"/>
+  <node id="9245378844" lat="39.0612026" lon="115.9175254">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378845" lat="39.0611952" lon="115.9133393">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378846" lat="39.0602261" lon="115.9100659">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378859" lat="39.0687673" lon="115.9086207"/>
+  <node id="9245378861" lat="39.0652613" lon="115.9104649">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378862" lat="39.0617696" lon="115.9105683"/>
+  <node id="9245378863" lat="39.0605558" lon="115.9111091"/>
+  <node id="9245378865" lat="39.0628889" lon="115.9152644">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378866" lat="39.0612099" lon="115.9152584">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378867" lat="39.0602222" lon="115.9153098"/>
+  <node id="9245378868" lat="39.0584324" lon="115.9159385"/>
+  <node id="9245378869" lat="39.0572519" lon="115.9165500"/>
+  <node id="9245378870" lat="39.0520545" lon="115.9191790">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378879" lat="39.0649159" lon="115.9152518"/>
+  <node id="9245378880" lat="39.0649204" lon="115.9133316"/>
+  <node id="9245378886" lat="39.0721383" lon="115.9203088"/>
+  <node id="9245378888" lat="39.0682070" lon="115.9184720">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378889" lat="39.0669587" lon="115.9190259">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378890" lat="39.0649231" lon="115.9190359">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378891" lat="39.0628824" lon="115.9190745">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378892" lat="39.0612162" lon="115.9190409"/>
+  <node id="9245378893" lat="39.0608608" lon="115.9190405"/>
+  <node id="9245378894" lat="39.0595494" lon="115.9195877">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378909" lat="39.0586500" lon="115.9108707">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378910" lat="39.0596108" lon="115.9154239">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245378912" lat="39.0603348" lon="115.9191758"/>
+  <node id="9245379724" lat="39.0549915" lon="115.9044929"/>
+  <node id="9245379725" lat="39.0550109" lon="115.9085076"/>
+  <node id="9245379726" lat="39.0551261" lon="115.9098200"/>
+  <node id="9245379727" lat="39.0557074" lon="115.9121853"/>
+  <node id="9245379728" lat="39.0557472" lon="115.9123226"/>
+  <node id="9245379729" lat="39.0564851" lon="115.9146290"/>
+  <node id="9245379730" lat="39.0570839" lon="115.9164592"/>
+  <node id="9245379732" lat="39.0581499" lon="115.9200723"/>
+  <node id="9245379733" lat="39.0583971" lon="115.9218284"/>
+  <node id="9245379735" lat="39.0590236" lon="115.9293388"/>
+  <node id="9245379736" lat="39.0590199" lon="115.9314705"/>
+  <node id="9245379737" lat="39.0590224" lon="115.9361373"/>
+  <node id="9245379746" lat="39.0570606" lon="115.9166434"/>
+  <node id="9245379747" lat="39.0571374" lon="115.9164317"/>
+  <node id="9245379748" lat="39.0576968" lon="115.9185850">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245379751" lat="39.0565782" lon="115.9151863"/>
+  <node id="9245379754" lat="39.0581612" lon="115.9202890"/>
+  <node id="9245379828" lat="39.0582907" lon="115.9202196"/>
+  <node id="9245379832" lat="39.0590816" lon="115.9338729"/>
+  <node id="9245379833" lat="39.0590796" lon="115.9314613"/>
+  <node id="9245379839" lat="39.0590831" lon="115.9361497"/>
+  <node id="9245560392" lat="39.0501294" lon="115.9179033"/>
+  <node id="9245560393" lat="39.0477124" lon="115.9179434"/>
+  <node id="9245560394" lat="39.0696153" lon="115.9113106"/>
+  <node id="9245560396" lat="39.0666623" lon="115.9126946"/>
+  <node id="9245560397" lat="39.0660434" lon="115.9129480">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560398" lat="39.0628665" lon="115.9130207">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560399" lat="39.0611488" lon="115.9130009">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560400" lat="39.0593824" lon="115.9132799"/>
+  <node id="9245560417" lat="39.0525790" lon="115.9045427"/>
+  <node id="9245560418" lat="39.0525469" lon="115.9097991"/>
+  <node id="9245560419" lat="39.0525170" lon="115.9131099"/>
+  <node id="9245560420" lat="39.0525176" lon="115.9132276"/>
+  <node id="9245560421" lat="39.0525546" lon="115.9148497"/>
+  <node id="9245560422" lat="39.0526099" lon="115.9153461"/>
+  <node id="9245560423" lat="39.0529233" lon="115.9164493">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560424" lat="39.0535351" lon="115.9184294">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560425" lat="39.0541520" lon="115.9203984">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9245560426" lat="39.0546387" lon="115.9221037"/>
+  <node id="9245560430" lat="39.0542551" lon="115.9264108"/>
+  <node id="9249983272" lat="39.0553244" lon="115.9108370"/>
+  <node id="9250030935" lat="39.0590196" lon="115.9292732"/>
+  <node id="9250030936" lat="39.0590714" lon="115.9292763"/>
+  <node id="9999059759" lat="39.0671532" lon="115.9094707">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059760" lat="39.0662826" lon="115.9068717">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059763" lat="39.0679962" lon="115.9120683">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059765" lat="39.0685925" lon="115.9143187">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059766" lat="39.0692082" lon="115.9165816">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059767" lat="39.0695612" lon="115.9178931">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="9999059768" lat="39.0703958" lon="115.9210444">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806257" lat="39.0547490" lon="115.9224664"/>
+  <node id="10739806258" lat="39.0547780" lon="115.9229637"/>
+  <node id="10739806259" lat="39.0547845" lon="115.9234994"/>
+  <node id="10739806260" lat="39.0547201" lon="115.9240190"/>
+  <node id="10739806261" lat="39.0545783" lon="115.9247246"/>
+  <node id="10739806262" lat="39.0544548" lon="115.9253544"/>
+  <node id="10739806263" lat="39.0543561" lon="115.9259535"/>
+  <node id="10739806266" lat="39.0526535" lon="115.9231066"/>
+  <node id="10739806284" lat="39.0661458" lon="115.9068799">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806285" lat="39.0661948" lon="115.9070123">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806286" lat="39.0670270" lon="115.9095378">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806287" lat="39.0678472" lon="115.9121329">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806288" lat="39.0679571" lon="115.9125595">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806289" lat="39.0684581" lon="115.9143707">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806290" lat="39.0690764" lon="115.9166535">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806291" lat="39.0694138" lon="115.9179583">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739806292" lat="39.0702684" lon="115.9210907">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="10739840443" lat="39.0569866" lon="115.9143534"/>
+  <node id="10739840444" lat="39.0574958" lon="115.9140938"/>
+  <node id="10739840445" lat="39.0576369" lon="115.9163590"/>
+  <node id="10739840446" lat="39.0581467" lon="115.9160895"/>
+  <node id="10739840448" lat="39.0586970" lon="115.9180726"/>
+  <node id="10739840449" lat="39.0621466" lon="115.9221510"/>
+  <node id="10739840771" lat="39.0551179" lon="115.9000095"/>
+  <node id="10739840773" lat="39.0549772" lon="115.9000053"/>
+  <node id="10814124224" lat="39.0544791" lon="115.9193956"/>
+  <node id="10814124225" lat="39.0541160" lon="115.9195878"/>
+  <node id="10814124226" lat="39.0542393" lon="115.9199739"/>
+  <node id="10814124227" lat="39.0546024" lon="115.9197818"/>
+  <node id="10814124228" lat="39.0546866" lon="115.9163506"/>
+  <node id="10814124229" lat="39.0545985" lon="115.9163940"/>
+  <node id="10814124230" lat="39.0545586" lon="115.9164909"/>
+  <node id="10814124231" lat="39.0546939" lon="115.9169466"/>
+  <node id="10814124232" lat="39.0548419" lon="115.9168737"/>
+  <node id="10814124233" lat="39.0548670" lon="115.9169616"/>
+  <node id="10814124234" lat="39.0547227" lon="115.9170356"/>
+  <node id="10814124235" lat="39.0548954" lon="115.9175942"/>
+  <node id="10814124236" lat="39.0552556" lon="115.9174095"/>
+  <node id="10814124237" lat="39.0551952" lon="115.9172144"/>
+  <node id="10814124238" lat="39.0549794" lon="115.9173251"/>
+  <node id="10836150093" lat="39.0494696" lon="115.9179166"/>
+  <node id="10980014680" lat="39.0494306" lon="115.9130666"/>
+  <node id="11122023451" lat="39.0498754" lon="115.9179084"/>
+  <node id="11122023464" lat="39.0498275" lon="115.9214818">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11122023574" lat="39.0498262" lon="115.9212982">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11204209179" lat="39.0623921" lon="115.9087985">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11204209180" lat="39.0601865" lon="115.9099399">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11204226724" lat="39.0570448" lon="115.9115336">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11204236168" lat="39.0586048" lon="115.9107476">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862618" lat="39.0629741" lon="115.9223408">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862619" lat="39.0629830" lon="115.9190709">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862620" lat="39.0629811" lon="115.9175160">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862621" lat="39.0629772" lon="115.9152634">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862622" lat="39.0629762" lon="115.9133386">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862623" lat="39.0629754" lon="115.9130192">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="11508862624" lat="39.0629316" lon="115.9104871"/>
+  <node id="11508862625" lat="39.0624766" lon="115.9087369"/>
+  <node id="11508862626" lat="39.0625085" lon="115.9088531"/>
+  <node id="11539962844" lat="39.0494296" lon="115.9129505"/>
+  <node id="12018447602" lat="39.0510839" lon="115.9214643">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="12133322653" lat="39.0532610" lon="115.9145996"/>
+  <node id="12133322654" lat="39.0537685" lon="115.9145292"/>
+  <node id="12133322655" lat="39.0560808" lon="115.9133856"/>
+  <node id="12133322665" lat="39.0525592" lon="115.9146071">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="12483062005" lat="39.0535532" lon="115.9109139"/>
+  <node id="12483062006" lat="39.0535547" lon="115.9113936"/>
+  <node id="12483062007" lat="39.0535356" lon="115.9114416"/>
+  <node id="12483062008" lat="39.0535145" lon="115.9114687"/>
+  <node id="12483062009" lat="39.0531014" lon="115.9114736"/>
+  <node id="12483062010" lat="39.0530802" lon="115.9114375"/>
+  <node id="12483062011" lat="39.0529736" lon="115.9111800"/>
+  <node id="12483062012" lat="39.0529662" lon="115.9111114"/>
+  <node id="12483062013" lat="39.0529975" lon="115.9110370"/>
+  <node id="12483062014" lat="39.0530727" lon="115.9109867"/>
+  <node id="12483062015" lat="39.0531385" lon="115.9109878"/>
+  <node id="12483062016" lat="39.0531643" lon="115.9110743"/>
+  <node id="12483062017" lat="39.0531450" lon="115.9111151"/>
+  <node id="12483062018" lat="39.0531090" lon="115.9111320"/>
+  <node id="12483062019" lat="39.0531685" lon="115.9113091"/>
+  <node id="12483062020" lat="39.0531929" lon="115.9113277"/>
+  <node id="12483062021" lat="39.0533781" lon="115.9113312"/>
+  <node id="12483062022" lat="39.0534160" lon="115.9113054"/>
+  <node id="12483062023" lat="39.0534262" lon="115.9112612"/>
+  <node id="12483062024" lat="39.0534262" lon="115.9109297"/>
+  <node id="12483062025" lat="39.0534373" lon="115.9108822"/>
+  <node id="12483062026" lat="39.0534846" lon="115.9108630"/>
+  <node id="12483062027" lat="39.0535288" lon="115.9108792"/>
+  <node id="12483062681" lat="39.0514837" lon="115.9145982"/>
+  <node id="12995167622" lat="39.0600684" lon="115.9131208"/>
+  <node id="12995167623" lat="39.0583994" lon="115.9136572"/>
+  <node id="12995167624" lat="39.0579801" lon="115.9140646"/>
+  <node id="12995167641" lat="39.0471867" lon="115.9214717"/>
+  <node id="12995941467" lat="39.0658286" lon="115.9129895"/>
+  <node id="12995941468" lat="39.0649138" lon="115.9130179"/>
+  <node id="13001515623" lat="39.0489050" lon="115.9179252"/>
+  <node id="13001518145" lat="39.0488942" lon="115.9214775"/>
+  <node id="13006326352" lat="39.0678853" lon="115.9090900"/>
+  <node id="13006338307" lat="39.0668776" lon="115.9131181"/>
+  <node id="13006338308" lat="39.0673361" lon="115.9148295"/>
+  <node id="13007532816" lat="39.0629810" lon="115.9204891"/>
+  <node id="13007532817" lat="39.0640575" lon="115.9204963"/>
+  <node id="13007532819" lat="39.0649336" lon="115.9204909"/>
+  <node id="13007532820" lat="39.0655458" lon="115.9204999"/>
+  <node id="13007532821" lat="39.0660081" lon="115.9205321"/>
+  <node id="13007532822" lat="39.0666440" lon="115.9205446"/>
+  <node id="13007532823" lat="39.0668078" lon="115.9205267"/>
+  <node id="13007532824" lat="39.0671516" lon="115.9204368">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007532825" lat="39.0675728" lon="115.9203121"/>
+  <node id="13007532826" lat="39.0677144" lon="115.9202621"/>
+  <node id="13007532827" lat="39.0679226" lon="115.9202120"/>
+  <node id="13007532828" lat="39.0681448" lon="115.9200940"/>
+  <node id="13007532829" lat="39.0685928" lon="115.9198773"/>
+  <node id="13007532830" lat="39.0697932" lon="115.9193183"/>
+  <node id="13007678801" lat="39.0647311" lon="115.9204874"/>
+  <node id="13007678803" lat="39.0669653" lon="115.9174539"/>
+  <node id="13007678804" lat="39.0658055" lon="115.9175100"/>
+  <node id="13007678805" lat="39.0639800" lon="115.9175091"/>
+  <node id="13007678806" lat="39.0620184" lon="115.9175167"/>
+  <node id="13007678807" lat="39.0601042" lon="115.9175672"/>
+  <node id="13007678808" lat="39.0567543" lon="115.9190931"/>
+  <node id="13007678809" lat="39.0553691" lon="115.9197922"/>
+  <node id="13007678810" lat="39.0471843" lon="115.9212756"/>
+  <node id="13007678812" lat="39.0478779" lon="115.9212750">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678813" lat="39.0480114" lon="115.9212711">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678814" lat="39.0488952" lon="115.9212917"/>
+  <node id="13007678815" lat="39.0508507" lon="115.9213096"/>
+  <node id="13007678816" lat="39.0510849" lon="115.9213013">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678817" lat="39.0515312" lon="115.9212488"/>
+  <node id="13007678818" lat="39.0519617" lon="115.9211558"/>
+  <node id="13007678819" lat="39.0522505" lon="115.9210860"/>
+  <node id="13007678820" lat="39.0523995" lon="115.9210292">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678821" lat="39.0524954" lon="115.9209948">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678822" lat="39.0528962" lon="115.9208500"/>
+  <node id="13007678823" lat="39.0532420" lon="115.9206766"/>
+  <node id="13007678824" lat="39.0541081" lon="115.9202500">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678825" lat="39.0553804" lon="115.9196090"/>
+  <node id="13007678828" lat="39.0576526" lon="115.9184268">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678829" lat="39.0577723" lon="115.9183688">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678830" lat="39.0581366" lon="115.9181857"/>
+  <node id="13007678831" lat="39.0586378" lon="115.9179318"/>
+  <node id="13007678832" lat="39.0589848" lon="115.9177580">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678833" lat="39.0593321" lon="115.9176081"/>
+  <node id="13007678834" lat="39.0595653" lon="115.9175223"/>
+  <node id="13007678835" lat="39.0598256" lon="115.9174461">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678836" lat="39.0602860" lon="115.9173757"/>
+  <node id="13007678837" lat="39.0605137" lon="115.9173685"/>
+  <node id="13007678838" lat="39.0612051" lon="115.9173742">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678839" lat="39.0624880" lon="115.9173703"/>
+  <node id="13007678840" lat="39.0628767" lon="115.9173686">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678841" lat="39.0629825" lon="115.9173686">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678842" lat="39.0639819" lon="115.9173667"/>
+  <node id="13007678843" lat="39.0649229" lon="115.9173703">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678844" lat="39.0662103" lon="115.9173542"/>
+  <node id="13007678845" lat="39.0667270" lon="115.9173318">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678846" lat="39.0669100" lon="115.9173077"/>
+  <node id="13007678847" lat="39.0671557" lon="115.9172612"/>
+  <node id="13007678848" lat="39.0674167" lon="115.9171861"/>
+  <node id="13007678849" lat="39.0678332" lon="115.9170305">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678850" lat="39.0687093" lon="115.9166229"/>
+  <node id="13007678851" lat="39.0690306" lon="115.9164813">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678852" lat="39.0691633" lon="115.9164179">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678853" lat="39.0702003" lon="115.9160006"/>
+  <node id="13007678854" lat="39.0709009" lon="115.9156890">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13007678860" lat="39.0572730" lon="115.9167310"/>
+  <node id="13007678861" lat="39.0571380" lon="115.9167857"/>
+  <node id="13007678862" lat="39.0572327" lon="115.9163850"/>
+  <node id="13007678863" lat="39.0569794" lon="115.9164942"/>
+  <node id="13007678864" lat="39.0568306" lon="115.9150759"/>
+  <node id="13007678865" lat="39.0540189" lon="115.9144341"/>
+  <node id="13007678866" lat="39.0551248" lon="115.9138777"/>
+  <node id="13007678867" lat="39.0555566" lon="115.9112269"/>
+  <node id="13007678868" lat="39.0552086" lon="115.9102963"/>
+  <node id="13007678869" lat="39.0553166" lon="115.9102352"/>
+  <node id="13007678870" lat="39.0550435" lon="115.9089868"/>
+  <node id="13007678871" lat="39.0551658" lon="115.9090548"/>
+  <node id="13007678872" lat="39.0550019" lon="115.9065190"/>
+  <node id="13007678873" lat="39.0551205" lon="115.9064786"/>
+  <node id="13007678874" lat="39.0548046" lon="115.9127933"/>
+  <node id="13007678875" lat="39.0555069" lon="115.9151246"/>
+  <node id="13007678876" lat="39.0561271" lon="115.9171152"/>
+  <node id="13007678877" lat="39.0566996" lon="115.9189281"/>
+  <node id="13007678878" lat="39.0572568" lon="115.9207506"/>
+  <node id="13007678879" lat="39.0535022" lon="115.9145912"/>
+  <node id="13007678880" lat="39.0527347" lon="115.9158556"/>
+  <node id="13011794592" lat="39.0643828" lon="115.9078933">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011794594" lat="39.0651650" lon="115.9104702">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011794595" lat="39.0659458" lon="115.9129669">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011794596" lat="39.0660380" lon="115.9133326">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011794599" lat="39.0663198" lon="115.9152235">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011800801" lat="39.0666241" lon="115.9173379">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011800802" lat="39.0666461" lon="115.9174989">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011800803" lat="39.0668655" lon="115.9190418">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011800804" lat="39.0670600" lon="115.9204608">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13011800807" lat="39.0673098" lon="115.9222928">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13013166299" lat="39.0578387" lon="115.9112696"/>
+  <node id="13013166300" lat="39.0577713" lon="115.9111620"/>
+  <node id="13013171201" lat="39.0585682" lon="115.9135916"/>
+  <node id="13013171202" lat="39.0576715" lon="115.9135333"/>
+  <node id="13013171206" lat="39.0591799" lon="115.9155704"/>
+  <node id="13013171211" lat="39.0593397" lon="115.9130865"/>
+  <node id="13013171218" lat="39.0594596" lon="115.9104356"/>
+  <node id="13013171219" lat="39.0596022" lon="115.9109000"/>
+  <node id="13013171220" lat="39.0596910" lon="115.9111271"/>
+  <node id="13013171221" lat="39.0603002" lon="115.9130813"/>
+  <node id="13013171222" lat="39.0619562" lon="115.9105172"/>
+  <node id="13013171223" lat="39.0629552" lon="115.9107383"/>
+  <node id="13013171224" lat="39.0614100" lon="115.9094358"/>
+  <node id="13013171225" lat="39.0618723" lon="115.9109215"/>
+  <node id="13013171238" lat="39.0619889" lon="115.9152615"/>
+  <node id="13013171239" lat="39.0619916" lon="115.9133066"/>
+  <node id="13013171240" lat="39.0619931" lon="115.9130224"/>
+  <node id="13013171241" lat="39.0619889" lon="115.9112630"/>
+  <node id="13013171284" lat="39.0594154" lon="115.9135828"/>
+  <node id="13013171285" lat="39.0594013" lon="115.9134575"/>
+  <node id="13013171290" lat="39.0619909" lon="115.9131228"/>
+  <node id="13013171291" lat="39.0619917" lon="115.9132421"/>
+  <node id="13013171294" lat="39.0635827" lon="115.9130193"/>
+  <node id="13015208366" lat="39.0638371" lon="115.9152529"/>
+  <node id="13015208378" lat="39.0657585" lon="115.9173598"/>
+  <node id="13015208383" lat="39.0655487" lon="115.9152390"/>
+  <node id="13015208393" lat="39.0639785" lon="115.9152516"/>
+  <node id="13015208394" lat="39.0639856" lon="115.9190528"/>
+  <node id="13015208398" lat="39.0638925" lon="115.9204952"/>
+  <node id="13015262006" lat="39.0639743" lon="115.9223248"/>
+  <node id="13015262007" lat="39.0625227" lon="115.9222976"/>
+  <node id="13015262008" lat="39.0623112" lon="115.9222225"/>
+  <node id="13015262009" lat="39.0601350" lon="115.9208639"/>
+  <node id="13015262010" lat="39.0597334" lon="115.9201624"/>
+  <node id="13015262011" lat="39.0598619" lon="115.9205110"/>
+  <node id="13015262012" lat="39.0606506" lon="115.9190671"/>
+  <node id="13015262029" lat="39.0604742" lon="115.9152714"/>
+  <node id="13015262030" lat="39.0604728" lon="115.9171403"/>
+  <node id="13015262031" lat="39.0604720" lon="115.9160620"/>
+  <node id="13015262032" lat="39.0602090" lon="115.9160674"/>
+  <node id="13015262033" lat="39.0598771" lon="115.9161514"/>
+  <node id="13015262034" lat="39.0602034" lon="115.9154648"/>
+  <node id="13015262035" lat="39.0604718" lon="115.9158671"/>
+  <node id="13015262036" lat="39.0608588" lon="115.9158850"/>
+  <node id="13015262037" lat="39.0608643" lon="115.9165466"/>
+  <node id="13015262038" lat="39.0604723" lon="115.9165466"/>
+  <node id="13015262041" lat="39.0587480" lon="115.9157831"/>
+  <node id="13015262042" lat="39.0592023" lon="115.9172350"/>
+  <node id="13015262046" lat="39.0615544" lon="115.9144294"/>
+  <node id="13015262047" lat="39.0619893" lon="115.9144259"/>
+  <node id="13015262048" lat="39.0625402" lon="115.9144312"/>
+  <node id="13015262051" lat="39.0663041" lon="115.9223044"/>
+  <node id="13015262054" lat="39.0662750" lon="115.9205373"/>
+  <node id="13015262055" lat="39.0658582" lon="115.9205217"/>
+  <node id="13015262056" lat="39.0658626" lon="115.9190388"/>
+  <node id="13015262057" lat="39.0658861" lon="115.9175089"/>
+  <node id="13015262058" lat="39.0712016" lon="115.9207043"/>
+  <node id="13015262060" lat="39.0711268" lon="115.9207358"/>
+  <node id="13362882432" lat="39.0576546" lon="115.9182796"/>
+  <node id="13362882433" lat="39.0577014" lon="115.9182554"/>
+  <node id="13362882434" lat="39.0583086" lon="115.9208961"/>
+  <node id="13362882435" lat="39.0583606" lon="115.9208867"/>
+  <node id="13362882436" lat="39.0565517" lon="115.9148370"/>
+  <node id="13362882437" lat="39.0566507" lon="115.9147739"/>
+  <node id="13362882438" lat="39.0566723" lon="115.9151452"/>
+  <node id="13362882439" lat="39.0567333" lon="115.9151185"/>
+  <node id="13362882440" lat="39.0587311" lon="115.9261056"/>
+  <node id="13362882441" lat="39.0591626" lon="115.9197814"/>
+  <node id="13362882442" lat="39.0586607" lon="115.9200402"/>
+  <node id="13362882443" lat="39.0609383" lon="115.9238744"/>
+  <node id="13362882446" lat="39.0612160" lon="115.9204039"/>
+  <node id="13362882447" lat="39.0629147" lon="115.9243092"/>
+  <node id="13362882448" lat="39.0629763" lon="115.9243052"/>
+  <node id="13362882459" lat="39.0590283" lon="115.9387837"/>
+  <node id="13362882460" lat="39.0590869" lon="115.9387877"/>
+  <node id="13362882461" lat="39.0590208" lon="115.9338820"/>
+  <node id="13362882468" lat="39.0589058" lon="115.9279852"/>
+  <node id="13362882469" lat="39.0589625" lon="115.9279764"/>
+  <node id="13373956232" lat="39.0635328" lon="115.9061911"/>
+  <node id="13373956233" lat="39.0635461" lon="115.9053988"/>
+  <node id="13373956234" lat="39.0635438" lon="115.9049279"/>
+  <node id="13373956235" lat="39.0636348" lon="115.9045677"/>
+  <node id="13373956236" lat="39.0637663" lon="115.9044170"/>
+  <node id="13373956237" lat="39.0646793" lon="115.9039350"/>
+  <node id="13373956238" lat="39.0635689" lon="115.9047233"/>
+  <node id="13373956239" lat="39.0635020" lon="115.9063527"/>
+  <node id="13373956240" lat="39.0634165" lon="115.9066644"/>
+  <node id="13373956241" lat="39.0632477" lon="115.9070566"/>
+  <node id="13373956242" lat="39.0630640" lon="115.9073364"/>
+  <node id="13373956243" lat="39.0628053" lon="115.9076119"/>
+  <node id="13373956244" lat="39.0625772" lon="115.9077918"/>
+  <node id="13373956245" lat="39.0623995" lon="115.9079753"/>
+  <node id="13373956246" lat="39.0622110" lon="115.9083606"/>
+  <node id="13373956247" lat="39.0620521" lon="115.9085572"/>
+  <node id="13373956248" lat="39.0618780" lon="115.9085988"/>
+  <node id="13373956249" lat="39.0615286" lon="115.9085953"/>
+  <node id="13373956250" lat="39.0613297" lon="115.9086179"/>
+  <node id="13373956251" lat="39.0611940" lon="115.9087556"/>
+  <node id="13373956252" lat="39.0609875" lon="115.9089810"/>
+  <node id="13373956253" lat="39.0607677" lon="115.9091236"/>
+  <node id="13373956254" lat="39.0606029" lon="115.9091818"/>
+  <node id="13373956255" lat="39.0602229" lon="115.9092150"/>
+  <node id="13373956256" lat="39.0600120" lon="115.9092859"/>
+  <node id="13373956257" lat="39.0597425" lon="115.9094179"/>
+  <node id="13373956258" lat="39.0594398" lon="115.9095194"/>
+  <node id="13373956259" lat="39.0591412" lon="115.9094818"/>
+  <node id="13373956260" lat="39.0588060" lon="115.9092890"/>
+  <node id="13373956261" lat="39.0584895" lon="115.9090694"/>
+  <node id="13373956262" lat="39.0582223" lon="115.9089523"/>
+  <node id="13373956263" lat="39.0578974" lon="115.9089353"/>
+  <node id="13373956264" lat="39.0576383" lon="115.9089338"/>
+  <node id="13373956265" lat="39.0573953" lon="115.9089080"/>
+  <node id="13373956266" lat="39.0571606" lon="115.9087692"/>
+  <node id="13373956267" lat="39.0568624" lon="115.9084854"/>
+  <node id="13373956268" lat="39.0565952" lon="115.9082173"/>
+  <node id="13373956269" lat="39.0564265" lon="115.9079358"/>
+  <node id="13373956270" lat="39.0562865" lon="115.9074373"/>
+  <node id="13373956271" lat="39.0562808" lon="115.9068022"/>
+  <node id="13373956272" lat="39.0563178" lon="115.9064828"/>
+  <node id="13373956273" lat="39.0564450" lon="115.9061036"/>
+  <node id="13373956274" lat="39.0565798" lon="115.9058792"/>
+  <node id="13373956275" lat="39.0569561" lon="115.9055227"/>
+  <node id="13373956276" lat="39.0571160" lon="115.9053029"/>
+  <node id="13373956277" lat="39.0572310" lon="115.9049314"/>
+  <node id="13373956278" lat="39.0573045" lon="115.9043147"/>
+  <node id="13373956279" lat="39.0574006" lon="115.9039341"/>
+  <node id="13373956280" lat="39.0575480" lon="115.9036584"/>
+  <node id="13373956281" lat="39.0578446" lon="115.9033387"/>
+  <node id="13373956282" lat="39.0581111" lon="115.9032051"/>
+  <node id="13373956283" lat="39.0583708" lon="115.9031744"/>
+  <node id="13373956284" lat="39.0586872" lon="115.9032238"/>
+  <node id="13373956285" lat="39.0589301" lon="115.9032616"/>
+  <node id="13373956286" lat="39.0590976" lon="115.9032189"/>
+  <node id="13373956287" lat="39.0594804" lon="115.9029836"/>
+  <node id="13373956288" lat="39.0596816" lon="115.9028687"/>
+  <node id="13373956289" lat="39.0599414" lon="115.9027100"/>
+  <node id="13373956290" lat="39.0601605" lon="115.9027076"/>
+  <node id="13373956291" lat="39.0604068" lon="115.9027874"/>
+  <node id="13373956292" lat="39.0606494" lon="115.9030437"/>
+  <node id="13373956293" lat="39.0609399" lon="115.9032136"/>
+  <node id="13373956294" lat="39.0611791" lon="115.9031527"/>
+  <node id="13373956295" lat="39.0613464" lon="115.9031495"/>
+  <node id="13373956296" lat="39.0615308" lon="115.9032908"/>
+  <node id="13373956297" lat="39.0618857" lon="115.9038505"/>
+  <node id="13373956298" lat="39.0621111" lon="115.9042024"/>
+  <node id="13373956299" lat="39.0621612" lon="115.9042317"/>
+  <node id="13373956300" lat="39.0623068" lon="115.9041488"/>
+  <node id="13373988701" lat="39.0624788" lon="115.9041151"/>
+  <node id="13373988702" lat="39.0626614" lon="115.9041523"/>
+  <node id="13373988703" lat="39.0629072" lon="115.9042480"/>
+  <node id="13373988704" lat="39.0632514" lon="115.9043491"/>
+  <node id="13373988705" lat="39.0634665" lon="115.9043460"/>
+  <node id="13373988706" lat="39.0636989" lon="115.9043256"/>
+  <node id="13373988707" lat="39.0639299" lon="115.9042386"/>
+  <node id="13373988708" lat="39.0646553" lon="115.9038564"/>
+  <node id="13373988720" lat="39.0624002" lon="115.9041147"/>
+  <node id="13373988721" lat="39.0625483" lon="115.9041210"/>
+  <node id="13373988722" lat="39.0626786" lon="115.9077118"/>
+  <node id="13373988726" lat="39.0635455" lon="115.9055494"/>
+  <node id="13373988727" lat="39.0631972" lon="115.9071336"/>
+  <node id="13373988770" lat="39.0574728" lon="115.9037791"/>
+  <node id="13373988772" lat="39.0562946" lon="115.9066825"/>
+  <node id="13373988774" lat="39.0562860" lon="115.9073902"/>
+  <node id="13373988781" lat="39.0576556" lon="115.9079294"/>
+  <node id="13373988790" lat="39.0576705" lon="115.9083564"/>
+  <node id="13373988791" lat="39.0575907" lon="115.9086424"/>
+  <node id="13373988792" lat="39.0575920" lon="115.9089289"/>
+  <node id="13373988793" lat="39.0588402" lon="115.9082915"/>
+  <node id="13373988794" lat="39.0587759" lon="115.9083420"/>
+  <node id="13373988795" lat="39.0587657" lon="115.9092611"/>
+  <node id="13373988796" lat="39.0590661" lon="115.9089842"/>
+  <node id="13373988797" lat="39.0587687" lon="115.9089942"/>
+  <node id="13373988798" lat="39.0601463" lon="115.9082757"/>
+  <node id="13373988799" lat="39.0600836" lon="115.9083161"/>
+  <node id="13373988800" lat="39.0600782" lon="115.9085623"/>
+  <node id="13373988801" lat="39.0601543" lon="115.9086569"/>
+  <node id="13373988802" lat="39.0601594" lon="115.9092364"/>
+  <node id="13373988817" lat="39.0624240" lon="115.9041148"/>
+  <node id="13373988846" lat="39.0586175" lon="115.9031998"/>
+  <node id="13373988858" lat="39.0563790" lon="115.9084057"/>
+  <node id="13373988859" lat="39.0561361" lon="115.9084423"/>
+  <node id="13373988860" lat="39.0559899" lon="115.9085509"/>
+  <node id="13373988861" lat="39.0558882" lon="115.9087127"/>
+  <node id="13373988862" lat="39.0558409" lon="115.9089141"/>
+  <node id="13373988863" lat="39.0558394" lon="115.9090200"/>
+  <node id="13373988864" lat="39.0557767" lon="115.9090551"/>
+  <node id="13373988865" lat="39.0557726" lon="115.9093599"/>
+  <node id="13373988866" lat="39.0558275" lon="115.9094177"/>
+  <node id="13373988867" lat="39.0558334" lon="115.9096349"/>
+  <node id="13373988868" lat="39.0558898" lon="115.9096725"/>
+  <node id="13373988869" lat="39.0562672" lon="115.9096629"/>
+  <node id="13373988870" lat="39.0573593" lon="115.9088868"/>
+  <node id="13373988871" lat="39.0572646" lon="115.9092628"/>
+  <node id="13373988872" lat="39.0569858" lon="115.9096351"/>
+  <node id="13373988873" lat="39.0568585" lon="115.9098595"/>
+  <node id="13373988874" lat="39.0568182" lon="115.9101925"/>
+  <node id="13373988875" lat="39.0567511" lon="115.9102592"/>
+  <node id="13373988876" lat="39.0567502" lon="115.9105523"/>
+  <node id="13373988877" lat="39.0568175" lon="115.9106250"/>
+  <node id="13373988878" lat="39.0568203" lon="115.9109591"/>
+  <node id="13373988879" lat="39.0568729" lon="115.9109933"/>
+  <node id="13373988880" lat="39.0571890" lon="115.9109978"/>
+  <node id="13373988881" lat="39.0580580" lon="115.9089437"/>
+  <node id="13373988882" lat="39.0580092" lon="115.9091920"/>
+  <node id="13373988883" lat="39.0579084" lon="115.9093665"/>
+  <node id="13373988884" lat="39.0579034" lon="115.9095807"/>
+  <node id="13373988885" lat="39.0578397" lon="115.9096376"/>
+  <node id="13373988886" lat="39.0578344" lon="115.9099219"/>
+  <node id="13373988887" lat="39.0579065" lon="115.9100026"/>
+  <node id="13373988888" lat="39.0579075" lon="115.9101947"/>
+  <node id="13373988889" lat="39.0579537" lon="115.9102488"/>
+  <node id="13373988890" lat="39.0580910" lon="115.9102706"/>
+  <node id="13373988891" lat="39.0584741" lon="115.9102614"/>
+  <node id="13373988892" lat="39.0585265" lon="115.9101547"/>
+  <node id="13373988899" lat="39.0634633" lon="115.9064988"/>
+  <node id="13373988908" lat="39.0606795" lon="115.9030613"/>
+  <node id="13373988912" lat="39.0608979" lon="115.9031890"/>
+  <node id="13373988951" lat="39.0565060" lon="115.9059895"/>
+  <node id="13374020372" lat="39.0563770" lon="115.9088701"/>
+  <node id="13374020373" lat="39.0563746" lon="115.9092107"/>
+  <node id="13374020374" lat="39.0562634" lon="115.9092134"/>
+  <node id="13374020375" lat="39.0561663" lon="115.9092136"/>
+  <node id="13374020376" lat="39.0561667" lon="115.9093678"/>
+  <node id="13374020377" lat="39.0563709" lon="115.9093671"/>
+  <node id="13374020378" lat="39.0563726" lon="115.9096001"/>
+  <node id="13374020379" lat="39.0559862" lon="115.9096027"/>
+  <node id="13374020380" lat="39.0559825" lon="115.9088768"/>
+  <node id="13374020405" lat="39.0594819" lon="115.9086609"/>
+  <node id="13374020406" lat="39.0594838" lon="115.9088808"/>
+  <node id="13374020407" lat="39.0590008" lon="115.9088914"/>
+  <node id="13374020408" lat="39.0590038" lon="115.9082420"/>
+  <node id="13374020409" lat="39.0592666" lon="115.9082285"/>
+  <node id="13374020410" lat="39.0592676" lon="115.9086646"/>
+  <node id="13374020411" lat="39.0574541" lon="115.9105899"/>
+  <node id="13374020412" lat="39.0574503" lon="115.9109183"/>
+  <node id="13374020413" lat="39.0570493" lon="115.9109288"/>
+  <node id="13374020414" lat="39.0570512" lon="115.9107623"/>
+  <node id="13374020415" lat="39.0569650" lon="115.9107650"/>
+  <node id="13374020416" lat="39.0569723" lon="115.9101380"/>
+  <node id="13374020417" lat="39.0572108" lon="115.9101435"/>
+  <node id="13374020418" lat="39.0572101" lon="115.9105943"/>
+  <node id="13374020419" lat="39.0585245" lon="115.9095490"/>
+  <node id="13374020420" lat="39.0585265" lon="115.9097890"/>
+  <node id="13374020421" lat="39.0584979" lon="115.9097890"/>
+  <node id="13374020422" lat="39.0584926" lon="115.9101272"/>
+  <node id="13374020423" lat="39.0583164" lon="115.9101327"/>
+  <node id="13374020424" lat="39.0583197" lon="115.9097655"/>
+  <node id="13374020425" lat="39.0581948" lon="115.9097692"/>
+  <node id="13374020426" lat="39.0581953" lon="115.9101140"/>
+  <node id="13374020427" lat="39.0581777" lon="115.9101156"/>
+  <node id="13374020428" lat="39.0581788" lon="115.9101930"/>
+  <node id="13374020429" lat="39.0580644" lon="115.9101952"/>
+  <node id="13374020430" lat="39.0580630" lon="115.9101159"/>
+  <node id="13374020431" lat="39.0580319" lon="115.9101177"/>
+  <node id="13374020432" lat="39.0580267" lon="115.9095352"/>
+  <node id="13374020433" lat="39.0580655" lon="115.9095357"/>
+  <node id="13374020434" lat="39.0580641" lon="115.9094481"/>
+  <node id="13374020435" lat="39.0584631" lon="115.9094629"/>
+  <node id="13374020436" lat="39.0584633" lon="115.9095517"/>
+  <node id="13461816345" lat="39.0600509" lon="115.9026945"/>
+  <node id="13461816346" lat="39.0588010" lon="115.9032561"/>
+  <node id="13461816347" lat="39.0582418" lon="115.9031759"/>
+  <node id="13461816349" lat="39.0576847" lon="115.9034794"/>
+  <node id="13461816350" lat="39.0573459" lon="115.9041233"/>
+  <node id="13461816351" lat="39.0571885" lon="115.9051203"/>
+  <node id="13461816352" lat="39.0570378" lon="115.9054245"/>
+  <node id="13461816353" lat="39.0566851" lon="115.9057605"/>
+  <node id="13461816355" lat="39.0563838" lon="115.9078509"/>
+  <node id="13461816356" lat="39.0564315" lon="115.9083728"/>
+  <node id="13461816357" lat="39.0563097" lon="115.9084285"/>
+  <node id="13461816358" lat="39.0551236" lon="115.9079337"/>
+  <way id="785419402">
+    <nd ref="9215428050"/>
+    <nd ref="9245379726"/>
+    <nd ref="9245560418"/>
+    <nd ref="8889878249"/>
+    <nd ref="7341081960"/>
+    <nd ref="7341081958"/>
+    <nd ref="7341081961"/>
+    <tag k="highway" v="unclassified"/>
+    <tag k="name" v="朗润路"/>
+  </way>
+  <way id="785419413">
+    <nd ref="10739840448"/>
+    <nd ref="9245378837"/>
+    <nd ref="7341134032"/>
+    <nd ref="8515847046"/>
+    <nd ref="13007678807"/>
+    <nd ref="7341134031"/>
+    <nd ref="9245378844"/>
+    <nd ref="13007678806"/>
+    <nd ref="9213164759"/>
+    <nd ref="11508862620"/>
+    <nd ref="13007678805"/>
+    <nd ref="9245378832"/>
+    <nd ref="13007678804"/>
+    <nd ref="13015262057"/>
+    <nd ref="13011800802"/>
+    <nd ref="7341134030"/>
+    <nd ref="13007678803"/>
+    <nd ref="8515847047"/>
+    <nd ref="8515847050"/>
+    <nd ref="9215428082"/>
+    <nd ref="10739806290"/>
+    <nd ref="9999059766"/>
+    <nd ref="9197849963"/>
+    <tag k="construction" v="tertiary"/>
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="785419416">
+    <nd ref="13362882460"/>
+    <nd ref="9245379839"/>
+    <nd ref="9245379832"/>
+    <nd ref="9245379833"/>
+    <nd ref="7341134050"/>
+    <nd ref="9250030936"/>
+    <nd ref="13362882469"/>
+    <nd ref="7341134049"/>
+    <nd ref="7341134069"/>
+    <nd ref="13362882435"/>
+    <nd ref="8515847045"/>
+    <nd ref="13362882433"/>
+    <nd ref="9245379747"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="layer" v="-1"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tunnel" v="yes"/>
+  </way>
+  <way id="916884512">
+    <nd ref="9999059760"/>
+    <nd ref="10739806284"/>
+    <nd ref="7341134038"/>
+    <nd ref="11508862625"/>
+    <nd ref="11204209179"/>
+    <nd ref="11204209180"/>
+    <nd ref="11204236168"/>
+    <nd ref="13013166300"/>
+    <nd ref="11204226724"/>
+    <nd ref="7341134071"/>
+    <nd ref="9245379727"/>
+    <nd ref="8515870098"/>
+    <nd ref="8515870099"/>
+    <nd ref="8515870100"/>
+    <nd ref="8515870101"/>
+    <nd ref="8515870102"/>
+    <nd ref="8515870103"/>
+    <nd ref="9245560419"/>
+    <nd ref="8515847043"/>
+    <nd ref="7341134026"/>
+    <nd ref="11539962844"/>
+    <nd ref="8515870104"/>
+    <nd ref="9213164736"/>
+    <nd ref="9213164738"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="甘棠路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="916884513">
+    <nd ref="9213164739"/>
+    <nd ref="9213164737"/>
+    <nd ref="8515870110"/>
+    <nd ref="10980014680"/>
+    <nd ref="7389734978"/>
+    <nd ref="8515847042"/>
+    <nd ref="9245560420"/>
+    <nd ref="8515870115"/>
+    <nd ref="8515870114"/>
+    <nd ref="8515870112"/>
+    <nd ref="8515870113"/>
+    <nd ref="8515870111"/>
+    <nd ref="8515870109"/>
+    <nd ref="13007678874"/>
+    <nd ref="9245379728"/>
+    <nd ref="9197849970"/>
+    <nd ref="9245378838"/>
+    <nd ref="13013166299"/>
+    <nd ref="9245378909"/>
+    <nd ref="13013171218"/>
+    <nd ref="9245378846"/>
+    <nd ref="13013171224"/>
+    <nd ref="9215428070"/>
+    <nd ref="11508862626"/>
+    <nd ref="13011794592"/>
+    <nd ref="8515847048"/>
+    <nd ref="10739806285"/>
+    <nd ref="9999059760"/>
+    <tag k="construction" v="secondary"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="甘棠路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="917242907">
+    <nd ref="8519484477"/>
+    <nd ref="12995167624"/>
+    <nd ref="9197849983"/>
+    <nd ref="9245378845"/>
+    <nd ref="13013171239"/>
+    <nd ref="8519484469"/>
+    <nd ref="11508862622"/>
+    <nd ref="9245378880"/>
+    <nd ref="13011794596"/>
+    <nd ref="7341134039"/>
+    <nd ref="8519484452"/>
+    <nd ref="13006338307"/>
+    <nd ref="10739806288"/>
+    <nd ref="8515847056"/>
+    <nd ref="8519484451"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="善荣路"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1001665903">
+    <nd ref="9245378886"/>
+    <nd ref="13015262058"/>
+    <nd ref="13015262060"/>
+    <nd ref="9999059768"/>
+    <nd ref="10739806292"/>
+    <nd ref="9245378834"/>
+    <nd ref="7341134041"/>
+    <nd ref="13011800807"/>
+    <nd ref="13015262051"/>
+    <nd ref="9245378835"/>
+    <nd ref="13015262006"/>
+    <nd ref="11508862618"/>
+    <nd ref="7341134074"/>
+    <nd ref="13015262007"/>
+    <nd ref="13015262008"/>
+    <nd ref="10739840449"/>
+    <nd ref="9245378843"/>
+    <nd ref="13015262009"/>
+    <nd ref="9245378836"/>
+    <nd ref="13015262011"/>
+    <nd ref="13015262010"/>
+    <nd ref="9245378894"/>
+    <nd ref="9245378837"/>
+    <nd ref="13007678832"/>
+    <nd ref="9245378868"/>
+    <nd ref="8519484477"/>
+    <nd ref="13013171202"/>
+    <nd ref="9245378838"/>
+    <nd ref="11204226724"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="motor_vehicle" v="no"/>
+    <tag k="name" v="龚庄路"/>
+  </way>
+  <way id="1001665906">
+    <nd ref="9245378859"/>
+    <nd ref="13006326352"/>
+    <nd ref="9999059759"/>
+    <nd ref="10739806286"/>
+    <nd ref="9245378861"/>
+    <nd ref="13011794594"/>
+    <nd ref="11508862624"/>
+    <nd ref="8519484468"/>
+    <nd ref="13013171222"/>
+    <nd ref="9245378862"/>
+    <nd ref="9245378863"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="佳泰路"/>
+    <tag k="oneway" v="no"/>
+  </way>
+  <way id="1001665907">
+    <nd ref="9197849962"/>
+    <nd ref="9999059765"/>
+    <nd ref="10739806289"/>
+    <nd ref="13006338308"/>
+    <nd ref="7341134040"/>
+    <nd ref="13011794599"/>
+    <nd ref="13015208383"/>
+    <nd ref="9245378879"/>
+    <nd ref="13015208393"/>
+    <nd ref="13015208366"/>
+    <nd ref="11508862621"/>
+    <nd ref="9245378865"/>
+    <nd ref="13013171238"/>
+    <nd ref="9245378866"/>
+    <nd ref="13015262029"/>
+    <nd ref="9245378867"/>
+    <nd ref="9245378910"/>
+    <nd ref="13013171206"/>
+    <nd ref="13015262041"/>
+    <nd ref="9245378868"/>
+    <nd ref="10739840446"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="富家路"/>
+  </way>
+  <way id="1001665911">
+    <nd ref="9999059767"/>
+    <nd ref="10739806291"/>
+    <nd ref="9245378888"/>
+    <nd ref="9245378889"/>
+    <nd ref="13011800803"/>
+    <nd ref="13015262056"/>
+    <nd ref="9245378890"/>
+    <nd ref="13015208394"/>
+    <nd ref="11508862619"/>
+    <nd ref="9245378891"/>
+    <nd ref="9245378892"/>
+    <nd ref="9245378893"/>
+    <nd ref="13015262012"/>
+    <nd ref="9245378912"/>
+    <nd ref="9245378894"/>
+    <nd ref="13362882441"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="金湖西路"/>
+  </way>
+  <way id="1001665914">
+    <nd ref="13013171284"/>
+    <nd ref="9197849983"/>
+    <nd ref="9245378910"/>
+    <nd ref="13007678835"/>
+    <nd ref="8515847046"/>
+    <nd ref="9245378912"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="悦容北街"/>
+  </way>
+  <way id="1001665917">
+    <nd ref="9245379730"/>
+    <nd ref="13362882432"/>
+    <nd ref="9245379732"/>
+    <nd ref="13362882434"/>
+    <nd ref="9245379733"/>
+    <nd ref="13362882440"/>
+    <nd ref="13362882468"/>
+    <nd ref="9250030935"/>
+    <nd ref="9245379735"/>
+    <nd ref="9245379736"/>
+    <nd ref="13362882461"/>
+    <nd ref="9245379737"/>
+    <nd ref="13362882459"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="layer" v="-1"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="tunnel" v="yes"/>
+  </way>
+  <way id="1001665918">
+    <nd ref="13362882436"/>
+    <nd ref="9245379751"/>
+    <nd ref="13007678863"/>
+    <nd ref="9245379746"/>
+    <nd ref="13007678861"/>
+    <nd ref="13007678828"/>
+    <nd ref="9245379748"/>
+    <nd ref="9245379754"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1001665933">
+    <nd ref="9245379828"/>
+    <nd ref="7341134047"/>
+    <nd ref="13007678829"/>
+    <nd ref="13007678860"/>
+    <nd ref="9245378869"/>
+    <nd ref="13007678862"/>
+    <nd ref="13007678864"/>
+    <nd ref="13362882437"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1001665934">
+    <nd ref="13362882437"/>
+    <nd ref="9245378841"/>
+    <nd ref="9197849970"/>
+    <nd ref="7341134071"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1001688828">
+    <nd ref="9245560394"/>
+    <nd ref="9999059763"/>
+    <nd ref="10739806287"/>
+    <nd ref="9245560396"/>
+    <nd ref="9245560397"/>
+    <nd ref="13011794595"/>
+    <nd ref="12995941467"/>
+    <nd ref="12995941468"/>
+    <nd ref="13013171294"/>
+    <nd ref="11508862623"/>
+    <nd ref="9245560398"/>
+    <nd ref="13013171240"/>
+    <nd ref="9245560399"/>
+    <nd ref="13013171221"/>
+    <nd ref="12995167622"/>
+    <nd ref="9245560400"/>
+    <nd ref="13013171201"/>
+    <nd ref="12995167623"/>
+    <nd ref="8519484477"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="1"/>
+    <tag k="name" v="善荣路"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1154819212">
+    <nd ref="9245560417"/>
+    <nd ref="9245560418"/>
+    <nd ref="9245560419"/>
+    <nd ref="9245560420"/>
+    <nd ref="12133322665"/>
+    <nd ref="9245560421"/>
+    <nd ref="9245560422"/>
+    <nd ref="13007678880"/>
+    <nd ref="9245560423"/>
+    <nd ref="9245560424"/>
+    <nd ref="13007678824"/>
+    <nd ref="9245560425"/>
+    <nd ref="9245560426"/>
+    <tag k="highway" v="tertiary"/>
+  </way>
+  <way id="1154819213">
+    <nd ref="9245560426"/>
+    <nd ref="10739806257"/>
+    <nd ref="10739806258"/>
+    <nd ref="10739806259"/>
+    <nd ref="10739806260"/>
+    <nd ref="10739806261"/>
+    <nd ref="10739806262"/>
+    <nd ref="10739806263"/>
+    <nd ref="9245560430"/>
+    <tag k="highway" v="unclassified"/>
+  </way>
+  <way id="1154819229">
+    <nd ref="10739840443"/>
+    <nd ref="9245378841"/>
+    <nd ref="9245379729"/>
+    <nd ref="13007678875"/>
+    <nd ref="9245560423"/>
+    <nd ref="8515870116"/>
+    <nd ref="8519484674"/>
+    <nd ref="9245560392"/>
+    <nd ref="11122023451"/>
+    <nd ref="10836150093"/>
+    <nd ref="13001515623"/>
+    <nd ref="9245560393"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="善荣路"/>
+    <tag k="oneway" v="no"/>
+  </way>
+  <way id="1154819230">
+    <nd ref="10739840443"/>
+    <nd ref="10739840444"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="善荣路"/>
+    <tag k="oneway" v="no"/>
+  </way>
+  <way id="1154819231">
+    <nd ref="10739840445"/>
+    <nd ref="9245378869"/>
+    <nd ref="9245379746"/>
+    <nd ref="13007678876"/>
+    <nd ref="9245560424"/>
+    <nd ref="9245378870"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="富家路"/>
+  </way>
+  <way id="1154819232">
+    <nd ref="10739840446"/>
+    <nd ref="10739840445"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="富家路"/>
+  </way>
+  <way id="1154819233">
+    <nd ref="12995167641"/>
+    <nd ref="8519468902"/>
+    <nd ref="8519468914"/>
+    <nd ref="13001518145"/>
+    <nd ref="11122023464"/>
+    <nd ref="7341134036"/>
+    <nd ref="12018447602"/>
+    <nd ref="8515870117"/>
+    <nd ref="8519484671"/>
+    <nd ref="7341134035"/>
+    <nd ref="7341134034"/>
+    <nd ref="9245560425"/>
+    <nd ref="13007678809"/>
+    <nd ref="13007678808"/>
+    <nd ref="9245379748"/>
+    <nd ref="7341134047"/>
+    <nd ref="7341134033"/>
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1154819234">
+    <nd ref="7341134033"/>
+    <nd ref="10739840448"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="construction" v="tertiary"/>
+    <tag k="highway" v="primary"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1154819241">
+    <nd ref="7341134071"/>
+    <nd ref="13007678867"/>
+    <nd ref="7341134068"/>
+    <nd ref="13007678869"/>
+    <nd ref="9215428050"/>
+    <nd ref="13007678871"/>
+    <nd ref="7341134067"/>
+    <nd ref="13461816358"/>
+    <nd ref="13007678873"/>
+    <nd ref="8011664244"/>
+    <nd ref="7341134063"/>
+    <nd ref="10739840771"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1154819243">
+    <nd ref="10739840773"/>
+    <nd ref="9245379724"/>
+    <nd ref="13007678872"/>
+    <nd ref="9245379725"/>
+    <nd ref="13007678870"/>
+    <nd ref="9245379726"/>
+    <nd ref="13007678868"/>
+    <nd ref="9249983272"/>
+    <nd ref="9245379727"/>
+    <nd ref="9245379728"/>
+    <nd ref="12133322655"/>
+    <nd ref="9245379729"/>
+    <nd ref="13362882436"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1162755594">
+    <nd ref="10814124224"/>
+    <nd ref="10814124225"/>
+    <nd ref="10814124226"/>
+    <nd ref="10814124227"/>
+    <nd ref="10814124224"/>
+    <tag k="building" v="construction"/>
+  </way>
+  <way id="1162755595">
+    <nd ref="10814124228"/>
+    <nd ref="10814124229"/>
+    <nd ref="10814124230"/>
+    <nd ref="10814124231"/>
+    <nd ref="10814124232"/>
+    <nd ref="10814124228"/>
+    <tag k="building" v="construction"/>
+  </way>
+  <way id="1162755596">
+    <nd ref="10814124233"/>
+    <nd ref="10814124234"/>
+    <nd ref="10814124235"/>
+    <nd ref="10814124236"/>
+    <nd ref="10814124237"/>
+    <nd ref="10814124238"/>
+    <nd ref="10814124233"/>
+    <tag k="building" v="construction"/>
+  </way>
+  <way id="1310788211">
+    <nd ref="12483062681"/>
+    <nd ref="12133322665"/>
+    <nd ref="12133322653"/>
+    <nd ref="13007678879"/>
+    <nd ref="12133322654"/>
+    <nd ref="13007678865"/>
+    <nd ref="13007678866"/>
+    <nd ref="12133322655"/>
+    <tag k="highway" v="unclassified"/>
+  </way>
+  <way id="1349426485">
+    <nd ref="12483062005"/>
+    <nd ref="12483062006"/>
+    <nd ref="12483062007"/>
+    <nd ref="12483062008"/>
+    <nd ref="12483062009"/>
+    <nd ref="12483062010"/>
+    <nd ref="12483062011"/>
+    <nd ref="12483062012"/>
+    <nd ref="12483062013"/>
+    <nd ref="12483062014"/>
+    <nd ref="12483062015"/>
+    <nd ref="12483062016"/>
+    <nd ref="12483062017"/>
+    <nd ref="12483062018"/>
+    <nd ref="12483062019"/>
+    <nd ref="12483062020"/>
+    <nd ref="12483062021"/>
+    <nd ref="12483062022"/>
+    <nd ref="12483062023"/>
+    <nd ref="12483062024"/>
+    <nd ref="12483062025"/>
+    <nd ref="12483062026"/>
+    <nd ref="12483062027"/>
+    <nd ref="12483062005"/>
+    <tag k="building" v="kindergarten"/>
+  </way>
+  <way id="1415503584">
+    <nd ref="13007532816"/>
+    <nd ref="13015208398"/>
+    <nd ref="13007532817"/>
+    <nd ref="13007678801"/>
+    <nd ref="13007532819"/>
+    <nd ref="13007532820"/>
+    <nd ref="13015262055"/>
+    <nd ref="13007532821"/>
+    <nd ref="13015262054"/>
+    <nd ref="13007532822"/>
+    <nd ref="13007532823"/>
+    <nd ref="13011800804"/>
+    <nd ref="13007532824"/>
+    <nd ref="13007532825"/>
+    <nd ref="13007532826"/>
+    <nd ref="13007532827"/>
+    <nd ref="13007532828"/>
+    <nd ref="13007532829"/>
+    <nd ref="13007532830"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1415517609">
+    <nd ref="13007678854"/>
+    <nd ref="13007678853"/>
+    <nd ref="13007678852"/>
+    <nd ref="13007678851"/>
+    <nd ref="13007678850"/>
+    <nd ref="13007678849"/>
+    <nd ref="13007678848"/>
+    <nd ref="13007678847"/>
+    <nd ref="13007678846"/>
+    <nd ref="13007678845"/>
+    <nd ref="13011800801"/>
+    <nd ref="13007678844"/>
+    <nd ref="13015208378"/>
+    <nd ref="13007678843"/>
+    <nd ref="13007678842"/>
+    <nd ref="13007678841"/>
+    <nd ref="13007678840"/>
+    <nd ref="13007678839"/>
+    <nd ref="13007678838"/>
+    <nd ref="13007678837"/>
+    <nd ref="13007678836"/>
+    <nd ref="13007678835"/>
+    <nd ref="13007678834"/>
+    <nd ref="13007678833"/>
+    <nd ref="13007678832"/>
+    <nd ref="13007678831"/>
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1415517615">
+    <nd ref="13007678830"/>
+    <nd ref="13007678829"/>
+    <nd ref="13007678828"/>
+    <nd ref="13007678877"/>
+    <nd ref="13007678825"/>
+    <nd ref="13007678824"/>
+    <nd ref="13007678823"/>
+    <nd ref="13007678822"/>
+    <nd ref="13007678821"/>
+    <nd ref="13007678820"/>
+    <nd ref="13007678819"/>
+    <nd ref="13007678818"/>
+    <nd ref="13007678817"/>
+    <nd ref="13007678816"/>
+    <nd ref="13007678815"/>
+    <nd ref="11122023574"/>
+    <nd ref="13007678814"/>
+    <nd ref="13007678813"/>
+    <nd ref="13007678812"/>
+    <nd ref="13007678810"/>
+    <tag k="highway" v="primary"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1415517616">
+    <nd ref="13007678831"/>
+    <nd ref="13007678830"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="崇文北路"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1415517617">
+    <nd ref="9245379747"/>
+    <nd ref="13362882439"/>
+    <nd ref="13362882437"/>
+    <tag k="cutting" v="yes"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415517618">
+    <nd ref="13362882436"/>
+    <nd ref="13362882438"/>
+    <nd ref="9245379730"/>
+    <tag k="cutting" v="yes"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="金湖街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1415517619">
+    <nd ref="13007678874"/>
+    <nd ref="13007678866"/>
+    <nd ref="13007678875"/>
+    <nd ref="13007678876"/>
+    <nd ref="13007678877"/>
+    <tag k="highway" v="unclassified"/>
+  </way>
+  <way id="1415517620">
+    <nd ref="13007678808"/>
+    <nd ref="13007678878"/>
+    <tag k="highway" v="unclassified"/>
+  </way>
+  <way id="1415517621">
+    <nd ref="10739840444"/>
+    <nd ref="8519484477"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="善荣路"/>
+    <tag k="oneway" v="no"/>
+  </way>
+  <way id="1416043116">
+    <nd ref="13013166299"/>
+    <nd ref="13013171201"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1416043117">
+    <nd ref="13013171218"/>
+    <nd ref="13013171219"/>
+    <nd ref="13013171220"/>
+    <nd ref="13013171221"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1416043118">
+    <nd ref="13013171224"/>
+    <nd ref="9245378862"/>
+    <nd ref="13013171225"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1416043119">
+    <nd ref="13013171290"/>
+    <nd ref="13013171240"/>
+    <nd ref="13013171241"/>
+    <nd ref="13013171225"/>
+    <tag k="highway" v="pedestrian"/>
+  </way>
+  <way id="1416043121">
+    <nd ref="11204236168"/>
+    <nd ref="9245378909"/>
+    <nd ref="13013171211"/>
+    <nd ref="9245560400"/>
+    <nd ref="13013171285"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="悦容北街"/>
+  </way>
+  <way id="1416043122">
+    <nd ref="13013171285"/>
+    <nd ref="13013171284"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="悦容北街"/>
+  </way>
+  <way id="1416043131">
+    <nd ref="13013171238"/>
+    <nd ref="13015262047"/>
+    <nd ref="13013171239"/>
+    <nd ref="13013171291"/>
+    <tag k="highway" v="pedestrian"/>
+  </way>
+  <way id="1416043132">
+    <nd ref="13013171291"/>
+    <nd ref="13013171290"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="pedestrian"/>
+    <tag k="layer" v="1"/>
+  </way>
+  <way id="1416280868">
+    <nd ref="13015262029"/>
+    <nd ref="13015262035"/>
+    <nd ref="13015262031"/>
+    <nd ref="13015262038"/>
+    <nd ref="13015262030"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1416280869">
+    <nd ref="13015262031"/>
+    <nd ref="13015262032"/>
+    <nd ref="13015262033"/>
+    <tag k="highway" v="living_street"/>
+  </way>
+  <way id="1416280870">
+    <nd ref="13015262032"/>
+    <nd ref="13015262034"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1416280871">
+    <nd ref="13015262035"/>
+    <nd ref="13015262036"/>
+    <nd ref="13015262037"/>
+    <nd ref="13015262038"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1416280872">
+    <nd ref="13015262041"/>
+    <nd ref="13015262042"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1416280873">
+    <nd ref="13015262046"/>
+    <nd ref="13015262047"/>
+    <nd ref="13015262048"/>
+    <tag k="highway" v="pedestrian"/>
+  </way>
+  <way id="1457051465">
+    <nd ref="13362882441"/>
+    <nd ref="13362882442"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="金湖西路"/>
+  </way>
+  <way id="1457051466">
+    <nd ref="13362882442"/>
+    <nd ref="9245379828"/>
+    <nd ref="9245379754"/>
+    <nd ref="13007678878"/>
+    <nd ref="9245560426"/>
+    <nd ref="10739806266"/>
+    <nd ref="7341134023"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="金湖西路"/>
+  </way>
+  <way id="1457051468">
+    <nd ref="13362882443"/>
+    <nd ref="9245378843"/>
+    <nd ref="13362882446"/>
+    <nd ref="9245378892"/>
+    <nd ref="9245378844"/>
+    <nd ref="13007678838"/>
+    <nd ref="9245378866"/>
+    <nd ref="9245378845"/>
+    <nd ref="9245560399"/>
+    <nd ref="9245378863"/>
+    <nd ref="9245378846"/>
+    <nd ref="11204209180"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="name" v="金湖北街"/>
+  </way>
+  <way id="1457051471">
+    <nd ref="11204209179"/>
+    <nd ref="9215428070"/>
+    <nd ref="8519484468"/>
+    <nd ref="9245560398"/>
+    <nd ref="8519484469"/>
+    <nd ref="9245378865"/>
+    <nd ref="13007678840"/>
+    <nd ref="9213164759"/>
+    <nd ref="9245378891"/>
+    <nd ref="7341134074"/>
+    <nd ref="13362882447"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="双文街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1457051472">
+    <nd ref="13362882448"/>
+    <nd ref="11508862618"/>
+    <nd ref="13007532816"/>
+    <nd ref="11508862619"/>
+    <nd ref="11508862620"/>
+    <nd ref="13007678841"/>
+    <nd ref="11508862621"/>
+    <nd ref="11508862622"/>
+    <nd ref="11508862623"/>
+    <nd ref="13013171223"/>
+    <nd ref="11508862624"/>
+    <nd ref="11508862626"/>
+    <nd ref="11508862625"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="双文街"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1458279845">
+    <nd ref="13373988708"/>
+    <nd ref="13373988707"/>
+    <nd ref="13373988706"/>
+    <nd ref="13373988705"/>
+    <nd ref="13373988704"/>
+    <nd ref="13373988703"/>
+    <nd ref="13373988702"/>
+    <nd ref="13373988721"/>
+    <nd ref="13373988701"/>
+    <nd ref="13373988817"/>
+    <nd ref="13373988720"/>
+    <nd ref="13373956300"/>
+    <nd ref="13373956299"/>
+    <nd ref="13373956298"/>
+    <nd ref="13373956297"/>
+    <nd ref="13373956296"/>
+    <nd ref="13373956295"/>
+    <nd ref="13373956294"/>
+    <nd ref="13373956293"/>
+    <nd ref="13373988912"/>
+    <nd ref="13373988908"/>
+    <nd ref="13373956292"/>
+    <nd ref="13373956291"/>
+    <nd ref="13373956290"/>
+    <nd ref="13461816345"/>
+    <nd ref="13373956289"/>
+    <nd ref="13373956288"/>
+    <nd ref="13373956287"/>
+    <nd ref="13373956286"/>
+    <nd ref="13373956285"/>
+    <nd ref="13461816346"/>
+    <nd ref="13373956284"/>
+    <nd ref="13373988846"/>
+    <nd ref="13373956283"/>
+    <nd ref="13461816347"/>
+    <nd ref="13373956282"/>
+    <nd ref="13373956281"/>
+    <nd ref="13461816349"/>
+    <nd ref="13373956280"/>
+    <nd ref="13373988770"/>
+    <nd ref="13373956279"/>
+    <nd ref="13461816350"/>
+    <nd ref="13373956278"/>
+    <nd ref="13373956277"/>
+    <nd ref="13461816351"/>
+    <nd ref="13373956276"/>
+    <nd ref="13461816352"/>
+    <nd ref="13373956275"/>
+    <nd ref="13461816353"/>
+    <nd ref="13373956274"/>
+    <nd ref="13373988951"/>
+    <nd ref="13373956273"/>
+    <nd ref="13373956272"/>
+    <nd ref="13373988772"/>
+    <nd ref="13373956271"/>
+    <nd ref="13373988774"/>
+    <nd ref="13373956270"/>
+    <nd ref="13461816355"/>
+    <nd ref="13373956269"/>
+    <nd ref="13373956268"/>
+    <nd ref="13373956267"/>
+    <nd ref="13373956266"/>
+    <nd ref="13373988870"/>
+    <nd ref="13373956265"/>
+    <nd ref="13373988792"/>
+    <nd ref="13373956264"/>
+    <nd ref="13373956263"/>
+    <nd ref="13373988881"/>
+    <nd ref="13373956262"/>
+    <nd ref="13373956261"/>
+    <nd ref="13373988795"/>
+    <nd ref="13373956260"/>
+    <nd ref="13373956259"/>
+    <nd ref="13373956258"/>
+    <nd ref="13373956257"/>
+    <nd ref="13373956256"/>
+    <nd ref="13373988802"/>
+    <nd ref="13373956255"/>
+    <nd ref="13373956254"/>
+    <nd ref="13373956253"/>
+    <nd ref="13373956252"/>
+    <nd ref="13373956251"/>
+    <nd ref="13373956250"/>
+    <nd ref="13373956249"/>
+    <nd ref="13373956248"/>
+    <nd ref="13373956247"/>
+    <nd ref="13373956246"/>
+    <nd ref="13373956245"/>
+    <nd ref="13373956244"/>
+    <nd ref="13373988722"/>
+    <nd ref="13373956243"/>
+    <nd ref="13373956242"/>
+    <nd ref="13373988727"/>
+    <nd ref="13373956241"/>
+    <nd ref="13373956240"/>
+    <nd ref="13373988899"/>
+    <nd ref="13373956239"/>
+    <nd ref="13373956232"/>
+    <nd ref="13373988726"/>
+    <nd ref="13373956233"/>
+    <nd ref="13373956234"/>
+    <nd ref="13373956238"/>
+    <nd ref="13373956235"/>
+    <nd ref="13373956236"/>
+    <nd ref="13373956237"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279860">
+    <nd ref="13373988781"/>
+    <nd ref="13373988790"/>
+    <nd ref="13373988791"/>
+    <nd ref="13373988792"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279861">
+    <nd ref="13373988793"/>
+    <nd ref="13373988794"/>
+    <nd ref="13373988797"/>
+    <nd ref="13373988795"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279862">
+    <nd ref="13373988796"/>
+    <nd ref="13373988797"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279863">
+    <nd ref="13373988798"/>
+    <nd ref="13373988799"/>
+    <nd ref="13373988800"/>
+    <nd ref="13373988801"/>
+    <nd ref="13373988802"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279873">
+    <nd ref="13373956268"/>
+    <nd ref="13461816356"/>
+    <nd ref="13373988858"/>
+    <nd ref="13461816357"/>
+    <nd ref="13373988859"/>
+    <nd ref="13373988860"/>
+    <nd ref="13373988861"/>
+    <nd ref="13373988862"/>
+    <nd ref="13373988863"/>
+    <nd ref="13373988864"/>
+    <nd ref="13373988865"/>
+    <nd ref="13373988866"/>
+    <nd ref="13373988867"/>
+    <nd ref="13373988868"/>
+    <nd ref="13373988869"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279874">
+    <nd ref="13373988870"/>
+    <nd ref="13373988871"/>
+    <nd ref="13373988872"/>
+    <nd ref="13373988873"/>
+    <nd ref="13373988874"/>
+    <nd ref="13373988875"/>
+    <nd ref="13373988876"/>
+    <nd ref="13373988877"/>
+    <nd ref="13373988878"/>
+    <nd ref="13373988879"/>
+    <nd ref="13373988880"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458279875">
+    <nd ref="13373988881"/>
+    <nd ref="13373988882"/>
+    <nd ref="13373988883"/>
+    <nd ref="13373988884"/>
+    <nd ref="13373988885"/>
+    <nd ref="13373988886"/>
+    <nd ref="13373988887"/>
+    <nd ref="13373988888"/>
+    <nd ref="13373988889"/>
+    <nd ref="13373988890"/>
+    <nd ref="13373988891"/>
+    <nd ref="13373988892"/>
+    <tag k="highway" v="service"/>
+  </way>
+  <way id="1458283487">
+    <nd ref="13374020372"/>
+    <nd ref="13374020373"/>
+    <nd ref="13374020374"/>
+    <nd ref="13374020375"/>
+    <nd ref="13374020376"/>
+    <nd ref="13374020377"/>
+    <nd ref="13374020378"/>
+    <nd ref="13374020379"/>
+    <nd ref="13374020380"/>
+    <nd ref="13374020372"/>
+    <tag k="building" v="hotel"/>
+  </way>
+  <way id="1458283491">
+    <nd ref="13374020405"/>
+    <nd ref="13374020406"/>
+    <nd ref="13374020407"/>
+    <nd ref="13374020408"/>
+    <nd ref="13374020409"/>
+    <nd ref="13374020410"/>
+    <nd ref="13374020405"/>
+    <tag k="building" v="hotel"/>
+  </way>
+  <way id="1458283492">
+    <nd ref="13374020411"/>
+    <nd ref="13374020412"/>
+    <nd ref="13374020413"/>
+    <nd ref="13374020414"/>
+    <nd ref="13374020415"/>
+    <nd ref="13374020416"/>
+    <nd ref="13374020417"/>
+    <nd ref="13374020418"/>
+    <nd ref="13374020411"/>
+    <tag k="building" v="hotel"/>
+  </way>
+  <way id="1458283493">
+    <nd ref="13374020419"/>
+    <nd ref="13374020420"/>
+    <nd ref="13374020421"/>
+    <nd ref="13374020422"/>
+    <nd ref="13374020423"/>
+    <nd ref="13374020424"/>
+    <nd ref="13374020425"/>
+    <nd ref="13374020426"/>
+    <nd ref="13374020427"/>
+    <nd ref="13374020428"/>
+    <nd ref="13374020429"/>
+    <nd ref="13374020430"/>
+    <nd ref="13374020431"/>
+    <nd ref="13374020432"/>
+    <nd ref="13374020433"/>
+    <nd ref="13374020434"/>
+    <nd ref="13374020435"/>
+    <nd ref="13374020436"/>
+    <nd ref="13374020419"/>
+    <tag k="building" v="hotel"/>
+  </way>
+
+</osm>

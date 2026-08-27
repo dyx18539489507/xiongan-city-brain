@@ -9,10 +9,10 @@ import time
 import xml.etree.ElementTree as ET
 from collections.abc import Awaitable, Callable
 from contextlib import suppress
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import cast
+from typing import Literal, cast
 from uuid import uuid4
 
 import psutil
@@ -52,6 +52,12 @@ from traffic_platform.edge_service.controller import EdgeController
 from traffic_platform.edge_service.runtime import EdgeRuntime
 from traffic_platform.edge_service.state_machine import DegradationConfig, EdgeMode
 from traffic_platform.experiment_service.disturbances import DisturbanceRuntime
+from traffic_platform.experiment_service.sample_fields import (
+    intersection_sample_fields,
+    prediction_sample_fields,
+    runner_manifest_fields,
+    runner_options,
+)
 from traffic_platform.messaging.base import MessageBus
 from traffic_platform.messaging.emulated import EmulatedMessageBus
 from traffic_platform.messaging.mqtt import MqttMessageBus
@@ -64,7 +70,28 @@ from traffic_platform.scenario_engine.manifest import build_manifest
 from traffic_platform.scenario_engine.models import Disturbance, ScenarioConfig
 from traffic_platform.scenario_engine.profiles import ScenarioProfileSet
 from traffic_platform.sumo_adapter import TraciSumoAdapter, VehicleSnapshot
-from traffic_platform.vehicle_agent.agent import VehicleDynamics, VehicleGuidanceAgent
+from traffic_platform.vehicle_agent.agent import (
+    GlosaEffectivenessGate,
+    GlosaMobilityRegimeClassifier,
+    VehicleDynamics,
+    VehicleGuidanceAgent,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ScheduledFault:
+    """One deterministic live-fault injection on the simulation clock."""
+
+    fault_type: str
+    start_s: float
+    duration_s: float
+    parameters: dict[str, float | str | bool] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if self.start_s < 0:
+            raise ValueError("scheduled fault start_s must be non-negative")
+        if self.duration_s <= 0:
+            raise ValueError("scheduled fault duration_s must be positive")
 
 
 @dataclass(frozen=True, slots=True)
@@ -88,12 +115,21 @@ class ExperimentConfig:
     cloud_outage_duration_s: float | None = None
     degradation_config: DegradationConfig | None = None
     disturbance_time_scale: float = 1.0
+    scheduled_faults: tuple[ScheduledFault, ...] = ()
+    isolate_algorithms: bool = True
+    publish_feedback_to_bus: bool = True
+    publish_runtime_telemetry_to_bus: bool = True
+    include_communication_events: bool = True
+    surrogate_safety_interval_s: float = 1.0
+    sumo_extra_args: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject non-causal schedule scaling at configuration time."""
 
         if self.disturbance_time_scale <= 0:
             raise ValueError("disturbance_time_scale must be positive")
+        if self.surrogate_safety_interval_s <= 0:
+            raise ValueError("surrogate_safety_interval_s must be positive")
 
 
 class ExperimentControl:
@@ -264,6 +300,12 @@ class ExperimentControl:
         self._recompute_fault_state()
 
 
+def _traci_label(experiment_id: str) -> str:
+    """Keep sibling experiments distinct even when they share a pair prefix."""
+
+    return f"experiment-{experiment_id}"
+
+
 class ExperimentRunner:
     """Drive the complete Phase 1 vertical slice with a pluggable bus."""
 
@@ -275,7 +317,9 @@ class ExperimentRunner:
         bus: MessageBus | None = None,
         control: ExperimentControl | None = None,
         snapshot_callback: Callable[[dict[str, object]], None] | None = None,
+        snapshot_detail: Literal["full", "progress"] = "full",
         digital_twin_callback: Callable[[DigitalTwinSourceFrame], None] | None = None,
+        step_barrier_callback: Callable[[float], Awaitable[None]] | None = None,
         persistence_callback: (Callable[[str, dict[str, object]], Awaitable[None]] | None) = None,
     ) -> None:
         self.config = config
@@ -283,7 +327,9 @@ class ExperimentRunner:
         self.bus = bus or EmulatedMessageBus(seed=config.seed)
         self.control = control or ExperimentControl()
         self.snapshot_callback = snapshot_callback
+        self.snapshot_detail = snapshot_detail
         self.digital_twin_callback = digital_twin_callback
+        self.step_barrier_callback = step_barrier_callback
         self.persistence_callback = persistence_callback
         self.events: list[dict[str, str | float]] = []
 
@@ -324,7 +370,9 @@ class ExperimentRunner:
         )
         adapter = TraciSumoAdapter(
             sumo_home=self.sumo_home,
-            label=f"experiment-{self.config.experiment_id[:12]}",
+            # Paired child IDs intentionally share a parent prefix. Keep the
+            # complete identifier so TraCI never aliases baseline/candidate.
+            label=_traci_label(self.config.experiment_id),
         )
         accumulator = MetricsAccumulator()
         process = psutil.Process(os.getpid())
@@ -443,14 +491,21 @@ class ExperimentRunner:
                     "true",
                     "--statistic-output",
                     str((self.config.result_dir / "statistics.xml").resolve()),
+                    *self.config.sumo_extra_args,
                 ],
             )
+            evaluation_start_simulation_time_s = (
+                await asyncio.to_thread(adapter.get_network_state)
+            ).simulation_time_s
             aggregator = EdgeStateAggregator(
                 adapter,
                 rsu_factory if isinstance(self.bus, MqttMessageBus) else edge_factory,
                 intersection_ids,
             )
-            topology = aggregator.build_topology()
+            # Topology discovery performs many synchronous TraCI round trips.
+            # Keep health checks, WebSockets and the control API responsive
+            # while the live SUMO connection is being initialized.
+            topology = await asyncio.to_thread(aggregator.build_topology)
             controller = EdgeController(
                 adapter,
                 edge_factory,
@@ -458,6 +513,7 @@ class ExperimentRunner:
                 algorithm_config=AlgorithmConfig(),
                 degradation_config=self.config.degradation_config,
                 control_algorithm=self.config.algorithm,
+                isolate_algorithms=self.config.isolate_algorithms,
             )
             edge_runtime = EdgeRuntime(
                 self.bus,
@@ -479,6 +535,7 @@ class ExperimentRunner:
                 await cloud_runtime.start()
             guidance_agent = VehicleGuidanceAgent()
             safety_monitor = SurrogateSafetyMonitor()
+            next_safety_sample_time = 0.0
             next_cloud_time = 0.0
             completed_total = 0
             completed_bicycle_total = 0
@@ -496,7 +553,9 @@ class ExperimentRunner:
             broker_outage_end_s: float | None = None
             edge_outage_end_s: float | None = None
             distributed_control_mode = EdgeMode.EDGE_AUTONOMOUS.value
+            latest_control_evidence: dict[str, dict[str, object]] = {}
             last_paced_simulation_time: float | None = None
+            injected_scheduled_faults: set[int] = set()
             while adapter.running:
                 await self.control.wait_until_running()
                 if self.control.stop_requested:
@@ -509,7 +568,10 @@ class ExperimentRunner:
                     break
                 step_wall_started = time.perf_counter()
                 network = await asyncio.to_thread(adapter.step)
-                if network.simulation_time_s > self.config.duration_s:
+                if (
+                    network.simulation_time_s
+                    > evaluation_start_simulation_time_s + self.config.duration_s
+                ):
                     break
                 for expired_fault in self.control.advance_simulation_time(
                     network.simulation_time_s
@@ -519,6 +581,26 @@ class ExperimentRunner:
                             "simulation_time": network.simulation_time_s,
                             "event": "FAULT_AUTO_CLEARED",
                             "detail": expired_fault,
+                        }
+                    )
+                for fault_index, fault in enumerate(self.config.scheduled_faults):
+                    if fault_index in injected_scheduled_faults:
+                        continue
+                    if network.simulation_time_s + 1e-9 < fault.start_s:
+                        continue
+                    self.control.inject_fault(
+                        fault.fault_type,
+                        {
+                            **fault.parameters,
+                            "duration_s": fault.duration_s,
+                        },
+                    )
+                    injected_scheduled_faults.add(fault_index)
+                    self.events.append(
+                        {
+                            "simulation_time": network.simulation_time_s,
+                            "event": "SCHEDULED_FAULT_INJECTED",
+                            "detail": fault.fault_type,
                         }
                     )
                 if isinstance(self.bus, EmulatedMessageBus):
@@ -582,7 +664,7 @@ class ExperimentRunner:
                         )
                     await self.bus.advance(network.simulation_time_s)
                 if self.control.roadwork_active and not roadwork_applied:
-                    adapter.close_lane(roadwork_lane_id)
+                    await asyncio.to_thread(adapter.close_lane, roadwork_lane_id)
                     roadwork_applied = True
                     self.events.append(
                         {
@@ -592,7 +674,7 @@ class ExperimentRunner:
                         }
                     )
                 elif not self.control.roadwork_active and roadwork_applied:
-                    adapter.reopen_lane(roadwork_lane_id)
+                    await asyncio.to_thread(adapter.reopen_lane, roadwork_lane_id)
                     roadwork_applied = False
                     self.events.append(
                         {
@@ -605,13 +687,16 @@ class ExperimentRunner:
                     for disturbance in self.control.drain_pending_disturbances():
                         disturbance_runtime.schedule(disturbance)
                     self.events.extend(
-                        disturbance_runtime.tick(
+                        await asyncio.to_thread(
+                            disturbance_runtime.tick,
                             network.simulation_time_s,
                             adapter,
                         )
                     )
                 self._apply_scheduled_cloud_outage(network.simulation_time_s)
-                regional = aggregator.collect_regional(
+                regional = await asyncio.to_thread(
+                    aggregator.collect_regional,
+                    network=network,
                     control_mode=(
                         distributed_control_mode
                         if isinstance(self.bus, MqttMessageBus)
@@ -678,6 +763,15 @@ class ExperimentRunner:
                         remote_action_event.clear()
                 step_remote_action_count = 0
                 step_remote_rejection_count = 0
+                step_signal_executed_count = 0
+                step_signal_modified_count = 0
+                step_signal_rejected_count = 0
+                step_policy_selection_counts = {code: 0 for code in ("B0", "B1", "B2", "B3")}
+                step_policy_candidate_scores: dict[str, list[float]] = {
+                    code: [] for code in ("B0", "B1", "B2", "B3")
+                }
+                step_expected_gain_ratios: list[float] = []
+                step_signal_rejection_reasons: dict[str, int] = {}
                 for intersection_state in regional.intersection_states:
                     edge_started = time.perf_counter()
                     if isinstance(self.bus, MqttMessageBus):
@@ -686,7 +780,8 @@ class ExperimentRunner:
                             None,
                         )
                         feedback = (
-                            self._apply_remote_edge_action(
+                            await asyncio.to_thread(
+                                self._apply_remote_edge_action,
                                 adapter,
                                 edge_factory,
                                 action,
@@ -750,9 +845,21 @@ class ExperimentRunner:
                             if isinstance(edge_latency, int | float):
                                 remote_edge_latencies_ms.append(float(edge_latency))
                     else:
-                        feedback = controller.control(intersection_state)
+                        feedback = await asyncio.to_thread(
+                            controller.control,
+                            intersection_state,
+                        )
                     edge_latencies_ms.append((time.perf_counter() - edge_started) * 1000)
                     if feedback is not None:
+                        step_signal_executed_count += int(
+                            feedback.execution_status == ExecutionStatus.EXECUTED
+                        )
+                        step_signal_modified_count += int(
+                            feedback.execution_status == ExecutionStatus.MODIFIED
+                        )
+                        step_signal_rejected_count += int(
+                            feedback.execution_status == ExecutionStatus.REJECTED
+                        )
                         if edge_runtime.round_trip_latencies_ms:
                             feedback = feedback.model_copy(
                                 update={
@@ -763,7 +870,64 @@ class ExperimentRunner:
                             )
                         if feedback.execution_status == ExecutionStatus.REJECTED:
                             accumulator.unsafe_rejections += 1
-                        await edge_runtime.publish_feedback(feedback)
+                            for reason in (feedback.rejection_reason or "UNKNOWN").split(","):
+                                reason = reason.strip() or "UNKNOWN"
+                                step_signal_rejection_reasons[reason] = (
+                                    step_signal_rejection_reasons.get(reason, 0) + 1
+                                )
+                        requested = feedback.requested_action
+                        scores = requested.get("scores")
+                        numeric_scores = (
+                            {
+                                str(phase_id): float(score)
+                                for phase_id, score in scores.items()
+                                if isinstance(score, int | float)
+                            }
+                            if isinstance(scores, dict)
+                            else {}
+                        )
+                        selected_phase = requested.get("requested_phase_id")
+                        latest_control_evidence[feedback.intersection_id] = {
+                            "current_phase_id": intersection_state.current_phase_id,
+                            "current_phase_elapsed_s": intersection_state.phase_elapsed,
+                            "current_phase_remaining_s": intersection_state.phase_remaining,
+                            "decision_action": str(
+                                feedback.executed_action.get("action_type")
+                                or requested.get("action_type")
+                                or "hold_phase"
+                            ),
+                            "requested_phase_id": (
+                                str(selected_phase) if selected_phase is not None else None
+                            ),
+                            "decision_status": feedback.execution_status.value,
+                            "decision_reason_codes": [
+                                str(code) for code in requested.get("reason_codes", [])
+                            ],
+                            "decision_explanation": str(requested.get("explanation") or ""),
+                            "phase_scores": numeric_scores,
+                            "selected_phase_score": numeric_scores.get(str(selected_phase)),
+                            "selected_policy": requested.get("selected_policy"),
+                            "expected_gain_ratio": requested.get("expected_gain_ratio"),
+                            "control_mode": feedback.control_mode,
+                        }
+                        selected_policy = feedback.requested_action.get("selected_policy")
+                        if (
+                            isinstance(selected_policy, str)
+                            and selected_policy in step_policy_selection_counts
+                        ):
+                            step_policy_selection_counts[selected_policy] += 1
+                        candidate_scores = feedback.requested_action.get("candidate_policy_scores")
+                        if isinstance(candidate_scores, dict):
+                            for policy, value in candidate_scores.items():
+                                if policy in step_policy_candidate_scores and isinstance(
+                                    value, int | float
+                                ):
+                                    step_policy_candidate_scores[policy].append(float(value))
+                        expected_gain = feedback.requested_action.get("expected_gain_ratio")
+                        if isinstance(expected_gain, int | float):
+                            step_expected_gain_ratios.append(float(expected_gain))
+                        if self.config.publish_feedback_to_bus:
+                            await edge_runtime.publish_feedback(feedback)
                 if isinstance(self.bus, MqttMessageBus) and step_remote_action_count:
                     self.events.append(
                         {
@@ -776,9 +940,17 @@ class ExperimentRunner:
                             ),
                         }
                     )
+                speed_factors = [
+                    strategy.speed_guidance_parameters.get("target_speed_factor", 1.0)
+                    for strategy in controller.last_strategy_by_intersection.values()
+                ]
+                target_speed_factor_mean = (
+                    statistics.fmean(speed_factors) if speed_factors else None
+                )
                 guidance_request_count = 0
                 if isinstance(self.bus, MqttMessageBus):
-                    guidance_count = self._apply_vehicle_commands(
+                    guidance_count = await asyncio.to_thread(
+                        self._apply_vehicle_commands,
                         adapter,
                         pending_vehicle_commands,
                     )
@@ -797,7 +969,8 @@ class ExperimentRunner:
                         guidance_count,
                         guidance_rejections,
                         guidance_modifications,
-                    ) = self._apply_guidance(
+                    ) = await asyncio.to_thread(
+                        self._apply_guidance,
                         adapter,
                         controller,
                         guidance_agent,
@@ -815,8 +988,8 @@ class ExperimentRunner:
                             ),
                         }
                     )
-                pedestrian_states = adapter.get_pedestrian_states()
-                arrived_vehicle_ids = adapter.get_arrived_vehicle_ids()
+                pedestrian_states = aggregator.last_pedestrian_states
+                arrived_vehicle_ids = await asyncio.to_thread(adapter.get_arrived_vehicle_ids)
                 completed_bicycle_total += sum(
                     vehicle_class_history.get(identifier) == "bicycle"
                     for identifier in arrived_vehicle_ids
@@ -825,7 +998,8 @@ class ExperimentRunner:
                     vehicle_class_history.get(identifier) != "bicycle"
                     for identifier in arrived_vehicle_ids
                 )
-                completed_pedestrian_total += len(adapter.get_arrived_pedestrian_ids())
+                arrived_pedestrian_ids = await asyncio.to_thread(adapter.get_arrived_pedestrian_ids)
+                completed_pedestrian_total += len(arrived_pedestrian_ids)
                 vehicle_class_history.update(
                     {vehicle.vehicle_id: vehicle.vehicle_class for vehicle in vehicle_states}
                 )
@@ -842,11 +1016,17 @@ class ExperimentRunner:
                 bicycle_states = [
                     vehicle for vehicle in vehicle_states if vehicle.vehicle_class == "bicycle"
                 ]
-                conflicts = safety_monitor.observe(
-                    network.simulation_time_s,
-                    vehicle_states,
-                    pedestrian_states,
-                )
+                if network.simulation_time_s + 1e-9 >= next_safety_sample_time:
+                    conflicts = safety_monitor.observe(
+                        network.simulation_time_s,
+                        vehicle_states,
+                        pedestrian_states,
+                    )
+                    next_safety_sample_time = (
+                        network.simulation_time_s + self.config.surrogate_safety_interval_s
+                    )
+                else:
+                    conflicts = []
                 total_queue_m = sum(
                     lane.queue_length_m
                     for state in regional.intersection_states
@@ -926,10 +1106,93 @@ class ExperimentRunner:
                 accumulator.add(sample)
                 sample_dict: dict[str, object] = {
                     **asdict(sample),
+                    "completed_vehicles": completed_total + completed_bicycle_total,
+                    "vehicle_trajectory_probes": (
+                        [
+                            {
+                                "vehicle_id": vehicle.vehicle_id,
+                                "road_id": vehicle.road_id,
+                                "lane_id": vehicle.lane_id,
+                                "lane_position_m": vehicle.lane_position_m,
+                                "x_m": vehicle.x_m,
+                                "y_m": vehicle.y_m,
+                                "speed_m_s": vehicle.speed_m_s,
+                                "waiting_time_s": vehicle.waiting_time_s,
+                            }
+                            for vehicle in sorted(
+                                motor_vehicle_states,
+                                key=lambda item: item.vehicle_id,
+                            )[:16]
+                        ]
+                        if round(network.simulation_time_s) % 5 == 0
+                        else []
+                    ),
                     "guidance_count": guidance_count,
                     "guidance_request_count": guidance_request_count,
                     "guidance_rejection_count": guidance_rejections,
                     "guidance_modification_count": guidance_modifications,
+                    "glosa_effectiveness_gate_active": getattr(
+                        getattr(controller, "glosa_effectiveness_gate", None),
+                        "active",
+                        None,
+                    ),
+                    "glosa_effectiveness_gate_reason": getattr(
+                        getattr(controller, "glosa_effectiveness_gate", None),
+                        "reason",
+                        "not_applicable",
+                    ),
+                    "glosa_speed_change_ratio": getattr(
+                        getattr(controller, "glosa_effectiveness_gate", None),
+                        "speed_change_ratio",
+                        None,
+                    ),
+                    "glosa_queue_reduction_ratio": getattr(
+                        getattr(controller, "glosa_effectiveness_gate", None),
+                        "queue_reduction_ratio",
+                        None,
+                    ),
+                    "glosa_minimum_target_speed_m_s": getattr(
+                        controller,
+                        "last_glosa_minimum_speed_m_s",
+                        None,
+                    ),
+                    "glosa_mobility_regime": getattr(
+                        getattr(controller, "glosa_mobility_classifier", None),
+                        "regime",
+                        "not_applicable",
+                    ),
+                    "glosa_mobility_baseline_speed_m_s": getattr(
+                        getattr(controller, "glosa_mobility_classifier", None),
+                        "baseline_mean_speed_m_s",
+                        None,
+                    ),
+                    "glosa_intervention_enabled": getattr(
+                        controller,
+                        "last_glosa_intervention_enabled",
+                        None,
+                    ),
+                    "target_speed_factor_mean": target_speed_factor_mean,
+                    "signal_action_executed_count": step_signal_executed_count,
+                    "signal_action_modified_count": step_signal_modified_count,
+                    "signal_action_rejected_count": step_signal_rejected_count,
+                    "signal_action_rejection_reasons": step_signal_rejection_reasons,
+                    "control_evidence_by_intersection": {
+                        intersection_id: dict(evidence)
+                        for intersection_id, evidence in latest_control_evidence.items()
+                    },
+                    "selected_policy_counts": step_policy_selection_counts,
+                    "candidate_policy_score_mean": {
+                        policy: statistics.fmean(values)
+                        for policy, values in step_policy_candidate_scores.items()
+                        if values
+                    },
+                    "b3_expected_gain_ratio": (
+                        statistics.fmean(step_expected_gain_ratios)
+                        if step_expected_gain_ratios
+                        else None
+                    ),
+                    **intersection_sample_fields(regional),
+                    **prediction_sample_fields(controller.last_strategy_by_intersection),
                     "cpu_percent": process.cpu_percent(),
                     "memory_mb": process.memory_info().rss / 1024 / 1024,
                     "fallback_mode": (
@@ -941,34 +1204,35 @@ class ExperimentRunner:
                     "mqtt_online": self.control.broker_online,
                 }
                 samples.append(sample_dict)
-                metric_snapshot = experiment_factory.build(
-                    MetricSnapshot,
-                    simulation_time=network.simulation_time_s,
-                    ttl_s=10.0,
-                    metrics={
-                        key: value
-                        for key, value in sample_dict.items()
-                        if isinstance(value, float | int | str | bool)
-                    },
-                )
-                await self.bus.publish(
-                    (f"traffic/development/experiment/{self.config.experiment_id}/metric"),
-                    metric_snapshot.model_dump_json().encode("utf-8"),
-                    qos=0,
-                )
-                for event in self.events[published_event_index:]:
-                    event_message = experiment_factory.build(
-                        ExperimentEvent,
-                        simulation_time=float(event["simulation_time"]),
-                        ttl_s=3600.0,
-                        event_type=str(event["event"]),
-                        payload=dict(event),
+                if self.config.publish_runtime_telemetry_to_bus:
+                    metric_snapshot = experiment_factory.build(
+                        MetricSnapshot,
+                        simulation_time=network.simulation_time_s,
+                        ttl_s=10.0,
+                        metrics={
+                            key: value
+                            for key, value in sample_dict.items()
+                            if isinstance(value, float | int | str | bool)
+                        },
                     )
                     await self.bus.publish(
-                        (f"traffic/development/experiment/{self.config.experiment_id}/event"),
-                        event_message.model_dump_json().encode("utf-8"),
-                        qos=1,
+                        (f"traffic/development/experiment/{self.config.experiment_id}/metric"),
+                        metric_snapshot.model_dump_json().encode("utf-8"),
+                        qos=0,
                     )
+                    for event in self.events[published_event_index:]:
+                        event_message = experiment_factory.build(
+                            ExperimentEvent,
+                            simulation_time=float(event["simulation_time"]),
+                            ttl_s=3600.0,
+                            event_type=str(event["event"]),
+                            payload=dict(event),
+                        )
+                        await self.bus.publish(
+                            (f"traffic/development/experiment/{self.config.experiment_id}/event"),
+                            event_message.model_dump_json().encode("utf-8"),
+                            qos=1,
+                        )
                 published_event_index = len(self.events)
                 if self.persistence_callback is not None:
                     await self.persistence_callback(
@@ -1075,6 +1339,7 @@ class ExperimentRunner:
                             intersection_metrics=[
                                 {
                                     "intersection_id": state.intersection_id,
+                                    **latest_control_evidence.get(state.intersection_id, {}),
                                     "phase_id": state.current_phase_id,
                                     "phase_state": state.phase_state,
                                     "queue_vehicles": state.total_queue,
@@ -1096,6 +1361,19 @@ class ExperimentRunner:
                                     "emergency_priority_phase_id": (
                                         state.emergency_priority_phase_id
                                     ),
+                                    "approaches": [
+                                        {
+                                            "lane_id": lane.lane_id,
+                                            "direction": lane.direction,
+                                            "movement": lane.movement,
+                                            "vehicle_count": lane.vehicle_count,
+                                            "queue_vehicles": lane.queue_vehicle_count,
+                                            "mean_speed_m_s": lane.mean_speed,
+                                            "occupancy": lane.occupancy,
+                                            "downstream_occupancy": lane.downstream_occupancy,
+                                        }
+                                        for lane in state.lane_states
+                                    ],
                                 }
                                 for state in regional.intersection_states
                             ],
@@ -1104,24 +1382,35 @@ class ExperimentRunner:
                     digital_twin_event_index = len(self.events)
                     next_digital_twin_time_s = network.simulation_time_s + digital_twin_interval_s
                 if self.snapshot_callback is not None:
-                    current_max_queue = max(
-                        (state.total_queue for state in regional.intersection_states),
-                        default=0,
-                    )
-                    downstream_occupancies = [
-                        lane.downstream_occupancy
-                        for state in regional.intersection_states
-                        for lane in state.lane_states
-                    ]
-                    self.snapshot_callback(
-                        {
-                            "experiment_id": self.config.experiment_id,
-                            "scenario_id": self.config.scenario_id,
-                            "scenario_profile": self.config.scenario_profile_code,
-                            "algorithm": self.config.algorithm,
+                    snapshot: dict[str, object] = {
+                        "experiment_id": self.config.experiment_id,
+                        "scenario_id": self.config.scenario_id,
+                        "scenario_profile": self.config.scenario_profile_code,
+                        "algorithm": self.config.algorithm,
+                        "seed": self.config.seed,
+                        "duration_s": self.config.duration_s,
+                        "evaluation_start_simulation_time_s": (
+                            evaluation_start_simulation_time_s
+                        ),
+                        "simulation_time_s": network.simulation_time_s,
+                        "simulation_rate": self.control.simulation_rate,
+                    }
+                    if self.snapshot_detail == "full":
+                        current_max_queue = max(
+                            (state.total_queue for state in regional.intersection_states),
+                            default=0,
+                        )
+                        downstream_occupancies = [
+                            lane.downstream_occupancy
+                            for state in regional.intersection_states
+                            for lane in state.lane_states
+                        ]
+                        snapshot.update(
+                            {
                             "intersections": [
                                 {
                                     "intersection_id": state.intersection_id,
+                                    **latest_control_evidence.get(state.intersection_id, {}),
                                     "phase_id": state.current_phase_id,
                                     "phase_state": state.phase_state,
                                     "queue_vehicles": state.total_queue,
@@ -1192,14 +1481,16 @@ class ExperimentRunner:
                                 else None
                             ),
                             "mqtt_online": self.control.broker_online,
-                            "simulation_rate": self.control.simulation_rate,
                             "active_disturbances": (regional.active_disturbances),
                             "spillback_edges": regional.spillback_edges,
                             "congested_intersection_ids": (regional.congested_intersections),
                             "recent_events": self.events[-60:],
                             **sample_dict,
-                        }
-                    )
+                            }
+                        )
+                    self.snapshot_callback(snapshot)
+                if self.step_barrier_callback is not None:
+                    await self.step_barrier_callback(network.simulation_time_s)
                 simulation_rate = self.control.simulation_rate
                 if simulation_rate is None or last_paced_simulation_time is None:
                     await asyncio.sleep(0)
@@ -1214,15 +1505,29 @@ class ExperimentRunner:
                     )
                 last_paced_simulation_time = network.simulation_time_s
         finally:
-            adapter.stop_simulation()
+            await asyncio.to_thread(adapter.stop_simulation)
             if controller is not None:
-                controller.close()
+                await asyncio.to_thread(controller.close)
             await self.bus.disconnect()
         wall_duration = time.perf_counter() - started_wall
         metrics = accumulator.summary()
+        metrics.update(self._signal_control_metrics(samples))
         if controller is not None:
             metrics["algorithm_timeout_count"] = controller.algorithm_timeout_count
             metrics["algorithm_failure_count"] = controller.algorithm_failure_count
+            metrics["algorithm_decision_latency_target_miss_count"] = (
+                controller.algorithm_decision_latency_target_miss_count
+            )
+            metrics["algorithm_decision_latency_target_ms"] = (
+                controller.algorithm_config.decision_latency_target_ms
+            )
+            metrics["algorithm_decision_elapsed_ms_max"] = (
+                controller.algorithm_decision_elapsed_ms_max
+            )
+            metrics["algorithm_timeout_elapsed_ms_max"] = (
+                controller.algorithm_timeout_elapsed_ms_max
+            )
+            metrics["algorithm_timeout_limit_ms"] = controller.algorithm_config.decision_timeout_ms
         metrics.update(self._trip_metrics(self.config.result_dir / "tripinfo.xml"))
         cloud_latency_source = (
             remote_cloud_latencies_ms
@@ -1255,6 +1560,7 @@ class ExperimentRunner:
         metrics["cpu_percent_mean"] = statistics.fmean(cpu_values) if cpu_values else 0.0
         metrics["memory_mb_peak"] = max(memory_values, default=0.0)
         metrics.update(self._fallback_metrics(samples))
+        metrics.update(self._prediction_metrics(samples))
         metrics["data_write_latency_ms"] = (
             "pending_flush"
             if self.persistence_callback is not None
@@ -1317,10 +1623,15 @@ class ExperimentRunner:
             workspace=Path.cwd(),
             provenance={
                 "algorithm": self.config.algorithm,
-                "algorithm_version": "1.0.0",
+                "algorithm_version": (
+                    controller.algorithm_version(self.config.algorithm)
+                    if controller is not None
+                    else "not_available"
+                ),
                 "scenario_profile": self.config.scenario_profile_code,
                 "seed": self.config.seed,
                 "duration_s": self.config.duration_s,
+                **runner_manifest_fields(self.config),
                 "python": platform.python_version(),
                 "sumo_home": str(self.sumo_home),
             },
@@ -1336,28 +1647,32 @@ class ExperimentRunner:
             for transition in (controller.machine.transitions if controller is not None else [])
         )
         communication_events = (
-            [
-                experiment_factory.build(
-                    CommunicationEvent,
-                    simulation_time=record.sent_at_s,
-                    ttl_s=3600.0,
-                    channel=record.channel,
-                    source=record.source,
-                    destination=record.destination,
-                    message_type=record.message_type,
-                    configured_latency_ms=record.configured_latency_ms,
-                    actual_latency_ms=record.actual_latency_ms,
-                    dropped=record.dropped,
-                    duplicated=record.duplicated,
-                    reordered=record.reordered,
-                    corrupted=record.corrupted,
-                    timeout=record.timeout,
-                    recovery_time=record.recovery_time_s,
-                ).model_dump(mode="json")
-                for record in self.bus.records
-            ]
-            if isinstance(self.bus, EmulatedMessageBus)
-            else [event.model_dump(mode="json") for event in remote_communication_events]
+            (
+                [
+                    experiment_factory.build(
+                        CommunicationEvent,
+                        simulation_time=record.sent_at_s,
+                        ttl_s=3600.0,
+                        channel=record.channel,
+                        source=record.source,
+                        destination=record.destination,
+                        message_type=record.message_type,
+                        configured_latency_ms=record.configured_latency_ms,
+                        actual_latency_ms=record.actual_latency_ms,
+                        dropped=record.dropped,
+                        duplicated=record.duplicated,
+                        reordered=record.reordered,
+                        corrupted=record.corrupted,
+                        timeout=record.timeout,
+                        recovery_time=record.recovery_time_s,
+                    ).model_dump(mode="json")
+                    for record in self.bus.records
+                ]
+                if isinstance(self.bus, EmulatedMessageBus)
+                else [event.model_dump(mode="json") for event in remote_communication_events]
+            )
+            if self.config.include_communication_events
+            else []
         )
         result: dict[str, object] = {
             "schema_version": "1.0",
@@ -1365,9 +1680,19 @@ class ExperimentRunner:
             "scenario_id": self.config.scenario_id,
             "scenario_profile": self.config.scenario_profile_code,
             "algorithm": self.config.algorithm,
+            "algorithm_version": next(
+                (
+                    item["version"]
+                    for item in controller.algorithm_registry.discover()
+                    if item["name"] == self.config.algorithm
+                ),
+                "unknown",
+            ),
             "seed": self.config.seed,
+            "evaluation_start_simulation_time_s": evaluation_start_simulation_time_s,
             "actual_run": True,
             "message_transport": type(self.bus).__name__,
+            "runner_options": runner_options(self.config),
             "metrics": metrics,
             "samples": samples,
             "events": self.events,
@@ -1388,6 +1713,65 @@ class ExperimentRunner:
         artifacts = generate_report(result, self.config.result_dir)
         result["artifacts"] = artifacts
         return result
+
+    @staticmethod
+    def _signal_control_metrics(
+        samples: list[dict[str, object]],
+    ) -> dict[str, float | int | str]:
+        executed = sum(
+            int(value)
+            for sample in samples
+            if isinstance((value := sample.get("signal_action_executed_count")), int | float)
+        )
+        modified = sum(
+            int(value)
+            for sample in samples
+            if isinstance((value := sample.get("signal_action_modified_count")), int | float)
+        )
+        rejected = sum(
+            int(value)
+            for sample in samples
+            if isinstance((value := sample.get("signal_action_rejected_count")), int | float)
+        )
+        policy_counts = {code: 0 for code in ("B0", "B1", "B2", "B3")}
+        expected_gains: list[float] = []
+        target_speed_factors: list[float] = []
+        for sample in samples:
+            selected = sample.get("selected_policy_counts")
+            if isinstance(selected, dict):
+                for policy, value in selected.items():
+                    if policy in policy_counts and isinstance(value, int | float):
+                        policy_counts[policy] += int(value)
+            expected_gain = sample.get("b3_expected_gain_ratio")
+            if isinstance(expected_gain, int | float):
+                expected_gains.append(float(expected_gain))
+            target_speed_factor = sample.get("target_speed_factor_mean")
+            if isinstance(target_speed_factor, int | float):
+                target_speed_factors.append(float(target_speed_factor))
+        decided = executed + modified + rejected
+        selected_total = sum(policy_counts.values())
+        return {
+            "signal_action_executed_count": executed,
+            "signal_action_modified_count": modified,
+            "signal_action_rejected_count": rejected,
+            "signal_action_acceptance_rate": ((executed + modified) / decided if decided else 1.0),
+            **{
+                f"policy_{code.lower()}_selection_count": count
+                for code, count in policy_counts.items()
+            },
+            "b3_policy_selection_rate": (
+                policy_counts["B3"] / selected_total if selected_total else 0.0
+            ),
+            "b3_expected_gain_ratio_mean": (
+                statistics.fmean(expected_gains) if expected_gains else "not_applicable"
+            ),
+            "target_speed_factor_mean": (
+                statistics.fmean(target_speed_factors) if target_speed_factors else "not_applicable"
+            ),
+            "target_speed_factor_min": (
+                min(target_speed_factors) if target_speed_factors else "not_applicable"
+            ),
+        }
 
     def _fallback_metrics(
         self,
@@ -1447,6 +1831,78 @@ class ExperimentRunner:
                 - first_time
                 if recovered is not None
                 else "not_recovered_within_run"
+            ),
+        }
+
+    def _prediction_metrics(
+        self,
+        samples: list[dict[str, object]],
+    ) -> dict[str, float | str]:
+        if self.config.algorithm != "coordinated-max-pressure":
+            return {
+                "prediction_status": "not_applicable",
+                "prediction_model_id": "not_applicable",
+                "prediction_horizon_s": "not_applicable",
+                "prediction_ready_ratio": "not_applicable",
+                "prediction_confidence_mean": "not_applicable",
+                "prediction_queue_mae_vehicles": "not_applicable",
+            }
+        ready = [sample for sample in samples if sample.get("prediction_status") == "ready"]
+        confidences = [
+            float(value)
+            for sample in samples
+            if isinstance((value := sample.get("prediction_confidence")), int | float)
+        ]
+        by_time = {
+            float(cast(float | int | str, sample["simulation_time_s"])): sample
+            for sample in samples
+        }
+        absolute_errors: list[float] = []
+        for sample in ready:
+            predicted = sample.get("predicted_queue_vehicles")
+            horizon = sample.get("prediction_horizon_s")
+            if not isinstance(predicted, int | float) or not isinstance(horizon, int | float):
+                continue
+            simulation_time = float(cast(float | int | str, sample["simulation_time_s"]))
+            target = by_time.get(simulation_time + float(horizon))
+            if target is None:
+                continue
+            actual_by_intersection = target.get("intersection_queue_vehicles")
+            if not isinstance(actual_by_intersection, dict):
+                continue
+            actual = sum(
+                float(value)
+                for value in actual_by_intersection.values()
+                if isinstance(value, int | float)
+            )
+            absolute_errors.append(abs(float(predicted) - actual))
+        latest_prediction = next(
+            (
+                sample
+                for sample in reversed(samples)
+                if sample.get("prediction_model_id") not in {None, "not_available"}
+            ),
+            {},
+        )
+        return {
+            "prediction_status": str(latest_prediction.get("prediction_status", "not_available")),
+            "prediction_model_id": str(
+                latest_prediction.get("prediction_model_id", "not_available")
+            ),
+            "prediction_horizon_s": (
+                float(horizon)
+                if isinstance(
+                    (horizon := latest_prediction.get("prediction_horizon_s")),
+                    int | float,
+                )
+                else "not_available"
+            ),
+            "prediction_ready_ratio": len(ready) / len(samples) if samples else 0.0,
+            "prediction_confidence_mean": (statistics.fmean(confidences) if confidences else 0.0),
+            "prediction_queue_mae_vehicles": (
+                statistics.fmean(absolute_errors)
+                if absolute_errors
+                else "not_available_horizon_not_observed"
             ),
         }
 
@@ -1671,6 +2127,8 @@ class ExperimentRunner:
         *,
         simulation_time_s: float,
     ) -> int:
+        if controller.control_algorithm != "coordinated-max-pressure":
+            return 0
         strategies = list(controller.last_strategy_by_intersection.values())
         target_factor = (
             sum(
@@ -1684,6 +2142,8 @@ class ExperimentRunner:
             if strategies
             else None
         )
+        if target_factor is None or target_factor >= 0.999:
+            return 0
         published = 0
         for vehicle in vehicles:
             connected = "connected_vehicle" in vehicle.vehicle_type
@@ -1755,13 +2215,126 @@ class ExperimentRunner:
         *,
         simulation_time_s: float,
     ) -> tuple[int, int, int]:
+        if controller.control_algorithm != "coordinated-max-pressure":
+            return 0, 0, 0
         strategies = list(controller.last_strategy_by_intersection.values())
         if not strategies:
+            for vehicle in vehicles:
+                if "connected_vehicle" in vehicle.vehicle_type:
+                    adapter.release_speed_guidance(vehicle.vehicle_id)
             return 0, 0, 0
         target_factor = sum(
             strategy.speed_guidance_parameters.get("target_speed_factor", 1.0)
             for strategy in strategies
         ) / len(strategies)
+        actionable_factor = (
+            1.0 - controller.algorithm_config.minimum_actionable_speed_reduction_ratio
+        )
+        acceleration_only = target_factor >= actionable_factor
+        motor_vehicles = [
+            vehicle
+            for vehicle in vehicles
+            if getattr(vehicle, "vehicle_class", "passenger") != "bicycle"
+        ]
+        mean_speed_m_s = (
+            sum(vehicle.speed_m_s for vehicle in motor_vehicles) / len(motor_vehicles)
+            if motor_vehicles
+            else 0.0
+        )
+        queue_vehicles = sum(vehicle.speed_m_s < 0.1 for vehicle in motor_vehicles)
+        gate = getattr(controller, "glosa_effectiveness_gate", None)
+        if gate is None:
+            gate = GlosaEffectivenessGate(
+                window_s=controller.algorithm_config.glosa_effectiveness_window_s,
+                cooldown_s=controller.algorithm_config.glosa_effectiveness_cooldown_s,
+                minimum_speed_loss_ratio=(
+                    controller.algorithm_config.glosa_minimum_speed_loss_ratio
+                ),
+                minimum_queue_reduction_ratio=(
+                    controller.algorithm_config.glosa_minimum_queue_reduction_ratio
+                ),
+            )
+            controller.glosa_effectiveness_gate = gate
+        effectiveness_gate_active = gate.observe(
+            simulation_time_s=simulation_time_s,
+            mean_speed_m_s=mean_speed_m_s,
+            queue_vehicles=queue_vehicles,
+        )
+        classifier = getattr(controller, "glosa_mobility_classifier", None)
+        if classifier is None:
+            classifier = GlosaMobilityRegimeClassifier(
+                window_s=(controller.algorithm_config.glosa_mobility_classification_window_s),
+                high_mobility_speed_threshold_m_s=(
+                    controller.algorithm_config.high_mobility_speed_threshold_m_s
+                ),
+            )
+            controller.glosa_mobility_classifier = classifier
+        mobility_regime = classifier.observe(
+            simulation_time_s=simulation_time_s,
+            mean_speed_m_s=mean_speed_m_s,
+        )
+        glosa_enabled = mobility_regime == "high_mobility" or effectiveness_gate_active
+        controller.last_glosa_intervention_enabled = glosa_enabled
+        minimum_glosa_speed_m_s = (
+            controller.algorithm_config.high_mobility_minimum_glosa_speed_m_s
+            if mobility_regime == "high_mobility"
+            else controller.algorithm_config.minimum_glosa_speed_m_s
+        )
+        maximum_queue_discharge_speed_m_s = (
+            controller.algorithm_config.high_mobility_maximum_queue_discharge_speed_m_s
+            if mobility_regime == "high_mobility"
+            else controller.algorithm_config.maximum_queue_discharge_guidance_speed_m_s
+        )
+        queue_discharge_target_speed_m_s = (
+            controller.algorithm_config.high_mobility_queue_discharge_target_speed_m_s
+            if mobility_regime == "high_mobility"
+            else controller.algorithm_config.queue_discharge_target_speed_m_s
+        )
+        controller.last_glosa_minimum_speed_m_s = minimum_glosa_speed_m_s
+        controller.last_queue_discharge_target_speed_m_s = queue_discharge_target_speed_m_s
+        green_lane_ids: set[str] = set()
+        red_lane_time_to_green_s: dict[str, float] = {}
+        if acceleration_only:
+            for state in controller.last_state_by_intersection.values():
+                phases = controller.topology.phases.get(state.intersection_id, [])
+                phase_by_id = {phase.phase_id: phase for phase in phases}
+                active_phase = phase_by_id.get(state.current_phase_id)
+                if active_phase is not None:
+                    green_lane_ids.update(
+                        movement.incoming_lane_id for movement in active_phase.movements
+                    )
+                phase_order = getattr(
+                    controller.topology,
+                    "phase_order",
+                    {},
+                ).get(
+                    state.intersection_id,
+                    [],
+                )
+                if state.current_phase_id not in phase_order:
+                    continue
+                phase_durations = getattr(
+                    controller.topology,
+                    "phase_durations_s",
+                    {},
+                ).get(
+                    state.intersection_id,
+                    {},
+                )
+                current_index = phase_order.index(state.current_phase_id)
+                eta_s = max(0.0, state.phase_remaining)
+                for offset in range(1, len(phase_order) + 1):
+                    phase_id = phase_order[(current_index + offset) % len(phase_order)]
+                    phase = phase_by_id.get(phase_id)
+                    if phase is not None:
+                        for movement in phase.movements:
+                            lane_id = movement.incoming_lane_id
+                            if lane_id in green_lane_ids:
+                                continue
+                            previous_eta = red_lane_time_to_green_s.get(lane_id)
+                            if previous_eta is None or eta_s < previous_eta:
+                                red_lane_time_to_green_s[lane_id] = eta_s
+                    eta_s += max(0.0, phase_durations.get(phase_id, 0.0))
         applied_count = 0
         rejected_count = 0
         modified_count = 0
@@ -1773,6 +2346,51 @@ class ExperimentRunner:
                 max(vehicle.speed_m_s, 0.1),
             )
             requested_speed = lane_speed * target_factor
+            queue_discharge = acceleration_only and (
+                vehicle.lane_id in green_lane_ids
+                and vehicle.speed_m_s
+                >= controller.algorithm_config.minimum_moving_guidance_speed_m_s
+                and vehicle.speed_m_s <= maximum_queue_discharge_speed_m_s
+            )
+            time_to_green_s = red_lane_time_to_green_s.get(vehicle.lane_id)
+            distance_to_stop_line_m = max(
+                0.0,
+                float(getattr(vehicle, "distance_to_stop_line_m", 0.0)),
+            )
+            glosa_target_speed_m_s = (
+                distance_to_stop_line_m / time_to_green_s
+                if time_to_green_s is not None and time_to_green_s > 0.0
+                else None
+            )
+            glosa_approach = bool(
+                acceleration_only
+                and glosa_enabled
+                and glosa_target_speed_m_s is not None
+                and controller.algorithm_config.minimum_glosa_distance_m
+                <= distance_to_stop_line_m
+                <= controller.algorithm_config.maximum_glosa_distance_m
+                and time_to_green_s is not None
+                and time_to_green_s <= controller.algorithm_config.maximum_glosa_time_to_green_s
+                and glosa_target_speed_m_s >= minimum_glosa_speed_m_s
+                and glosa_target_speed_m_s <= vehicle.speed_m_s * actionable_factor
+            )
+            if queue_discharge:
+                requested_speed = min(
+                    requested_speed,
+                    queue_discharge_target_speed_m_s,
+                )
+            elif glosa_approach and glosa_target_speed_m_s is not None:
+                requested_speed = glosa_target_speed_m_s
+            if acceleration_only and not queue_discharge and not glosa_approach:
+                adapter.release_speed_guidance(vehicle.vehicle_id)
+                continue
+            if (
+                queue_discharge
+                and requested_speed - vehicle.speed_m_s
+                < controller.algorithm_config.minimum_guidance_acceleration_gain_m_s
+            ):
+                adapter.release_speed_guidance(vehicle.vehicle_id)
+                continue
             decision = ControlDecision(
                 status=DecisionStatus.OK,
                 intersection_id="vehicle-guidance",
@@ -1780,8 +2398,12 @@ class ExperimentRunner:
                 action_type="apply_speed_guidance",
                 requested_duration_s=None,
                 scores={"recommended_speed_m_s": requested_speed},
-                reason_codes=["CLOUD_SPEED_TARGET"],
-                explanation="Cloud target converted to a per-vehicle speed request.",
+                reason_codes=[
+                    "GREEN_QUEUE_DISCHARGE" if queue_discharge else "RED_APPROACH_ARRIVAL_ALIGNMENT"
+                ],
+                explanation=(
+                    "Signal timing and cloud targets converted to a per-vehicle speed request."
+                ),
             )
             safety = controller.safety.validate(
                 decision,
@@ -1799,6 +2421,7 @@ class ExperimentRunner:
                 ),
             )
             if safety.outcome == SafetyOutcome.REJECTED or safety.validated is None:
+                adapter.release_speed_guidance(vehicle.vehicle_id)
                 rejected_count += 1
                 continue
             modified_count += int(safety.outcome == SafetyOutcome.MODIFIED)
@@ -1817,6 +2440,8 @@ class ExperimentRunner:
                     result.applied_speed_m_s,
                 )
                 applied_count += 1
+            else:
+                adapter.release_speed_guidance(vehicle.vehicle_id)
         return applied_count, rejected_count, modified_count
 
 

@@ -6,6 +6,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from collections.abc import Callable, Sequence
@@ -27,6 +28,8 @@ _OUTPUT_FILE_OPTIONS = frozenset(
         "--vehroute-output",
     }
 )
+_INPUT_FILE_OPTIONS = frozenset({"--load-state"})
+_TRACI_START_LOCK = threading.Lock()
 
 
 def _is_ascii_path(path: Path | str) -> bool:
@@ -236,6 +239,14 @@ class TraciSumoAdapter:
         self._paused = False
         self._closed_lane_permissions: dict[str, tuple[str, ...]] = {}
         self._metric_callbacks: list[Callable[[NetworkSnapshot], None]] = []
+        self._subscribed_vehicle_ids: set[str] = set()
+        self._subscribed_person_ids: set[str] = set()
+        self._subscribed_lane_ids: set[str] = set()
+        self._subscribed_traffic_light_ids: set[str] = set()
+        self._vehicle_class_by_type: dict[str, str] = {}
+        self._vehicle_length_by_id: dict[str, float] = {}
+        self._step_vehicle_states: list[VehicleSnapshot] | None = None
+        self._step_pedestrian_states: list[PedestrianSnapshot] | None = None
         self._runtime_stage: tempfile.TemporaryDirectory[str] | None = None
         self._staged_output_files: list[tuple[Path, Path]] = []
 
@@ -305,40 +316,45 @@ class TraciSumoAdapter:
         else:
             import traci
 
-            used_port = port or find_free_port()
+            used_port = port
             try:
-                retry_count = max(1, int(self.startup_timeout_s) + 1)
-                if self._runtime_stage is None:
-                    traci.start(
-                        command,
-                        port=used_port,
-                        numRetries=retry_count,
-                        label=self.label,
-                    )
-                else:
-                    process_environment = os.environ.copy()
-                    if not _is_ascii_path(self.sumo_home):
-                        process_environment.pop("SUMO_HOME", None)
-                    process = subprocess.Popen(
-                        [*command, "--remote-port", str(used_port)],
-                        cwd=self._runtime_stage.name,
-                        env=process_environment,
-                    )
-                    try:
-                        traci.init(
-                            used_port,
+                # Port discovery releases its probe socket before SUMO binds.
+                # Serialize discovery through connection establishment so two
+                # paired runners cannot select the same ephemeral port.
+                with _TRACI_START_LOCK:
+                    used_port = port or find_free_port()
+                    retry_count = max(1, int(self.startup_timeout_s) + 1)
+                    if self._runtime_stage is None:
+                        traci.start(
+                            command,
+                            port=used_port,
                             numRetries=retry_count,
-                            host="localhost",
                             label=self.label,
-                            proc=process,
                         )
-                    except Exception:
-                        if process.poll() is None:
-                            process.terminate()
-                            process.wait(timeout=5)
-                        raise
-                self._root_module = traci
-                self._api = traci.getConnection(self.label)
+                    else:
+                        process_environment = os.environ.copy()
+                        if not _is_ascii_path(self.sumo_home):
+                            process_environment.pop("SUMO_HOME", None)
+                        process = subprocess.Popen(
+                            [*command, "--remote-port", str(used_port)],
+                            cwd=self._runtime_stage.name,
+                            env=process_environment,
+                        )
+                        try:
+                            traci.init(
+                                used_port,
+                                numRetries=retry_count,
+                                host="localhost",
+                                label=self.label,
+                                proc=process,
+                            )
+                        except Exception:
+                            if process.poll() is None:
+                                process.terminate()
+                                process.wait(timeout=5)
+                            raise
+                    self._root_module = traci
+                    self._api = traci.getConnection(self.label)
             except Exception as exc:
                 self._api = None
                 self._root_module = None
@@ -352,6 +368,13 @@ class TraciSumoAdapter:
                 ) from exc
         self._running = True
         self._paused = False
+        self._subscribed_vehicle_ids.clear()
+        self._subscribed_person_ids.clear()
+        self._subscribed_lane_ids.clear()
+        self._subscribed_traffic_light_ids.clear()
+        self._vehicle_class_by_type.clear()
+        self._vehicle_length_by_id.clear()
+        self._clear_step_state_cache()
         return used_port
 
     def pause_simulation(self) -> None:
@@ -371,16 +394,28 @@ class TraciSumoAdapter:
 
         api = self._require_running()
         if self._paused:
-            return self.get_network_state()
+            return self.get_network_state(vehicle_states=self.get_step_vehicle_states())
+        self._clear_step_state_cache()
         try:
             api.simulationStep(0 if target_time_s is None else target_time_s)
         except Exception as exc:
             self._raise_if_process_exited(exc)
             raise
-        snapshot = self.get_network_state()
+        vehicle_states = self.get_step_vehicle_states()
+        snapshot = self.get_network_state(vehicle_states=vehicle_states)
         for callback in self._metric_callbacks:
             callback(snapshot)
         return snapshot
+
+    def save_state(self, destination: Path) -> Path:
+        """Persist the complete deterministic SUMO state for paired evaluation."""
+
+        destination = destination.resolve()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        self._require_running().simulation.saveState(str(destination))
+        if not destination.is_file():
+            raise RuntimeError(f"SUMO did not create state file: {destination}")
+        return destination
 
     def stop_simulation(self) -> None:
         """Close the connection and terminate the owned SUMO process."""
@@ -400,7 +435,20 @@ class TraciSumoAdapter:
             self._root_module = None
             self._running = False
             self._paused = False
+            self._subscribed_vehicle_ids.clear()
+            self._subscribed_person_ids.clear()
+            self._subscribed_lane_ids.clear()
+            self._subscribed_traffic_light_ids.clear()
+            self._vehicle_class_by_type.clear()
+            self._vehicle_length_by_id.clear()
+            self._clear_step_state_cache()
             self._finalize_runtime_stage(copy_outputs=True)
+
+    def _clear_step_state_cache(self) -> None:
+        """Invalidate state shared by consumers of one simulation step."""
+
+        self._step_vehicle_states = None
+        self._step_pedestrian_states = None
 
     def _prepare_runtime_paths(
         self,
@@ -416,8 +464,12 @@ class TraciSumoAdapter:
             for index, value in enumerate(extra_args[:-1])
             if value in _OUTPUT_FILE_OPTIONS
         ]
+        input_indexes = [
+            index + 1 for index, value in enumerate(extra_args[:-1]) if value in _INPUT_FILE_OPTIONS
+        ]
         path_values: list[Path | str] = [config, self.sumo_home]
         path_values.extend(extra_args[index] for index in output_indexes)
+        path_values.extend(extra_args[index] for index in input_indexes)
         if all(_is_ascii_path(value) for value in path_values):
             return config, extra_args
 
@@ -438,6 +490,15 @@ class TraciSumoAdapter:
             )
         staged_config = _stage_sumo_config(config, stage_root / "scenario")
         rewritten_args = list(extra_args)
+        input_root = stage_root / "inputs"
+        for sequence, index in enumerate(input_indexes, start=1):
+            source = Path(extra_args[index]).resolve()
+            if not source.is_file():
+                raise FileNotFoundError(source)
+            input_root.mkdir(parents=True, exist_ok=True)
+            staged_input = input_root / f"{sequence:02d}-{source.name}"
+            shutil.copy2(source, staged_input)
+            rewritten_args[index] = str(staged_input)
         output_root = stage_root / "outputs"
         for sequence, index in enumerate(output_indexes, start=1):
             destination = Path(extra_args[index])
@@ -473,9 +534,128 @@ class TraciSumoAdapter:
         """Collect all active vehicle states in SI units."""
 
         api = self._require_running()
+        subscribed = self._get_subscribed_vehicle_states(api)
+        if subscribed is not None:
+            return subscribed
+        return self._get_vehicle_states_with_getters(api)
+
+    def get_step_vehicle_states(self) -> list[VehicleSnapshot]:
+        """Return the vehicle collection shared by the current simulation step."""
+
+        if self._step_vehicle_states is None:
+            self._step_vehicle_states = self.get_vehicle_states()
+        return self._step_vehicle_states
+
+    def _get_subscribed_vehicle_states(self, api: Any) -> list[VehicleSnapshot] | None:
+        """Use TraCI subscriptions to avoid per-field socket round trips."""
+
+        constants = getattr(self._root_module, "constants", None)
+        vehicle_domain = api.vehicle
+        if (
+            constants is None
+            or not hasattr(vehicle_domain, "subscribe")
+            or not hasattr(vehicle_domain, "getAllSubscriptionResults")
+        ):
+            return None
+        variable_names = (
+            "VAR_TYPE",
+            "VAR_POSITION",
+            "VAR_NEXT_TLS",
+            "VAR_COLOR",
+            "VAR_ROAD_ID",
+            "VAR_LANE_ID",
+            "VAR_LANEPOSITION",
+            "VAR_SPEED",
+            "VAR_ACCELERATION",
+            "VAR_ANGLE",
+            "VAR_ROUTE_ID",
+            "VAR_WAITING_TIME",
+            "VAR_CO2EMISSION",
+            "VAR_NOXEMISSION",
+            "VAR_FUELCONSUMPTION",
+            "VAR_SIGNALS",
+            "VAR_LENGTH",
+        )
+        if any(not hasattr(constants, name) for name in variable_names):
+            return None
+        variables = tuple(int(getattr(constants, name)) for name in variable_names)
+        try:
+            vehicle_ids = tuple(str(item) for item in vehicle_domain.getIDList())
+            active_ids = set(vehicle_ids)
+            departed_ids = self._subscribed_vehicle_ids - active_ids
+            self._subscribed_vehicle_ids.intersection_update(active_ids)
+            for vehicle_id in departed_ids:
+                self._vehicle_length_by_id.pop(vehicle_id, None)
+            for vehicle_id in vehicle_ids:
+                if vehicle_id in self._subscribed_vehicle_ids:
+                    continue
+                vehicle_domain.subscribe(vehicle_id, variables)
+                self._subscribed_vehicle_ids.add(vehicle_id)
+            results = vehicle_domain.getAllSubscriptionResults()
+            if not isinstance(results, dict):
+                return None
+            snapshots: list[VehicleSnapshot] = []
+            for vehicle_id in vehicle_ids:
+                values = results.get(vehicle_id)
+                if not isinstance(values, dict) or any(
+                    variable not in values for variable in variables
+                ):
+                    return None
+                vehicle_type = str(values[constants.VAR_TYPE])
+                self._vehicle_length_by_id[vehicle_id] = float(values[constants.VAR_LENGTH])
+                vehicle_class = self._vehicle_class_by_type.get(vehicle_type)
+                if vehicle_class is None:
+                    vehicle_class = str(api.vehicletype.getVehicleClass(vehicle_type))
+                    self._vehicle_class_by_type[vehicle_type] = vehicle_class
+                x_m, y_m = values[constants.VAR_POSITION]
+                next_signals = values[constants.VAR_NEXT_TLS]
+                color = values[constants.VAR_COLOR]
+                snapshots.append(
+                    VehicleSnapshot(
+                        vehicle_id=vehicle_id,
+                        vehicle_type=vehicle_type,
+                        vehicle_class=vehicle_class,
+                        road_id=str(values[constants.VAR_ROAD_ID]),
+                        lane_id=str(values[constants.VAR_LANE_ID]),
+                        x_m=float(x_m),
+                        y_m=float(y_m),
+                        lane_position_m=float(values[constants.VAR_LANEPOSITION]),
+                        speed_m_s=float(values[constants.VAR_SPEED]),
+                        acceleration_m_s2=float(values[constants.VAR_ACCELERATION]),
+                        heading_deg=float(values[constants.VAR_ANGLE]),
+                        route_id=str(values[constants.VAR_ROUTE_ID]),
+                        next_intersection_id=(str(next_signals[0][0]) if next_signals else None),
+                        distance_to_stop_line_m=(
+                            max(0.0, float(next_signals[0][2])) if next_signals else 0.0
+                        ),
+                        waiting_time_s=float(values[constants.VAR_WAITING_TIME]),
+                        co2_mg_s=float(values[constants.VAR_CO2EMISSION]),
+                        nox_mg_s=float(values[constants.VAR_NOXEMISSION]),
+                        fuel_mg_s=float(values[constants.VAR_FUELCONSUMPTION]),
+                        signals=int(values[constants.VAR_SIGNALS]),
+                        color_rgba=(
+                            int(color[0]),
+                            int(color[1]),
+                            int(color[2]),
+                            int(color[3]),
+                        ),
+                    )
+                )
+            return snapshots
+        except Exception as exc:
+            self._raise_if_process_exited(exc)
+            return None
+
+    def _get_vehicle_states_with_getters(self, api: Any) -> list[VehicleSnapshot]:
+        """Collect vehicle states through individual getters as a compatibility path."""
+
         snapshots: list[VehicleSnapshot] = []
         for vehicle_id in api.vehicle.getIDList():
             vehicle_type = str(api.vehicle.getTypeID(vehicle_id))
+            vehicle_class = self._vehicle_class_by_type.get(vehicle_type)
+            if vehicle_class is None:
+                vehicle_class = str(api.vehicletype.getVehicleClass(vehicle_type))
+                self._vehicle_class_by_type[vehicle_type] = vehicle_class
             x_m, y_m = api.vehicle.getPosition(vehicle_id)
             next_signals = api.vehicle.getNextTLS(vehicle_id)
             next_intersection_id = str(next_signals[0][0]) if next_signals else None
@@ -485,7 +665,7 @@ class TraciSumoAdapter:
                 VehicleSnapshot(
                     vehicle_id=vehicle_id,
                     vehicle_type=vehicle_type,
-                    vehicle_class=str(api.vehicletype.getVehicleClass(vehicle_type)),
+                    vehicle_class=vehicle_class,
                     road_id=api.vehicle.getRoadID(vehicle_id),
                     lane_id=api.vehicle.getLaneID(vehicle_id),
                     x_m=float(x_m),
@@ -546,6 +726,103 @@ class TraciSumoAdapter:
         """Collect active SUMO persons, including crossing and waiting-area state."""
 
         api = self._require_running()
+        subscribed = self._get_subscribed_pedestrian_states(api)
+        if subscribed is not None:
+            return subscribed
+        return self._get_pedestrian_states_with_getters(api)
+
+    def get_step_pedestrian_states(self) -> list[PedestrianSnapshot]:
+        """Return the pedestrian collection shared by the current simulation step."""
+
+        if self._step_pedestrian_states is None:
+            self._step_pedestrian_states = self.get_pedestrian_states()
+        return self._step_pedestrian_states
+
+    def _get_subscribed_pedestrian_states(
+        self,
+        api: Any,
+    ) -> list[PedestrianSnapshot] | None:
+        constants = getattr(self._root_module, "constants", None)
+        person_domain = api.person
+        variable_names = (
+            "VAR_TYPE",
+            "VAR_POSITION",
+            "VAR_ROAD_ID",
+            "VAR_LANE_ID",
+            "VAR_SPEED",
+            "VAR_WAITING_TIME",
+            "VAR_ANGLE",
+        )
+        if (
+            constants is None
+            or not hasattr(person_domain, "subscribe")
+            or not hasattr(person_domain, "getAllSubscriptionResults")
+            or any(not hasattr(constants, name) for name in variable_names)
+        ):
+            return None
+        variables = tuple(int(getattr(constants, name)) for name in variable_names)
+        try:
+            pedestrian_ids = tuple(str(item) for item in person_domain.getIDList())
+            active_ids = set(pedestrian_ids)
+            self._subscribed_person_ids.intersection_update(active_ids)
+            for pedestrian_id in pedestrian_ids:
+                if pedestrian_id in self._subscribed_person_ids:
+                    continue
+                person_domain.subscribe(pedestrian_id, variables)
+                self._subscribed_person_ids.add(pedestrian_id)
+            results = person_domain.getAllSubscriptionResults()
+            if not isinstance(results, dict):
+                return None
+            stage_index_getter = getattr(person_domain, "getStageIndex", None)
+            pedestrians: list[PedestrianSnapshot] = []
+            for pedestrian_id in pedestrian_ids:
+                values = results.get(pedestrian_id)
+                if not isinstance(values, dict) or any(
+                    variable not in values for variable in variables
+                ):
+                    return None
+                x_m, y_m = values[constants.VAR_POSITION]
+                road_id = str(values[constants.VAR_ROAD_ID])
+                lane_id = str(values[constants.VAR_LANE_ID])
+                internal_id = road_id or lane_id
+                pedestrians.append(
+                    PedestrianSnapshot(
+                        pedestrian_id=pedestrian_id,
+                        pedestrian_type=str(values[constants.VAR_TYPE]),
+                        road_id=road_id,
+                        lane_id=lane_id,
+                        x_m=float(x_m),
+                        y_m=float(y_m),
+                        speed_m_s=max(0.0, float(values[constants.VAR_SPEED])),
+                        waiting_time_s=max(
+                            0.0,
+                            float(values[constants.VAR_WAITING_TIME]),
+                        ),
+                        walking_stage_index=max(
+                            0,
+                            int(stage_index_getter(pedestrian_id))
+                            if stage_index_getter is not None
+                            else 0,
+                        ),
+                        crossing_id=(
+                            internal_id
+                            if internal_id.startswith(":") and "_c" in internal_id
+                            else None
+                        ),
+                        waiting_area_id=(
+                            internal_id
+                            if internal_id.startswith(":") and "_w" in internal_id
+                            else None
+                        ),
+                        heading_deg=float(values[constants.VAR_ANGLE]),
+                    )
+                )
+            return pedestrians
+        except Exception as exc:
+            self._raise_if_process_exited(exc)
+            return None
+
+    def _get_pedestrian_states_with_getters(self, api: Any) -> list[PedestrianSnapshot]:
         pedestrians: list[PedestrianSnapshot] = []
         for pedestrian_id in api.person.getIDList():
             x_m, y_m = api.person.getPosition(pedestrian_id)
@@ -713,41 +990,68 @@ class TraciSumoAdapter:
             departSpeed="max",
         )
 
-    def get_lane_states(self, lane_ids: list[str] | None = None) -> list[LaneSnapshot]:
+    def get_lane_states(
+        self,
+        lane_ids: list[str] | None = None,
+        *,
+        vehicle_states: Sequence[VehicleSnapshot] | None = None,
+        pedestrian_states: Sequence[PedestrianSnapshot] | None = None,
+    ) -> list[LaneSnapshot]:
         """Collect selected or all non-internal lane aggregates."""
 
         api = self._require_running()
         identifiers = lane_ids or [
             lane_id for lane_id in api.lane.getIDList() if not lane_id.startswith(":")
         ]
-        persons_by_lane: dict[str, list[str]] = defaultdict(list)
-        for person_id in api.person.getIDList():
-            persons_by_lane[str(api.person.getLaneID(person_id))].append(str(person_id))
+        vehicles_by_lane: dict[str, list[VehicleSnapshot]] = defaultdict(list)
+        vehicles = self.get_vehicle_states() if vehicle_states is None else vehicle_states
+        for vehicle in vehicles:
+            vehicles_by_lane[vehicle.lane_id].append(vehicle)
+        pedestrians_by_lane: dict[str, list[PedestrianSnapshot]] = defaultdict(list)
+        pedestrians = (
+            self.get_pedestrian_states() if pedestrian_states is None else pedestrian_states
+        )
+        for pedestrian in pedestrians:
+            pedestrians_by_lane[pedestrian.lane_id].append(pedestrian)
+        subscribed_lane_metrics = self._get_subscribed_lane_metrics(api, identifiers)
         snapshots: list[LaneSnapshot] = []
         for lane_id in identifiers:
-            vehicle_ids = tuple(api.lane.getLastStepVehicleIDs(lane_id))
-            bicycle_ids: list[str] = []
-            motor_ids: list[str] = []
-            electric_bicycle_count = 0
-            for vehicle_id in vehicle_ids:
-                type_id = str(api.vehicle.getTypeID(vehicle_id))
-                if str(api.vehicletype.getVehicleClass(type_id)) == "bicycle":
-                    bicycle_ids.append(str(vehicle_id))
-                    electric_bicycle_count += int("electric" in type_id.lower())
-                else:
-                    motor_ids.append(str(vehicle_id))
-            motor_speeds = [float(api.vehicle.getSpeed(item)) for item in motor_ids]
-            bicycle_speeds = [float(api.vehicle.getSpeed(item)) for item in bicycle_ids]
-            person_ids = tuple(persons_by_lane.get(lane_id, ()))
-            person_waiting = sum(
-                float(api.person.getWaitingTime(item)) > 0.0 for item in person_ids
-            )
-            vehicle_count = len(motor_ids)
+            lane_vehicles = vehicles_by_lane.get(lane_id, [])
+            bicycle_vehicles = [
+                vehicle for vehicle in lane_vehicles if vehicle.vehicle_class == "bicycle"
+            ]
+            motor_vehicles = [
+                vehicle for vehicle in lane_vehicles if vehicle.vehicle_class != "bicycle"
+            ]
+            motor_speeds = [vehicle.speed_m_s for vehicle in motor_vehicles]
+            bicycle_speeds = [vehicle.speed_m_s for vehicle in bicycle_vehicles]
+            lane_pedestrians = pedestrians_by_lane.get(lane_id, [])
+            person_waiting = sum(pedestrian.waiting_time_s > 0.0 for pedestrian in lane_pedestrians)
+            vehicle_count = len(motor_vehicles)
             queue_count = sum(speed < 0.1 for speed in motor_speeds)
             mean_length = (
-                sum(float(api.vehicle.getLength(item)) for item in motor_ids) / vehicle_count
+                sum(
+                    self._vehicle_length_by_id[vehicle.vehicle_id]
+                    if vehicle.vehicle_id in self._vehicle_length_by_id
+                    else float(api.vehicle.getLength(vehicle.vehicle_id))
+                    for vehicle in motor_vehicles
+                )
+                / vehicle_count
                 if vehicle_count
                 else 5.0
+            )
+            lane_metrics = (
+                subscribed_lane_metrics.get(lane_id)
+                if subscribed_lane_metrics is not None
+                else None
+            )
+            occupancy_percent, max_speed_m_s = (
+                lane_metrics
+                if lane_metrics is not None
+                else (
+                    float(api.lane.getLastStepOccupancy(lane_id)),
+                    float(api.lane.getMaxSpeed(lane_id)),
+                )
             )
             snapshots.append(
                 LaneSnapshot(
@@ -760,22 +1064,144 @@ class TraciSumoAdapter:
                     ),
                     occupancy_ratio=min(
                         1.0,
-                        max(0.0, float(api.lane.getLastStepOccupancy(lane_id)) / 100),
+                        max(0.0, occupancy_percent / 100),
                     ),
-                    max_speed_m_s=float(api.lane.getMaxSpeed(lane_id)),
-                    bicycle_count=len(bicycle_ids),
-                    electric_bicycle_count=electric_bicycle_count,
+                    max_speed_m_s=max_speed_m_s,
+                    bicycle_count=len(bicycle_vehicles),
+                    electric_bicycle_count=sum(
+                        "electric" in vehicle.vehicle_type.lower() for vehicle in bicycle_vehicles
+                    ),
                     bicycle_queue_count=sum(speed < 0.1 for speed in bicycle_speeds),
-                    pedestrian_count=len(person_ids),
+                    pedestrian_count=len(lane_pedestrians),
                     pedestrian_waiting_count=person_waiting,
                 )
             )
         return snapshots
 
+    def _get_subscribed_lane_metrics(
+        self,
+        api: Any,
+        lane_ids: Sequence[str],
+    ) -> dict[str, tuple[float, float]] | None:
+        """Fetch dynamic lane metrics in one TraCI subscription response."""
+
+        constants = getattr(self._root_module, "constants", None)
+        lane_domain = api.lane
+        variable_names = ("LAST_STEP_OCCUPANCY", "VAR_MAXSPEED")
+        if (
+            constants is None
+            or not hasattr(lane_domain, "subscribe")
+            or not hasattr(lane_domain, "getAllSubscriptionResults")
+            or any(not hasattr(constants, name) for name in variable_names)
+        ):
+            return None
+        variables = tuple(int(getattr(constants, name)) for name in variable_names)
+        try:
+            for lane_id in lane_ids:
+                if lane_id in self._subscribed_lane_ids:
+                    continue
+                lane_domain.subscribe(lane_id, variables)
+                self._subscribed_lane_ids.add(lane_id)
+            results = lane_domain.getAllSubscriptionResults()
+            if not isinstance(results, dict):
+                return None
+            metrics: dict[str, tuple[float, float]] = {}
+            for lane_id in lane_ids:
+                values = results.get(lane_id)
+                if not isinstance(values, dict) or any(
+                    variable not in values for variable in variables
+                ):
+                    return None
+                metrics[lane_id] = (
+                    float(values[constants.LAST_STEP_OCCUPANCY]),
+                    float(values[constants.VAR_MAXSPEED]),
+                )
+            return metrics
+        except Exception:
+            return None
+
     def get_intersection_state(self, intersection_id: str) -> IntersectionSnapshot:
         """Collect the active phase and controlled lane IDs of one signal."""
 
+        return self.get_intersection_states([intersection_id])[0]
+
+    def get_intersection_states(
+        self,
+        intersection_ids: Sequence[str],
+    ) -> list[IntersectionSnapshot]:
+        """Collect multiple signal states through one subscription response."""
+
         api = self._require_running()
+        subscribed = self._get_subscribed_intersection_states(api, intersection_ids)
+        if subscribed is not None:
+            return subscribed
+        return [
+            self._get_intersection_state_with_getters(api, intersection_id)
+            for intersection_id in intersection_ids
+        ]
+
+    def _get_subscribed_intersection_states(
+        self,
+        api: Any,
+        intersection_ids: Sequence[str],
+    ) -> list[IntersectionSnapshot] | None:
+        constants = getattr(self._root_module, "constants", None)
+        signal_domain = api.trafficlight
+        variable_names = (
+            "TL_CURRENT_PHASE",
+            "TL_RED_YELLOW_GREEN_STATE",
+            "TL_PHASE_DURATION",
+            "TL_NEXT_SWITCH",
+            "TL_CONTROLLED_LANES",
+        )
+        if (
+            constants is None
+            or not hasattr(signal_domain, "subscribe")
+            or not hasattr(signal_domain, "getAllSubscriptionResults")
+            or any(not hasattr(constants, name) for name in variable_names)
+        ):
+            return None
+        variables = tuple(int(getattr(constants, name)) for name in variable_names)
+        try:
+            for intersection_id in intersection_ids:
+                if intersection_id in self._subscribed_traffic_light_ids:
+                    continue
+                signal_domain.subscribe(intersection_id, variables)
+                self._subscribed_traffic_light_ids.add(intersection_id)
+            results = signal_domain.getAllSubscriptionResults()
+            if not isinstance(results, dict):
+                return None
+            snapshots: list[IntersectionSnapshot] = []
+            for intersection_id in intersection_ids:
+                values = results.get(intersection_id)
+                if not isinstance(values, dict) or any(
+                    variable not in values for variable in variables
+                ):
+                    return None
+                snapshots.append(
+                    IntersectionSnapshot(
+                        intersection_id=intersection_id,
+                        phase_index=int(values[constants.TL_CURRENT_PHASE]),
+                        phase_state=str(values[constants.TL_RED_YELLOW_GREEN_STATE]),
+                        phase_duration_s=float(values[constants.TL_PHASE_DURATION]),
+                        next_switch_s=float(values[constants.TL_NEXT_SWITCH]),
+                        controlled_lane_ids=tuple(
+                            dict.fromkeys(
+                                str(lane_id)
+                                for lane_id in values[constants.TL_CONTROLLED_LANES]
+                            )
+                        ),
+                    )
+                )
+            return snapshots
+        except Exception:
+            return None
+
+    @staticmethod
+    def _get_intersection_state_with_getters(
+        api: Any,
+        intersection_id: str,
+    ) -> IntersectionSnapshot:
         return IntersectionSnapshot(
             intersection_id=intersection_id,
             phase_index=int(api.trafficlight.getPhase(intersection_id)),
@@ -787,18 +1213,19 @@ class TraciSumoAdapter:
             ),
         )
 
-    def get_network_state(self) -> NetworkSnapshot:
+    def get_network_state(
+        self,
+        *,
+        vehicle_states: Sequence[VehicleSnapshot] | None = None,
+    ) -> NetworkSnapshot:
         """Aggregate live vehicle speed, queue and lifecycle counts."""
 
         api = self._require_running()
-        motor_speeds: list[float] = []
-        bicycle_count = 0
-        for identifier in api.vehicle.getIDList():
-            type_id = str(api.vehicle.getTypeID(identifier))
-            if str(api.vehicletype.getVehicleClass(type_id)) == "bicycle":
-                bicycle_count += 1
-            else:
-                motor_speeds.append(float(api.vehicle.getSpeed(identifier)))
+        vehicles = self.get_vehicle_states() if vehicle_states is None else vehicle_states
+        motor_speeds = [
+            vehicle.speed_m_s for vehicle in vehicles if vehicle.vehicle_class != "bicycle"
+        ]
+        bicycle_count = sum(vehicle.vehicle_class == "bicycle" for vehicle in vehicles)
         return NetworkSnapshot(
             simulation_time_s=float(api.simulation.getTime()),
             vehicle_count=len(motor_speeds),
@@ -856,6 +1283,11 @@ class TraciSumoAdapter:
         applied = min(float(speed_m_s), float(api.lane.getMaxSpeed(lane_id)))
         api.vehicle.setSpeed(vehicle_id, applied)
         return applied
+
+    def release_speed_guidance(self, vehicle_id: str) -> None:
+        """Return a vehicle from an expired advisory to native SUMO following."""
+
+        self._require_running().vehicle.setSpeed(vehicle_id, -1.0)
 
     def close_lane(self, lane_id: str) -> None:
         """Close one lane while retaining its previous permission list."""

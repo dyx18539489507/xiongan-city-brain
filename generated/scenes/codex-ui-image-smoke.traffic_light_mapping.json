@@ -1,0 +1,2232 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "codex-ui-image-smoke",
+  "sourceSceneFile": "codex-ui-image-smoke.scene.json",
+  "sourceSceneSha256": "c5e133d08f1f665bcc25c7c8f6f69de4b7b76fea15887a1a76fe6eaa46e46f11",
+  "controllers": [
+    {
+      "sceneId": "tls:J001:0",
+      "sumoTlsId": "J001",
+      "controlledJunctionId": "J001",
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00006_0",
+          "toLaneId": "E00090_0",
+          "viaLaneId": ":J001_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00006_0",
+          "toLaneId": "E00004_0",
+          "viaLaneId": ":J001_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00006_1",
+          "toLaneId": "E00004_1",
+          "viaLaneId": ":J001_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00006_1",
+          "toLaneId": "E00091_1",
+          "viaLaneId": ":J001_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00092_0",
+          "toLaneId": "E00005_0",
+          "viaLaneId": ":J001_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00092_0",
+          "toLaneId": "E00090_0",
+          "viaLaneId": ":J001_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00092_1",
+          "toLaneId": "E00090_1",
+          "viaLaneId": ":J001_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00092_1",
+          "toLaneId": "E00004_1",
+          "viaLaneId": ":J001_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00003_0",
+          "toLaneId": "E00091_0",
+          "viaLaneId": ":J001_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00003_0",
+          "toLaneId": "E00005_0",
+          "viaLaneId": ":J001_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00003_1",
+          "toLaneId": "E00005_1",
+          "viaLaneId": ":J001_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00003_1",
+          "toLaneId": "E00090_1",
+          "viaLaneId": ":J001_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00089_0",
+          "toLaneId": "E00004_0",
+          "viaLaneId": ":J001_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00089_0",
+          "toLaneId": "E00091_0",
+          "viaLaneId": ":J001_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00089_1",
+          "toLaneId": "E00091_1",
+          "viaLaneId": ":J001_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00089_1",
+          "toLaneId": "E00005_1",
+          "viaLaneId": ":J001_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J002:0",
+      "sumoTlsId": "J002",
+      "controlledJunctionId": "J002",
+      "displayId": "J02",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00008_0",
+          "toLaneId": "E00078_0",
+          "viaLaneId": ":J002_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00008_0",
+          "toLaneId": "E00006_0",
+          "viaLaneId": ":J002_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00008_1",
+          "toLaneId": "E00006_1",
+          "viaLaneId": ":J002_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00008_1",
+          "toLaneId": "E00079_1",
+          "viaLaneId": ":J002_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00080_0",
+          "toLaneId": "E00007_0",
+          "viaLaneId": ":J002_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00080_0",
+          "toLaneId": "E00078_0",
+          "viaLaneId": ":J002_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00080_1",
+          "toLaneId": "E00078_1",
+          "viaLaneId": ":J002_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00080_1",
+          "toLaneId": "E00006_1",
+          "viaLaneId": ":J002_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00005_0",
+          "toLaneId": "E00079_0",
+          "viaLaneId": ":J002_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00005_0",
+          "toLaneId": "E00007_0",
+          "viaLaneId": ":J002_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00005_1",
+          "toLaneId": "E00007_1",
+          "viaLaneId": ":J002_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00005_1",
+          "toLaneId": "E00078_1",
+          "viaLaneId": ":J002_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00077_0",
+          "toLaneId": "E00006_0",
+          "viaLaneId": ":J002_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00077_0",
+          "toLaneId": "E00079_0",
+          "viaLaneId": ":J002_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00077_1",
+          "toLaneId": "E00079_1",
+          "viaLaneId": ":J002_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00077_1",
+          "toLaneId": "E00007_1",
+          "viaLaneId": ":J002_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J003:0",
+      "sumoTlsId": "J003",
+      "controlledJunctionId": "J003",
+      "displayId": "J03",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00010_0",
+          "toLaneId": "E00066_0",
+          "viaLaneId": ":J003_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00010_0",
+          "toLaneId": "E00008_0",
+          "viaLaneId": ":J003_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00010_1",
+          "toLaneId": "E00008_1",
+          "viaLaneId": ":J003_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00010_1",
+          "toLaneId": "E00067_1",
+          "viaLaneId": ":J003_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00068_0",
+          "toLaneId": "E00009_0",
+          "viaLaneId": ":J003_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00068_0",
+          "toLaneId": "E00066_0",
+          "viaLaneId": ":J003_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00068_1",
+          "toLaneId": "E00066_1",
+          "viaLaneId": ":J003_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00068_1",
+          "toLaneId": "E00008_1",
+          "viaLaneId": ":J003_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00007_0",
+          "toLaneId": "E00067_0",
+          "viaLaneId": ":J003_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00007_0",
+          "toLaneId": "E00009_0",
+          "viaLaneId": ":J003_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00007_1",
+          "toLaneId": "E00009_1",
+          "viaLaneId": ":J003_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00007_1",
+          "toLaneId": "E00066_1",
+          "viaLaneId": ":J003_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00065_0",
+          "toLaneId": "E00008_0",
+          "viaLaneId": ":J003_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00065_0",
+          "toLaneId": "E00067_0",
+          "viaLaneId": ":J003_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00065_1",
+          "toLaneId": "E00067_1",
+          "viaLaneId": ":J003_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00065_1",
+          "toLaneId": "E00009_1",
+          "viaLaneId": ":J003_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J004:0",
+      "sumoTlsId": "J004",
+      "controlledJunctionId": "J004",
+      "displayId": "J04",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00012_0",
+          "toLaneId": "E00054_0",
+          "viaLaneId": ":J004_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00012_0",
+          "toLaneId": "E00010_0",
+          "viaLaneId": ":J004_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00012_1",
+          "toLaneId": "E00010_1",
+          "viaLaneId": ":J004_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00012_1",
+          "toLaneId": "E00055_1",
+          "viaLaneId": ":J004_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00056_0",
+          "toLaneId": "E00011_0",
+          "viaLaneId": ":J004_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00056_0",
+          "toLaneId": "E00054_0",
+          "viaLaneId": ":J004_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00056_1",
+          "toLaneId": "E00054_1",
+          "viaLaneId": ":J004_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00056_1",
+          "toLaneId": "E00010_1",
+          "viaLaneId": ":J004_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00009_0",
+          "toLaneId": "E00055_0",
+          "viaLaneId": ":J004_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00009_0",
+          "toLaneId": "E00011_0",
+          "viaLaneId": ":J004_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00009_1",
+          "toLaneId": "E00011_1",
+          "viaLaneId": ":J004_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00009_1",
+          "toLaneId": "E00054_1",
+          "viaLaneId": ":J004_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00053_0",
+          "toLaneId": "E00010_0",
+          "viaLaneId": ":J004_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00053_0",
+          "toLaneId": "E00055_0",
+          "viaLaneId": ":J004_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00053_1",
+          "toLaneId": "E00055_1",
+          "viaLaneId": ":J004_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00053_1",
+          "toLaneId": "E00011_1",
+          "viaLaneId": ":J004_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J005:0",
+      "sumoTlsId": "J005",
+      "controlledJunctionId": "J005",
+      "displayId": "J05",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00016_0",
+          "toLaneId": "E00092_0",
+          "viaLaneId": ":J005_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00016_0",
+          "toLaneId": "E00014_0",
+          "viaLaneId": ":J005_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00016_1",
+          "toLaneId": "E00014_1",
+          "viaLaneId": ":J005_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00016_1",
+          "toLaneId": "E00093_1",
+          "viaLaneId": ":J005_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00094_0",
+          "toLaneId": "E00015_0",
+          "viaLaneId": ":J005_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00094_0",
+          "toLaneId": "E00092_0",
+          "viaLaneId": ":J005_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00094_1",
+          "toLaneId": "E00092_1",
+          "viaLaneId": ":J005_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00094_1",
+          "toLaneId": "E00014_1",
+          "viaLaneId": ":J005_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00013_0",
+          "toLaneId": "E00093_0",
+          "viaLaneId": ":J005_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00013_0",
+          "toLaneId": "E00015_0",
+          "viaLaneId": ":J005_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00013_1",
+          "toLaneId": "E00015_1",
+          "viaLaneId": ":J005_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00013_1",
+          "toLaneId": "E00092_1",
+          "viaLaneId": ":J005_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00091_0",
+          "toLaneId": "E00014_0",
+          "viaLaneId": ":J005_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00091_0",
+          "toLaneId": "E00093_0",
+          "viaLaneId": ":J005_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00091_1",
+          "toLaneId": "E00093_1",
+          "viaLaneId": ":J005_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00091_1",
+          "toLaneId": "E00015_1",
+          "viaLaneId": ":J005_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J006:0",
+      "sumoTlsId": "J006",
+      "controlledJunctionId": "J006",
+      "displayId": "J06",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00018_0",
+          "toLaneId": "E00080_0",
+          "viaLaneId": ":J006_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00018_0",
+          "toLaneId": "E00016_0",
+          "viaLaneId": ":J006_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00018_1",
+          "toLaneId": "E00016_1",
+          "viaLaneId": ":J006_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00018_1",
+          "toLaneId": "E00081_1",
+          "viaLaneId": ":J006_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00082_0",
+          "toLaneId": "E00017_0",
+          "viaLaneId": ":J006_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00082_0",
+          "toLaneId": "E00080_0",
+          "viaLaneId": ":J006_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00082_1",
+          "toLaneId": "E00080_1",
+          "viaLaneId": ":J006_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00082_1",
+          "toLaneId": "E00016_1",
+          "viaLaneId": ":J006_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00015_0",
+          "toLaneId": "E00081_0",
+          "viaLaneId": ":J006_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00015_0",
+          "toLaneId": "E00017_0",
+          "viaLaneId": ":J006_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00015_1",
+          "toLaneId": "E00017_1",
+          "viaLaneId": ":J006_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00015_1",
+          "toLaneId": "E00080_1",
+          "viaLaneId": ":J006_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00079_0",
+          "toLaneId": "E00016_0",
+          "viaLaneId": ":J006_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00079_0",
+          "toLaneId": "E00081_0",
+          "viaLaneId": ":J006_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00079_1",
+          "toLaneId": "E00081_1",
+          "viaLaneId": ":J006_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00079_1",
+          "toLaneId": "E00017_1",
+          "viaLaneId": ":J006_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J007:0",
+      "sumoTlsId": "J007",
+      "controlledJunctionId": "J007",
+      "displayId": "J07",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00020_0",
+          "toLaneId": "E00068_0",
+          "viaLaneId": ":J007_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00020_0",
+          "toLaneId": "E00018_0",
+          "viaLaneId": ":J007_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00020_1",
+          "toLaneId": "E00018_1",
+          "viaLaneId": ":J007_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00020_1",
+          "toLaneId": "E00069_1",
+          "viaLaneId": ":J007_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00070_0",
+          "toLaneId": "E00019_0",
+          "viaLaneId": ":J007_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00070_0",
+          "toLaneId": "E00068_0",
+          "viaLaneId": ":J007_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00070_1",
+          "toLaneId": "E00068_1",
+          "viaLaneId": ":J007_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00070_1",
+          "toLaneId": "E00018_1",
+          "viaLaneId": ":J007_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00017_0",
+          "toLaneId": "E00069_0",
+          "viaLaneId": ":J007_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00017_0",
+          "toLaneId": "E00019_0",
+          "viaLaneId": ":J007_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00017_1",
+          "toLaneId": "E00019_1",
+          "viaLaneId": ":J007_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00017_1",
+          "toLaneId": "E00068_1",
+          "viaLaneId": ":J007_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00067_0",
+          "toLaneId": "E00018_0",
+          "viaLaneId": ":J007_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00067_0",
+          "toLaneId": "E00069_0",
+          "viaLaneId": ":J007_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00067_1",
+          "toLaneId": "E00069_1",
+          "viaLaneId": ":J007_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00067_1",
+          "toLaneId": "E00019_1",
+          "viaLaneId": ":J007_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J008:0",
+      "sumoTlsId": "J008",
+      "controlledJunctionId": "J008",
+      "displayId": "J08",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00022_0",
+          "toLaneId": "E00056_0",
+          "viaLaneId": ":J008_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00022_0",
+          "toLaneId": "E00020_0",
+          "viaLaneId": ":J008_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00022_1",
+          "toLaneId": "E00020_1",
+          "viaLaneId": ":J008_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00022_1",
+          "toLaneId": "E00057_1",
+          "viaLaneId": ":J008_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00058_0",
+          "toLaneId": "E00021_0",
+          "viaLaneId": ":J008_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00058_0",
+          "toLaneId": "E00056_0",
+          "viaLaneId": ":J008_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00058_1",
+          "toLaneId": "E00056_1",
+          "viaLaneId": ":J008_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00058_1",
+          "toLaneId": "E00020_1",
+          "viaLaneId": ":J008_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00019_0",
+          "toLaneId": "E00057_0",
+          "viaLaneId": ":J008_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00019_0",
+          "toLaneId": "E00021_0",
+          "viaLaneId": ":J008_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00019_1",
+          "toLaneId": "E00021_1",
+          "viaLaneId": ":J008_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00019_1",
+          "toLaneId": "E00056_1",
+          "viaLaneId": ":J008_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00055_0",
+          "toLaneId": "E00020_0",
+          "viaLaneId": ":J008_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00055_0",
+          "toLaneId": "E00057_0",
+          "viaLaneId": ":J008_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00055_1",
+          "toLaneId": "E00057_1",
+          "viaLaneId": ":J008_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00055_1",
+          "toLaneId": "E00021_1",
+          "viaLaneId": ":J008_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J009:0",
+      "sumoTlsId": "J009",
+      "controlledJunctionId": "J009",
+      "displayId": "J09",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00026_0",
+          "toLaneId": "E00094_0",
+          "viaLaneId": ":J009_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00026_0",
+          "toLaneId": "E00024_0",
+          "viaLaneId": ":J009_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00026_1",
+          "toLaneId": "E00024_1",
+          "viaLaneId": ":J009_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00026_1",
+          "toLaneId": "E00095_1",
+          "viaLaneId": ":J009_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00096_0",
+          "toLaneId": "E00025_0",
+          "viaLaneId": ":J009_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00096_0",
+          "toLaneId": "E00094_0",
+          "viaLaneId": ":J009_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00096_1",
+          "toLaneId": "E00094_1",
+          "viaLaneId": ":J009_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00096_1",
+          "toLaneId": "E00024_1",
+          "viaLaneId": ":J009_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00023_0",
+          "toLaneId": "E00095_0",
+          "viaLaneId": ":J009_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00023_0",
+          "toLaneId": "E00025_0",
+          "viaLaneId": ":J009_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00023_1",
+          "toLaneId": "E00025_1",
+          "viaLaneId": ":J009_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00023_1",
+          "toLaneId": "E00094_1",
+          "viaLaneId": ":J009_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00093_0",
+          "toLaneId": "E00024_0",
+          "viaLaneId": ":J009_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00093_0",
+          "toLaneId": "E00095_0",
+          "viaLaneId": ":J009_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00093_1",
+          "toLaneId": "E00095_1",
+          "viaLaneId": ":J009_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00093_1",
+          "toLaneId": "E00025_1",
+          "viaLaneId": ":J009_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J010:0",
+      "sumoTlsId": "J010",
+      "controlledJunctionId": "J010",
+      "displayId": "J10",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00028_0",
+          "toLaneId": "E00082_0",
+          "viaLaneId": ":J010_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00028_0",
+          "toLaneId": "E00026_0",
+          "viaLaneId": ":J010_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00028_1",
+          "toLaneId": "E00026_1",
+          "viaLaneId": ":J010_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00028_1",
+          "toLaneId": "E00083_1",
+          "viaLaneId": ":J010_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00084_0",
+          "toLaneId": "E00027_0",
+          "viaLaneId": ":J010_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00084_0",
+          "toLaneId": "E00082_0",
+          "viaLaneId": ":J010_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00084_1",
+          "toLaneId": "E00082_1",
+          "viaLaneId": ":J010_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00084_1",
+          "toLaneId": "E00026_1",
+          "viaLaneId": ":J010_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00025_0",
+          "toLaneId": "E00083_0",
+          "viaLaneId": ":J010_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00025_0",
+          "toLaneId": "E00027_0",
+          "viaLaneId": ":J010_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00025_1",
+          "toLaneId": "E00027_1",
+          "viaLaneId": ":J010_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00025_1",
+          "toLaneId": "E00082_1",
+          "viaLaneId": ":J010_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00081_0",
+          "toLaneId": "E00026_0",
+          "viaLaneId": ":J010_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00081_0",
+          "toLaneId": "E00083_0",
+          "viaLaneId": ":J010_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00081_1",
+          "toLaneId": "E00083_1",
+          "viaLaneId": ":J010_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00081_1",
+          "toLaneId": "E00027_1",
+          "viaLaneId": ":J010_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J011:0",
+      "sumoTlsId": "J011",
+      "controlledJunctionId": "J011",
+      "displayId": "J11",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00030_0",
+          "toLaneId": "E00070_0",
+          "viaLaneId": ":J011_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00030_0",
+          "toLaneId": "E00028_0",
+          "viaLaneId": ":J011_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00030_1",
+          "toLaneId": "E00028_1",
+          "viaLaneId": ":J011_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00030_1",
+          "toLaneId": "E00071_1",
+          "viaLaneId": ":J011_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00072_0",
+          "toLaneId": "E00029_0",
+          "viaLaneId": ":J011_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00072_0",
+          "toLaneId": "E00070_0",
+          "viaLaneId": ":J011_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00072_1",
+          "toLaneId": "E00070_1",
+          "viaLaneId": ":J011_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00072_1",
+          "toLaneId": "E00028_1",
+          "viaLaneId": ":J011_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00027_0",
+          "toLaneId": "E00071_0",
+          "viaLaneId": ":J011_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00027_0",
+          "toLaneId": "E00029_0",
+          "viaLaneId": ":J011_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00027_1",
+          "toLaneId": "E00029_1",
+          "viaLaneId": ":J011_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00027_1",
+          "toLaneId": "E00070_1",
+          "viaLaneId": ":J011_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00069_0",
+          "toLaneId": "E00028_0",
+          "viaLaneId": ":J011_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00069_0",
+          "toLaneId": "E00071_0",
+          "viaLaneId": ":J011_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00069_1",
+          "toLaneId": "E00071_1",
+          "viaLaneId": ":J011_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00069_1",
+          "toLaneId": "E00029_1",
+          "viaLaneId": ":J011_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J012:0",
+      "sumoTlsId": "J012",
+      "controlledJunctionId": "J012",
+      "displayId": "J12",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00032_0",
+          "toLaneId": "E00058_0",
+          "viaLaneId": ":J012_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00032_0",
+          "toLaneId": "E00030_0",
+          "viaLaneId": ":J012_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00032_1",
+          "toLaneId": "E00030_1",
+          "viaLaneId": ":J012_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00032_1",
+          "toLaneId": "E00059_1",
+          "viaLaneId": ":J012_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00060_0",
+          "toLaneId": "E00031_0",
+          "viaLaneId": ":J012_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00060_0",
+          "toLaneId": "E00058_0",
+          "viaLaneId": ":J012_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00060_1",
+          "toLaneId": "E00058_1",
+          "viaLaneId": ":J012_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00060_1",
+          "toLaneId": "E00030_1",
+          "viaLaneId": ":J012_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00029_0",
+          "toLaneId": "E00059_0",
+          "viaLaneId": ":J012_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00029_0",
+          "toLaneId": "E00031_0",
+          "viaLaneId": ":J012_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00029_1",
+          "toLaneId": "E00031_1",
+          "viaLaneId": ":J012_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00029_1",
+          "toLaneId": "E00058_1",
+          "viaLaneId": ":J012_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00057_0",
+          "toLaneId": "E00030_0",
+          "viaLaneId": ":J012_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00057_0",
+          "toLaneId": "E00059_0",
+          "viaLaneId": ":J012_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00057_1",
+          "toLaneId": "E00059_1",
+          "viaLaneId": ":J012_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00057_1",
+          "toLaneId": "E00031_1",
+          "viaLaneId": ":J012_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J013:0",
+      "sumoTlsId": "J013",
+      "controlledJunctionId": "J013",
+      "displayId": "J13",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00036_0",
+          "toLaneId": "E00096_0",
+          "viaLaneId": ":J013_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00036_0",
+          "toLaneId": "E00034_0",
+          "viaLaneId": ":J013_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00036_1",
+          "toLaneId": "E00034_1",
+          "viaLaneId": ":J013_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00036_1",
+          "toLaneId": "E00097_1",
+          "viaLaneId": ":J013_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00098_0",
+          "toLaneId": "E00035_0",
+          "viaLaneId": ":J013_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00098_0",
+          "toLaneId": "E00096_0",
+          "viaLaneId": ":J013_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00098_1",
+          "toLaneId": "E00096_1",
+          "viaLaneId": ":J013_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00098_1",
+          "toLaneId": "E00034_1",
+          "viaLaneId": ":J013_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00033_0",
+          "toLaneId": "E00097_0",
+          "viaLaneId": ":J013_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00033_0",
+          "toLaneId": "E00035_0",
+          "viaLaneId": ":J013_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00033_1",
+          "toLaneId": "E00035_1",
+          "viaLaneId": ":J013_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00033_1",
+          "toLaneId": "E00096_1",
+          "viaLaneId": ":J013_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00095_0",
+          "toLaneId": "E00034_0",
+          "viaLaneId": ":J013_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00095_0",
+          "toLaneId": "E00097_0",
+          "viaLaneId": ":J013_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00095_1",
+          "toLaneId": "E00097_1",
+          "viaLaneId": ":J013_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00095_1",
+          "toLaneId": "E00035_1",
+          "viaLaneId": ":J013_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J014:0",
+      "sumoTlsId": "J014",
+      "controlledJunctionId": "J014",
+      "displayId": "J14",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00038_0",
+          "toLaneId": "E00084_0",
+          "viaLaneId": ":J014_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00038_0",
+          "toLaneId": "E00036_0",
+          "viaLaneId": ":J014_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00038_1",
+          "toLaneId": "E00036_1",
+          "viaLaneId": ":J014_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00038_1",
+          "toLaneId": "E00085_1",
+          "viaLaneId": ":J014_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00086_0",
+          "toLaneId": "E00037_0",
+          "viaLaneId": ":J014_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00086_0",
+          "toLaneId": "E00084_0",
+          "viaLaneId": ":J014_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00086_1",
+          "toLaneId": "E00084_1",
+          "viaLaneId": ":J014_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00086_1",
+          "toLaneId": "E00036_1",
+          "viaLaneId": ":J014_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00035_0",
+          "toLaneId": "E00085_0",
+          "viaLaneId": ":J014_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00035_0",
+          "toLaneId": "E00037_0",
+          "viaLaneId": ":J014_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00035_1",
+          "toLaneId": "E00037_1",
+          "viaLaneId": ":J014_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00035_1",
+          "toLaneId": "E00084_1",
+          "viaLaneId": ":J014_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00083_0",
+          "toLaneId": "E00036_0",
+          "viaLaneId": ":J014_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00083_0",
+          "toLaneId": "E00085_0",
+          "viaLaneId": ":J014_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00083_1",
+          "toLaneId": "E00085_1",
+          "viaLaneId": ":J014_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00083_1",
+          "toLaneId": "E00037_1",
+          "viaLaneId": ":J014_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J015:0",
+      "sumoTlsId": "J015",
+      "controlledJunctionId": "J015",
+      "displayId": "J15",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00040_0",
+          "toLaneId": "E00072_0",
+          "viaLaneId": ":J015_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00040_0",
+          "toLaneId": "E00038_0",
+          "viaLaneId": ":J015_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00040_1",
+          "toLaneId": "E00038_1",
+          "viaLaneId": ":J015_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00040_1",
+          "toLaneId": "E00073_1",
+          "viaLaneId": ":J015_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00074_0",
+          "toLaneId": "E00039_0",
+          "viaLaneId": ":J015_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00074_0",
+          "toLaneId": "E00072_0",
+          "viaLaneId": ":J015_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00074_1",
+          "toLaneId": "E00072_1",
+          "viaLaneId": ":J015_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00074_1",
+          "toLaneId": "E00038_1",
+          "viaLaneId": ":J015_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00037_0",
+          "toLaneId": "E00073_0",
+          "viaLaneId": ":J015_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00037_0",
+          "toLaneId": "E00039_0",
+          "viaLaneId": ":J015_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00037_1",
+          "toLaneId": "E00039_1",
+          "viaLaneId": ":J015_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00037_1",
+          "toLaneId": "E00072_1",
+          "viaLaneId": ":J015_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00071_0",
+          "toLaneId": "E00038_0",
+          "viaLaneId": ":J015_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00071_0",
+          "toLaneId": "E00073_0",
+          "viaLaneId": ":J015_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00071_1",
+          "toLaneId": "E00073_1",
+          "viaLaneId": ":J015_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00071_1",
+          "toLaneId": "E00039_1",
+          "viaLaneId": ":J015_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J016:0",
+      "sumoTlsId": "J016",
+      "controlledJunctionId": "J016",
+      "displayId": "J16",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00042_0",
+          "toLaneId": "E00060_0",
+          "viaLaneId": ":J016_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00042_0",
+          "toLaneId": "E00040_0",
+          "viaLaneId": ":J016_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00042_1",
+          "toLaneId": "E00040_1",
+          "viaLaneId": ":J016_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00042_1",
+          "toLaneId": "E00061_1",
+          "viaLaneId": ":J016_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00062_0",
+          "toLaneId": "E00041_0",
+          "viaLaneId": ":J016_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00062_0",
+          "toLaneId": "E00060_0",
+          "viaLaneId": ":J016_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00062_1",
+          "toLaneId": "E00060_1",
+          "viaLaneId": ":J016_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00062_1",
+          "toLaneId": "E00040_1",
+          "viaLaneId": ":J016_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00039_0",
+          "toLaneId": "E00061_0",
+          "viaLaneId": ":J016_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00039_0",
+          "toLaneId": "E00041_0",
+          "viaLaneId": ":J016_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00039_1",
+          "toLaneId": "E00041_1",
+          "viaLaneId": ":J016_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00039_1",
+          "toLaneId": "E00060_1",
+          "viaLaneId": ":J016_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00059_0",
+          "toLaneId": "E00040_0",
+          "viaLaneId": ":J016_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00059_0",
+          "toLaneId": "E00061_0",
+          "viaLaneId": ":J016_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00059_1",
+          "toLaneId": "E00061_1",
+          "viaLaneId": ":J016_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00059_1",
+          "toLaneId": "E00041_1",
+          "viaLaneId": ":J016_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J017:0",
+      "sumoTlsId": "J017",
+      "controlledJunctionId": "J017",
+      "displayId": "J17",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00046_0",
+          "toLaneId": "E00098_0",
+          "viaLaneId": ":J017_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00046_0",
+          "toLaneId": "E00044_0",
+          "viaLaneId": ":J017_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00046_1",
+          "toLaneId": "E00044_1",
+          "viaLaneId": ":J017_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00046_1",
+          "toLaneId": "E00099_1",
+          "viaLaneId": ":J017_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00100_0",
+          "toLaneId": "E00045_0",
+          "viaLaneId": ":J017_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00100_0",
+          "toLaneId": "E00098_0",
+          "viaLaneId": ":J017_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00100_1",
+          "toLaneId": "E00098_1",
+          "viaLaneId": ":J017_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00100_1",
+          "toLaneId": "E00044_1",
+          "viaLaneId": ":J017_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00043_0",
+          "toLaneId": "E00099_0",
+          "viaLaneId": ":J017_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00043_0",
+          "toLaneId": "E00045_0",
+          "viaLaneId": ":J017_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00043_1",
+          "toLaneId": "E00045_1",
+          "viaLaneId": ":J017_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00043_1",
+          "toLaneId": "E00098_1",
+          "viaLaneId": ":J017_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00097_0",
+          "toLaneId": "E00044_0",
+          "viaLaneId": ":J017_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00097_0",
+          "toLaneId": "E00099_0",
+          "viaLaneId": ":J017_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00097_1",
+          "toLaneId": "E00099_1",
+          "viaLaneId": ":J017_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00097_1",
+          "toLaneId": "E00045_1",
+          "viaLaneId": ":J017_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J018:0",
+      "sumoTlsId": "J018",
+      "controlledJunctionId": "J018",
+      "displayId": "J18",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00048_0",
+          "toLaneId": "E00086_0",
+          "viaLaneId": ":J018_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00048_0",
+          "toLaneId": "E00046_0",
+          "viaLaneId": ":J018_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00048_1",
+          "toLaneId": "E00046_1",
+          "viaLaneId": ":J018_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00048_1",
+          "toLaneId": "E00087_1",
+          "viaLaneId": ":J018_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00088_0",
+          "toLaneId": "E00047_0",
+          "viaLaneId": ":J018_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00088_0",
+          "toLaneId": "E00086_0",
+          "viaLaneId": ":J018_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00088_1",
+          "toLaneId": "E00086_1",
+          "viaLaneId": ":J018_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00088_1",
+          "toLaneId": "E00046_1",
+          "viaLaneId": ":J018_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00045_0",
+          "toLaneId": "E00087_0",
+          "viaLaneId": ":J018_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00045_0",
+          "toLaneId": "E00047_0",
+          "viaLaneId": ":J018_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00045_1",
+          "toLaneId": "E00047_1",
+          "viaLaneId": ":J018_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00045_1",
+          "toLaneId": "E00086_1",
+          "viaLaneId": ":J018_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00085_0",
+          "toLaneId": "E00046_0",
+          "viaLaneId": ":J018_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00085_0",
+          "toLaneId": "E00087_0",
+          "viaLaneId": ":J018_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00085_1",
+          "toLaneId": "E00087_1",
+          "viaLaneId": ":J018_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00085_1",
+          "toLaneId": "E00047_1",
+          "viaLaneId": ":J018_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J019:0",
+      "sumoTlsId": "J019",
+      "controlledJunctionId": "J019",
+      "displayId": "J19",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00050_0",
+          "toLaneId": "E00074_0",
+          "viaLaneId": ":J019_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00050_0",
+          "toLaneId": "E00048_0",
+          "viaLaneId": ":J019_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00050_1",
+          "toLaneId": "E00048_1",
+          "viaLaneId": ":J019_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00050_1",
+          "toLaneId": "E00075_1",
+          "viaLaneId": ":J019_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00076_0",
+          "toLaneId": "E00049_0",
+          "viaLaneId": ":J019_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00076_0",
+          "toLaneId": "E00074_0",
+          "viaLaneId": ":J019_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00076_1",
+          "toLaneId": "E00074_1",
+          "viaLaneId": ":J019_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00076_1",
+          "toLaneId": "E00048_1",
+          "viaLaneId": ":J019_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00047_0",
+          "toLaneId": "E00075_0",
+          "viaLaneId": ":J019_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00047_0",
+          "toLaneId": "E00049_0",
+          "viaLaneId": ":J019_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00047_1",
+          "toLaneId": "E00049_1",
+          "viaLaneId": ":J019_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00047_1",
+          "toLaneId": "E00074_1",
+          "viaLaneId": ":J019_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00073_0",
+          "toLaneId": "E00048_0",
+          "viaLaneId": ":J019_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00073_0",
+          "toLaneId": "E00075_0",
+          "viaLaneId": ":J019_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00073_1",
+          "toLaneId": "E00075_1",
+          "viaLaneId": ":J019_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00073_1",
+          "toLaneId": "E00049_1",
+          "viaLaneId": ":J019_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "sceneId": "tls:J020:0",
+      "sumoTlsId": "J020",
+      "controlledJunctionId": "J020",
+      "displayId": "J20",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "E00052_0",
+          "toLaneId": "E00062_0",
+          "viaLaneId": ":J020_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "E00052_0",
+          "toLaneId": "E00050_0",
+          "viaLaneId": ":J020_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "E00052_1",
+          "toLaneId": "E00050_1",
+          "viaLaneId": ":J020_1_1"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "E00052_1",
+          "toLaneId": "E00063_1",
+          "viaLaneId": ":J020_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "E00064_0",
+          "toLaneId": "E00051_0",
+          "viaLaneId": ":J020_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "E00064_0",
+          "toLaneId": "E00062_0",
+          "viaLaneId": ":J020_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "E00064_1",
+          "toLaneId": "E00062_1",
+          "viaLaneId": ":J020_5_1"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "E00064_1",
+          "toLaneId": "E00050_1",
+          "viaLaneId": ":J020_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "E00049_0",
+          "toLaneId": "E00063_0",
+          "viaLaneId": ":J020_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "E00049_0",
+          "toLaneId": "E00051_0",
+          "viaLaneId": ":J020_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "E00049_1",
+          "toLaneId": "E00051_1",
+          "viaLaneId": ":J020_9_1"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "E00049_1",
+          "toLaneId": "E00062_1",
+          "viaLaneId": ":J020_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "E00061_0",
+          "toLaneId": "E00050_0",
+          "viaLaneId": ":J020_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "E00061_0",
+          "toLaneId": "E00063_0",
+          "viaLaneId": ":J020_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "E00061_1",
+          "toLaneId": "E00063_1",
+          "viaLaneId": ":J020_13_1"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "E00061_1",
+          "toLaneId": "E00051_1",
+          "viaLaneId": ":J020_15_0"
+        }
+      ],
+      "phaseStateLengths": [
+        16,
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 20,
+    "links": 320
+  }
+}

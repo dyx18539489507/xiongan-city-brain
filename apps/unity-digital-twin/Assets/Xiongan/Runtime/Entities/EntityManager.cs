@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Xiongan.DigitalTwin.Core;
 using Xiongan.DigitalTwin.Data;
+using Xiongan.DigitalTwin.Interaction;
+using Xiongan.DigitalTwin.Scene;
 
 namespace Xiongan.DigitalTwin.Entities
 {
@@ -14,9 +16,14 @@ namespace Xiongan.DigitalTwin.Entities
         private readonly Stack<EntityActor> vehiclePool = new();
         private readonly Stack<EntityActor> bicyclePool = new();
         private readonly Stack<EntityActor> pedestrianPool = new();
+        private readonly List<VehicleClusterMarker> vehicleLocatorMarkers = new();
         private CoordinateService coordinates = null!;
         private MaterialLibrary materials = null!;
+        private EntityRoadProjector? roadProjector;
+        private UnityEngine.Camera? viewCamera;
         private float tickHz = 1f;
+        private bool vehicleLocatorsVisible;
+        private int nextVehicleLocatorFrame;
 
         public int VehicleCount => vehicles.Count;
         public int BicycleCount => bicycles.Count;
@@ -26,6 +33,42 @@ namespace Xiongan.DigitalTwin.Entities
         {
             coordinates = coordinateService;
             materials = materialLibrary;
+            roadProjector = null;
+        }
+
+        public void Initialise(SceneBuilder scene)
+        {
+            coordinates = scene.Coordinates;
+            materials = scene.Materials;
+            roadProjector = new EntityRoadProjector(scene);
+        }
+
+        private void Update()
+        {
+            if (viewCamera == null) viewCamera = UnityEngine.Camera.main;
+            var hasCamera = viewCamera != null;
+            var cameraPosition = hasCamera ? viewCamera!.transform.position : Vector3.zero;
+            var deltaTime = Time.deltaTime;
+            var frameCount = Time.frameCount;
+            TickActors(vehicles, deltaTime, frameCount, cameraPosition, hasCamera);
+            TickActors(bicycles, deltaTime, frameCount, cameraPosition, hasCamera);
+            TickActors(pedestrians, deltaTime, frameCount, cameraPosition, hasCamera);
+            if (vehicleLocatorsVisible && hasCamera && frameCount >= nextVehicleLocatorFrame)
+            {
+                UpdateVehicleLocatorMarkers(viewCamera!, cameraPosition);
+                nextVehicleLocatorFrame = frameCount + 12;
+            }
+        }
+
+        private static void TickActors(
+            Dictionary<string, EntityActor> actors,
+            float deltaTime,
+            int frameCount,
+            Vector3 cameraPosition,
+            bool hasCamera)
+        {
+            foreach (var actor in actors.Values)
+                actor.Tick(deltaTime, frameCount, cameraPosition, hasCamera);
         }
 
         public void ApplyInit(DigitalTwinInit message)
@@ -74,7 +117,17 @@ namespace Xiongan.DigitalTwin.Entities
 
         public bool TryGetVehicleClusterCenter(out Vector3 center)
         {
+            return TryGetVehicleClusterCenter(out center, out _, out _);
+        }
+
+        public bool TryGetVehicleClusterCenter(
+            out Vector3 center,
+            out int vehicleCount,
+            out string representativeId)
+        {
             center = Vector3.zero;
+            vehicleCount = 0;
+            representativeId = string.Empty;
             if (vehicles.Count == 0) return false;
             const float clusterRadius = 78f;
             var radiusSquared = clusterRadius * clusterRadius;
@@ -94,8 +147,46 @@ namespace Xiongan.DigitalTwin.Entities
                 if (count <= bestCount) continue;
                 bestCount = count;
                 center = sum / count;
+                representativeId = candidate.Identifier;
             }
-            return bestCount > 0;
+            vehicleCount = bestCount;
+            return vehicleCount > 0;
+        }
+
+        public bool TryGetNearestVehicle(Vector3 point, out EntityActor actor)
+        {
+            actor = null!;
+            var bestDistanceSquared = float.MaxValue;
+            foreach (var candidate in vehicles.Values)
+            {
+                var offset = Vector3.ProjectOnPlane(candidate.transform.position - point, Vector3.up);
+                if (offset.sqrMagnitude >= bestDistanceSquared) continue;
+                bestDistanceSquared = offset.sqrMagnitude;
+                actor = candidate;
+            }
+            return actor != null;
+        }
+
+        public bool TryGetVehicleByOffset(string currentId, int offset, out EntityActor actor)
+        {
+            actor = null!;
+            if (vehicles.Count == 0) return false;
+            var ids = new List<string>(vehicles.Keys);
+            ids.Sort(StringComparer.Ordinal);
+            var currentIndex = ids.IndexOf(currentId);
+            if (currentIndex < 0) currentIndex = offset < 0 ? 0 : -1;
+            var nextIndex = (currentIndex + offset) % ids.Count;
+            if (nextIndex < 0) nextIndex += ids.Count;
+            actor = vehicles[ids[nextIndex]];
+            return true;
+        }
+
+        public void SetVehicleLocatorsVisible(bool visible)
+        {
+            vehicleLocatorsVisible = visible;
+            nextVehicleLocatorFrame = 0;
+            if (visible) return;
+            foreach (var marker in vehicleLocatorMarkers) marker.Root.SetActive(false);
         }
 
         private void SyncSnapshot(IEnumerable<VehicleEntity> source, Dictionary<string, EntityActor> target, Stack<EntityActor> pool, string category)
@@ -116,14 +207,14 @@ namespace Xiongan.DigitalTwin.Entities
             var pool = category == "bicycle" ? bicyclePool : vehiclePool;
             if (target.TryGetValue(item.Id, out var existing))
             {
-                existing.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+                SetVehicleTarget(existing, item, category, immediate);
                 existing.SetBrake(item.Brake);
                 return;
             }
             var actor = pool.Count > 0 ? pool.Pop() : CreateActor(item.Id, category, ResolveColor(item), materials);
             actor.Rebind(item.Id);
             actor.gameObject.SetActive(true);
-            actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+            SetVehicleTarget(actor, item, category, immediate);
             actor.SetBrake(item.Brake);
             target[item.Id] = actor;
         }
@@ -132,13 +223,13 @@ namespace Xiongan.DigitalTwin.Entities
         {
             if (pedestrians.TryGetValue(item.Id, out var existing))
             {
-                existing.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+                SetPedestrianTarget(existing, item, immediate);
                 return;
             }
             var actor = pedestrianPool.Count > 0 ? pedestrianPool.Pop() : CreateActor(item.Id, "pedestrian", DeterministicColor(item.Id), materials);
             actor.Rebind(item.Id);
             actor.gameObject.SetActive(true);
-            actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+            SetPedestrianTarget(actor, item, immediate);
             pedestrians[item.Id] = actor;
         }
 
@@ -149,7 +240,7 @@ namespace Xiongan.DigitalTwin.Entities
                 SpawnVehicle(item, ReferenceEquals(target, bicycles) ? "bicycle" : "vehicle", true);
                 return;
             }
-            actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates);
+            SetVehicleTarget(actor, item, ReferenceEquals(target, bicycles) ? "bicycle" : "vehicle", false);
             actor.SetBrake(item.Brake);
         }
 
@@ -160,7 +251,40 @@ namespace Xiongan.DigitalTwin.Entities
                 SpawnPedestrian(item, true);
                 return;
             }
-            actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates);
+            SetPedestrianTarget(actor, item, false);
+        }
+
+        private void SetVehicleTarget(
+            EntityActor actor,
+            VehicleEntity item,
+            string category,
+            bool immediate)
+        {
+            if (roadProjector == null)
+            {
+                actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+                return;
+            }
+            roadProjector.Resolve(
+                item.X, item.Y, item.Angle, item.LaneId, category,
+                out var position, out var rotation);
+            actor.SetTarget(position, rotation, item.Speed, tickHz, immediate);
+        }
+
+        private void SetPedestrianTarget(
+            EntityActor actor,
+            PedestrianEntity item,
+            bool immediate)
+        {
+            if (roadProjector == null)
+            {
+                actor.SetTarget(item.X, item.Y, item.Angle, item.Speed, tickHz, coordinates, immediate);
+                return;
+            }
+            roadProjector.Resolve(
+                item.X, item.Y, item.Angle, item.LaneId, "pedestrian",
+                out var position, out var rotation);
+            actor.SetTarget(position, rotation, item.Speed, tickHz, immediate);
         }
 
         private EntityActor CreateActor(string id, string category, Color color, MaterialLibrary library)
@@ -211,6 +335,279 @@ namespace Xiongan.DigitalTwin.Entities
             foreach (var id in new List<string>(vehicles.Keys)) Recycle(vehicles, vehiclePool, id);
             foreach (var id in new List<string>(bicycles.Keys)) Recycle(bicycles, bicyclePool, id);
             foreach (var id in new List<string>(pedestrians.Keys)) Recycle(pedestrians, pedestrianPool, id);
+            foreach (var marker in vehicleLocatorMarkers) marker.Root.SetActive(false);
+        }
+
+        private void UpdateVehicleLocatorMarkers(UnityEngine.Camera camera, Vector3 cameraPosition)
+        {
+            const float cellSize = 110f;
+            var clusters = new Dictionary<(int X, int Z), VehicleCluster>();
+            foreach (var actor in vehicles.Values)
+            {
+                var position = actor.transform.position;
+                var key = (Mathf.FloorToInt(position.x / cellSize), Mathf.FloorToInt(position.z / cellSize));
+                if (!clusters.TryGetValue(key, out var cluster))
+                {
+                    cluster = new VehicleCluster { RepresentativeId = actor.Identifier };
+                    clusters[key] = cluster;
+                }
+                cluster.PositionSum += position;
+                cluster.Count++;
+            }
+
+            var markerIndex = 0;
+            foreach (var cluster in clusters.Values)
+            {
+                var center = cluster.PositionSum / Mathf.Max(1, cluster.Count);
+                var distance = Vector3.Distance(cameraPosition, center);
+                if (distance < 180f) continue;
+                while (vehicleLocatorMarkers.Count <= markerIndex)
+                    vehicleLocatorMarkers.Add(CreateVehicleClusterMarker());
+                var marker = vehicleLocatorMarkers[markerIndex++];
+                var scale = Mathf.Clamp(distance * 0.008f, 1.2f, 16f);
+                marker.Root.SetActive(true);
+                marker.Root.transform.position = center + Vector3.up * (4.5f + scale * 0.32f);
+                marker.Root.transform.localScale = Vector3.one * scale;
+                marker.Label.text = cluster.Count.ToString();
+                marker.Label.transform.rotation = camera.transform.rotation;
+                marker.Selectable.Identifier = cluster.RepresentativeId;
+            }
+            for (; markerIndex < vehicleLocatorMarkers.Count; markerIndex++)
+                vehicleLocatorMarkers[markerIndex].Root.SetActive(false);
+        }
+
+        private VehicleClusterMarker CreateVehicleClusterMarker()
+        {
+            var root = new GameObject("远景车辆聚合标记");
+            root.transform.SetParent(transform, false);
+            var selectable = root.AddComponent<SelectableObject>();
+            selectable.Kind = "vehicle_cluster";
+            selectable.Provenance = "SUMO/TraCI vehicle cluster";
+
+            var beacon = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            beacon.name = "车辆定位信标";
+            beacon.transform.SetParent(root.transform, false);
+            beacon.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+            var beaconRenderer = beacon.GetComponent<Renderer>();
+            beaconRenderer.sharedMaterial = materials.SignalYellow;
+            beaconRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            beaconRenderer.receiveShadows = false;
+
+            var stem = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            stem.name = "车辆定位引线";
+            stem.transform.SetParent(root.transform, false);
+            stem.transform.localPosition = Vector3.down * 1.35f;
+            stem.transform.localScale = new Vector3(0.09f, 1.25f, 0.09f);
+            var stemCollider = stem.GetComponent<Collider>();
+            if (stemCollider != null) Destroy(stemCollider);
+            var stemRenderer = stem.GetComponent<Renderer>();
+            stemRenderer.sharedMaterial = materials.Headlight;
+            stemRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            stemRenderer.receiveShadows = false;
+
+            var labelObject = new GameObject("车辆聚合数量");
+            labelObject.transform.SetParent(root.transform, false);
+            labelObject.transform.localPosition = Vector3.up * 1.05f;
+            var label = labelObject.AddComponent<TextMesh>();
+            label.anchor = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignment.Center;
+            label.characterSize = 0.12f;
+            label.fontSize = 48;
+            label.color = Color.white;
+            var labelRenderer = label.GetComponent<MeshRenderer>();
+            labelRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            labelRenderer.receiveShadows = false;
+            root.SetActive(false);
+            return new VehicleClusterMarker(root, label, selectable);
+        }
+
+        private sealed class VehicleCluster
+        {
+            public Vector3 PositionSum;
+            public int Count;
+            public string RepresentativeId = string.Empty;
+        }
+
+        private sealed class VehicleClusterMarker
+        {
+            public GameObject Root { get; }
+            public TextMesh Label { get; }
+            public SelectableObject Selectable { get; }
+
+            public VehicleClusterMarker(GameObject root, TextMesh label, SelectableObject selectable)
+            {
+                Root = root;
+                Label = label;
+                Selectable = selectable;
+            }
+        }
+    }
+
+    public sealed class EntityRoadProjector
+    {
+        private sealed class LanePath
+        {
+            public Vector3[] Points = System.Array.Empty<Vector3>();
+            public float HalfWidth;
+            public bool IntersectsShowcase;
+        }
+
+        private readonly CoordinateService coordinates;
+        private readonly ReferenceShowcaseFrame showcaseFrame;
+        private readonly bool hasShowcase;
+        private readonly Dictionary<string, LanePath> lanes = new();
+
+        public EntityRoadProjector(SceneBuilder scene)
+        {
+            coordinates = scene.Coordinates;
+            hasShowcase = scene.Junctions.ContainsKey(ReferenceShowcaseLayout.JunctionId);
+            showcaseFrame = hasShowcase ? ReferenceShowcaseLayout.Resolve(scene) : default;
+            foreach (var lane in scene.Document.Lanes)
+            {
+                if (lane.Shape.Count < 2) continue;
+                var points = new Vector3[lane.Shape.Count];
+                for (var index = 0; index < lane.Shape.Count; index++)
+                    points[index] = coordinates.ToWorld(lane.Shape[index]);
+                lanes[lane.SumoLaneId] = new LanePath
+                {
+                    Points = points,
+                    HalfWidth = Mathf.Max(0.7f, lane.WidthM * 0.5f),
+                    IntersectsShowcase = hasShowcase && ReferenceShowcaseLayout.IntersectsRoadSurfaceOverride(
+                        showcaseFrame, points, lane.WidthM * 0.5f),
+                };
+            }
+        }
+
+        public void Resolve(
+            float x,
+            float y,
+            float angle,
+            string laneId,
+            string category,
+            out Vector3 position,
+            out Quaternion rotation)
+        {
+            var baseHeight = category switch
+            {
+                "pedestrian" => 0.105f,
+                "bicycle" => 0.055f,
+                _ => 0.04f,
+            };
+            position = coordinates.ToWorld(x, y, baseHeight);
+            rotation = coordinates.ToWorldRotation(angle);
+            if (string.IsNullOrWhiteSpace(laneId) || !lanes.TryGetValue(laneId, out var lane)) return;
+
+            ResolveClosestPoint(lane.Points, position, out var closest, out var tangent);
+            var offset = Vector3.ProjectOnPlane(position - closest, Vector3.up);
+            var bodyHalfWidth = category switch
+            {
+                "pedestrian" => 0.24f,
+                "bicycle" => 0.38f,
+                _ => 0.96f,
+            };
+            var allowedOffset = Mathf.Max(0.22f, lane.HalfWidth - bodyHalfWidth);
+            if (offset.sqrMagnitude > allowedOffset * allowedOffset)
+            {
+                var corrected = offset.sqrMagnitude < 0.0001f
+                    ? closest
+                    : closest + offset.normalized * allowedOffset;
+                position.x = corrected.x;
+                position.z = corrected.z;
+            }
+
+            if (!hasShowcase || !lane.IntersectsShowcase ||
+                !ReferenceShowcaseLayout.CoversRoadSurfaceOverride(showcaseFrame, position, 8f))
+                return;
+
+            ProjectToShowcaseCarriageway(category, tangent, ref position, ref rotation);
+        }
+
+        private void ProjectToShowcaseCarriageway(
+            string category,
+            Vector3 sourceTangent,
+            ref Vector3 position,
+            ref Quaternion rotation)
+        {
+            var local = ReferenceShowcaseLayout.ToLocal(showcaseFrame, position);
+            var across = local.x;
+            var along = local.y;
+            var insideOpenJunction = Mathf.Abs(across) <= 33.5f && Mathf.Abs(along) <= 33.5f;
+            var displayHeight = category == "pedestrian" ? 0.125f :
+                category == "bicycle" ? 0.12f : 0.11f;
+            if (insideOpenJunction)
+            {
+                position.y = displayHeight;
+                return;
+            }
+
+            sourceTangent = Vector3.ProjectOnPlane(sourceTangent, Vector3.up).normalized;
+            var followsMainRoad = Mathf.Abs(Vector3.Dot(sourceTangent, showcaseFrame.Forward)) >=
+                                  Mathf.Abs(Vector3.Dot(sourceTangent, showcaseFrame.Right));
+            Vector3 displayForward;
+            if (followsMainRoad)
+            {
+                var side = Mathf.Abs(across) > 2.8f
+                    ? Mathf.Sign(across)
+                    : Vector3.Dot(sourceTangent, showcaseFrame.Forward) >= 0f ? 1f : -1f;
+                across = side * ResolveLaneCenter(Mathf.Abs(across));
+                position = showcaseFrame.Point(across, displayHeight, along);
+                displayForward = Vector3.Dot(sourceTangent, showcaseFrame.Forward) >= 0f
+                    ? showcaseFrame.Forward
+                    : -showcaseFrame.Forward;
+            }
+            else
+            {
+                var side = Mathf.Abs(along) > 2.8f
+                    ? Mathf.Sign(along)
+                    : Vector3.Dot(sourceTangent, showcaseFrame.Right) >= 0f ? -1f : 1f;
+                along = side * ResolveLaneCenter(Mathf.Abs(along));
+                position = showcaseFrame.Point(across, displayHeight, along);
+                displayForward = Vector3.Dot(sourceTangent, showcaseFrame.Right) >= 0f
+                    ? showcaseFrame.Right
+                    : -showcaseFrame.Right;
+            }
+            rotation = Quaternion.LookRotation(displayForward, Vector3.up);
+        }
+
+        private static float ResolveLaneCenter(float sourceOffset)
+        {
+            var centers = new[] { 5.7f, 11.5f, 17.3f, 23.1f };
+            var best = centers[0];
+            var bestDistance = Mathf.Abs(sourceOffset - best);
+            for (var index = 1; index < centers.Length; index++)
+            {
+                var distance = Mathf.Abs(sourceOffset - centers[index]);
+                if (distance >= bestDistance) continue;
+                best = centers[index];
+                bestDistance = distance;
+            }
+            return best;
+        }
+
+        private static void ResolveClosestPoint(
+            IReadOnlyList<Vector3> points,
+            Vector3 position,
+            out Vector3 closest,
+            out Vector3 tangent)
+        {
+            closest = points[0];
+            tangent = Vector3.forward;
+            var bestDistanceSquared = float.MaxValue;
+            for (var index = 0; index < points.Count - 1; index++)
+            {
+                var from = points[index];
+                var segment = Vector3.ProjectOnPlane(points[index + 1] - from, Vector3.up);
+                var lengthSquared = segment.sqrMagnitude;
+                if (lengthSquared < 0.0001f) continue;
+                var offset = Vector3.ProjectOnPlane(position - from, Vector3.up);
+                var progress = Mathf.Clamp01(Vector3.Dot(offset, segment) / lengthSquared);
+                var candidate = from + segment * progress;
+                var distanceSquared = Vector3.ProjectOnPlane(position - candidate, Vector3.up).sqrMagnitude;
+                if (distanceSquared >= bestDistanceSquared) continue;
+                bestDistanceSquared = distanceSquared;
+                closest = candidate;
+                tangent = segment.normalized;
+            }
         }
     }
 }

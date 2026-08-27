@@ -39,7 +39,11 @@ def test_runtime_openapi_paths_and_methods_match_formal_specification() -> None:
         Path("specs/openapi.yaml").read_text(encoding="utf-8")
     )
     runtime = create_app().openapi()
-    websocket_paths = {"/ws/v1/realtime", "/ws/v1/digital-twin"}
+    websocket_paths = {
+        "/ws/v1/realtime",
+        "/ws/v1/digital-twin",
+        "/ws/v1/digital-twin/comparison",
+    }
     specification_paths = set(specification["paths"]) - websocket_paths
     runtime_paths = set(runtime["paths"])
     assert runtime_paths == specification_paths

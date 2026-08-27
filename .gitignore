@@ -28,6 +28,7 @@ reports/generated/*
 
 # Local audit/reference material; never package as source
 tmp/
+/.tmp/
 
 # IDE and operating-system files
 .idea/

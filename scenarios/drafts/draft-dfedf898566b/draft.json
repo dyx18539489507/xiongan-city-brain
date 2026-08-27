@@ -1,0 +1,65 @@
+{
+  "id": "draft-dfedf898566b",
+  "status": "ready",
+  "progress": 100,
+  "message": "规划资料已生成可校核草稿",
+  "source_type": "planning_file",
+  "source": {
+    "original_name": "demo_3.png",
+    "size_bytes": 4466560
+  },
+  "coordinate_mode": "local",
+  "confidence": "low",
+  "requires_manual_review": true,
+  "review_confirmed": false,
+  "preview": {
+    "bounds": null,
+    "roads": [],
+    "buildings": [],
+    "intersections": [],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [],
+  "manual_edits": [],
+  "validation": {
+    "valid": false,
+    "selected_intersection_count": 0,
+    "selected_intersection_ids": [],
+    "errors": [
+      "没有可构建的道路中心线",
+      "至少选择一个路口",
+      "规划图草稿必须完成人工校核确认"
+    ],
+    "warnings": [
+      "扫描件只生成低置信草稿, 必须人工补绘或校正道路和路口"
+    ],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "planning_file",
+    "confidence": "low",
+    "review_confirmed": false
+  },
+  "artifacts": {
+    "source": "source.png",
+    "preview": "source.png"
+  },
+  "logs": [
+    {
+      "time": "2026-08-22T07:27:22.069448+00:00",
+      "progress": 12,
+      "message": "规划资料已保存, 正在识别文件结构"
+    },
+    {
+      "time": "2026-08-22T07:27:22.105313+00:00",
+      "progress": 58,
+      "message": "正在生成可编辑道路与候选路口"
+    },
+    {
+      "time": "2026-08-22T07:27:22.105313+00:00",
+      "progress": 100,
+      "message": "规划资料已生成可校核草稿"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-22T07:27:22.030223+00:00",
+  "updated_at": "2026-08-22T07:27:22.120477+00:00"
+}

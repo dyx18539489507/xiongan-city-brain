@@ -180,6 +180,7 @@ def _benchmark(args: argparse.Namespace) -> int:
             seeds=args.seeds,
             duration_s=args.duration,
             output_dir=Path(args.output),
+            warmup_s=args.warmup,
         )
     )
     print(
@@ -432,6 +433,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     benchmark.add_argument("--seeds", nargs="+", type=int, default=[11, 23, 37, 41, 59])
     benchmark.add_argument("--duration", type=float, default=1800.0)
+    benchmark.add_argument(
+        "--warmup",
+        type=float,
+        default=0.0,
+        help="shared native fixed-plan warmup seconds before paired evaluation",
+    )
     benchmark.add_argument("--output", default="results/benchmark")
     benchmark.set_defaults(handler=_benchmark)
     report = subcommands.add_parser("report", help="regenerate report from result JSON")

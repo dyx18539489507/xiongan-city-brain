@@ -1,8 +1,11 @@
-import {BarChart, LineChart} from "echarts/charts";
+import {BarChart, HeatmapChart, LineChart, ScatterChart} from "echarts/charts";
 import {
+  DataZoomComponent,
   GridComponent,
   LegendComponent,
+  MarkLineComponent,
   TooltipComponent,
+  VisualMapComponent,
 } from "echarts/components";
 import * as echarts from "echarts/core";
 import {CanvasRenderer} from "echarts/renderers";
@@ -15,9 +18,14 @@ export function initTrendChart(element: HTMLDivElement): echarts.EChartsType {
     echarts.use([
       LineChart,
       BarChart,
+      ScatterChart,
+      HeatmapChart,
       GridComponent,
       LegendComponent,
       TooltipComponent,
+      VisualMapComponent,
+      DataZoomComponent,
+      MarkLineComponent,
       CanvasRenderer,
     ]);
     registered = true;

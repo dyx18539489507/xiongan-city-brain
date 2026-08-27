@@ -26,6 +26,11 @@ namespace Xiongan.DigitalTwin.Core
         public Material BuildingGlassWarm { get; }
         public Material FacadeFrame { get; }
         public Material BuildingRoof { get; }
+        public Material ArchitecturalStone { get; }
+        public Material CivicCladding { get; }
+        public Material BrickAccent { get; }
+        public Material GreyRoofTile { get; }
+        public Material TimberScreen { get; }
         public Material Curb { get; }
         public Material TreeBark { get; }
         public Material TreeLeaves { get; }
@@ -52,34 +57,39 @@ namespace Xiongan.DigitalTwin.Core
             // Surfaces are deliberately texture-free.  Their apparent material
             // comes from physical mesh detail, vertex geometry, lighting and the
             // URP BRDF rather than an albedo/normal photograph.
-            Asphalt = CreateProcedural(new Color(0.158f, 0.164f, 0.17f), new Color(0.108f, 0.114f, 0.12f), 13.5f, 0.2f, 0.23f, 0f, 0f);
-            HeroAsphalt = CreateProcedural(new Color(0.172f, 0.178f, 0.182f), new Color(0.116f, 0.122f, 0.128f), 15.8f, 0.22f, 0.25f, 0f, 0f);
-            Junction = CreateProcedural(new Color(0.164f, 0.17f, 0.175f), new Color(0.112f, 0.118f, 0.124f), 14.2f, 0.2f, 0.22f, 0f, 0f);
-            Sidewalk = CreateProcedural(new Color(0.43f, 0.435f, 0.415f), new Color(0.3f, 0.305f, 0.29f), 2.35f, 0.1f, 0.04f, 0f, 1f);
-            HeroSidewalk = CreateProcedural(new Color(0.445f, 0.45f, 0.43f), new Color(0.32f, 0.325f, 0.31f), 2.55f, 0.1f, 0.05f, 0f, 1f);
-            ParkingGround = CreateProcedural(new Color(0.34f, 0.35f, 0.345f), new Color(0.245f, 0.255f, 0.25f), 3.2f, 0.1f, 0.12f, 0f, 1f);
+            Asphalt = CreateProcedural(new Color(0.132f, 0.142f, 0.151f), new Color(0.072f, 0.078f, 0.084f), 15.5f, 0.24f, 0.2f, 0f, 0f);
+            HeroAsphalt = CreateProcedural(new Color(0.145f, 0.154f, 0.162f), new Color(0.078f, 0.084f, 0.091f), 17.2f, 0.25f, 0.22f, 0f, 0f);
+            Junction = CreateProcedural(new Color(0.138f, 0.148f, 0.156f), new Color(0.075f, 0.081f, 0.087f), 15.8f, 0.23f, 0.2f, 0f, 0f);
+            Sidewalk = CreateProcedural(new Color(0.52f, 0.505f, 0.47f), new Color(0.37f, 0.36f, 0.335f), 2.35f, 0.11f, 0.06f, 0f, 1f);
+            HeroSidewalk = CreateProcedural(new Color(0.56f, 0.545f, 0.505f), new Color(0.405f, 0.39f, 0.36f), 2.55f, 0.11f, 0.07f, 0f, 1f);
+            ParkingGround = CreateProcedural(new Color(0.37f, 0.365f, 0.345f), new Color(0.275f, 0.27f, 0.255f), 3.2f, 0.09f, 0.1f, 0f, 1f);
             ConstructionGround = CreateProcedural(new Color(0.355f, 0.325f, 0.27f), new Color(0.245f, 0.225f, 0.19f), 4.7f, 0.13f, 0.04f, 0f, 0f);
-            UrbanGround = CreateProcedural(new Color(0.135f, 0.19f, 0.095f), new Color(0.07f, 0.105f, 0.045f), 4.2f, 0.085f, 0.05f, 0f, 0f);
-            HeroGrass = CreateProcedural(new Color(0.17f, 0.24f, 0.11f), new Color(0.085f, 0.13f, 0.055f), 5.2f, 0.085f, 0.05f, 0f, 0f);
-            Grass = CreateProcedural(new Color(0.155f, 0.22f, 0.1f), new Color(0.075f, 0.12f, 0.05f), 4.8f, 0.085f, 0.05f, 0f, 0f);
+            UrbanGround = CreateProcedural(new Color(0.205f, 0.282f, 0.142f), new Color(0.108f, 0.16f, 0.074f), 4.2f, 0.1f, 0.035f, 0f, 0f);
+            HeroGrass = CreateProcedural(new Color(0.235f, 0.335f, 0.16f), new Color(0.125f, 0.19f, 0.078f), 5.2f, 0.11f, 0.035f, 0f, 0f);
+            Grass = CreateProcedural(new Color(0.205f, 0.305f, 0.14f), new Color(0.108f, 0.172f, 0.068f), 4.8f, 0.1f, 0.035f, 0f, 0f);
             Marking = Create(new Color(0.97f, 0.98f, 0.955f), 0.3f, 0f);
             // Xiong'an's showcase corridor uses a restrained warm edge line;
             // the previous saturated orange read like a game debug overlay.
             MarkingYellow = Create(new Color(0.82f, 0.78f, 0.57f), 0.28f, 0f);
             Bicycle = Create(new Color(0.085f, 0.038f, 0.026f), 0.18f, 0f);
-            Building = Create(new Color(0.805f, 0.81f, 0.785f), 0.3f, 0.02f);
+            Building = Create(new Color(0.68f, 0.69f, 0.67f), 0.24f, 0.01f);
             // Opaque high-gloss architectural glass remains legible in WebGL
             // without reflecting a photographed environment or revealing the
             // empty interior of a procedural building.
-            BuildingGlass = Create(new Color(0.235f, 0.35f, 0.38f), 0.88f, 0.14f);
-            BuildingGlassWarm = Create(new Color(0.34f, 0.285f, 0.205f), 0.86f, 0.08f);
-            FacadeFrame = Create(new Color(0.325f, 0.34f, 0.345f), 0.52f, 0.38f);
-            BuildingRoof = CreateProcedural(new Color(0.65f, 0.66f, 0.64f), new Color(0.49f, 0.5f, 0.49f), 1.9f, 0.085f, 0.23f, 0f, 1f);
+            BuildingGlass = CreateProcedural(new Color(0.32f, 0.49f, 0.61f), new Color(0.125f, 0.275f, 0.365f), 0.16f, 0.16f, 0.94f, 0.16f, 3f);
+            BuildingGlassWarm = CreateProcedural(new Color(0.55f, 0.43f, 0.29f), new Color(0.255f, 0.195f, 0.125f), 0.16f, 0.15f, 0.9f, 0.1f, 3f);
+            FacadeFrame = Create(new Color(0.265f, 0.285f, 0.295f), 0.48f, 0.34f);
+            BuildingRoof = CreateProcedural(new Color(0.39f, 0.42f, 0.415f), new Color(0.24f, 0.265f, 0.26f), 2.15f, 0.13f, 0.18f, 0f, 1f);
+            ArchitecturalStone = CreateProcedural(new Color(0.56f, 0.555f, 0.52f), new Color(0.37f, 0.37f, 0.345f), 3.6f, 0.12f, 0.2f, 0f, 2f);
+            CivicCladding = Create(new Color(0.94f, 0.945f, 0.925f), 0.22f, 0f);
+            BrickAccent = CreateProcedural(new Color(0.42f, 0.18f, 0.135f), new Color(0.245f, 0.08f, 0.058f), 5.8f, 0.14f, 0.18f, 0f, 2f);
+            GreyRoofTile = CreateProcedural(new Color(0.23f, 0.255f, 0.255f), new Color(0.125f, 0.145f, 0.148f), 7.2f, 0.13f, 0.25f, 0f, 1f);
+            TimberScreen = CreateProcedural(new Color(0.285f, 0.17f, 0.105f), new Color(0.145f, 0.075f, 0.042f), 4.4f, 0.12f, 0.28f, 0f, 2f);
             Curb = CreateProcedural(new Color(0.755f, 0.76f, 0.735f), new Color(0.57f, 0.575f, 0.55f), 3.1f, 0.09f, 0.24f, 0f, 1f);
             TreeBark = Create(new Color(0.24f, 0.145f, 0.072f), 0.08f, 0f);
-            TreeLeaves = Create(new Color(0.11f, 0.29f, 0.075f), 0.07f, 0f);
-            ShrubLeaves = Create(new Color(0.095f, 0.245f, 0.065f), 0.09f, 0f);
-            FormalTreeLeaves = Create(new Color(0.09f, 0.235f, 0.07f), 0.06f, 0f);
+            TreeLeaves = CreateProcedural(new Color(0.12f, 0.31f, 0.075f), new Color(0.045f, 0.145f, 0.035f), 5.4f, 0.22f, 0.07f, 0f, 0f);
+            ShrubLeaves = CreateProcedural(new Color(0.14f, 0.31f, 0.07f), new Color(0.05f, 0.15f, 0.03f), 6.1f, 0.24f, 0.08f, 0f, 0f);
+            FormalTreeLeaves = CreateProcedural(new Color(0.16f, 0.36f, 0.09f), new Color(0.06f, 0.18f, 0.035f), 5.7f, 0.22f, 0.06f, 0f, 0f);
             FormalTreeBranches = Create(new Color(0.215f, 0.125f, 0.064f), 0.12f, 0f);
             // These maps are used only by their corresponding three-dimensional
             // CC0 prop meshes. Road asphalt, walls, facades and terrain remain
@@ -109,11 +119,11 @@ namespace Xiongan.DigitalTwin.Core
 
             foreach (var color in new[]
                      {
-                         new Color(0.835f, 0.835f, 0.795f), new Color(0.705f, 0.73f, 0.735f),
-                         new Color(0.81f, 0.755f, 0.68f), new Color(0.65f, 0.68f, 0.675f),
-                         new Color(0.78f, 0.77f, 0.725f), new Color(0.89f, 0.875f, 0.83f),
-                         new Color(0.63f, 0.695f, 0.71f), new Color(0.735f, 0.755f, 0.74f),
-                     }) facadeMaterials.Add(CreateProcedural(color, color * 0.78f, 5.4f, 0.09f, 0.3f, 0.012f, 2f));
+                         new Color(0.74f, 0.75f, 0.72f), new Color(0.68f, 0.71f, 0.72f),
+                         new Color(0.78f, 0.75f, 0.68f), new Color(0.72f, 0.74f, 0.73f),
+                         new Color(0.71f, 0.71f, 0.67f), new Color(0.79f, 0.78f, 0.73f),
+                         new Color(0.65f, 0.72f, 0.73f), new Color(0.73f, 0.74f, 0.7f),
+                     }) facadeMaterials.Add(CreateProcedural(color, color * 0.8f, 5.8f, 0.14f, 0.19f, 0.006f, 2f));
         }
 
         public Material Create(Color color, float smoothness, float metallic)

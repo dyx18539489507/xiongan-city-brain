@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.91618226770709" minlat="39.05690793856534" maxlon="115.91716355432771" maxlat="39.05732773491366" />
+  <node id="-1" lon="115.91704715" lat="39.057327735" version="1" />
+  <node id="-2" lon="115.9164317" lat="39.0571374" version="1" />
+  <node id="-3" lon="115.9164592" lat="39.0570839" version="1" />
+  <node id="-4" lon="115.917163554" lat="39.057304717" version="1" />
+  <node id="-5" lon="115.916261238" lat="39.056907939" version="1" />
+  <node id="-6" lon="115.9164942" lat="39.0569794" version="1" />
+  <node id="-7" lon="115.9166434" lat="39.0570606" version="1" />
+  <node id="-8" lon="115.9167857" lat="39.057138" version="1" />
+  <node id="-9" lon="115.917163554" lat="39.057256484" version="1" />
+  <node id="-10" lon="115.916910541" lat="39.057327735" version="1" />
+  <node id="-11" lon="115.916731" lat="39.057273" version="1" />
+  <node id="-12" lon="115.91655" lat="39.0572519" version="1" />
+  <node id="-13" lon="115.916385" lat="39.0572327" version="1" />
+  <node id="-14" lon="115.916182268" lat="39.057170429" version="1" />
+  <node id="-15" lon="115.916512378" lat="39.057327735" version="1" />
+  <node id="-16" lon="115.916720557" lat="39.056907939" version="1" />
+  <node id="-17" lon="115.916182268" lat="39.057060644" version="1" />
+  <node id="-18" lon="115.916182268" lat="39.056997153" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="785419416" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665917" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <nd ref="-9" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665918" />
+  </way>
+  <way id="-4" visible="true" version="1">
+    <nd ref="-10" />
+    <nd ref="-11" />
+    <nd ref="-12" />
+    <nd ref="-13" />
+    <nd ref="-14" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665933" />
+  </way>
+  <way id="-5" visible="true" version="1">
+    <nd ref="-15" />
+    <nd ref="-12" />
+    <nd ref="-7" />
+    <nd ref="-16" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819231" />
+  </way>
+  <way id="-6" visible="true" version="1">
+    <nd ref="-2" />
+    <nd ref="-17" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1415517617" />
+  </way>
+  <way id="-7" visible="true" version="1">
+    <nd ref="-18" />
+    <nd ref="-3" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1415517618" />
+  </way>
+</osm>

@@ -1,0 +1,115 @@
+{
+  "id": "draft-b74b20e756f1",
+  "status": "ready",
+  "progress": 100,
+  "message": "规划资料已生成可校核草稿",
+  "source_type": "planning_file",
+  "source": {
+    "original_name": "planning_cross.geojson",
+    "size_bytes": 474
+  },
+  "coordinate_mode": "local",
+  "confidence": "high",
+  "requires_manual_review": true,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 0.0,
+      "min_y": 0.0,
+      "max_x": 1000.0,
+      "max_y": 1000.0
+    },
+    "roads": [
+      {
+        "id": "road-1",
+        "coordinates": [
+          [
+            0,
+            500
+          ],
+          [
+            1000,
+            500
+          ]
+        ]
+      },
+      {
+        "id": "road-2",
+        "coordinates": [
+          [
+            500,
+            0
+          ],
+          [
+            500,
+            1000
+          ]
+        ]
+      }
+    ],
+    "buildings": [],
+    "intersections": [
+      {
+        "intersection_id": "J001",
+        "display_id": "J01",
+        "display_name": "候选路口 1",
+        "x": 500,
+        "y": 500,
+        "lon": null,
+        "lat": null,
+        "degree": 4,
+        "signalized": false
+      }
+    ],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [
+    "J001"
+  ],
+  "manual_edits": [
+    {
+      "time": "2026-08-21T10:13:19.644379+00:00",
+      "type": "replace_roads"
+    },
+    {
+      "time": "2026-08-21T10:13:19.644379+00:00",
+      "type": "replace_intersections"
+    }
+  ],
+  "validation": {
+    "valid": true,
+    "selected_intersection_count": 1,
+    "selected_intersection_ids": [
+      "J001"
+    ],
+    "errors": [],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "planning_file",
+    "confidence": "high",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.geojson"
+  },
+  "logs": [
+    {
+      "time": "2026-08-21T10:12:52.016296+00:00",
+      "progress": 12,
+      "message": "规划资料已保存, 正在识别文件结构"
+    },
+    {
+      "time": "2026-08-21T10:12:52.076241+00:00",
+      "progress": 58,
+      "message": "正在生成可编辑道路与候选路口"
+    },
+    {
+      "time": "2026-08-21T10:12:52.241440+00:00",
+      "progress": 100,
+      "message": "规划资料已生成可校核草稿"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-21T10:12:51.823641+00:00",
+  "updated_at": "2026-08-21T10:13:19.644379+00:00"
+}

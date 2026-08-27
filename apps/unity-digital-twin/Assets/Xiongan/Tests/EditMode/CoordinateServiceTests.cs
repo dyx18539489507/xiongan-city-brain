@@ -21,7 +21,16 @@ namespace Xiongan.DigitalTwin.Tests
         public void SumoHeadingMapsToUnityYaw()
         {
             var service = new CoordinateService(new Point2());
-            Assert.That(Quaternion.Angle(service.ToWorldRotation(90f), Quaternion.Euler(0f, -90f, 0f)), Is.LessThan(0.001f));
+            AssertHeading(service, 0f, Vector3.back);
+            AssertHeading(service, 90f, Vector3.right);
+            AssertHeading(service, 180f, Vector3.forward);
+            AssertHeading(service, 270f, Vector3.left);
+        }
+
+        private static void AssertHeading(CoordinateService service, float sumoHeading, Vector3 expected)
+        {
+            var actual = service.ToWorldRotation(sumoHeading) * Vector3.forward;
+            Assert.That(Vector3.Angle(actual, expected), Is.LessThan(0.001f));
         }
     }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-08-24T22:59:59.623295+08:00 by Eclipse SUMO sumo 1.27.1
+<sumoConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\rongdong.multimodal.net.xml"/>
+        <route-files value="D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\routes.rou.xml,D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\multimodal.rou.xml"/>
+        <additional-files value="D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\vtypes.add.xml,D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\functional_zones.add.xml"/>
+    </input>
+
+    <output>
+        <fcd-output value="D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\traj.xml"/>
+        <summary-output value="D:\程序项目\面向雄安新区的城市大脑\outputs\qa\xiongan-20260824092305-vcd8r5-v0007\summary.xml"/>
+        <tripinfo-output value="D:\程序项目\面向雄安新区的城市大脑\outputs\qa\xiongan-20260824092305-vcd8r5-v0007\tripinfo.xml"/>
+        <collision-output value="D:\程序项目\面向雄安新区的城市大脑\outputs\qa\xiongan-20260824092305-vcd8r5-v0007\collisions.xml"/>
+        <statistic-output value="D:\程序项目\面向雄安新区的城市大脑\outputs\qa\xiongan-20260824092305-vcd8r5-v0007\statistics.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="180.000"/>
+        <step-length value="1"/>
+    </time>
+
+    <processing>
+        <collision.action value="warn"/>
+        <time-to-teleport value="300"/>
+    </processing>
+
+    <report>
+        <verbose value="false"/>
+        <duration-log.statistics value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <random_number>
+        <seed value="2089828075"/>
+    </random_number>
+
+    <gui_only>
+        <gui-settings-file value="D:\程序项目\面向雄安新区的城市大脑\scenarios\generated\xiongan-20260824092305-vcd8r5\common.settings.xml"/>
+    </gui_only>
+
+</sumoConfiguration>
+-->
+
+<collisions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/collision_file.xsd">
+</collisions>

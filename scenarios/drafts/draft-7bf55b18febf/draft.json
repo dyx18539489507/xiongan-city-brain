@@ -1,0 +1,52 @@
+{
+  "id": "draft-7bf55b18febf",
+  "status": "failed",
+  "progress": 72,
+  "message": "OSM 路网解析失败",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91551183529768,
+      "south": 39.05766186050635,
+      "east": 115.91651055728256,
+      "north": 39.058342892100654
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21"
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "unknown",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": null,
+    "roads": [],
+    "buildings": [],
+    "intersections": [],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [],
+  "manual_edits": [],
+  "validation": null,
+  "artifacts": {},
+  "logs": [
+    {
+      "time": "2026-08-26T15:41:33.879286+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照提取路网范围"
+    },
+    {
+      "time": "2026-08-26T15:41:36.413741+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-26T15:41:36.711254+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    }
+  ],
+  "error": "ValueError: 框选范围内未识别到有效交叉路口。请适当扩大框选范围",
+  "created_at": "2026-08-26T15:41:33.804716+00:00",
+  "updated_at": "2026-08-26T15:41:36.814586+00:00"
+}

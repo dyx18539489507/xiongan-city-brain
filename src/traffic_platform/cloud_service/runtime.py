@@ -34,7 +34,11 @@ class CloudRuntime:
 
     async def _handle_state(self, _topic: str, payload: bytes) -> None:
         state = RegionalState.model_validate_json(payload)
-        self.guard.accept(state)
+        validation_time = getattr(self.bus, "validation_time", None)
+        self.guard.accept(
+            state,
+            checked_at=validation_time(state) if callable(validation_time) else None,
+        )
         self.received_states += 1
         for strategy in self.coordinator.strategies(state):
             await self.bus.publish(
@@ -46,4 +50,3 @@ class CloudRuntime:
                 qos=1,
             )
             self.published_strategies += 1
-

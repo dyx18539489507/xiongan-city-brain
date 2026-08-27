@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.1",
+  "sceneId": "xiongan-20260824095850-qf2lfz",
+  "sceneFile": "xiongan-20260824095850-qf2lfz.scene.json",
+  "sceneSha256": "fdb5447403506da97cc98cf4724b938c6dec471c5efb6780014b9221b9b27142",
+  "sceneBytes": 3951462,
+  "counts": {
+    "junctions": 758,
+    "roads": 132,
+    "edges": 2608,
+    "lanes": 3188,
+    "connections": 4510,
+    "crossings": 14,
+    "trafficLights": 87,
+    "busStops": 0,
+    "pedestrianAreas": 175,
+    "bicycleAreas": 965,
+    "buildings": 0,
+    "vegetation": 0,
+    "roadsideDevices": 174,
+    "zones": 0,
+    "controlCorridors": 1,
+    "edgeRegions": 460
+  },
+  "sourceFiles": [
+    {
+      "path": "scenarios/generated/xiongan-20260824095850-qf2lfz/rongdong.multimodal.net.xml",
+      "role": "sumo_network_truth",
+      "sha256": "5df47f51958a70f2265c7dca6efc1bffee830e430f94f5b09cb4c4541b633a6b"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824095850-qf2lfz/controlled_intersections.json",
+      "role": "controlled_intersection_registry",
+      "sha256": "22e9bdb321726dcda69500edefce107b574fec8faee8689fe0cb1d2d22662f15"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824095850-qf2lfz/functional_zones.json",
+      "role": "functional_zone_inventory",
+      "sha256": "34add6f406e6e4525f368a351607c821c7648812d835c3c951d50c1ba45cde15"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824095850-qf2lfz/vtypes.add.xml",
+      "role": "sumo_participant_types",
+      "sha256": "c93acd7cb4d62d45b53009350ddb4aa02f96863a2df35ea710ca3ce1d067f37f"
+    },
+    {
+      "path": "scenarios/configs/xiongan-20260824095850-qf2lfz.yaml",
+      "role": "scenario_configuration",
+      "sha256": "5bcdee4ddd76ffa350e606aa49c0110827b8814c35b6fc14ea283edda9feced9"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824095850-qf2lfz/source.osm.xml",
+      "role": "osm_geographic_context",
+      "sha256": "f6b3de16c10c01d359cf3d46df036f728dd857632aa49d4f39cbf17c39dc1ae2"
+    }
+  ]
+}

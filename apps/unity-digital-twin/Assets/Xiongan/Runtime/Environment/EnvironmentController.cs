@@ -15,23 +15,23 @@ namespace Xiongan.DigitalTwin.Environment
         {
             var lightObject = new GameObject("太阳主光");
             lightObject.transform.SetParent(transform, false);
-            lightObject.transform.rotation = Quaternion.Euler(38f, -118f, 0f);
+            lightObject.transform.rotation = Quaternion.Euler(43f, -126f, 0f);
             sun = lightObject.AddComponent<Light>();
             sun.type = LightType.Directional;
-            sun.intensity = 2.05f;
-            sun.color = new Color(1f, 0.975f, 0.925f);
+            sun.intensity = 1.38f;
+            sun.color = new Color(1f, 0.955f, 0.89f);
             sun.shadows = LightShadows.Soft;
-            sun.shadowStrength = 0.9f;
-            sun.shadowBias = 0.018f;
-            sun.shadowNormalBias = 0.18f;
+            sun.shadowStrength = 0.72f;
+            sun.shadowBias = 0.024f;
+            sun.shadowNormalBias = 0.24f;
 
             var fillObject = new GameObject("天空柔光");
             fillObject.transform.SetParent(transform, false);
             fillObject.transform.rotation = Quaternion.Euler(58f, 145f, 0f);
             var fill = fillObject.AddComponent<Light>();
             fill.type = LightType.Directional;
-            fill.intensity = 0.08f;
-            fill.color = new Color(0.78f, 0.82f, 0.86f);
+            fill.intensity = 0.24f;
+            fill.color = new Color(0.86f, 0.9f, 0.96f);
             fill.shadows = LightShadows.None;
 
             var skyShader = Shader.Find("Skybox/Procedural");
@@ -40,23 +40,23 @@ namespace Xiongan.DigitalTwin.Environment
                 var sky = new Material(skyShader);
                 sky.SetFloat("_SunSize", 0.018f);
                 sky.SetFloat("_SunSizeConvergence", 8.5f);
-                sky.SetFloat("_AtmosphereThickness", 0.86f);
-                sky.SetColor("_SkyTint", new Color(0.24f, 0.49f, 0.78f));
-                sky.SetColor("_GroundColor", new Color(0.45f, 0.48f, 0.43f));
-                sky.SetFloat("_Exposure", 1.02f);
+                sky.SetFloat("_AtmosphereThickness", 0.78f);
+                sky.SetColor("_SkyTint", new Color(0.3f, 0.52f, 0.78f));
+                sky.SetColor("_GroundColor", new Color(0.44f, 0.46f, 0.44f));
+                sky.SetFloat("_Exposure", 1.05f);
                 RenderSettings.skybox = sky;
             }
             RenderSettings.sun = sun;
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.Linear;
-            RenderSettings.fogStartDistance = 1800f;
-            RenderSettings.fogEndDistance = 8000f;
+            RenderSettings.fogStartDistance = 280f;
+            RenderSettings.fogEndDistance = 1900f;
             RenderSettings.ambientMode = AmbientMode.Trilight;
-            RenderSettings.ambientIntensity = 0.91f;
-            RenderSettings.ambientSkyColor = new Color(0.68f, 0.7f, 0.69f);
-            RenderSettings.ambientEquatorColor = new Color(0.49f, 0.5f, 0.46f);
-            RenderSettings.ambientGroundColor = new Color(0.27f, 0.29f, 0.235f);
-            RenderSettings.reflectionIntensity = 0.78f;
+            RenderSettings.ambientIntensity = 0.88f;
+            RenderSettings.ambientSkyColor = new Color(0.65f, 0.69f, 0.77f);
+            RenderSettings.ambientEquatorColor = new Color(0.5f, 0.52f, 0.53f);
+            RenderSettings.ambientGroundColor = new Color(0.4f, 0.41f, 0.4f);
+            RenderSettings.reflectionIntensity = 1f;
             RenderSettings.defaultReflectionMode = DefaultReflectionMode.Skybox;
 
             CreatePostProcessing();
@@ -67,15 +67,15 @@ namespace Xiongan.DigitalTwin.Environment
         public void SetMode(string mode)
         {
             if (sun == null) return;
-            color.postExposure.value = 1.05f;
-            color.saturation.value = 1f;
-            color.contrast.value = 10f;
-            whiteBalance.temperature.value = 4f;
-            sun.intensity = 2.05f;
-            sun.color = new Color(1f, 0.975f, 0.925f);
-            sun.transform.rotation = Quaternion.Euler(38f, -118f, 0f);
-            RenderSettings.fogColor = new Color(0.61f, 0.74f, 0.85f);
-            RenderSettings.ambientSkyColor = new Color(0.68f, 0.7f, 0.69f);
+            color.postExposure.value = 0.3f;
+            color.saturation.value = 0f;
+            color.contrast.value = 5f;
+            whiteBalance.temperature.value = 0f;
+            sun.intensity = 1.38f;
+            sun.color = new Color(1f, 0.955f, 0.89f);
+            sun.transform.rotation = Quaternion.Euler(43f, -126f, 0f);
+            RenderSettings.fogColor = new Color(0.7f, 0.8f, 0.89f);
+            RenderSettings.ambientSkyColor = new Color(0.68f, 0.73f, 0.8f);
         }
 
         private void CreatePostProcessing()
@@ -90,17 +90,20 @@ namespace Xiongan.DigitalTwin.Environment
             var tonemapping = profile.Add<Tonemapping>(true);
             tonemapping.mode.Override(TonemappingMode.ACES);
             color = profile.Add<ColorAdjustments>(true);
-            color.postExposure.Override(1.05f);
-            color.contrast.Override(10f);
-            color.saturation.Override(1f);
+            color.postExposure.Override(0.3f);
+            color.contrast.Override(5f);
+            color.saturation.Override(0f);
             whiteBalance = profile.Add<WhiteBalance>(true);
-            whiteBalance.temperature.Override(4f);
+            whiteBalance.temperature.Override(0f);
             var bloom = profile.Add<Bloom>(true);
-            bloom.threshold.Override(1.2f);
-            bloom.intensity.Override(0.075f);
-            bloom.scatter.Override(0.52f);
+            bloom.threshold.Override(1.35f);
+            bloom.intensity.Override(0.04f);
+            bloom.scatter.Override(0.42f);
+            // At this intensity Bloom is visually imperceptible in the sunny
+            // scene, but still allocates and samples a downsample pyramid.
+            bloom.active = false;
             var vignette = profile.Add<Vignette>(true);
-            vignette.intensity.Override(0.015f);
+            vignette.intensity.Override(0f);
             vignette.smoothness.Override(0.32f);
         }
 

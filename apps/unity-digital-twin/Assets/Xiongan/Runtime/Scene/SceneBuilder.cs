@@ -9,7 +9,7 @@ namespace Xiongan.DigitalTwin.Scene
 {
     public sealed class SceneBuilder : MonoBehaviour
     {
-        private const string ShowcaseVisualAnchorJunctionId = "cluster_11122023464_11122023574";
+        private const string ShowcaseVisualAnchorJunctionId = ReferenceShowcaseLayout.JunctionId;
 
         [SerializeField] private SceneDocument document = new();
         [SerializeField] private int bakedBuildingCount;
@@ -30,6 +30,8 @@ namespace Xiongan.DigitalTwin.Scene
             bakedBuildingCount = document.Buildings.Count;
             Coordinates = new CoordinateService(document.CoordinateSystem.WorldOriginSumo);
             Materials = new MaterialLibrary();
+            lanes.Clear();
+            junctions.Clear();
             foreach (var lane in document.Lanes) lanes[lane.SumoLaneId] = lane;
             foreach (var junction in document.Junctions) junctions[junction.SumoJunctionId] = junction;
 
@@ -40,24 +42,28 @@ namespace Xiongan.DigitalTwin.Scene
             var curb = new MeshAccumulator();
             var verge = new MeshAccumulator();
             var marking = new MeshAccumulator();
-            var yellowMarking = new MeshAccumulator();
             var junctionMesh = new MeshAccumulator();
             var crossingMesh = new MeshAccumulator();
-            var heroJunction = document.Junctions.First(item => item.SumoJunctionId == ShowcaseVisualAnchorJunctionId);
-            var heroCenter = Coordinates.ToWorld(heroJunction.Position);
+            var hasReferenceShowcase = junctions.ContainsKey(ShowcaseVisualAnchorJunctionId);
+            ReferenceShowcaseFrame? showcaseFrame = hasReferenceShowcase
+                ? ReferenceShowcaseLayout.Resolve(this)
+                : null;
 
             for (var index = 0; index < document.Lanes.Count; index++)
             {
                 var lane = document.Lanes[index];
                 var points = lane.Shape.Select(point => Coordinates.ToWorld(point)).ToList();
-                var overlapsHeroInterior = lane.EdgeFunction == "internal" &&
-                                           points.Any(point => Vector3.Distance(point, heroCenter) < 24f);
-                if (overlapsHeroInterior && lane.LaneKind is "bicycle" or "pedestrian") continue;
-                if (lane.LaneKind == "bicycle") bicycle.AddRibbon(points, lane.WidthM, 0.035f, 5f);
-                else if (lane.LaneKind == "pedestrian") sidewalk.AddRibbon(points, lane.WidthM, 0.085f, 3.2f);
+                // Junction polygons are the single visible surface inside every
+                // intersection. Drawing SUMO internal lanes a few millimetres
+                // above the same polygon caused depth fighting while panning.
+                if (lane.EdgeFunction == "internal") continue;
+                if (lane.LaneKind == "bicycle")
+                    AddRibbonOutsideShowcase(bicycle, points, lane.WidthM, 0.035f, 5f, showcaseFrame);
+                else if (lane.LaneKind == "pedestrian")
+                    AddRibbonOutsideShowcase(sidewalk, points, lane.WidthM, 0.085f, 3.2f, showcaseFrame);
                 else
                 {
-                    asphalt.AddRibbon(points, lane.WidthM, lane.EdgeFunction == "internal" ? 0.022f : 0.02f, 8f);
+                    AddRibbonOutsideShowcase(asphalt, points, lane.WidthM, 0.02f, 8f, showcaseFrame);
                 }
                 if (index % 500 == 0)
                 {
@@ -73,8 +79,18 @@ namespace Xiongan.DigitalTwin.Scene
                          .GroupBy(item => item.SumoEdgeId))
             {
                 var ordered = edge.OrderBy(item => LaneIndex(item.SumoLaneId)).ToList();
-                AddRoadEdgeDetails(ordered[0], -1f, curb, verge, yellowMarking);
-                if (ordered.Count > 1) AddRoadEdgeDetails(ordered[^1], 1f, curb, verge, yellowMarking);
+                if (showcaseFrame.HasValue && ordered.Any(lane => ReferenceShowcaseLayout.IntersectsRoadSurfaceOverride(
+                        showcaseFrame.Value,
+                        lane.Shape.Select(point => Coordinates.ToWorld(point)).ToList(),
+                        lane.WidthM * 0.5f + 1f)))
+                    continue;
+                // Scene geometry is stored in the converted Unity coordinate
+                // system: the minimum lane-index boundary offsets negatively,
+                // while the maximum boundary offsets positively. This pairing
+                // is verified by the fixed audit cameras and keeps raised verge
+                // ribbons outside the asphalt carriageway.
+                AddRoadEdgeDetails(ordered[0], -1f, curb, verge, marking);
+                if (ordered.Count > 1) AddRoadEdgeDetails(ordered[^1], 1f, curb, verge, marking);
                 var driveable = ordered.Where(IsDriveable).ToList();
                 for (var laneIndex = 0; laneIndex < driveable.Count - 1; laneIndex++)
                 {
@@ -86,13 +102,12 @@ namespace Xiongan.DigitalTwin.Scene
 
             foreach (var junction in document.Junctions)
             {
+                if (hasReferenceShowcase && junction.SumoJunctionId == ShowcaseVisualAnchorJunctionId) continue;
                 if (junction.Shape.Count >= 3)
                     junctionMesh.AddPolygon(junction.Shape.Select(point => Coordinates.ToWorld(point)).ToList(), 0.028f);
             }
-            CreateHeroJunctionSurface();
             foreach (var crossing in document.Crossings.Where(item => item.JunctionId != ShowcaseVisualAnchorJunctionId))
                 AddCrosswalk(crossingMesh, crossing);
-            AddHeroCrosswalks(crossingMesh, heroCenter);
 
             var approachConnections = document.Connections
                 .Where(item => item.Direction is "s" or "l" or "r")
@@ -103,11 +118,10 @@ namespace Xiongan.DigitalTwin.Scene
             {
                 var lane = lanes[approach.Key];
                 var points = lane.Shape.Select(point => Coordinates.ToWorld(point)).ToList();
-                if (!TryPointBeforeEnd(points, 16.5f, out var arrowPosition, out var forward)) continue;
-                var directions = NormaliseDirections(approach
-                    .Select(item => item.Direction)
-                    .Distinct()
-                    .OrderBy(DirectionOrder));
+                if (!RoadMarkingPlacementRules.TryResolveArrow(points, out var arrowPosition, out var forward)) continue;
+                if (showcaseFrame.HasValue && ReferenceShowcaseLayout.CoversRoadMarkingOverride(showcaseFrame.Value, arrowPosition)) continue;
+                var directions = RoadMarkingPlacementRules.SelectDisplayDirections(
+                    approach.Select(item => item.Direction));
                 if (directions.Length == 0) continue;
                 marking.AddArrow(arrowPosition, forward, directions, 0.065f);
             }
@@ -120,6 +134,7 @@ namespace Xiongan.DigitalTwin.Scene
             {
                 var lane = lanes[approach.Key];
                 var end = Coordinates.ToWorld(lane.Shape[^1]);
+                if (showcaseFrame.HasValue && ReferenceShowcaseLayout.CoversRoadMarkingOverride(showcaseFrame.Value, end)) continue;
                 var previous = Coordinates.ToWorld(lane.Shape[^2]);
                 var forward = (end - previous).normalized;
                 var side = Vector3.Cross(Vector3.up, forward);
@@ -127,14 +142,13 @@ namespace Xiongan.DigitalTwin.Scene
             }
 
             asphalt.Build("SUMO道路面", Materials.Asphalt, transform);
-            bicycle.Build("非机动车道", Materials.Bicycle, transform, false);
-            sidewalk.Build("人行设施", Materials.Sidewalk, transform, false);
-            curb.Build("花岗岩路缘石", Materials.Curb, transform);
-            verge.Build("道路侧分绿化带", Materials.Grass, transform, false);
+            bicycle.Build("非机动车道", Materials.Bicycle, transform, false, SceneDetailClass.Context);
+            sidewalk.Build("人行设施", Materials.Sidewalk, transform, false, SceneDetailClass.Context);
+            curb.Build("花岗岩路缘石", Materials.Curb, transform, true, SceneDetailClass.Fine);
+            verge.Build("道路侧分绿化带", Materials.Grass, transform, false, SceneDetailClass.Context);
             junctionMesh.Build("路口铺装", Materials.Junction, transform);
-            crossingMesh.Build("斑马线", Materials.Marking, transform, false);
-            marking.Build("车道线停止线与导向箭头", Materials.Marking, transform, false);
-            yellowMarking.Build("道路边缘黄色标线", Materials.MarkingYellow, transform, false);
+            crossingMesh.Build("斑马线", Materials.Marking, transform, false, SceneDetailClass.Fine);
+            marking.Build("车道线停止线与导向箭头", Materials.Marking, transform, false, SceneDetailClass.Fine);
 
             onProgress(0.72f, "照片级道路与路口构造已生成");
             yield return null;
@@ -185,7 +199,7 @@ namespace Xiongan.DigitalTwin.Scene
             var surface = new MeshAccumulator();
             var shape = junction.Shape.Select(point => Coordinates.ToWorld(point)).ToList();
             if (shape.Count < 3) return;
-            const float apron = 1.25f;
+            const float apron = 3.5f;
             var minX = shape.Min(point => point.x) - apron;
             var maxX = shape.Max(point => point.x) + apron;
             var minZ = shape.Min(point => point.z) - apron;
@@ -195,12 +209,44 @@ namespace Xiongan.DigitalTwin.Scene
                 new Vector3(minX, 0f, minZ), new Vector3(maxX, 0f, minZ),
                 new Vector3(maxX, 0f, maxZ), new Vector3(minX, 0f, maxZ),
             }, 0.031f);
-            surface.Build("K08 连续沥青路口铺装", Materials.Asphalt, transform);
+            surface.Build("K08 连续沥青路口铺装", Materials.HeroAsphalt, transform);
         }
 
         private static bool IsDriveable(LaneRecord lane)
         {
             return lane.LaneKind is "motor" or "mixed";
+        }
+
+        private static void AddRibbonOutsideShowcase(
+            MeshAccumulator accumulator,
+            IReadOnlyList<Vector3> points,
+            float width,
+            float height,
+            float textureMeters,
+            ReferenceShowcaseFrame? frame)
+        {
+            var margin = width * 0.5f + 0.35f;
+            if (!frame.HasValue || !ReferenceShowcaseLayout.IntersectsRoadSurfaceOverride(frame.Value, points, margin))
+            {
+                accumulator.AddRibbon(points, width, height, textureMeters);
+                return;
+            }
+
+            for (var index = 0; index < points.Count - 1; index++)
+            {
+                var from = points[index];
+                var to = points[index + 1];
+                var distance = Vector3.Distance(from, to);
+                var pieces = Mathf.Max(1, Mathf.CeilToInt(distance / 4f));
+                for (var piece = 0; piece < pieces; piece++)
+                {
+                    var a = Vector3.Lerp(from, to, piece / (float)pieces);
+                    var b = Vector3.Lerp(from, to, (piece + 1f) / pieces);
+                    var midpoint = (a + b) * 0.5f;
+                    if (ReferenceShowcaseLayout.CoversRoadSurfaceOverride(frame.Value, midpoint, margin)) continue;
+                    accumulator.AddRibbon(new[] { a, b }, width, height, textureMeters);
+                }
+            }
         }
 
         private static void AddDashedMarking(MeshAccumulator accumulator, IReadOnlyList<Vector3> points)
@@ -225,12 +271,15 @@ namespace Xiongan.DigitalTwin.Scene
             }
         }
 
-        private void AddRoadEdgeDetails(LaneRecord lane, float sign, MeshAccumulator curb, MeshAccumulator verge, MeshAccumulator yellow)
+        private void AddRoadEdgeDetails(LaneRecord lane, float sign, MeshAccumulator curb, MeshAccumulator verge, MeshAccumulator edgeLine)
         {
             var points = lane.Shape.Select(point => Coordinates.ToWorld(point)).ToList();
             curb.AddExtrudedRibbon(Offset(points, sign * (lane.WidthM * 0.5f + 0.16f)), 0.32f, 0.025f, 0.16f);
-            verge.AddRibbon(Offset(points, sign * (lane.WidthM * 0.5f + 1.55f)), 2.45f, 0.075f, 5f);
-            yellow.AddRibbon(Offset(points, sign * (lane.WidthM * 0.5f - 0.12f)), 0.1f, 0.067f, 1f);
+            // Verge polygons must sit below every driveable surface. Source OSM
+            // edges occasionally overlap; a raised verge made legal SUMO cars
+            // appear to drive on grass even though their lane was correct.
+            verge.AddRibbon(Offset(points, sign * (lane.WidthM * 0.5f + 1.55f)), 2.45f, 0.012f, 5f);
+            edgeLine.AddRibbon(Offset(points, sign * (lane.WidthM * 0.5f - 0.12f)), 0.1f, 0.067f, 1f);
         }
 
         private static List<Vector3> Offset(IReadOnlyList<Vector3> points, float amount)
@@ -250,54 +299,6 @@ namespace Xiongan.DigitalTwin.Scene
         {
             var split = id.LastIndexOf('_');
             return split >= 0 && int.TryParse(id[(split + 1)..], out var index) ? index : 0;
-        }
-
-        private static int DirectionOrder(string direction)
-        {
-            return direction switch
-            {
-                "l" => 0,
-                "s" => 1,
-                "r" => 2,
-                _ => 3,
-            };
-        }
-
-        private static string NormaliseDirections(IEnumerable<string> source)
-        {
-            var directions = new string(source
-                .SelectMany(value => value.ToLowerInvariant())
-                .Where(value => value is 'l' or 's' or 'r')
-                .Distinct()
-                .OrderBy(value => DirectionOrder(value.ToString()))
-                .ToArray());
-            // A three-headed symbol reads as a paint error at web resolution. Keep the dominant
-            // through movement while SUMO continues to retain all legal connection movements.
-            return directions.Length == 3 ? "s" : directions;
-        }
-
-        private static bool TryPointBeforeEnd(
-            IReadOnlyList<Vector3> points, float distanceFromEnd, out Vector3 position, out Vector3 forward)
-        {
-            position = Vector3.zero;
-            forward = Vector3.forward;
-            if (points.Count < 2) return false;
-            var remaining = distanceFromEnd;
-            for (var index = points.Count - 1; index > 0; index--)
-            {
-                var segment = points[index] - points[index - 1];
-                segment.y = 0f;
-                var length = segment.magnitude;
-                if (length < 0.05f) continue;
-                forward = segment / length;
-                if (remaining <= length)
-                {
-                    position = points[index] - forward * remaining;
-                    return true;
-                }
-                remaining -= length;
-            }
-            return false;
         }
 
         private void AddCrosswalk(MeshAccumulator accumulator, CrossingRecord crossing)
@@ -345,12 +346,12 @@ namespace Xiongan.DigitalTwin.Scene
                 var projections = lanes.Select(lane => Vector3.Dot(lane.End - averageEnd, side)).ToList();
                 var halfSpan = Mathf.Max(4.5f, (projections.Max() - projections.Min()) * 0.5f + (float)lanes.Average(lane => lane.Lane.WidthM) * 0.72f);
                 var crosswalkCenter = averageEnd + forward * 2.45f;
-                for (var stripe = -3; stripe <= 3; stripe++)
+                for (var stripe = -5; stripe <= 5; stripe++)
                 {
-                    var stripeCenter = crosswalkCenter + forward * stripe * 0.78f;
+                    var stripeCenter = crosswalkCenter + forward * stripe * 0.72f;
                     accumulator.AddRibbon(
                         new[] { stripeCenter - side * halfSpan, stripeCenter + side * halfSpan },
-                        0.46f, 0.076f, 1f);
+                        0.5f, 0.076f, 1f);
                 }
             }
         }

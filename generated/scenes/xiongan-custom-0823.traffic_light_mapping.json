@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "xiongan-custom-0823",
+  "sourceSceneFile": "xiongan-custom-0823.scene.json",
+  "sourceSceneSha256": "53a7ae491610d5534ef0c9d1e1e8e79ac35c8072003c16d14baf3c6562c63012",
+  "controllers": [
+    {
+      "sceneId": "tls:-2:0",
+      "sumoTlsId": "-2",
+      "controlledJunctionId": "-2",
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-1_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-2_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-1_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-2_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-1_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-2_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-1_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-2_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-1_1",
+          "toLaneId": "--1_1",
+          "viaLaneId": ":-2_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "--1_0",
+          "viaLaneId": ":-2_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-2_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--1_1",
+          "viaLaneId": ":-2_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-2_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-2_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-2_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--1_0",
+          "viaLaneId": ":-2_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-2_12_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "--1_1",
+          "viaLaneId": ":-2_13_0"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-2_14_0"
+        }
+      ],
+      "phaseStateLengths": [
+        15,
+        15,
+        15,
+        15
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 1,
+    "links": 15
+  }
+}

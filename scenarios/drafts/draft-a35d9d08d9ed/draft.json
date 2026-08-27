@@ -1,0 +1,248 @@
+{
+  "id": "draft-a35d9d08d9ed",
+  "status": "ready",
+  "progress": 100,
+  "message": "河北本地 OSM 框选范围已解析",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91573565679775,
+      "south": 39.058306970941246,
+      "east": 115.9162008502208,
+      "north": 39.05849087922222
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21",
+    "network_context": {
+      "strategy": "intersecting_road_corridors_to_nearest_intersection",
+      "maximum_extension_m": 120.0,
+      "fallback_extension_m": 80.0,
+      "network_bbox": {
+        "west": 115.914880008,
+        "south": 39.058094654,
+        "east": 115.916992638,
+        "north": 39.058752441
+      },
+      "selected_source_way_count": 2,
+      "corridors": [
+        {
+          "source_way_id": 1001665903,
+          "before_selection_m": 80.0,
+          "after_selection_m": 80.0,
+          "before_boundary": "fallback_stub",
+          "after_boundary": "fallback_stub"
+        },
+        {
+          "source_way_id": 1001665907,
+          "before_selection_m": 30.567,
+          "after_selection_m": 19.239,
+          "before_boundary": "nearest_intersection",
+          "after_boundary": "nearest_intersection"
+        }
+      ],
+      "controlled_intersections_limited_to_selection": true
+    }
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "high",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 115.91486835577871,
+      "min_y": 39.05807254559229,
+      "max_x": 115.91700364617971,
+      "max_y": 39.0587746869689
+    },
+    "selection_bounds": {
+      "west": 115.91573565679775,
+      "south": 39.058306970941246,
+      "east": 115.9162008502208,
+      "north": 39.05849087922222
+    },
+    "roads": [
+      {
+        "id": "--1#0",
+        "coordinates": [
+          [
+            115.91602797844985,
+            39.05843395514212
+          ],
+          [
+            115.91700364617971,
+            39.05873019871194
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "--1#1",
+        "coordinates": [
+          [
+            115.9148915695739,
+            39.05807254559229
+          ],
+          [
+            115.91587309295215,
+            39.05838579363218
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "--2#0",
+        "coordinates": [
+          [
+            115.91593708221875,
+            39.058501728422286
+          ],
+          [
+            115.91581159924328,
+            39.058756562367556
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "--2#1",
+        "coordinates": [
+          [
+            115.91611781489962,
+            39.05815581175187
+          ],
+          [
+            115.91599879900238,
+            39.05838083479287
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-1#0",
+        "coordinates": [
+          [
+            115.91698146937225,
+            39.0587746869689
+          ],
+          [
+            115.91600580044246,
+            39.05847848825663
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-1#1",
+        "coordinates": [
+          [
+            115.91584993812585,
+            39.058429957198484
+          ],
+          [
+            115.91486835577871,
+            39.058116753469385
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-2#0",
+        "coordinates": [
+          [
+            115.9157544211979,
+            39.058739360529415
+          ],
+          [
+            115.91587990365663,
+            39.058484571695686
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      },
+      {
+        "id": "-2#1",
+        "coordinates": [
+          [
+            115.91594221484924,
+            39.05836260231063
+          ],
+          [
+            115.9160611146456,
+            39.05813762330292
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 22.22
+      }
+    ],
+    "buildings": [],
+    "intersections": [
+      {
+        "intersection_id": "-2",
+        "display_id": "J01",
+        "display_name": "路口 1",
+        "x": 115.91593843138052,
+        "y": 39.05843240185256,
+        "lon": 115.91593843138052,
+        "lat": 39.05843240185256,
+        "degree": 4,
+        "signalized": false
+      }
+    ],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [
+    "-2"
+  ],
+  "manual_edits": [],
+  "validation": {
+    "valid": true,
+    "selected_intersection_count": 1,
+    "selected_intersection_ids": [
+      "-2"
+    ],
+    "errors": [],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "osm_bbox",
+    "confidence": "high",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.osm.xml",
+    "processed_source": "source.clipped.osm.xml",
+    "network": "network.net.xml"
+  },
+  "logs": [
+    {
+      "time": "2026-08-25T05:18:21.960357+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照提取路网范围"
+    },
+    {
+      "time": "2026-08-25T05:18:22.791219+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-25T05:18:23.357156+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    },
+    {
+      "time": "2026-08-25T05:18:23.402913+00:00",
+      "progress": 100,
+      "message": "河北本地 OSM 框选范围已解析"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-25T05:18:21.881307+00:00",
+  "updated_at": "2026-08-25T05:18:37.539703+00:00"
+}

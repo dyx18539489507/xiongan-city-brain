@@ -80,6 +80,7 @@ type AssetState = "loading" | "ready" | "error";
 type DisplayMode = "real" | "analysis";
 
 type IntersectionSceneProps = {
+  scenarioId: string;
   digitalTwin: DigitalTwinStream;
   node: IntersectionNode | null;
   realtime: IntersectionRealtime | null;
@@ -141,10 +142,6 @@ const initialDemoSnapshot: DemoSnapshot = {
   label: "待机",
 };
 
-function formatValue(value: number | undefined, digits = 0): string {
-  return value === undefined ? "—" : value.toFixed(digits);
-}
-
 function formatCount(value: number): string {
   return new Intl.NumberFormat("zh-CN").format(value);
 }
@@ -163,6 +160,7 @@ function triangleCount(stats: RoadBuildStats): number {
 }
 
 export function IntersectionScene({
+  scenarioId,
   digitalTwin,
   node,
   realtime,
@@ -189,7 +187,7 @@ export function IntersectionScene({
   const eventExperimentRef = useRef<string | null>(null);
   const digitalTwinStateRef = useRef(digitalTwin.state);
   const [view, setView] = useState<ViewMode>("overview");
-  const [weatherMode, setWeatherMode] = useState<WeatherMode>("clear");
+  const [weatherMode] = useState<WeatherMode>("clear");
   const [displayMode, setDisplayMode] = useState<DisplayMode>("real");
   const [assetState, setAssetState] = useState<AssetState>("loading");
   const [assetMessage, setAssetMessage] = useState("下载统一场景数据");
@@ -391,12 +389,20 @@ export function IntersectionScene({
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.075;
+    controls.zoomSpeed = 0.65;
     controls.target.copy(desiredTarget);
     controls.minDistance = 10;
     controls.maxDistance = 6200;
     controls.maxPolarAngle = Math.PI * 0.485;
     const cameraManager = new CameraManager(camera, controls);
-    controls.addEventListener("start", () => cameraManager.cancel());
+    let lastCameraMotionMs = Number.NEGATIVE_INFINITY;
+    const handleControlStart = () => cameraManager.cancel();
+    const handleCameraMotion = () => {
+      lastCameraMotionMs = performance.now();
+      lodManager?.notifyCameraMotion(lastCameraMotionMs);
+    };
+    controls.addEventListener("start", handleControlStart);
+    controls.addEventListener("change", handleCameraMotion);
 
     const placeCamera = (nextView: ViewMode, junctionId: string | null) => {
       if (!loadedScene || !coordinateService) return;
@@ -607,7 +613,6 @@ export function IntersectionScene({
       demoTimelineConfig as DemoTimeline,
       (cue) => {
         setView(cue.view);
-        if (cue.weather) setWeatherMode(cue.weather);
         if (cue.displayMode) setDisplayMode(cue.displayMode);
         placeCamera(cue.view, cue.junctionId ?? null);
       },
@@ -630,7 +635,7 @@ export function IntersectionScene({
     const load = async () => {
       try {
         const document = await loadStaticScene(
-          "xiongan_rongdong_20",
+          scenarioId,
           abortController.signal,
           (progress) => {
             if (cancelled) return;
@@ -826,10 +831,8 @@ export function IntersectionScene({
         scene.add(conflictAreaManager.root);
         lodManager = new LODManager(lodConfig);
         lodManager.capture(scene);
-        // Force the first configured decision instead of waiting for a camera move.
-        for (let index = 0; index < lodConfig.updateIntervalFrames; index += 1) {
-          lodManager.update(camera);
-        }
+        // Establish the initial tier immediately; later changes wait for camera settle.
+        lodManager.update(camera, performance.now(), true);
         setStaticLod(lodManager.snapshot());
         textureManager = new TextureManager();
         textureManager.capture(scene);
@@ -869,7 +872,7 @@ export function IntersectionScene({
           roadsideDevices: roadsideDeviceManager.stats.devices,
         });
         placeCamera("overview", null);
-        setAssetMessage("20 路口 SUMO 静态拓扑已载入");
+        setAssetMessage(`${document.junctions.length} 个 SUMO 路口静态拓扑已载入`);
         setAssetState("ready");
       } catch (error: unknown) {
         if (cancelled || (error instanceof DOMException && error.name === "AbortError")) return;
@@ -882,6 +885,7 @@ export function IntersectionScene({
 
     let lastRender = 0;
     let lastSubmittedFrame = 0;
+    let cameraMotionActive = false;
     const render = (frameTime: number) => {
       const renderIntervalMs = 1_000 / targetFrameRate(qualityManager.snapshot().level);
       const elapsed = frameTime - lastRender;
@@ -908,11 +912,14 @@ export function IntersectionScene({
           setDemo({...nextDemo});
         }
         controls.update();
+        const cameraIsMoving = frameTime - lastCameraMotionMs < lodConfig.settleDelayMs;
+        if (cameraMotionActive && !cameraIsMoving) performanceMonitor.reset();
+        cameraMotionActive = cameraIsMoving;
         vehicleManager?.update(frameTime, camera);
         bicycleManager?.update(frameTime, camera);
         pedestrianManager?.update(frameTime, camera);
         weatherManager?.update(submittedDelta / 1000, camera);
-        if (lodManager?.update(camera)) setStaticLod(lodManager.snapshot());
+        if (lodManager?.update(camera, frameTime)) setStaticLod(lodManager.snapshot());
         shadowBudgetManager?.setEnabled(qualityManager.snapshot().level === "native");
         shadowBudgetManager?.update(camera);
         renderer.render(scene, camera);
@@ -920,6 +927,7 @@ export function IntersectionScene({
         if (performanceSnapshot) {
           setRenderPerformance(performanceSnapshot);
           if (
+            !cameraIsMoving &&
             qualityManager.observe(
               performanceSnapshot.averageFps,
               performanceSnapshot.p1Fps,
@@ -944,6 +952,8 @@ export function IntersectionScene({
       abortController.abort();
       window.cancelAnimationFrame(frameId);
       observer.disconnect();
+      controls.removeEventListener("start", handleControlStart);
+      controls.removeEventListener("change", handleCameraMotion);
       controls.dispose();
       interactionManager?.dispose();
       interactionManager = null;
@@ -1000,22 +1010,52 @@ export function IntersectionScene({
       coordinateService = null;
       controllerRef.current = null;
     };
-  }, []);
+  }, [scenarioId]);
 
   const selectedLabel = useMemo(
-    () => (node ? `${node.display_id} / SUMO ${node.intersection_id}` : "20 CONTROLLED JUNCTIONS"),
-    [node],
+    () => (node ? `${node.display_id} / SUMO ${node.intersection_id}` : `${scenarioId} / SUMO 场景`),
+    [node, scenarioId],
   );
+
+  const performanceTelemetry = JSON.stringify({
+    ...renderPerformance,
+    quality: {...quality, targetFps: targetFrameRate(quality.level)},
+    staticLod,
+    textureBudget,
+    view,
+    weatherMode,
+    displayMode,
+    sourceMode,
+    websocketOnline,
+    status,
+    simulationTimeS: digitalTwin.state.initialized
+      ? digitalTwin.state.simulationTimeS
+      : simulationTime,
+    entityConnection: digitalTwin.connection,
+    entitySequence: digitalTwin.state.sequence,
+    experimentId: digitalTwin.state.experimentId,
+    vehicleCount: digitalTwin.state.vehicles.size,
+    renderedVehicles,
+    bicycleCount: digitalTwin.state.bicycles.size,
+    renderedBicycles,
+    pedestrianCount: digitalTwin.state.pedestrians.size,
+    renderedPedestrians,
+    mappedSignals,
+    deviceStats,
+    analyticsStats,
+    activeEventVisuals,
+    eventInstanceCounts,
+    summary,
+  });
 
   return (
     <section className="intersection-stage" aria-labelledby="scene-title">
-      <div className="scene-canvas-shell" ref={stageRef}>
-        <canvas ref={canvasRef} aria-label="雄安容东联通20路口三维道路场景" />
+      <div className="scene-canvas-shell" data-performance={performanceTelemetry} ref={stageRef}>
+        <canvas ref={canvasRef} aria-label={`雄安交通 ${scenarioId} 三维道路场景`} />
         <div className="scene-atmosphere" aria-hidden="true" />
 
         <div className="scene-heading">
-          <p>SUMO TOPOLOGY · THREE.JS WEBGL</p>
-          <h1 id="scene-title">雄安窄路密网 20 路口数字孪生</h1>
+          <h1 id="scene-title">雄安交通场景 · {scenarioId}</h1>
           <span>{selectedLabel}</span>
         </div>
 
@@ -1043,11 +1083,10 @@ export function IntersectionScene({
         </div>
 
         <div className="scene-readout">
-          <p>TRACEABLE · REQUIREMENT VALIDATION</p>
           <dl>
             <div>
               <dt>路口 / TLS</dt>
-              <dd>{formatCount(summary.trafficLights)} / 20</dd>
+              <dd>{formatCount(summary.trafficLights)}</dd>
             </div>
             <div>
               <dt>车道</dt>
@@ -1115,26 +1154,7 @@ export function IntersectionScene({
         </div>
 
         <div className="scene-environment-controls" aria-label="天气与时段">
-          {(
-            [
-              ["clear", "晴"],
-              ["cloudy", "阴"],
-              ["dusk", "昏"],
-              ["night", "夜"],
-              ["rain", "雨"],
-              ["fog", "雾"],
-            ] as Array<[WeatherMode, string]>
-          ).map(([mode, label]) => (
-            <button
-              aria-label={`环境-${label}`}
-              className={weatherMode === mode ? "active" : ""}
-              key={mode}
-              onClick={() => setWeatherMode(mode)}
-              type="button"
-            >
-              {label}
-            </button>
-          ))}
+          <button aria-label="环境-大晴天" className="active" disabled type="button">大晴天</button>
         </div>
 
         <div className="scene-analysis-toggle" aria-label="三维显示模式">
@@ -1172,82 +1192,6 @@ export function IntersectionScene({
           </span>
         </div>
 
-        <div
-          className="scene-telemetry"
-          data-performance={JSON.stringify({
-            ...renderPerformance,
-            quality: {...quality, targetFps: targetFrameRate(quality.level)},
-            view,
-            weatherMode,
-            displayMode,
-            experimentId: digitalTwin.state.experimentId,
-            simulationTimeS: digitalTwin.state.simulationTimeS,
-            entityConnection: digitalTwin.connection,
-            vehicleCount: digitalTwin.state.vehicles.size,
-            bicycleCount: digitalTwin.state.bicycles.size,
-            pedestrianCount: digitalTwin.state.pedestrians.size,
-          })}
-        >
-          <span>
-            SOURCE {sourceMode.toUpperCase()} · WS {websocketOnline ? "ONLINE" : "RECONNECTING"}
-          </span>
-          <span>
-            ENTITY {digitalTwin.connection.toUpperCase()} · SEQ {digitalTwin.state.sequence}
-          </span>
-          <span>
-            T+
-            {formatValue(
-              digitalTwin.state.initialized
-                ? digitalTwin.state.simulationTimeS
-                : simulationTime,
-            )}
-            s
-          </span>
-          <span>{status.toUpperCase()}</span>
-          <span>
-            3D VEH {renderedVehicles}/{digitalTwin.state.vehicles.size}
-          </span>
-          <span>
-            BIKE {renderedBicycles}/{digitalTwin.state.bicycles.size} · PED {renderedPedestrians}/{digitalTwin.state.pedestrians.size}
-          </span>
-          <span>
-            TLS LINK {mappedSignals} · CTRL {digitalTwin.state.trafficLights.size}/20
-          </span>
-          <span>
-            BLDG {summary.buildings} · TREE {summary.trees}
-          </span>
-          <span>LAMP {summary.streetLights}</span>
-          <span>
-            DEVICE {deviceStats.devices} · RSU {deviceStats.rsus} · CAM {deviceStats.cameras} · BOUND {deviceStats.runtimeBound}
-          </span>
-          <span>ENV {weatherMode.toUpperCase()}</span>
-          <span>
-            ANALYTICS {displayMode.toUpperCase()} · LANE {analyticsStats.activeLanes} · SEVERE {analyticsStats.severeLanes} · QUEUE {analyticsStats.queuedVehicles}
-          </span>
-          <span>
-            GREEN WINDOW {analyticsStats.openGreenWindows} · BAND {analyticsStats.greenWaveSegments}
-          </span>
-          <span>
-            ACTIVE EVENT {activeEventVisuals} · CONE {eventInstanceCounts.cones} · BARRIER {eventInstanceCounts.barriers}
-          </span>
-          <span>
-            FPS {formatValue(renderPerformance.averageFps, 1)} · P1 {formatValue(renderPerformance.p1Fps, 1)}
-          </span>
-          <span>
-            QUALITY {quality.level.toUpperCase()} · TARGET {targetFrameRate(quality.level)} · SCALE {formatValue(quality.renderScale, 2)} · DPR {formatValue(quality.pixelRatio, 2)}
-          </span>
-          <span>
-            LOD {staticLod.tier.toUpperCase()} · HIDDEN {staticLod.hiddenObjects}/{staticLod.managedObjects}
-          </span>
-          <span>
-            TEX {textureBudget.textures} · GPU≈{formatValue(textureBudget.estimatedBytes / 1048576, 1)}MB/{formatValue(textureBudget.budgetBytes / 1048576, 0)}MB
-          </span>
-          <span>
-            {formatCount(renderPerformance.drawCalls)} DC · {formatCount(renderPerformance.triangles)} TRI
-          </span>
-          <span>{summary.drawObjects} BATCH OBJECTS · {summary.stopLines} STOP LINES</span>
-        </div>
-
         <p className="scene-hint">点击车辆/道路/路口/信号灯/RSU 查看真值 · 拖拽旋转 · 滚轮缩放</p>
         {sceneSelection && (
           <aside className="scene-entity-inspector" aria-live="polite">
@@ -1258,7 +1202,6 @@ export function IntersectionScene({
             >
               ×
             </button>
-            <p>{sceneSelection.kind.toUpperCase()}</p>
             <h2>{sceneSelection.title}</h2>
             <small>{sceneSelection.subtitle}</small>
             <dl>
@@ -1273,7 +1216,7 @@ export function IntersectionScene({
         )}
         <p className="scene-evidence">
           {sourceMode === "replay" ? "回放数据来自真实 SUMO 实验录制；" : ""}
-          机动车、非机动车、行人、信号与施工/事故事件均由 xiongan_rongdong_20 真值驱动；建筑轮廓与绿地边界来自 OSM，缺失建筑高度与树木分布属于明确标注的工程假设
+          机动车、非机动车、行人、信号与施工/事故事件均由当前场景 {scenarioId} 的 SUMO 真值驱动；建筑与绿地仅在来源文件具备可追溯几何时显示，其余视觉补充均属于明确标注的工程假设
           {digitalTwin.issue ? ` · ${digitalTwin.issue}` : ""}
         </p>
       </div>

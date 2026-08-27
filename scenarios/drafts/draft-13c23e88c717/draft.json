@@ -1,0 +1,199 @@
+{
+  "id": "draft-13c23e88c717",
+  "status": "ready",
+  "progress": 100,
+  "message": "河北本地 OSM 框选范围已解析",
+  "source_type": "osm_bbox",
+  "source": {
+    "bbox": {
+      "west": 115.91727618238376,
+      "south": 39.05716445530922,
+      "east": 115.92029479966627,
+      "north": 39.05800304252619
+    },
+    "provider": "河北本地 OpenStreetMap 固定快照",
+    "snapshot_date": "2026-08-21"
+  },
+  "coordinate_mode": "geographic",
+  "confidence": "high",
+  "requires_manual_review": false,
+  "review_confirmed": true,
+  "preview": {
+    "bounds": {
+      "min_x": 115.91836115978796,
+      "min_y": 39.05766042813597,
+      "max_x": 115.91858566731067,
+      "max_y": 39.0578107516045
+    },
+    "roads": [
+      {
+        "id": "--1",
+        "coordinates": [
+          [
+            115.9184991451143,
+            39.05768817688678
+          ],
+          [
+            115.9184969591398,
+            39.0576875258482
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "--2",
+        "coordinates": [
+          [
+            115.91844683573494,
+            39.05778365818722
+          ],
+          [
+            115.9184489047794,
+            39.05778439825156
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "--3",
+        "coordinates": [
+          [
+            115.91851568717448,
+            39.057751587052735
+          ],
+          [
+            115.91851735446764,
+            39.05774835857931
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "--4",
+        "coordinates": [
+          [
+            115.91843269432427,
+            39.05772198235494
+          ],
+          [
+            115.91843030893752,
+            39.057726826134996
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "-1",
+        "coordinates": [
+          [
+            115.91850939225715,
+            39.05766042813597
+          ],
+          [
+            115.91851157960546,
+            39.05766098907768
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "-2",
+        "coordinates": [
+          [
+            115.91843394033951,
+            39.0578107516045
+          ],
+          [
+            115.91843175573655,
+            39.05781001046812
+          ]
+        ],
+        "lane_count": 1,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "-3",
+        "coordinates": [
+          [
+            115.91858566731067,
+            39.05777052822727
+          ],
+          [
+            115.91858388446225,
+            39.05777375563009
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 27.78
+      },
+      {
+        "id": "-4",
+        "coordinates": [
+          [
+            115.91836115978796,
+            39.05770645082586
+          ],
+          [
+            115.91836348739983,
+            39.05770160651135
+          ]
+        ],
+        "lane_count": 2,
+        "speed_m_s": 27.78
+      }
+    ],
+    "buildings": [],
+    "intersections": [],
+    "topology_edges": []
+  },
+  "selected_intersection_ids": [],
+  "manual_edits": [],
+  "validation": {
+    "valid": false,
+    "selected_intersection_count": 0,
+    "selected_intersection_ids": [],
+    "errors": [
+      "至少选择一个路口"
+    ],
+    "warnings": [],
+    "rule": "selected_count_is_authoritative",
+    "source_type": "osm_bbox",
+    "confidence": "high",
+    "review_confirmed": true
+  },
+  "artifacts": {
+    "source": "source.osm.xml",
+    "processed_source": "source.clipped.osm.xml",
+    "network": "network.net.xml"
+  },
+  "logs": [
+    {
+      "time": "2026-08-23T07:45:39.481536+00:00",
+      "progress": 8,
+      "message": "正在从河北本地 OSM 快照裁剪框选范围"
+    },
+    {
+      "time": "2026-08-23T07:45:39.515307+00:00",
+      "progress": 38,
+      "message": "本地 OSM 数据已保存, 正在转换 SUMO 路网"
+    },
+    {
+      "time": "2026-08-23T07:45:39.604221+00:00",
+      "progress": 72,
+      "message": "SUMO 路网已生成, 正在识别道路和候选路口"
+    },
+    {
+      "time": "2026-08-23T07:45:39.616340+00:00",
+      "progress": 100,
+      "message": "河北本地 OSM 框选范围已解析"
+    }
+  ],
+  "error": null,
+  "created_at": "2026-08-23T07:45:39.471908+00:00",
+  "updated_at": "2026-08-23T07:45:39.616340+00:00"
+}

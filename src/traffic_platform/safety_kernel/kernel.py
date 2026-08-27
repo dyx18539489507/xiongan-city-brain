@@ -105,6 +105,16 @@ class SafetyKernel:
             decision.action_type == "extend_green"
             and decision.requested_duration_s is not None
             and context.current_phase_elapsed_s + decision.requested_duration_s
+            < context.min_green_s
+        ):
+            validated.requested_duration_s = (
+                context.min_green_s - context.current_phase_elapsed_s
+            )
+            modify.append("EXTENSION_RAISED_TO_MIN_GREEN")
+        if (
+            decision.action_type == "extend_green"
+            and validated.requested_duration_s is not None
+            and context.current_phase_elapsed_s + validated.requested_duration_s
             > context.max_green_s
         ):
             remaining = context.max_green_s - context.current_phase_elapsed_s
@@ -165,4 +175,3 @@ class SafetyKernel:
             transition_requires_yellow=switching and context.yellow_required,
             transition_requires_all_red=switching and context.all_red_required,
         )
-

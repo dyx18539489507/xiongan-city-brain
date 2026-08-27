@@ -1,7 +1,13 @@
 import {defineConfig} from "@playwright/test";
+import {fileURLToPath} from "node:url";
+
+const workspaceRoot = fileURLToPath(new URL("../..", import.meta.url));
+const workspaceSumo = fileURLToPath(new URL("../../.tools/sumo/", import.meta.url));
 
 const workspacePython =
-  process.platform === "win32" ? ".\\.venv\\Scripts\\python.exe" : "./.venv/bin/python";
+  process.platform === "win32"
+    ? fileURLToPath(new URL("../../.venv/Scripts/python.exe", import.meta.url))
+    : fileURLToPath(new URL("../../.venv/bin/python", import.meta.url));
 const externalBaseUrl = process.env.PLAYWRIGHT_BASE_URL;
 
 export default defineConfig({
@@ -9,12 +15,18 @@ export default defineConfig({
   timeout: 240_000,
   use: {
     baseURL: externalBaseUrl ?? "http://127.0.0.1:5183",
+    launchOptions: {
+      channel: "chrome",
+    },
     trace: "retain-on-failure",
   },
   webServer: externalBaseUrl ? undefined : [
     {
       command: `${workspacePython} -m traffic_platform.cli serve --host 127.0.0.1 --port 8003`,
-      cwd: "../..",
+      cwd: workspaceRoot,
+      env: {
+        SUMO_HOME: process.env.SUMO_HOME ?? workspaceSumo,
+      },
       url: "http://127.0.0.1:8003/ready",
       reuseExistingServer: false,
     },

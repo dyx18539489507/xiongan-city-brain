@@ -1,6 +1,7 @@
+import type {Point2} from "../../3d/scene/types";
 import {mapTheme} from "../theme";
 import type {TrafficMapLayer, LayerRenderContext} from "./LayerTypes";
-import {geometryIntersectsBounds, tracePolygon} from "./LayerTypes";
+import {appendPolygon, geometryIntersectsBounds} from "./LayerTypes";
 
 export class BackgroundLayer implements TrafficMapLayer {
   readonly id = "baseMap" as const;
@@ -13,21 +14,29 @@ export class BackgroundLayer implements TrafficMapLayer {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, camera.width, camera.height);
 
+    const waterShapes: Array<readonly Point2[]> = [];
+    const blockShapes: Array<readonly Point2[]> = [];
     for (const zone of world.scene.zones) {
       if (zone.shape.length < 3) continue;
-      tracePolygon(ctx, camera, zone.shape);
       const isWater = /water|river|basin|reservoir/i.test(`${zone.areaType} ${zone.tags.natural ?? ""} ${zone.tags.landuse ?? ""}`);
-      ctx.fillStyle = isWater ? mapTheme.water : mapTheme.block;
+      (isWater ? waterShapes : blockShapes).push(zone.shape);
+    }
+    for (const [shapes, color] of [[blockShapes, mapTheme.block], [waterShapes, mapTheme.water]] as const) {
+      if (!shapes.length) continue;
+      ctx.beginPath();
+      for (const shape of shapes) appendPolygon(ctx, camera, shape);
+      ctx.fillStyle = color;
       ctx.fill();
       ctx.strokeStyle = mapTheme.blockEdge;
       ctx.lineWidth = .8;
       ctx.stroke();
     }
+    ctx.beginPath();
     for (const vegetation of world.scene.vegetation) {
-      tracePolygon(ctx, camera, vegetation.shape);
-      ctx.fillStyle = mapTheme.vegetation;
-      ctx.fill();
+      appendPolygon(ctx, camera, vegetation.shape);
     }
+    ctx.fillStyle = mapTheme.vegetation;
+    ctx.fill();
   }
 
   destroy(): void {}
@@ -39,16 +48,20 @@ export class BuildingLayer implements TrafficMapLayer {
 
   render({ctx, camera, world, visibleBounds}: LayerRenderContext): void {
     if (camera.scale < .08) return;
+    ctx.beginPath();
+    let visible = 0;
     for (const indexed of world.indexedBuildings) {
       if (!geometryIntersectsBounds(indexed, visibleBounds)) continue;
       const building = indexed.building;
-      tracePolygon(ctx, camera, building.footprint);
-      ctx.fillStyle = mapTheme.building;
-      ctx.fill();
-      ctx.strokeStyle = mapTheme.buildingEdge;
-      ctx.lineWidth = camera.scale > .4 ? 1 : .6;
-      ctx.stroke();
+      appendPolygon(ctx, camera, building.footprint);
+      visible += 1;
     }
+    if (!visible) return;
+    ctx.fillStyle = mapTheme.building;
+    ctx.fill();
+    ctx.strokeStyle = mapTheme.buildingEdge;
+    ctx.lineWidth = camera.scale > .4 ? 1 : .6;
+    ctx.stroke();
   }
 
   destroy(): void {}

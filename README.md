@@ -71,7 +71,7 @@ npm run dev -- --host 127.0.0.1
 Windows 一键启动正式 Web 3D 演示（会启动一组真实 `xiongan_rongdong_20` fixed-time 实验）：
 
 ```powershell
-.\scripts\start_3d_demo.ps1
+.\scripts\start_3d.ps1
 ```
 
 脚本默认使用后端 `8013`、前端 `5177`，避开当前 Docker 驾驶舱的 `8000/5173`；端口仍可用 `-BackendPort`、`-FrontendPort` 显式覆盖。
@@ -79,7 +79,7 @@ Windows 一键启动正式 Web 3D 演示（会启动一组真实 `xiongan_rongdo
 运行已有、经过配置校验的 S01—S07 工况时显式传入 `-Profile`；例如 S02 高峰：
 
 ```powershell
-.\scripts\start_3d_demo.ps1 -Profile S02 -Algorithm fixed-time -Seed 52
+.\scripts\start_3d.ps1 -Profile S02 -Algorithm fixed-time -Seed 52
 ```
 
 网页“工况”选择器提供同一组 `BASE/S01—S07`。后端会选择对应
@@ -89,7 +89,7 @@ Windows 一键启动正式 Web 3D 演示（会启动一组真实 `xiongan_rongdo
 只启动前后端、不创建实验可使用 `-SkipExperiment`；一键停止：
 
 ```powershell
-.\scripts\stop_3d_demo.ps1
+.\scripts\stop_3d.ps1
 ```
 
 脚本只绑定回环地址，状态与日志位于 `outputs/3d/runtime/`；停止脚本只处理状态清单中且命令行属于本仓库的精确 PID。
@@ -175,15 +175,16 @@ make e2e
 
 紧扣赛题 PDF、以赛道 A 为主并融合赛道 B/C 的 Phase 2 工程执行提示词见
 [`docs/prompts/phase2_engineering_prompt.md`](docs/prompts/phase2_engineering_prompt.md)。
-其主线是轻量时空预测、预测驱动云边协调、ONNX 部署、长时多种子基准和
-竞赛级证据包，不改变 Phase 1 的安全闭环、完整 OSM 和双场景数据边界。STGNN/MPC/MARL 目前只有严格激活接口，没有训练模型或伪造输出。
+当前主线是已并入 B3 的轻量图时序在线预测、置信度门控、预测驱动云边协调、
+长时多种子基准和竞赛级证据包，不改变安全闭环、完整 OSM 和双场景数据边界。
+STGNN/MPC/MARL 仍只有严格激活接口，没有训练模型或伪造输出。
 
 ## 目录
 
 ```text
 apps/           部署入口与 React 驾驶舱
 packages/       公共协议模块索引
-algorithms/     B0-B4 算法入口索引
+algorithms/     B0-B3 四算法入口索引
 src/            Python 实现
 scenarios/      只读来源、配置与派生场景
 specs/          OpenAPI、MQTT、JSON Schema 与验收规约

@@ -62,6 +62,25 @@ class MetricsAccumulator:
 
         if not self.samples:
             return {"status": "尚未运行"}
+        completed_motor = self.samples[-1].completed_trips
+        completed_bicycle = self.samples[-1].bicycle_completed_trips
+        completed_vehicles = completed_motor + completed_bicycle
+        fuel_consumption_mg = sum(sample.fuel_mg for sample in self.samples)
+        co2_mg = sum(sample.co2_mg for sample in self.samples)
+        nox_mg = sum(sample.nox_mg for sample in self.samples)
+        emergency_braking_count = sum(
+            sample.emergency_braking_count for sample in self.samples
+        )
+        conflict_count = sum(
+            sample.motor_motor_conflict_count
+            + sample.motor_bicycle_conflict_count
+            + sample.motor_pedestrian_conflict_count
+            + sample.bicycle_pedestrian_conflict_count
+            for sample in self.samples
+        )
+        per_completed_vehicle = (
+            1.0 / completed_vehicles if completed_vehicles > 0 else 0.0
+        )
         queues = [sample.total_queue_vehicles for sample in self.samples]
         spillback_samples = [
             sample for sample in self.samples if sample.spillback_intersections > 0
@@ -95,7 +114,8 @@ class MetricsAccumulator:
             "mean_queue_meters": fmean(sample.total_queue_m for sample in self.samples),
             "max_queue": max(queues),
             "throughput": self.samples[-1].throughput_vehicles,
-            "completed_trips": self.samples[-1].completed_trips,
+            "completed_trips": completed_motor,
+            "completed_vehicles": completed_vehicles,
             "stop_count": self.samples[-1].stop_count,
             "spillback_count": spillback_onsets,
             "spillback_sample_count": len(spillback_samples),
@@ -109,14 +129,22 @@ class MetricsAccumulator:
             "congestion_propagation_time": self._propagation_time(),
             "network_recovery_time": self._network_recovery_time(),
             "gridlock_duration": gridlock_duration,
-            "fuel_consumption_mg": sum(sample.fuel_mg for sample in self.samples),
-            "co2_mg": sum(sample.co2_mg for sample in self.samples),
-            "nox_mg": sum(sample.nox_mg for sample in self.samples),
-            "emergency_braking_count": sum(
-                sample.emergency_braking_count for sample in self.samples
+            "fuel_consumption_mg": fuel_consumption_mg,
+            "co2_mg": co2_mg,
+            "nox_mg": nox_mg,
+            "fuel_per_completed_vehicle_mg": fuel_consumption_mg * per_completed_vehicle,
+            "co2_per_completed_vehicle_mg": co2_mg * per_completed_vehicle,
+            "nox_per_completed_vehicle_mg": nox_mg * per_completed_vehicle,
+            "emergency_braking_count": emergency_braking_count,
+            "emergency_braking_per_1000_completed_vehicles": (
+                emergency_braking_count * per_completed_vehicle * 1000.0
+            ),
+            "conflict_count": conflict_count,
+            "conflicts_per_1000_completed_vehicles": (
+                conflict_count * per_completed_vehicle * 1000.0
             ),
             "acceleration_variance": fmean(sample.acceleration_variance for sample in self.samples),
-            "bicycle_completed_trips": self.samples[-1].bicycle_completed_trips,
+            "bicycle_completed_trips": completed_bicycle,
             "mean_bicycle_waiting_time_s": fmean(
                 sample.bicycle_waiting_time_s for sample in self.samples
             ),

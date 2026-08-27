@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganTrafficScenarioFactory/1.0">
+  <bounds minlon="115.92078208923341" minlat="39.066100725164674" maxlon="115.93056678771974" maxlat="39.07036559553225" />
+  <node id="7341134041" lon="115.9222737" lat="39.0674063" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="7341134042" lon="115.9273897" lat="39.0674176" version="1" />
+  <node id="7341134046" lon="115.9293519" lat="39.067437" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9215428075" lon="115.9292749" lat="39.0699231" version="1" />
+  <node id="9245378834" lon="115.9216093" lat="39.0690527" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379760" lon="115.924378" lat="39.0698129" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379761" lon="115.9255476" lat="39.0674241" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379766" lon="115.9230365" lat="39.0694377" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379767" lon="115.9238898" lat="39.0674372" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379823" lon="115.9278077" lat="39.0674229" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379975" lon="115.9293382" lat="39.0690384" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9245379976" lon="115.9275456" lat="39.0688855" version="1" />
+  <node id="9245379977" lon="115.924992" lat="39.0685685" version="1" />
+  <node id="9245379990" lon="115.9277598" lat="39.0680143" version="1" />
+  <node id="9249983287" lon="115.9292193" lat="39.0674336" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9249983288" lon="115.9291772" lat="39.0690413" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="9249983289" lon="115.9290896" lat="39.0699084" version="1" />
+  <node id="9249983296" lon="115.9292188" lat="39.0669114" version="1" />
+  <node id="9249983297" lon="115.9291173" lat="39.0664364" version="1" />
+  <node id="9249983310" lon="115.9294685" lat="39.066418" version="1" />
+  <node id="9249983311" lon="115.9293618" lat="39.0669143" version="1" />
+  <node id="10739806292" lon="115.9210907" lat="39.0702684" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="12995948004" lon="115.9259405" lat="39.0664868" version="1" />
+  <node id="13011800805" lon="115.9219132" lat="39.0672764" version="1" />
+  <node id="13011800806" lon="115.9221296" lat="39.0673" version="1" />
+  <node id="13011800807" lon="115.9222928" lat="39.0673098" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800808" lon="115.9236387" lat="39.0673347" version="1" />
+  <node id="13011800809" lon="115.9239314" lat="39.0673333" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800810" lon="115.9240894" lat="39.0673334" version="1" />
+  <node id="13011800811" lon="115.9246115" lat="39.0673361" version="1" />
+  <node id="13011800812" lon="115.9255854" lat="39.0673318" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800813" lon="115.9278104" lat="39.0673375" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800814" lon="115.9292201" lat="39.0673421" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800815" lon="115.9293534" lat="39.0673418" version="1">
+    <tag k="highway" v="traffic_signals" />
+    <tag k="traffic_signals" v="signal" />
+  </node>
+  <node id="13011800816" lon="115.9302638" lat="39.0673292" version="1" />
+  <node id="13011800867" lon="115.929937" lat="39.0674283" version="1" />
+  <node id="13011800868" lon="115.9228117" lat="39.0674204" version="1" />
+  <node id="13015262049" lon="115.923941" lat="39.0663221" version="1" />
+  <node id="13015262050" lon="115.9231359" lat="39.0663013" version="1" />
+  <node id="13015262051" lon="115.9223044" lat="39.0663041" version="1" />
+  <node id="13015262052" lon="115.9217215" lat="39.0663027" version="1" />
+  <node id="13015262053" lon="115.9213603" lat="39.0662749" version="1" />
+  <node id="13362882462" lon="115.9293382" lat="39.0664248" version="1" />
+  <node id="13362882463" lon="115.9292457" lat="39.0664297" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="13011800867" />
+    <nd ref="7341134046" />
+    <nd ref="9249983287" />
+    <nd ref="9245379823" />
+    <nd ref="7341134042" />
+    <nd ref="9245379761" />
+    <nd ref="9245379767" />
+    <nd ref="13011800868" />
+    <nd ref="7341134041" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="乐安街" />
+    <tag k="oneway" v="yes" />
+    <tag k="surface" v="asphalt" />
+    <tag k="source_way_id" v="-1" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="9245379760" />
+    <nd ref="9245379766" />
+    <nd ref="9245378834" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="八于街" />
+    <tag k="source_way_id" v="-2" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="10739806292" />
+    <nd ref="9245378834" />
+    <nd ref="7341134041" />
+    <nd ref="13011800807" />
+    <nd ref="13015262051" />
+    <tag k="highway" v="tertiary" />
+    <tag k="motor_vehicle" v="no" />
+    <tag k="name" v="龚庄路" />
+    <tag k="source_way_id" v="-3" />
+  </way>
+  <way id="-4" visible="true" version="1">
+    <nd ref="9245379760" />
+    <nd ref="9245379977" />
+    <nd ref="9245379761" />
+    <nd ref="13011800812" />
+    <nd ref="12995948004" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金源东路" />
+    <tag k="source_way_id" v="-4" />
+  </way>
+  <way id="-5" visible="true" version="1">
+    <nd ref="9245379766" />
+    <nd ref="9245379767" />
+    <nd ref="13011800809" />
+    <nd ref="13015262049" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金源西路" />
+    <tag k="source_way_id" v="-5" />
+  </way>
+  <way id="-6" visible="true" version="1">
+    <nd ref="9245379976" />
+    <nd ref="9245379990" />
+    <nd ref="9245379823" />
+    <nd ref="13011800813" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖东路" />
+    <tag k="source_way_id" v="-6" />
+  </way>
+  <way id="-7" visible="true" version="1">
+    <nd ref="9245379975" />
+    <nd ref="9249983288" />
+    <nd ref="9245379976" />
+    <nd ref="9245379977" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="乐安北一街" />
+    <tag k="source_way_id" v="-7" />
+  </way>
+  <way id="-8" visible="true" version="1">
+    <nd ref="9249983296" />
+    <nd ref="9249983297" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="兴贤路" />
+    <tag k="oneway" v="yes" />
+    <tag k="source_way_id" v="-8" />
+  </way>
+  <way id="-9" visible="true" version="1">
+    <nd ref="9249983310" />
+    <nd ref="9249983311" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="兴贤路" />
+    <tag k="oneway" v="yes" />
+    <tag k="source_way_id" v="-9" />
+  </way>
+  <way id="-10" visible="true" version="1">
+    <nd ref="9249983289" />
+    <nd ref="9249983288" />
+    <nd ref="9249983287" />
+    <nd ref="13011800814" />
+    <nd ref="9249983296" />
+    <nd ref="13362882463" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="兴贤路" />
+    <tag k="oneway" v="yes" />
+    <tag k="source_way_id" v="-10" />
+  </way>
+  <way id="-11" visible="true" version="1">
+    <nd ref="13362882462" />
+    <nd ref="9249983311" />
+    <nd ref="13011800815" />
+    <nd ref="7341134046" />
+    <nd ref="9245379975" />
+    <nd ref="9215428075" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="兴贤路" />
+    <tag k="oneway" v="yes" />
+    <tag k="surface" v="asphalt" />
+    <tag k="source_way_id" v="-11" />
+  </way>
+  <way id="-12" visible="true" version="1">
+    <nd ref="9215428075" />
+    <nd ref="9249983289" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="乐安北二街" />
+    <tag k="source_way_id" v="-12" />
+  </way>
+  <way id="-13" visible="true" version="1">
+    <nd ref="13011800805" />
+    <nd ref="13011800806" />
+    <nd ref="13011800807" />
+    <nd ref="13011800808" />
+    <nd ref="13011800809" />
+    <nd ref="13011800810" />
+    <nd ref="13011800811" />
+    <nd ref="13011800812" />
+    <nd ref="13011800813" />
+    <nd ref="13011800814" />
+    <nd ref="13011800815" />
+    <nd ref="13011800816" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="乐安街" />
+    <tag k="oneway" v="yes" />
+    <tag k="source_way_id" v="-13" />
+  </way>
+  <way id="-14" visible="true" version="1">
+    <nd ref="13015262049" />
+    <nd ref="13015262050" />
+    <nd ref="13015262051" />
+    <nd ref="13015262052" />
+    <nd ref="13015262053" />
+    <tag k="highway" v="living_street" />
+    <tag k="source_way_id" v="-14" />
+  </way>
+</osm>

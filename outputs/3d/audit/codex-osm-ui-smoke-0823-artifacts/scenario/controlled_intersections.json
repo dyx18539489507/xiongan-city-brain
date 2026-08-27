@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "network_provenance": "osm_bbox",
+  "geography_claim": "openstreetmap_geography_not_field_calibrated",
+  "selection_method": "user_selected_from_source_draft",
+  "controlled_intersection_count": 1,
+  "controlled_meta_graph_connected": null,
+  "controlled_direct_adjacency_graph_connected": null,
+  "requires_signalization": [
+    "-76"
+  ],
+  "core_corridor": [],
+  "core_corridor_intersection_count": 0,
+  "topology_edge_count": 0,
+  "topology_edges": [],
+  "intersections": [
+    {
+      "intersection_id": "-76",
+      "display_id": "J81",
+      "display_name": "路口 81",
+      "lon": 115.91593854693936,
+      "lat": 39.05843240292683,
+      "degree": 4,
+      "signalized": false,
+      "x": 624.78,
+      "y": 580.89,
+      "role": "user_selected",
+      "sumo_node_id": "-76",
+      "original_sumo_junction_type": "traffic_light",
+      "parameter_provenance": "user_reviewed_source_draft"
+    }
+  ],
+  "source_draft_id": "draft-97b33818b4a8",
+  "full_network_context_retained": true
+}

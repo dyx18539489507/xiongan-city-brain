@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "xiongan-20260824092305-vcd8r5",
+  "sourceSceneFile": "xiongan-20260824092305-vcd8r5.scene.json",
+  "sourceSceneSha256": "1cc618c7f28e227cef36c36fbf6e668bc6b525cac9f1af5abcf6d0a4e61d92b8",
+  "controllers": [
+    {
+      "sceneId": "tls:joinedS_-2_-6:0",
+      "sumoTlsId": "joinedS_-2_-6",
+      "controlledJunctionId": "joinedS_-2_-6",
+      "memberSumoJunctionIds": [
+        "-2",
+        "-6"
+      ],
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-2#0_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-2#0_1",
+          "toLaneId": "--1#0_1",
+          "viaLaneId": ":-2_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-2_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--2#0_1",
+          "viaLaneId": ":-2_6_1"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":-2_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-1#1_1",
+          "viaLaneId": ":-2_8_1"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_10_1"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "-2#1_0",
+          "viaLaneId": ":-2_18_0"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "-2#1_1",
+          "viaLaneId": ":-2_18_1"
+        },
+        {
+          "linkIndex": 14,
+          "fromLaneId": "--1#1_0",
+          "toLaneId": "--1#0_0",
+          "viaLaneId": ":-2_20_0"
+        },
+        {
+          "linkIndex": 15,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--1#0_1",
+          "viaLaneId": ":-2_20_1"
+        },
+        {
+          "linkIndex": 16,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--2#0_0",
+          "viaLaneId": ":-2_22_0"
+        },
+        {
+          "linkIndex": 17,
+          "fromLaneId": "--1#1_1",
+          "toLaneId": "--2#0_1",
+          "viaLaneId": ":-2_22_1"
+        },
+        {
+          "linkIndex": 18,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_6_0"
+        },
+        {
+          "linkIndex": 19,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_6_1"
+        },
+        {
+          "linkIndex": 20,
+          "fromLaneId": "--3#1_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_8_0"
+        },
+        {
+          "linkIndex": 21,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-6_8_1"
+        },
+        {
+          "linkIndex": 22,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "-2#2_0",
+          "viaLaneId": ":-6_10_0"
+        },
+        {
+          "linkIndex": 23,
+          "fromLaneId": "--3#1_1",
+          "toLaneId": "-2#2_1",
+          "viaLaneId": ":-6_10_1"
+        },
+        {
+          "linkIndex": 24,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_12_0"
+        },
+        {
+          "linkIndex": 25,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_13_0"
+        },
+        {
+          "linkIndex": 26,
+          "fromLaneId": "--2#2_0",
+          "toLaneId": "--3#0_0",
+          "viaLaneId": ":-6_14_0"
+        },
+        {
+          "linkIndex": 27,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_15_0"
+        },
+        {
+          "linkIndex": 28,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_16_0"
+        },
+        {
+          "linkIndex": 29,
+          "fromLaneId": "--2#2_1",
+          "toLaneId": "--3#0_1",
+          "viaLaneId": ":-6_17_0"
+        },
+        {
+          "linkIndex": 30,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-2#2_0",
+          "viaLaneId": ":-6_18_0"
+        },
+        {
+          "linkIndex": 31,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-2#2_1",
+          "viaLaneId": ":-6_18_1"
+        },
+        {
+          "linkIndex": 32,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-3#1_0",
+          "viaLaneId": ":-6_20_0"
+        },
+        {
+          "linkIndex": 33,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "-3#1_1",
+          "viaLaneId": ":-6_20_1"
+        },
+        {
+          "linkIndex": 34,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--2#1_0",
+          "viaLaneId": ":-6_22_0"
+        },
+        {
+          "linkIndex": 35,
+          "fromLaneId": "-3#0_1",
+          "toLaneId": "--2#1_1",
+          "viaLaneId": ":-6_22_1"
+        }
+      ],
+      "phaseStateLengths": [
+        36,
+        36,
+        36,
+        36,
+        36,
+        36
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 1,
+    "links": 36
+  }
+}

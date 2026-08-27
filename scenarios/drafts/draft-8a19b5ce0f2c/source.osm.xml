@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.91330787944246" minlat="39.05498214737976" maxlon="115.92198331210282" maxlat="39.06002971655477" />
+  <node id="-1" lon="115.9180726" lat="39.058697" version="1" />
+  <node id="-2" lon="115.9179003" lat="39.059028" version="1" />
+  <node id="-3" lon="115.9177095" lat="39.0595447" version="1" />
+  <node id="-4" lon="115.9176109" lat="39.0598615" version="1" />
+  <node id="-5" lon="115.917580611" lat="39.060029717" version="1" />
+  <node id="-6" lon="115.921983312" lat="39.05846968" version="1" />
+  <node id="-7" lon="115.9218142" lat="39.058456" version="1" />
+  <node id="-8" lon="115.9208867" lat="39.0583606" version="1" />
+  <node id="-9" lon="115.9200492" lat="39.0582057" version="1" />
+  <node id="-10" lon="115.9182554" lat="39.0577014" version="1" />
+  <node id="-11" lon="115.9164317" lat="39.0571374" version="1" />
+  <node id="-12" lon="115.9140409" lat="39.0578269" version="1" />
+  <node id="-13" lon="115.9140646" lat="39.0579801" version="1" />
+  <node id="-14" lon="115.9137394" lat="39.0594261" version="1" />
+  <node id="-15" lon="115.913602886" lat="39.060029717" version="1" />
+  <node id="-16" lon="115.920762539" lat="39.060029717" version="1" />
+  <node id="-17" lon="115.9207166" lat="39.059982" version="1" />
+  <node id="-18" lon="115.920511" lat="39.0598619" version="1" />
+  <node id="-19" lon="115.9201624" lat="39.0597334" version="1" />
+  <node id="-20" lon="115.9195877" lat="39.0595494" version="1" />
+  <node id="-21" lon="115.917758" lat="39.0589848" version="1" />
+  <node id="-22" lon="115.9159385" lat="39.0584324" version="1" />
+  <node id="-23" lon="115.9135333" lat="39.0576715" version="1" />
+  <node id="-24" lon="115.913307879" lat="39.057601014" version="1" />
+  <node id="-25" lon="115.915345721" lat="39.060029717" version="1" />
+  <node id="-26" lon="115.9154239" lat="39.0596108" version="1" />
+  <node id="-27" lon="115.9155704" lat="39.0591799" version="1" />
+  <node id="-28" lon="115.9157831" lat="39.058748" version="1" />
+  <node id="-29" lon="115.9160895" lat="39.0581467" version="1" />
+  <node id="-30" lon="115.9193358" lat="39.060029717" version="1" />
+  <node id="-31" lon="115.9197814" lat="39.0591626" version="1" />
+  <node id="-32" lon="115.9135828" lat="39.0594154" version="1" />
+  <node id="-33" lon="115.9174461" lat="39.0598256" version="1" />
+  <node id="-34" lon="115.918167084" lat="39.060029717" version="1" />
+  <node id="-35" lon="115.9164592" lat="39.0570839" version="1" />
+  <node id="-36" lon="115.9182796" lat="39.0576546" version="1" />
+  <node id="-37" lon="115.9200723" lat="39.0581499" version="1" />
+  <node id="-38" lon="115.9208961" lat="39.0583086" version="1" />
+  <node id="-39" lon="115.9218284" lat="39.0583971" version="1" />
+  <node id="-40" lon="115.921983312" lat="39.058409197" version="1" />
+  <node id="-41" lon="115.914837" lat="39.0565517" version="1" />
+  <node id="-42" lon="115.9151863" lat="39.0565782" version="1" />
+  <node id="-43" lon="115.9164942" lat="39.0569794" version="1" />
+  <node id="-44" lon="115.9166434" lat="39.0570606" version="1" />
+  <node id="-45" lon="115.9167857" lat="39.057138" version="1" />
+  <node id="-46" lon="115.9184268" lat="39.0576526" version="1" />
+  <node id="-47" lon="115.918585" lat="39.0576968" version="1" />
+  <node id="-48" lon="115.920289" lat="39.0581612" version="1" />
+  <node id="-49" lon="115.9202196" lat="39.0582907" version="1" />
+  <node id="-50" lon="115.9185171" lat="39.0578238" version="1" />
+  <node id="-51" lon="115.9183688" lat="39.0577723" version="1" />
+  <node id="-52" lon="115.916731" lat="39.057273" version="1" />
+  <node id="-53" lon="115.91655" lat="39.0572519" version="1" />
+  <node id="-54" lon="115.916385" lat="39.0572327" version="1" />
+  <node id="-55" lon="115.9150759" lat="39.0568306" version="1" />
+  <node id="-56" lon="115.9147739" lat="39.0566507" version="1" />
+  <node id="-57" lon="115.9145765" lat="39.0565868" version="1" />
+  <node id="-58" lon="115.913307879" lat="39.056191126" version="1" />
+  <node id="-59" lon="115.913307879" lat="39.059309314" version="1" />
+  <node id="-60" lon="115.9135916" lat="39.0585682" version="1" />
+  <node id="-61" lon="115.9136572" lat="39.0583994" version="1" />
+  <node id="-62" lon="115.9143534" lat="39.0569866" version="1" />
+  <node id="-63" lon="115.914629" lat="39.0564851" version="1" />
+  <node id="-64" lon="115.9151246" lat="39.0555069" version="1" />
+  <node id="-65" lon="115.915393659" lat="39.054982147" version="1" />
+  <node id="-66" lon="115.9140938" lat="39.0574958" version="1" />
+  <node id="-67" lon="115.916359" lat="39.0576369" version="1" />
+  <node id="-68" lon="115.9171152" lat="39.0561271" version="1" />
+  <node id="-69" lon="115.917695716" lat="39.054982147" version="1" />
+  <node id="-70" lon="115.919984929" lat="39.054982147" version="1" />
+  <node id="-71" lon="115.9197922" lat="39.0553691" version="1" />
+  <node id="-72" lon="115.9190931" lat="39.0567543" version="1" />
+  <node id="-73" lon="115.9183561" lat="39.0581854" version="1" />
+  <node id="-74" lon="115.913307879" lat="39.056056409" version="1" />
+  <node id="-75" lon="115.9133856" lat="39.0560808" version="1" />
+  <node id="-76" lon="115.913949471" lat="39.054982147" version="1" />
+  <node id="-77" lon="115.9138777" lat="39.0551248" version="1" />
+  <node id="-78" lon="115.917414888" lat="39.060029717" version="1" />
+  <node id="-79" lon="115.9175223" lat="39.0595653" version="1" />
+  <node id="-80" lon="115.9176081" lat="39.0593321" version="1" />
+  <node id="-81" lon="115.9179318" lat="39.0586378" version="1" />
+  <node id="-82" lon="115.9181857" lat="39.0581366" version="1" />
+  <node id="-83" lon="115.9189281" lat="39.0566996" version="1" />
+  <node id="-84" lon="115.919609" lat="39.0553804" version="1" />
+  <node id="-85" lon="115.919809644" lat="39.054982147" version="1" />
+  <node id="-86" lon="115.9151185" lat="39.0567333" version="1" />
+  <node id="-87" lon="115.9151452" lat="39.0566723" version="1" />
+  <node id="-88" lon="115.913394588" lat="39.054982147" version="1" />
+  <node id="-89" lon="115.9207506" lat="39.0572568" version="1" />
+  <node id="-90" lon="115.913307879" lat="39.058479064" version="1" />
+  <node id="-91" lon="115.913307879" lat="39.059385378" version="1" />
+  <node id="-92" lon="115.9134575" lat="39.0594013" version="1" />
+  <node id="-93" lon="115.916112775" lat="39.060029717" version="1" />
+  <node id="-94" lon="115.9161514" lat="39.0598771" version="1" />
+  <node id="-95" lon="115.917235" lat="39.0592023" version="1" />
+  <node id="-96" lon="115.9200402" lat="39.0586607" version="1" />
+  <node id="-97" lon="115.921926198" lat="39.054982147" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="785419413" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-6" />
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <nd ref="-9" />
+    <nd ref="-10" />
+    <nd ref="-11" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="785419416" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-12" />
+    <nd ref="-13" />
+    <nd ref="-14" />
+    <nd ref="-15" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="善荣路" />
+    <tag k="source_way_id" v="917242907" />
+  </way>
+  <way id="-4" visible="true" version="1">
+    <nd ref="-16" />
+    <nd ref="-17" />
+    <nd ref="-18" />
+    <nd ref="-19" />
+    <nd ref="-20" />
+    <nd ref="-2" />
+    <nd ref="-21" />
+    <nd ref="-22" />
+    <nd ref="-12" />
+    <nd ref="-23" />
+    <nd ref="-24" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="龚庄路" />
+    <tag k="source_way_id" v="1001665903" />
+  </way>
+  <way id="-5" visible="true" version="1">
+    <nd ref="-25" />
+    <nd ref="-26" />
+    <nd ref="-27" />
+    <nd ref="-28" />
+    <nd ref="-22" />
+    <nd ref="-29" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+  </way>
+  <way id="-6" visible="true" version="1">
+    <nd ref="-30" />
+    <nd ref="-20" />
+    <nd ref="-31" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖西路" />
+    <tag k="source_way_id" v="1001665911" />
+  </way>
+  <way id="-7" visible="true" version="1">
+    <nd ref="-32" />
+    <nd ref="-14" />
+    <nd ref="-26" />
+    <nd ref="-33" />
+    <nd ref="-4" />
+    <nd ref="-34" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="悦容北街" />
+    <tag k="source_way_id" v="1001665914" />
+  </way>
+  <way id="-8" visible="true" version="1">
+    <nd ref="-35" />
+    <nd ref="-36" />
+    <nd ref="-37" />
+    <nd ref="-38" />
+    <nd ref="-39" />
+    <nd ref="-40" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665917" />
+  </way>
+  <way id="-9" visible="true" version="1">
+    <nd ref="-41" />
+    <nd ref="-42" />
+    <nd ref="-43" />
+    <nd ref="-44" />
+    <nd ref="-45" />
+    <nd ref="-46" />
+    <nd ref="-47" />
+    <nd ref="-48" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665918" />
+  </way>
+  <way id="-10" visible="true" version="1">
+    <nd ref="-49" />
+    <nd ref="-50" />
+    <nd ref="-51" />
+    <nd ref="-52" />
+    <nd ref="-53" />
+    <nd ref="-54" />
+    <nd ref="-55" />
+    <nd ref="-56" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665933" />
+  </way>
+  <way id="-11" visible="true" version="1">
+    <nd ref="-56" />
+    <nd ref="-57" />
+    <nd ref="-58" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1001665934" />
+  </way>
+  <way id="-12" visible="true" version="1">
+    <nd ref="-59" />
+    <nd ref="-60" />
+    <nd ref="-61" />
+    <nd ref="-12" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="善荣路" />
+    <tag k="source_way_id" v="1001688828" />
+  </way>
+  <way id="-13" visible="true" version="1">
+    <nd ref="-62" />
+    <nd ref="-57" />
+    <nd ref="-63" />
+    <nd ref="-64" />
+    <nd ref="-65" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="善荣路" />
+    <tag k="source_way_id" v="1154819229" />
+  </way>
+  <way id="-14" visible="true" version="1">
+    <nd ref="-62" />
+    <nd ref="-66" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="善荣路" />
+    <tag k="source_way_id" v="1154819230" />
+  </way>
+  <way id="-15" visible="true" version="1">
+    <nd ref="-67" />
+    <nd ref="-53" />
+    <nd ref="-44" />
+    <nd ref="-68" />
+    <nd ref="-69" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819231" />
+  </way>
+  <way id="-16" visible="true" version="1">
+    <nd ref="-29" />
+    <nd ref="-67" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819232" />
+  </way>
+  <way id="-17" visible="true" version="1">
+    <nd ref="-70" />
+    <nd ref="-71" />
+    <nd ref="-72" />
+    <nd ref="-47" />
+    <nd ref="-50" />
+    <nd ref="-73" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1154819233" />
+  </way>
+  <way id="-18" visible="true" version="1">
+    <nd ref="-73" />
+    <nd ref="-1" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1154819234" />
+  </way>
+  <way id="-19" visible="true" version="1">
+    <nd ref="-74" />
+    <nd ref="-75" />
+    <nd ref="-63" />
+    <nd ref="-41" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1154819243" />
+  </way>
+  <way id="-20" visible="true" version="1">
+    <nd ref="-76" />
+    <nd ref="-77" />
+    <nd ref="-75" />
+    <tag k="highway" v="unclassified" />
+    <tag k="source_way_id" v="1310788211" />
+  </way>
+  <way id="-21" visible="true" version="1">
+    <nd ref="-78" />
+    <nd ref="-33" />
+    <nd ref="-79" />
+    <nd ref="-80" />
+    <nd ref="-21" />
+    <nd ref="-81" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517609" />
+  </way>
+  <way id="-22" visible="true" version="1">
+    <nd ref="-82" />
+    <nd ref="-51" />
+    <nd ref="-46" />
+    <nd ref="-83" />
+    <nd ref="-84" />
+    <nd ref="-85" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517615" />
+  </way>
+  <way id="-23" visible="true" version="1">
+    <nd ref="-81" />
+    <nd ref="-82" />
+    <tag k="highway" v="primary" />
+    <tag k="name" v="崇文北路" />
+    <tag k="source_way_id" v="1415517616" />
+  </way>
+  <way id="-24" visible="true" version="1">
+    <nd ref="-11" />
+    <nd ref="-86" />
+    <nd ref="-56" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1415517617" />
+  </way>
+  <way id="-25" visible="true" version="1">
+    <nd ref="-41" />
+    <nd ref="-87" />
+    <nd ref="-35" />
+    <tag k="highway" v="secondary" />
+    <tag k="name" v="金湖街" />
+    <tag k="source_way_id" v="1415517618" />
+  </way>
+  <way id="-26" visible="true" version="1">
+    <nd ref="-88" />
+    <nd ref="-77" />
+    <nd ref="-64" />
+    <nd ref="-68" />
+    <nd ref="-83" />
+    <tag k="highway" v="unclassified" />
+    <tag k="source_way_id" v="1415517619" />
+  </way>
+  <way id="-27" visible="true" version="1">
+    <nd ref="-72" />
+    <nd ref="-89" />
+    <tag k="highway" v="unclassified" />
+    <tag k="source_way_id" v="1415517620" />
+  </way>
+  <way id="-28" visible="true" version="1">
+    <nd ref="-66" />
+    <nd ref="-12" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="善荣路" />
+    <tag k="source_way_id" v="1415517621" />
+  </way>
+  <way id="-29" visible="true" version="1">
+    <nd ref="-90" />
+    <nd ref="-60" />
+    <tag k="highway" v="living_street" />
+    <tag k="source_way_id" v="1416043116" />
+  </way>
+  <way id="-30" visible="true" version="1">
+    <nd ref="-91" />
+    <nd ref="-92" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="悦容北街" />
+    <tag k="source_way_id" v="1416043121" />
+  </way>
+  <way id="-31" visible="true" version="1">
+    <nd ref="-92" />
+    <nd ref="-32" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="悦容北街" />
+    <tag k="source_way_id" v="1416043122" />
+  </way>
+  <way id="-32" visible="true" version="1">
+    <nd ref="-93" />
+    <nd ref="-94" />
+    <tag k="highway" v="living_street" />
+    <tag k="source_way_id" v="1416280869" />
+  </way>
+  <way id="-33" visible="true" version="1">
+    <nd ref="-28" />
+    <nd ref="-95" />
+    <tag k="highway" v="service" />
+    <tag k="source_way_id" v="1416280872" />
+  </way>
+  <way id="-34" visible="true" version="1">
+    <nd ref="-31" />
+    <nd ref="-96" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖西路" />
+    <tag k="source_way_id" v="1457051465" />
+  </way>
+  <way id="-35" visible="true" version="1">
+    <nd ref="-96" />
+    <nd ref="-49" />
+    <nd ref="-48" />
+    <nd ref="-89" />
+    <nd ref="-97" />
+    <tag k="highway" v="tertiary" />
+    <tag k="name" v="金湖西路" />
+    <tag k="source_way_id" v="1457051466" />
+  </way>
+</osm>

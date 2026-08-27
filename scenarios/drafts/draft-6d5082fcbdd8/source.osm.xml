@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="XionganLocalHebeiOSM/1.0">
+  <bounds minlon="115.91437139" minlat="39.0572519" maxlon="115.917656348" maxlat="39.058879038" />
+  <node id="-1" lon="115.91740963" lat="39.058879038" version="1" />
+  <node id="-2" lon="115.9159385" lat="39.0584324" version="1" />
+  <node id="-3" lon="115.91437139" lat="39.057932358" version="1" />
+  <node id="-4" lon="115.9157831" lat="39.058748" version="1" />
+  <node id="-5" lon="115.9160895" lat="39.0581467" version="1" />
+  <node id="-6" lon="115.917656348" lat="39.057555105" version="1" />
+  <node id="-7" lon="115.916731" lat="39.057273" version="1" />
+  <node id="-8" lon="115.91655" lat="39.0572519" version="1" />
+  <node id="-9" lon="115.916359" lat="39.0576369" version="1" />
+  <way id="-1" visible="true" version="1">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <tag k="highway" v="tertiary" />
+    <tag k="maxspeed" v="40" />
+    <tag k="motor_vehicle" v="no" />
+    <tag k="name" v="龚庄路" />
+    <tag k="source_way_id" v="1001665903" />
+  </way>
+  <way id="-2" visible="true" version="1">
+    <nd ref="-4" />
+    <nd ref="-2" />
+    <nd ref="-5" />
+    <tag k="highway" v="tertiary" />
+    <tag k="lanes" v="2" />
+    <tag k="maxspeed" v="40" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1001665907" />
+  </way>
+  <way id="-3" visible="true" version="1">
+    <nd ref="-6" />
+    <nd ref="-7" />
+    <nd ref="-8" />
+    <tag k="highway" v="secondary" />
+    <tag k="maxspeed" v="40" />
+    <tag k="name" v="金湖街" />
+    <tag k="oneway" v="yes" />
+    <tag k="source_way_id" v="1001665933" />
+  </way>
+  <way id="-4" visible="true" version="1">
+    <nd ref="-9" />
+    <nd ref="-8" />
+    <tag k="highway" v="tertiary" />
+    <tag k="lanes" v="2" />
+    <tag k="maxspeed" v="40" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819231" />
+  </way>
+  <way id="-5" visible="true" version="1">
+    <nd ref="-5" />
+    <nd ref="-9" />
+    <tag k="bridge" v="yes" />
+    <tag k="highway" v="tertiary" />
+    <tag k="lanes" v="2" />
+    <tag k="layer" v="1" />
+    <tag k="maxspeed" v="40" />
+    <tag k="name" v="富家路" />
+    <tag k="source_way_id" v="1154819232" />
+  </way>
+</osm>

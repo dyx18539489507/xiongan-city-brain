@@ -70,6 +70,22 @@ def test_expired_message_is_rejected(
     assert caught.value.code == ErrorCode.MESSAGE_EXPIRED
 
 
+def test_idempotency_can_validate_against_a_transport_clock(
+    envelope: Callable[..., dict[str, Any]],
+) -> None:
+    now = datetime.now(UTC)
+    message = vehicle(
+        envelope,
+        created_at=now - timedelta(seconds=10),
+        expires_at=now - timedelta(seconds=7),
+    )
+
+    IdempotencyGuard().accept(
+        message,
+        checked_at=message.created_at + timedelta(seconds=1),
+    )
+
+
 def test_idempotency_and_sequence_guards(
     envelope: Callable[..., dict[str, Any]],
 ) -> None:

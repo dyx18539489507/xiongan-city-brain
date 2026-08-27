@@ -141,7 +141,10 @@ class IsolatedAlgorithmRunner:
             )
         except PlatformError:
             self._failures += 1
-            self._restart()
+            try:
+                self._restart()
+            except PlatformError:
+                self._terminate()
             raise
         elapsed_ms = (time.perf_counter() - started) * 1000.0
         self._last_decision_ms = elapsed_ms

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.1",
+  "sceneId": "xiongan-20260824135027-vzneki",
+  "sceneFile": "xiongan-20260824135027-vzneki.scene.json",
+  "sceneSha256": "6e7d1ace4768073f7b7a5c0c37f5d8f0f58ea1658ad9b27f4fd06e54f6d809cb",
+  "sceneBytes": 115356,
+  "counts": {
+    "junctions": 20,
+    "roads": 6,
+    "edges": 66,
+    "lanes": 96,
+    "connections": 124,
+    "crossings": 0,
+    "trafficLights": 1,
+    "busStops": 0,
+    "pedestrianAreas": 8,
+    "bicycleAreas": 31,
+    "buildings": 0,
+    "vegetation": 0,
+    "roadsideDevices": 2,
+    "zones": 0,
+    "controlCorridors": 1,
+    "edgeRegions": 14
+  },
+  "sourceFiles": [
+    {
+      "path": "scenarios/generated/xiongan-20260824135027-vzneki/rongdong.multimodal.net.xml",
+      "role": "sumo_network_truth",
+      "sha256": "f329ee3ae20ac1c7073a3330e4f38a45907c663cc89d9d3500af8666628946be"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824135027-vzneki/controlled_intersections.json",
+      "role": "controlled_intersection_registry",
+      "sha256": "de3d1ce11cfea13ce5e5aeea87989379b34fb6bdf6ca18b9692274dac927fe41"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824135027-vzneki/functional_zones.json",
+      "role": "functional_zone_inventory",
+      "sha256": "34add6f406e6e4525f368a351607c821c7648812d835c3c951d50c1ba45cde15"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824135027-vzneki/vtypes.add.xml",
+      "role": "sumo_participant_types",
+      "sha256": "c93acd7cb4d62d45b53009350ddb4aa02f96863a2df35ea710ca3ce1d067f37f"
+    },
+    {
+      "path": "scenarios/configs/xiongan-20260824135027-vzneki.yaml",
+      "role": "scenario_configuration",
+      "sha256": "b8b0481f95f1beaf2b78c0594f745b33b14e9d7d44ec55516333c9683fddbeae"
+    },
+    {
+      "path": "scenarios/generated/xiongan-20260824135027-vzneki/source.osm.xml",
+      "role": "osm_geographic_context",
+      "sha256": "97e4948df3d5dc38059e4b7d938b0d15a315ddeadae10cce6b3a098ea3425131"
+    }
+  ]
+}

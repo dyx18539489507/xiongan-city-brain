@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Passed" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.1982924">
+  <test-suite type="TestSuite" id="1000" name="雄安交通协同控制数字孪生" fullname="雄安交通协同控制数字孪生" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.198292" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1020" name="Xiongan.DigitalTwin.Tests.EditMode.dll" fullname="D:/程序项目/面向雄安新区的城市大脑/apps/unity-digital-twin/Library/ScriptAssemblies/Xiongan.DigitalTwin.Tests.EditMode.dll" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.173924" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="20504" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1021" name="Xiongan" fullname="Xiongan" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.172472" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1022" name="DigitalTwin" fullname="Xiongan.DigitalTwin" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.171792" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1023" name="Tests" fullname="Xiongan.DigitalTwin.Tests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.170947" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1006" name="CoordinateServiceTests" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.087746" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1007" name="K06UsesTheSharedFloatingOrigin" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests.K06UsesTheSharedFloatingOrigin" methodname="K06UsesTheSharedFloatingOrigin" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" seed="944719058" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.042537" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="SumoHeadingMapsToUnityYaw" fullname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests.SumoHeadingMapsToUnityYaw" methodname="SumoHeadingMapsToUnityYaw" classname="Xiongan.DigitalTwin.Tests.CoordinateServiceTests" runstate="Runnable" seed="1007591373" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.007809" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1009" name="MobilityAssetTests" fullname="Xiongan.DigitalTwin.Tests.MobilityAssetTests" classname="Xiongan.DigitalTwin.Tests.MobilityAssetTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.048922" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1011" name="BicycleAssetContainsMechanicalAndRiderDetail" fullname="Xiongan.DigitalTwin.Tests.MobilityAssetTests.BicycleAssetContainsMechanicalAndRiderDetail" methodname="BicycleAssetContainsMechanicalAndRiderDetail" classname="Xiongan.DigitalTwin.Tests.MobilityAssetTests" runstate="Runnable" seed="155557557" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.041166" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="PedestrianAssetContainsArticulatedBodyMesh" fullname="Xiongan.DigitalTwin.Tests.MobilityAssetTests.PedestrianAssetContainsArticulatedBodyMesh" methodname="PedestrianAssetContainsArticulatedBodyMesh" classname="Xiongan.DigitalTwin.Tests.MobilityAssetTests" runstate="Runnable" seed="1706673718" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.004839" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1012" name="RoadMarkingPlacementTests" fullname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests" classname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.017515" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1013" name="ArrowUsesTheTangentAtItsResolvedPosition" fullname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests.ArrowUsesTheTangentAtItsResolvedPosition" methodname="ArrowUsesTheTangentAtItsResolvedPosition" classname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests" runstate="Runnable" seed="364061908" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.004555" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="DirectionSetKeepsEveryLegalSumoMovement" fullname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests.DirectionSetKeepsEveryLegalSumoMovement" methodname="DirectionSetKeepsEveryLegalSumoMovement" classname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests" runstate="Runnable" seed="522011405" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.009706" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="VeryShortLaneDoesNotReceiveAnUnreadableArrow" fullname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests.VeryShortLaneDoesNotReceiveAnUnreadableArrow" methodname="VeryShortLaneDoesNotReceiveAnUnreadableArrow" classname="Xiongan.DigitalTwin.Tests.RoadMarkingPlacementTests" runstate="Runnable" seed="283482730" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.000744" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1016" name="TrafficLightPlacementTests" fullname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests" classname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.012679" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1017" name="NorthboundApproachPlacesPoleBeyondRightmostLane" fullname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests.NorthboundApproachPlacesPoleBeyondRightmostLane" methodname="NorthboundApproachPlacesPoleBeyondRightmostLane" classname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests" runstate="Runnable" seed="1945310213" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.007453" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="PlacementSearchMovesPastBlockedRoadShoulder" fullname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests.PlacementSearchMovesPastBlockedRoadShoulder" methodname="PlacementSearchMovesPastBlockedRoadShoulder" classname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests" runstate="Runnable" seed="1822191784" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.001131" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="PolygonCheckHandlesBothWindingDirections" fullname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests.PolygonCheckHandlesBothWindingDirections" methodname="PolygonCheckHandlesBothWindingDirections" classname="Xiongan.DigitalTwin.Tests.TrafficLightPlacementTests" runstate="Runnable" seed="1738089160" result="Passed" start-time="2026-08-16 12:15:48Z" end-time="2026-08-16 12:15:48Z" duration="0.001209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/15493/AppData/LocalLow/Xiongan Traffic Brain/雄安交通协同控制数字孪生\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,427 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "xiongan-20260826154007-exkri9",
+  "sourceSceneFile": "xiongan-20260826154007-exkri9.scene.json",
+  "sourceSceneSha256": "695bccab6323a1a736c79260562f99751a3b4de7bdb5fb98941b8d987f79df1b",
+  "controllers": [
+    {
+      "sceneId": "tls:-13:0",
+      "sumoTlsId": "-13",
+      "controlledJunctionId": "-13",
+      "memberSumoJunctionIds": [
+        "-13"
+      ],
+      "displayId": "J04",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-4#2_0",
+          "toLaneId": "--5#1_0",
+          "viaLaneId": ":-13_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-4#2_0",
+          "toLaneId": "-4#3_0",
+          "viaLaneId": ":-13_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-4#2_0",
+          "toLaneId": "-5#2_0",
+          "viaLaneId": ":-13_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "--5#2_0",
+          "toLaneId": "--4#2_0",
+          "viaLaneId": ":-13_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "--5#2_0",
+          "toLaneId": "--5#1_0",
+          "viaLaneId": ":-13_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "--5#2_0",
+          "toLaneId": "-4#3_0",
+          "viaLaneId": ":-13_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "--4#3_0",
+          "toLaneId": "-5#2_0",
+          "viaLaneId": ":-13_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "--4#3_0",
+          "toLaneId": "--4#2_0",
+          "viaLaneId": ":-13_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "--4#3_0",
+          "toLaneId": "--5#1_0",
+          "viaLaneId": ":-13_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-5#1_0",
+          "toLaneId": "-4#3_0",
+          "viaLaneId": ":-13_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-5#1_0",
+          "toLaneId": "-5#2_0",
+          "viaLaneId": ":-13_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-5#1_0",
+          "toLaneId": "--4#2_0",
+          "viaLaneId": ":-13_11_0"
+        }
+      ],
+      "phaseStateLengths": [
+        12,
+        12,
+        12,
+        12
+      ]
+    },
+    {
+      "sceneId": "tls:-34:0",
+      "sumoTlsId": "-34",
+      "controlledJunctionId": "-34",
+      "memberSumoJunctionIds": [
+        "-34"
+      ],
+      "displayId": "J05",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-8#1_0",
+          "toLaneId": "-9_0",
+          "viaLaneId": ":-34_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-17_0",
+          "toLaneId": "-9_0",
+          "viaLaneId": ":-34_1_0"
+        }
+      ],
+      "phaseStateLengths": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "sceneId": "tls:-8:0",
+      "sumoTlsId": "-8",
+      "controlledJunctionId": "-8",
+      "memberSumoJunctionIds": [
+        "-8"
+      ],
+      "displayId": "J02",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-4#3_0",
+          "toLaneId": "-3_0",
+          "viaLaneId": ":-8_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-4#3_0",
+          "toLaneId": "-4#4_0",
+          "viaLaneId": ":-8_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-4#3_0",
+          "toLaneId": "--19_0",
+          "viaLaneId": ":-8_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-19_0",
+          "toLaneId": "--4#3_0",
+          "viaLaneId": ":-8_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-19_0",
+          "toLaneId": "-3_0",
+          "viaLaneId": ":-8_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-19_0",
+          "toLaneId": "-4#4_0",
+          "viaLaneId": ":-8_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "--4#4_0",
+          "toLaneId": "--19_0",
+          "viaLaneId": ":-8_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "--4#4_0",
+          "toLaneId": "--4#3_0",
+          "viaLaneId": ":-8_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "--4#4_0",
+          "toLaneId": "-3_0",
+          "viaLaneId": ":-8_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-10_0",
+          "toLaneId": "-4#4_0",
+          "viaLaneId": ":-8_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-10_0",
+          "toLaneId": "--19_0",
+          "viaLaneId": ":-8_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-10_0",
+          "toLaneId": "--4#3_0",
+          "viaLaneId": ":-8_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "-10_0",
+          "toLaneId": "-3_0",
+          "viaLaneId": ":-8_12_0"
+        }
+      ],
+      "phaseStateLengths": [
+        13,
+        13,
+        13,
+        13
+      ]
+    },
+    {
+      "sceneId": "tls:cluster_-12_-2:0",
+      "sumoTlsId": "cluster_-12_-2",
+      "controlledJunctionId": "cluster_-12_-2",
+      "memberSumoJunctionIds": [
+        "cluster_-12_-2"
+      ],
+      "displayId": "J03",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":cluster_-12_-2_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-2_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-15#1_1",
+          "viaLaneId": ":cluster_-12_-2_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "--4#0_0",
+          "viaLaneId": ":cluster_-12_-2_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-1#0_0",
+          "toLaneId": "-1#1_0",
+          "viaLaneId": ":cluster_-12_-2_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-1#1_1",
+          "viaLaneId": ":cluster_-12_-2_4_1"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-1#0_1",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-2_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "--4#2_0",
+          "toLaneId": "-15#1_0",
+          "viaLaneId": ":cluster_-12_-2_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "--4#2_0",
+          "toLaneId": "--4#0_0",
+          "viaLaneId": ":cluster_-12_-2_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "--4#2_0",
+          "toLaneId": "-1#1_1",
+          "viaLaneId": ":cluster_-12_-2_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-15#0_0",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-2_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-15#0_0",
+          "toLaneId": "-15#1_0",
+          "viaLaneId": ":cluster_-12_-2_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "-15#0_1",
+          "toLaneId": "-15#1_1",
+          "viaLaneId": ":cluster_-12_-2_11_1"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "-15#0_1",
+          "toLaneId": "--4#0_0",
+          "viaLaneId": ":cluster_-12_-2_13_0"
+        }
+      ],
+      "phaseStateLengths": [
+        14,
+        14,
+        14,
+        14
+      ]
+    },
+    {
+      "sceneId": "tls:cluster_-26_-31:0",
+      "sumoTlsId": "cluster_-26_-31",
+      "controlledJunctionId": "cluster_-26_-31",
+      "memberSumoJunctionIds": [
+        "cluster_-26_-31"
+      ],
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-8#0_0",
+          "toLaneId": "--13#0_0",
+          "viaLaneId": ":cluster_-26_-31_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-8#0_0",
+          "toLaneId": "-8#1_0",
+          "viaLaneId": ":cluster_-26_-31_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-8#0_0",
+          "toLaneId": "-13#2_0",
+          "viaLaneId": ":cluster_-26_-31_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-8#0_0",
+          "toLaneId": "-7#1_0",
+          "viaLaneId": ":cluster_-26_-31_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "--13#2_0",
+          "toLaneId": "-7#1_0",
+          "viaLaneId": ":cluster_-26_-31_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "--13#2_0",
+          "toLaneId": "--13#0_0",
+          "viaLaneId": ":cluster_-26_-31_5_0"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "--13#2_0",
+          "toLaneId": "-8#1_0",
+          "viaLaneId": ":cluster_-26_-31_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-7#0_0",
+          "toLaneId": "-13#2_0",
+          "viaLaneId": ":cluster_-26_-31_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-7#0_0",
+          "toLaneId": "-7#1_0",
+          "viaLaneId": ":cluster_-26_-31_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-7#0_0",
+          "toLaneId": "--13#0_0",
+          "viaLaneId": ":cluster_-26_-31_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-13#0_0",
+          "toLaneId": "-8#1_0",
+          "viaLaneId": ":cluster_-26_-31_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-13#0_0",
+          "toLaneId": "-13#2_0",
+          "viaLaneId": ":cluster_-26_-31_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "-13#0_0",
+          "toLaneId": "-7#1_0",
+          "viaLaneId": ":cluster_-26_-31_12_0"
+        }
+      ],
+      "phaseStateLengths": [
+        13,
+        13,
+        13,
+        13,
+        13
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 5,
+    "links": 54
+  }
+}

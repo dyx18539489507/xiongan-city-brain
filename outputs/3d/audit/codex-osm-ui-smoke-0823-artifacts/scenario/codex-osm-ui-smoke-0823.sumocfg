@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <input>
+    <net-file value="rongdong.multimodal.net.xml"/>
+    <route-files value="routes.rou.xml,multimodal.rou.xml"/>
+    <additional-files value="vtypes.add.xml,functional_zones.add.xml"/>
+  </input>
+  <time><begin value="0"/><end value="1800"/><step-length value="1"/></time>
+  <processing><time-to-teleport value="300"/><collision.action value="warn"/></processing>
+  <report><verbose value="false"/><no-step-log value="true"/><duration-log.statistics value="true"/></report>
+  <random_number><seed value="42"/></random_number>
+</configuration>

@@ -39,4 +39,23 @@ describe("CoordinateService", () => {
       10,
     );
   });
+
+  it("supports local Cartesian scenes without inventing a UTM zone", () => {
+    const local = new CoordinateService({
+      units: "m",
+      projection: "!",
+      utmZone: 0,
+      northernHemisphere: true,
+      netOffset: {x: -76.25, y: -57.6},
+      worldOriginSumo: {x: 641.875, y: 382.4},
+    });
+
+    expect(local.sumoToWorld(641.875, 382.4)).toEqual({x: 0, y: 0, z: 0});
+    expect(() => local.sumoToLonLat(641.875, 382.4)).toThrow(
+      "Geographic conversion is unavailable for local Cartesian scenes",
+    );
+    expect(() => local.lonLatToSumo(115.9, 39.05)).toThrow(
+      "Geographic conversion is unavailable for local Cartesian scenes",
+    );
+  });
 });

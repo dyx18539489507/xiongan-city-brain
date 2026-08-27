@@ -3,12 +3,14 @@
 import asyncio
 import json
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 
 from traffic_platform.communication_emulator.channel import (
     ChannelConfig,
     DeliveryRecord,
     SimulatedChannel,
 )
+from traffic_platform.contracts.models import TrafficMessage
 from traffic_platform.messaging.base import MessageHandler
 from traffic_platform.messaging.in_memory import topic_matches
 
@@ -52,6 +54,12 @@ class EmulatedMessageBus:
         """Return the active channel configuration."""
 
         return self._config
+
+    def validation_time(self, message: TrafficMessage) -> datetime:
+        """Map simulated delivery delay onto the message's UTC creation clock."""
+
+        simulated_delay_s = max(0.0, self._current_time_s - message.simulation_time)
+        return message.created_at + timedelta(seconds=simulated_delay_s)
 
     async def connect(self) -> None:
         """Enable subscriptions and publications."""

@@ -103,7 +103,7 @@ export type DigitalTwinInit = {
   conflicts?: SafetyConflictEntity[];
   activeEvents?: RealtimeEvent[];
   metrics?: Record<string, number | string | boolean | null>;
-  intersectionMetrics?: Array<Record<string, number | string | boolean | null>>;
+  intersectionMetrics?: Array<Record<string, unknown>>;
 };
 
 export type DigitalTwinDelta = {
@@ -119,7 +119,7 @@ export type DigitalTwinDelta = {
   conflicts?: SafetyConflictEntity[];
   events: RealtimeEvent[];
   metrics?: Record<string, number | string | boolean | null>;
-  intersectionMetrics?: Array<Record<string, number | string | boolean | null>>;
+  intersectionMetrics?: Array<Record<string, unknown>>;
 };
 
 export type DigitalTwinMessage = DigitalTwinInit | DigitalTwinDelta;
@@ -141,13 +141,12 @@ export type DigitalTwinState = {
   conflicts: SafetyConflictEntity[];
   events: RealtimeEvent[];
   metrics: Readonly<Record<string, number | string | boolean | null>>;
-  intersectionMetrics: ReadonlyArray<
-    Readonly<Record<string, number | string | boolean | null>>
-  >;
+  intersectionMetrics: ReadonlyArray<Readonly<Record<string, unknown>>>;
 };
 
 export type DigitalTwinStream = {
   connection: DigitalTwinConnection;
   state: DigitalTwinState;
   issue: string | null;
+  reset?: () => void;
 };

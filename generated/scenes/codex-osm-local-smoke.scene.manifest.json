@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.1",
+  "sceneId": "codex-osm-local-smoke",
+  "sceneFile": "codex-osm-local-smoke.scene.json",
+  "sceneSha256": "ab26755e7b9e5dea69496c14d48eb339aaeeabb153745e55e81e99c3bfb0ce25",
+  "sceneBytes": 3490263,
+  "counts": {
+    "junctions": 613,
+    "roads": 111,
+    "edges": 2173,
+    "lanes": 2627,
+    "connections": 3697,
+    "crossings": 29,
+    "trafficLights": 2,
+    "busStops": 0,
+    "pedestrianAreas": 106,
+    "bicycleAreas": 766,
+    "buildings": 26,
+    "vegetation": 0,
+    "roadsideDevices": 4,
+    "zones": 0,
+    "controlCorridors": 1,
+    "edgeRegions": 322
+  },
+  "sourceFiles": [
+    {
+      "path": "scenarios/generated/codex-osm-local-smoke/rongdong.multimodal.net.xml",
+      "role": "sumo_network_truth",
+      "sha256": "4027b0713604c65f8a0c84a4d808a61f0736c9dfa92eb589c4a17904bbdc0196"
+    },
+    {
+      "path": "scenarios/generated/codex-osm-local-smoke/controlled_intersections.json",
+      "role": "controlled_intersection_registry",
+      "sha256": "a459053f41afc08a3a9b104cb7cbd1a2312e4ea45aabaaefcab997006e5de0ea"
+    },
+    {
+      "path": "scenarios/generated/codex-osm-local-smoke/functional_zones.json",
+      "role": "functional_zone_inventory",
+      "sha256": "34add6f406e6e4525f368a351607c821c7648812d835c3c951d50c1ba45cde15"
+    },
+    {
+      "path": "scenarios/generated/codex-osm-local-smoke/vtypes.add.xml",
+      "role": "sumo_participant_types",
+      "sha256": "c93acd7cb4d62d45b53009350ddb4aa02f96863a2df35ea710ca3ce1d067f37f"
+    },
+    {
+      "path": "scenarios/configs/codex-osm-local-smoke.yaml",
+      "role": "scenario_configuration",
+      "sha256": "9d2d154b720e12e57291264f454ba97901bfae158c3a9c88de742d268274d068"
+    },
+    {
+      "path": "scenarios/generated/codex-osm-local-smoke/source.osm.xml",
+      "role": "osm_geographic_context",
+      "sha256": "2713c6c831e95929038bcefaa7a8ecd01498bdfa97fb8969e410fd51ae848471"
+    }
+  ]
+}

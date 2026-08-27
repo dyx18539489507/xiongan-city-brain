@@ -1,0 +1,11 @@
+{
+  "experiment_id": "rapid-medium-b3-s2026-none-n0-d60-w10-a01",
+  "run_key": "rapid-medium-b3-s2026-none-n0-d60-w10",
+  "status": "completed",
+  "exit_status": 0,
+  "started_at": "2026-08-20T07:10:09.088792+00:00",
+  "ended_at": "2026-08-20T07:11:20.592938+00:00",
+  "wall_duration_s": 71.50549279999905,
+  "simulation_realtime_factor": 0.8996907573931787,
+  "raw_data_path": "D:\\程序项目\\面向雄安新区的城市大脑\\experiments\\formal_2026\\raw\\rapid-medium-b3-s2026-none-n0-d60-w10-a01"
+}

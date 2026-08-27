@@ -27,6 +27,56 @@ paths:
   /api/v1/scenarios/{scenario_id}:
     parameters: [{$ref: "#/components/parameters/ScenarioId"}]
     get: {operationId: getScenario, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/scenarios/{scenario_id}/open-folder:
+    parameters: [{$ref: "#/components/parameters/ScenarioId"}]
+    post: {operationId: openScenarioFolder, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/scenarios/{scenario_id}/open-sumo:
+    parameters: [{$ref: "#/components/parameters/ScenarioId"}]
+    post: {operationId: openScenarioInSumo, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/osm/local-map:
+    get: {operationId: getLocalOsmMap, responses: {"200": {$ref: "#/components/responses/Ok"}, "503": {$ref: "#/components/responses/Error"}}}
+  /api/v1/scenario-drafts:
+    get: {operationId: listScenarioDrafts, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/scenario-drafts/osm:
+    post:
+      operationId: createOsmScenarioDraft
+      requestBody: {$ref: "#/components/requestBodies/OsmDraftBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "422": {$ref: "#/components/responses/Error"}, "503": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenario-drafts/planning:
+    post:
+      operationId: createPlanningScenarioDraft
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema: {type: string, format: binary, maxLength: 52428800}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "400": {$ref: "#/components/responses/Error"}, "413": {$ref: "#/components/responses/Error"}, "415": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenario-drafts/{draft_id}:
+    parameters: [{$ref: "#/components/parameters/DraftId"}]
+    get: {operationId: getScenarioDraft, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+    patch:
+      operationId: updateScenarioDraft
+      requestBody: {$ref: "#/components/requestBodies/ScenarioDraftUpdateBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenario-drafts/{draft_id}/artifacts/{artifact_key}:
+    parameters:
+      - {$ref: "#/components/parameters/DraftId"}
+      - {$ref: "#/components/parameters/ArtifactKey"}
+    get: {operationId: getScenarioDraftArtifact, responses: {"200": {description: Source draft artifact}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/scenario-builds:
+    get: {operationId: listScenarioBuilds, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+    post:
+      operationId: createScenarioBuild
+      requestBody: {$ref: "#/components/requestBodies/ScenarioBuildBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenario-builds/validate:
+    post:
+      operationId: validateScenarioBuild
+      requestBody: {$ref: "#/components/requestBodies/ScenarioBuildBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/scenario-builds/{build_id}:
+    parameters: [{$ref: "#/components/parameters/BuildId"}]
+    get: {operationId: getScenarioBuild, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
   /api/v1/scenes/{scenario_id}/3d:
     parameters: [{$ref: "#/components/parameters/ScenarioId"}]
     get:
@@ -57,6 +107,45 @@ paths:
             application/x-ndjson:
               schema: {type: string, format: binary}
         "404": {$ref: "#/components/responses/Error"}
+  /api/v1/live-comparisons:
+    post:
+      operationId: createLiveComparison
+      description: Create one same-condition fixed-time baseline and candidate algorithm pair. Both sides use independent SUMO/TraCI processes and advance through a strict synchronization barrier.
+      requestBody: {$ref: "#/components/requestBodies/LiveComparisonBody"}
+      responses: {"201": {$ref: "#/components/responses/Created"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/live-comparisons/{pair_id}:
+    parameters: [{$ref: "#/components/parameters/LiveComparisonId"}]
+    get:
+      operationId: getLiveComparison
+      description: Return bounded status, latest paired identities, fairness fingerprint and current rolling comparison summary. Raw frame history is not embedded.
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}
+  /api/v1/live-comparisons/{pair_id}/start:
+    post: {$ref: "#/components/pathItems/LiveComparisonAction"}
+  /api/v1/live-comparisons/{pair_id}/pause:
+    post: {$ref: "#/components/pathItems/LiveComparisonAction"}
+  /api/v1/live-comparisons/{pair_id}/resume:
+    post: {$ref: "#/components/pathItems/LiveComparisonAction"}
+  /api/v1/live-comparisons/{pair_id}/rate:
+    parameters: [{$ref: "#/components/parameters/LiveComparisonId"}]
+    post:
+      operationId: setLiveComparisonSimulationRate
+      requestBody: {$ref: "#/components/requestBodies/SimulationRateBody"}
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/live-comparisons/{pair_id}/stop:
+    post: {$ref: "#/components/pathItems/LiveComparisonAction"}
+  /api/v1/live-comparisons/{pair_id}/faults/inject:
+    parameters: [{$ref: "#/components/parameters/LiveComparisonId"}]
+    post:
+      operationId: injectLiveComparisonFault
+      description: Inject the same simulation-clock fault into both members of a live comparison.
+      requestBody: {$ref: "#/components/requestBodies/FaultBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "404": {$ref: "#/components/responses/Error"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/live-comparisons/{pair_id}/faults/clear:
+    parameters: [{$ref: "#/components/parameters/LiveComparisonId"}]
+    post:
+      operationId: clearLiveComparisonFaults
+      description: Clear active faults from both members of a live comparison.
+      responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}, "409": {$ref: "#/components/responses/Error"}}
   /api/v1/experiments:
     post:
       operationId: createExperiment
@@ -82,6 +171,9 @@ paths:
   /api/v1/experiments/{id}/metrics:
     parameters: [{$ref: "#/components/parameters/ExperimentId"}]
     get: {operationId: experimentMetrics, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+  /api/v1/experiments/{id}/evidence:
+    parameters: [{$ref: "#/components/parameters/ExperimentId"}]
+    get: {operationId: experimentEvidence, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
   /api/v1/experiments/{id}/events:
     parameters: [{$ref: "#/components/parameters/ExperimentId"}]
     get: {operationId: experimentEvents, responses: {"200": {$ref: "#/components/responses/Ok"}}}
@@ -99,6 +191,20 @@ paths:
   /api/v1/algorithms/{name}/activate:
     parameters: [{$ref: "#/components/parameters/AlgorithmName"}]
     post: {operationId: activateAlgorithm, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/benchmarks:
+    get: {operationId: listBenchmarks, responses: {"200": {$ref: "#/components/responses/Ok"}}}
+    post:
+      operationId: createBenchmark
+      requestBody: {$ref: "#/components/requestBodies/BenchmarkBody"}
+      responses: {"202": {$ref: "#/components/responses/Accepted"}, "409": {$ref: "#/components/responses/Error"}, "422": {$ref: "#/components/responses/Error"}}
+  /api/v1/benchmarks/{benchmark_id}:
+    parameters: [{$ref: "#/components/parameters/BenchmarkId"}]
+    get: {operationId: getBenchmark, responses: {"200": {$ref: "#/components/responses/Ok"}, "404": {$ref: "#/components/responses/Error"}}}
+  /api/v1/benchmarks/{benchmark_id}/artifacts/{name}:
+    parameters:
+      - {$ref: "#/components/parameters/BenchmarkId"}
+      - {$ref: "#/components/parameters/ArtifactName"}
+    get: {operationId: getBenchmarkArtifact, responses: {"200": {description: Benchmark evidence artifact}, "404": {$ref: "#/components/responses/Error"}}}
   /api/v1/faults/inject:
     post:
       operationId: injectFault
@@ -126,10 +232,21 @@ paths:
       operationId: digitalTwinWebSocket
       description: Upgrade to WebSocket. Streams protocol 1.0 entity init snapshots and bounded SUMO deltas.
       responses: {"101": {description: Switching Protocols}}
+  /ws/v1/digital-twin/comparison:
+    get:
+      operationId: liveComparisonDigitalTwinWebSocket
+      description: Upgrade to WebSocket. Streams one atomic baseline, candidate and delta message only after both SUMO instances reach the same simulation time.
+      responses: {"101": {description: Switching Protocols}}
 components:
   parameters:
     ScenarioId: {name: scenario_id, in: path, required: true, schema: {type: string}}
+    DraftId: {name: draft_id, in: path, required: true, schema: {type: string, pattern: "^draft-[a-f0-9]{12}$"}}
+    ArtifactKey: {name: artifact_key, in: path, required: true, schema: {type: string}}
+    BuildId: {name: build_id, in: path, required: true, schema: {type: string}}
+    BenchmarkId: {name: benchmark_id, in: path, required: true, schema: {type: string}}
+    ArtifactName: {name: name, in: path, required: true, schema: {type: string}}
     ReplayExperimentId: {name: experiment_id, in: path, required: true, schema: {type: string}}
+    LiveComparisonId: {name: pair_id, in: path, required: true, schema: {type: string}}
     ExperimentId: {name: id, in: path, required: true, schema: {type: string}}
     AlgorithmName: {name: name, in: path, required: true, schema: {type: string}}
     IntersectionId: {name: id, in: path, required: true, schema: {type: string}}
@@ -144,11 +261,36 @@ components:
       content:
         application/json:
           schema: {$ref: "#/components/schemas/ScenarioGenerateRequest"}
+    OsmDraftBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/OsmDraftRequest"}
+    ScenarioDraftUpdateBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ScenarioDraftUpdateRequest"}
+    ScenarioBuildBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/ScenarioBuildRequest"}
+    BenchmarkBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/BenchmarkRequest"}
     ExperimentBody:
       required: true
       content:
         application/json:
           schema: {$ref: "#/components/schemas/ExperimentRequest"}
+    LiveComparisonBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/LiveComparisonRequest"}
     SimulationRateBody:
       required: true
       content:
@@ -193,6 +335,13 @@ components:
         "200": {$ref: "#/components/responses/Ok"}
         "409": {$ref: "#/components/responses/Error"}
         "404": {$ref: "#/components/responses/Error"}
+    LiveComparisonAction:
+      parameters: [{$ref: "#/components/parameters/LiveComparisonId"}]
+      operationId: liveComparisonLifecycleAction
+      responses:
+        "200": {$ref: "#/components/responses/Ok"}
+        "409": {$ref: "#/components/responses/Error"}
+        "404": {$ref: "#/components/responses/Error"}
   schemas:
     ScenarioGenerateRequest:
       type: object
@@ -200,6 +349,66 @@ components:
       required: [scenario_id]
       properties:
         scenario_id: {type: string, example: xiongan_rongdong_20}
+    OsmDraftRequest:
+      type: object
+      additionalProperties: false
+      required: [bbox]
+      properties:
+        bbox:
+          type: object
+          additionalProperties: false
+          required: [west, south, east, north]
+          properties:
+            west: {type: number, minimum: -180, maximum: 180, example: 115.908766}
+            south: {type: number, minimum: -90, maximum: 90, example: 39.052935}
+            east: {type: number, minimum: -180, maximum: 180, example: 115.923250}
+            north: {type: number, minimum: -90, maximum: 90, example: 39.063049}
+    ScenarioDraftUpdateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        selected_intersection_ids: {type: [array, "null"], maxItems: 2000, items: {type: string}}
+        review_confirmed: {type: [boolean, "null"]}
+        roads: {type: [array, "null"], maxItems: 6000, items: {type: object, additionalProperties: true}}
+        intersections: {type: [array, "null"], maxItems: 500, items: {type: object, additionalProperties: true}}
+    ScenarioTrafficDemandRequest:
+      type: object
+      additionalProperties: false
+      description: Explicit synthetic engineering demand for a newly drafted OSM or planning network; this is not field-measured OD data.
+      properties:
+        source: {type: string, enum: [synthetic], default: synthetic}
+        target_flow_veh_h: {type: number, minimum: 60, maximum: 7200, default: 1800}
+        duration_s: {type: number, minimum: 180, maximum: 7200, default: 180}
+        od_pattern:
+          type: string
+          enum: [network_wide, boundary_exchange, boundary_dominant]
+          default: boundary_exchange
+        min_trip_distance_m: {type: number, minimum: 0, maximum: 5000, default: 50}
+    ScenarioBuildRequest:
+      type: object
+      additionalProperties: false
+      required: [scenario_id, display_name, selected_intersection_ids]
+      properties:
+        scenario_id: {type: string, minLength: 3, maxLength: 64, example: xiongan-osm-one-junction}
+        display_name: {type: string, minLength: 2, maxLength: 120, example: 雄安 OSM 单路口演示}
+        source_type: {type: string, enum: [current_osm, osm_bbox, planning_file], default: current_osm}
+        draft_id: {type: [string, "null"], pattern: "^draft-[a-f0-9]{12}$"}
+        selected_intersection_ids: {type: array, minItems: 1, maxItems: 2000, items: {type: string}}
+        seed: {type: integer, minimum: 0, maximum: 2147483647, default: 42}
+        traffic_demand:
+          description: Omit to derive a reproducible random target flow, OD pattern, and minimum trip distance from the scenario seed. OSM builds always run for 180 seconds.
+          anyOf:
+            - {$ref: "#/components/schemas/ScenarioTrafficDemandRequest"}
+            - {type: "null"}
+          default: null
+    BenchmarkRequest:
+      type: object
+      additionalProperties: false
+      required: [algorithms, seeds]
+      properties:
+        algorithms: {type: array, minItems: 2, maxItems: 4, items: {type: string}}
+        seeds: {type: array, minItems: 1, maxItems: 10, items: {type: integer, minimum: 0}}
+        duration_s: {type: number, minimum: 10, maximum: 1800, default: 300}
     ExperimentRequest:
       type: object
       additionalProperties: false
@@ -215,6 +424,20 @@ components:
           enum: [BASE, S01, S02, S03, S04, S05, S06, S07]
           default: BASE
           example: S02
+    LiveComparisonRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        scenario_id: {type: string, default: xiongan_rongdong_20, example: xiongan_rongdong_20}
+        baseline_algorithm: {type: string, default: fixed-time, example: fixed-time}
+        candidate_algorithm: {type: string, default: coordinated-max-pressure, example: coordinated-max-pressure}
+        seed: {type: integer, minimum: 0, default: 42, example: 42}
+        duration_s: {type: number, exclusiveMinimum: 0, maximum: 18000, default: 300, example: 300}
+        profile:
+          type: string
+          enum: [BASE, S01, S02, S03, S04, S05, S06, S07]
+          default: BASE
+        gui: {type: boolean, default: false}
     SimulationRateRequest:
       type: object
       additionalProperties: false

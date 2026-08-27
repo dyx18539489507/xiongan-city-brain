@@ -30,6 +30,9 @@ def test_metrics_explicitly_report_unrun_then_aggregate_samples() -> None:
     summary = accumulator.summary()
     assert summary["mean_speed"] == 10.0
     assert summary["bicycle_completed_trips"] == 2
+    assert summary["completed_vehicles"] == 4
+    assert summary["fuel_per_completed_vehicle_mg"] == 0.0
+    assert summary["conflicts_per_1000_completed_vehicles"] == 250.0
     assert summary["pedestrian_completed_trips"] == 4
     assert summary["motor_pedestrian_conflict_count"] == 1
     assert summary["minimum_ttc_s"] == 1.8

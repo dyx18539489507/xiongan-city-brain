@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0",
+  "sceneId": "xiongan-20260825023127-ni1nxk",
+  "sourceSceneFile": "xiongan-20260825023127-ni1nxk.scene.json",
+  "sourceSceneSha256": "251d1ed914ed90075dac2a8ebd2d8d94e9853d1d506f21a6bcfc728d23f7771b",
+  "controllers": [
+    {
+      "sceneId": "tls:cluster_-12_-13_-8_-9:0",
+      "sumoTlsId": "cluster_-12_-13_-8_-9",
+      "controlledJunctionId": "cluster_-12_-13_-8_-9",
+      "memberSumoJunctionIds": [
+        "cluster_-12_-13_-8_-9"
+      ],
+      "displayId": "J01",
+      "programId": "0",
+      "links": [
+        {
+          "linkIndex": 0,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-5#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_0_0"
+        },
+        {
+          "linkIndex": 1,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_1_0"
+        },
+        {
+          "linkIndex": 2,
+          "fromLaneId": "-4#0_0",
+          "toLaneId": "-6#2_1",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_2_0"
+        },
+        {
+          "linkIndex": 3,
+          "fromLaneId": "-5#0_0",
+          "toLaneId": "-3#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_3_0"
+        },
+        {
+          "linkIndex": 4,
+          "fromLaneId": "-5#0_0",
+          "toLaneId": "-5#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_4_0"
+        },
+        {
+          "linkIndex": 5,
+          "fromLaneId": "-5#0_1",
+          "toLaneId": "-5#2_1",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_4_1"
+        },
+        {
+          "linkIndex": 6,
+          "fromLaneId": "-5#0_1",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_6_0"
+        },
+        {
+          "linkIndex": 7,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-6#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_7_0"
+        },
+        {
+          "linkIndex": 8,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-3#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_8_0"
+        },
+        {
+          "linkIndex": 9,
+          "fromLaneId": "-3#0_0",
+          "toLaneId": "-5#2_1",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_9_0"
+        },
+        {
+          "linkIndex": 10,
+          "fromLaneId": "-6#0_0",
+          "toLaneId": "-4#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_10_0"
+        },
+        {
+          "linkIndex": 11,
+          "fromLaneId": "-6#0_0",
+          "toLaneId": "-6#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_11_0"
+        },
+        {
+          "linkIndex": 12,
+          "fromLaneId": "-6#0_1",
+          "toLaneId": "-6#2_1",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_11_1"
+        },
+        {
+          "linkIndex": 13,
+          "fromLaneId": "-6#0_1",
+          "toLaneId": "-3#2_0",
+          "viaLaneId": ":cluster_-12_-13_-8_-9_13_0"
+        }
+      ],
+      "phaseStateLengths": [
+        14,
+        14,
+        14,
+        14
+      ]
+    }
+  ],
+  "counts": {
+    "controllers": 1,
+    "links": 14
+  }
+}
