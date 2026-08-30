@@ -1,14 +1,15 @@
 {
-  "status": "running",
-  "workspace": "D:\\程序项目\\面向雄安新区的城市大脑",
-  "startedAt": "2026-08-27T19:08:12.1256190Z",
-  "backendPid": 21812,
-  "frontendPid": 8264,
-  "backendUrl": "http://127.0.0.1:8016",
-  "frontendUrl": "http://127.0.0.1:5180",
-  "experimentId": null,
-  "scenarioProfile": "BASE",
-  "simulationRate": 1.0,
-  "sumoHome": "D:\\程序项目\\面向雄安新区的城市大脑\\.tools\\sumo",
-  "logs": "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\runtime\\logs"
+    "status":  "stopped",
+    "workspace":  "D:\\程序项目\\面向雄安新区的城市大脑",
+    "startedAt":  "2026-08-27T19:08:12.1256190Z",
+    "backendPid":  21812,
+    "frontendPid":  8264,
+    "backendUrl":  "http://127.0.0.1:8016",
+    "frontendUrl":  "http://127.0.0.1:5180",
+    "experimentId":  null,
+    "scenarioProfile":  "BASE",
+    "simulationRate":  1.0,
+    "sumoHome":  "D:\\程序项目\\面向雄安新区的城市大脑\\.tools\\sumo",
+    "logs":  "D:\\程序项目\\面向雄安新区的城市大脑\\outputs\\3d\\runtime\\logs",
+    "stoppedAt":  "2026-08-30T02:16:15.3717510Z"
 }
